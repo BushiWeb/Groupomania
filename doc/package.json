@@ -1,0 +1,17 @@
+{
+    "name": "groupomania_api_documentation",
+    "version": "1.0.0",
+    "description": "Documentation of the Groupomania Social network 's API.",
+    "main": "groupomania_openapi.yaml",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "redoc-cli build groupomania_openapi.yaml -o groupomania_doc.html --title \"Groupomania API\"",
+        "start": "redocly preview-docs groupomania_openapi.yaml --config=.redocly.yaml --port=8080"
+    },
+    "author": "Francisod Emeric",
+    "license": "MIT",
+    "dependencies": {
+        "@redocly/cli": "^1.0.0-beta.111",
+        "redoc-cli": "^0.13.20"
+    }
+}

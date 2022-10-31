@@ -1,0 +1,5 @@
+apiDefinitions:
+    main: groupomania_openapi.yaml
+features.openapi:
+    pathInMiddlePanel: true
+    expandDefaultServerVariables: true
