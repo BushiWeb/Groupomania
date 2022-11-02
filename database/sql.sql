@@ -1,3 +1,6 @@
+DROP SCHEMA IF EXISTS admin, authentication, users, posts CASCADE;
+
+
 CREATE SCHEMA admin;
 
 CREATE TABLE admin.roles(
