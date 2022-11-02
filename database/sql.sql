@@ -76,6 +76,25 @@ CREATE TABLE posts.posts(
    ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE FUNCTION posts.trigger_last_updated_update()
+   RETURNS TRIGGER
+   LANGUAGE PLPGSQL
+   AS
+$$
+BEGIN
+
+   NEW.last_update_date := CURRENT_TIMESTAMP(0);
+
+   RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER post_update
+BEFORE UPDATE
+ON posts.posts
+FOR EACH ROW
+EXECUTE PROCEDURE posts.trigger_last_updated_update();
+
 CREATE TABLE posts.likes(
    user_id INTEGER,
    post_id INTEGER,
