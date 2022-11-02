@@ -1,22 +1,12 @@
 CREATE SCHEMA admin;
 
 CREATE TABLE admin.roles(
-   role_id SERIAL PRIMARY KEY,
+   role_id SMALLINT PRIMARY KEY,
    name VARCHAR(50) UNIQUE NOT NULL
 );
 
-INSERT INTO admin.roles (name)
-VALUES ('admin'), ('user');
-
-CREATE FUNCTION admin.get_user_role_id()
-   RETURNS INTEGER
-   LANGUAGE SQL
-   AS
-$$
-   SELECT role_id
-   FROM admin.roles
-   WHERE name = 'user';
-$$;
+INSERT INTO admin.roles (role_id, name)
+VALUES (1, 'admin'), (2, 'user');
 
 
 
@@ -38,7 +28,7 @@ CREATE TABLE users.users(
    password VARCHAR(60) NOT NULL,
    failed_login_attempt_count INTEGER NOT NULL DEFAULT 0,
    locked_until TIMESTAMP WITH TIME ZONE,
-   role_id INTEGER NOT NULL DEFAULT admin.get_user_role_id(),
+   role_id INTEGER NOT NULL DEFAULT 2,
    FOREIGN KEY(role_id) REFERENCES admin.roles(role_id)
    ON DELETE RESTRICT ON UPDATE RESTRICT
 );
