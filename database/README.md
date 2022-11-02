@@ -14,9 +14,21 @@ psql -U username -d db_name -f sql.sql
 
 This command connects you to the database `db_name ` with the user `username ` and execute the statements in `sql.sql `. Thus, `username ` needs all the rights to execute those instructions, and they will be executed on the selected database.
 
-We recommand creating a new database to host the tables, as all the used schemas will be deleted first (if they exist) and the _search_path_ will be modified.
+We recommand creating a new database to host the tables, as all the used schemas will be deleted first (if they exist). Since new schemas re created, if you don't want to add the schema before each table, you may run the following statement to update the search_path:
+
+```sql
+SET search_path TO "$user", public, admin, authentication, users, posts;
+```
 
 We also recommend not using the superuser to access the database with the application, for security reasons. You should create a user with limited access on the tables and objects.
+
+```sql
+CREATE ROLE role_name WITH LOGIN PASSWORD 'password';
+GRANT USAGE ON SCHEMA admin, authentication, users, posts TO role_name;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA admin, authentication, users, posts TO role_name;
+GRANT SELECT ON admin.roles TO role_name;
+GRANT SELECT, INSERT, UPDATE, DELETE ON authentication.refresh_tokens, users.users, posts.posts, posts. likes TO role_name;
+```
 
 For more informations on the `psql` command and all it's options, visit [the documentation](https://docs.postgresql.fr/10/app-psql.html).
 
