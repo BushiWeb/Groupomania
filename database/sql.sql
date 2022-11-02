@@ -104,7 +104,3 @@ CREATE TABLE posts.likes(
    FOREIGN KEY(post_id) REFERENCES posts.posts(post_id)
    ON DELETE CASCADE ON UPDATE CASCADE
 );
-
-
-
-SET search_path TO "$user", public, admin, authentication, users, posts;
