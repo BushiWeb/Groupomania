@@ -1,0 +1,23 @@
+# Database structure for the Groupomania social network
+
+## Installation
+
+### Using psql
+
+In order to install the database, you need to install **[PostgreSQL](https://www.postgresql.org/)** first.
+
+You will find in this folder the file **sql.sql** containing the dump of the database. To install it, run the following command:
+
+```
+psql -U username -d db_name -f sql.sql
+```
+
+This command connects you to the database _db_name_ with the user _username_ and execute the statements in _sql.sql_. Thus, _username_ needs all the rights to execute those instructions, and they will be executed on the selected database.
+
+We recommand creating a new database to host the tables.
+
+For more informations on the `psql` command and all it's options, visit [the documentation](https://docs.postgresql.fr/10/app-psql.html).
+
+### Using pgAdmin
+
+You can import the database using any administration tool, like **[pgAdmin](https://www.pgadmin.org/)**.
