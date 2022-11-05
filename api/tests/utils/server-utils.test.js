@@ -1,4 +1,3 @@
-import http from 'node:http';
 import process from 'node:process';
 import { normalizePort, getConnectionInformations, errorHandler } from '../../src/utils/server-utils.js';
 
