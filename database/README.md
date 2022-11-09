@@ -9,6 +9,19 @@ You will find in this folder two files:
 -   **create.sql** containing the dump of the structure of the database;
 -   **init.sql** containing some data for the database.
 
+**For security reasons**, before going any further, we strongly recommand updating the **create.sql** file to personnalize the created roles and their passwords:
+
+-   Change all occurences of `project_admin` to the role name you wish to use to own the database and have all the rights on it.
+-   Change all occurences of `project_user` to the role name you wish to use to use the database and have limited rights on it.
+-   Change all occurences of `admin_password` with a secure password for the _project_admin_ role.
+-   Change all occurences of `user_password` with a secure password for the _project_user_ role.
+
+You are free to choose any role, but _we suggest you create new ones_, to avoid granting privileges to other databases to these roles. If however you decide to reuse other roles, you may delete the `CREATE ROLE` statements corresponding to those roles.
+
+**Note:** this can easily be done with a _find & replace_ functionnality in a text editor.
+
+In the following instructions, _project_admin_ and _project_user_ will refer to the roles you choose.
+
 ### Using psql
 
 To install the database, first execute:
@@ -17,19 +30,19 @@ To install the database, first execute:
 psql -U superuser -d postgres -f path/create.sql
 ```
 
--   `superuser` is the name of the role you want to use to connect to the database.
+-   `superuser` is the name of the role you want to use to connect to the database. This is not the _project_admin_ role. More informations bellow.
 -   We use the **postgres** database since it should be present on your server, but you can use any database except _groupomania_.
 -   `path/create.sql` must be replaced by the path to the **create.sql** file.
 
-This will execute the statements inside of the create dump.
+This will execute the statements inside of the _create.sql_ dump.
 
-These statements will first delete, if they exist, any _groupomania_ database as well as the _project_admin_ and _project_user_ roles that you chose, and then create them. To make sure these operations happen smoothly:
+These statements will first create the _groupomania_ database as well as the _project_admin_ and _project_user_ roles. To make sure these operations happen smoothly:
 
--   Connect with a superuser role, or any role with the `CREATEROLE` and `CREATEDB` privileges and owning the current _groupomania_ database.
--   If the chosen _project_admin_ and _project-user_ roles already exist and own objects, make sure to reassign (with `REASSIGN OWNED` for example) or delete (with `DROP OWNED` for example) all those objects. Otherwise, these roles can't be deleted.
--   If the _groupomania_ database already exist, close all connections so that it can be dropped.
+-   Connect with a superuser role, or any role with the `CREATEROLE` and `CREATEDB` privileges.
+-   Delete the statements for the creation of the roles if you wish to reuse existing roles, althought we advise against it.
+-   If the _groupomania_ database already exist, either drop the existing database, rename it or change the name of the new database.
 
-**Note**: once the database is created, before creating the tables and other objects, you will be prompted to enter the _project_admin_ role's password you chose.
+**Note**: after creating the database and before creating the tables and other objects, you will be prompted to enter the _project_admin_ role's password you chose.
 
 Once the structure is installed, you can add data to the tables with:
 
@@ -49,7 +62,7 @@ You can import the database using any administration tool, like **[pgAdmin](http
 
 The tables are split into 4 schemas:
 
--   _admin_: containing all tables that the application shouldn't update;
+-   _admin_: containing all tables that the application, and thus the _project_user_, shouldn't update;
 -   _authentication_: containing all tables related to the authentication mechanism;
 -   _users_: containing all the users related tables;
 -   _posts_: containing all the posts related tables.

@@ -1,26 +1,16 @@
 ------------------------------------------------------
--- RESET
-------------------------------------------------------
--- Drop the existing project's database to reset it.
-DROP DATABASE IF EXISTS groupomania;
-
--- Drop roles associated to the project if they exist in order to reset them. Reassign owned objects to current user.
-DROP ROLE IF EXISTS project_admin;
-DROP ROLE IF EXISTS project_user;
-
-------------------------------------------------------
 -- ROLES CREATION
 ------------------------------------------------------
 -- Administrator of the project's database. Owns the databases and its objects.
 CREATE ROLE project_admin WITH
     CREATEROLE
     LOGIN
-    PASSWORD 'password';
+    PASSWORD 'admin_password';
 
 -- User of the project. Has minimal rights on the database's objects.
 CREATE ROLE project_user WITH
     LOGIN
-    PASSWORD 'password';
+    PASSWORD 'user_password';
 
 
 ------------------------------------------------------
@@ -33,7 +23,7 @@ CREATE DATABASE groupomania WITH
 
 
 -- Connect to the database
-\connect -reuse-previous=on "dbname=groupomania user=project_admin password=password"
+\connect -reuse-previous=on "dbname=groupomania user=project_admin password=admin_password"
 
 
 ------------------------------------------------------
