@@ -2,33 +2,42 @@
 
 ## Installation
 
+**Note**: In order to install the database, you need to install **[PostgreSQL](https://www.postgresql.org/)** first.
+
+You will find in this folder two files:
+
+-   **create.sql** containing the dump of the structure of the database;
+-   **init.sql** containing some data for the database.
+
 ### Using psql
 
-In order to install the database, you need to install **[PostgreSQL](https://www.postgresql.org/)** first.
-
-You will find in this folder the file **sql.sql** containing the dump of the database. To install it, run the following command:
+To install the database, first execute:
 
 ```
-psql -U username -d db_name -f sql.sql
+psql -U superuser -d postgres -f path/create.sql
 ```
 
-This command connects you to the database `db_name ` with the user `username ` and execute the statements in `sql.sql `. Thus, `username ` needs all the rights to execute those instructions, and they will be executed on the selected database.
+-   `superuser` is the name of the role you want to use to connect to the database.
+-   We use the **postgres** database since it should be present on your server, but you can use any database except _groupomania_.
+-   `path/create.sql` must be replaced by the path to the **create.sql** file.
 
-We recommand creating a new database to host the tables, as all the used schemas will be deleted first (if they exist). Since new schemas re created, if you don't want to add the schema before each table, you may run the following statement to update the search_path:
+This will execute the statements inside of the create dump.
 
-```sql
-SET search_path TO "$user", public, admin, authentication, users, posts;
+These statements will first delete, if they exist, any _groupomania_ database as well as the _project_admin_ and _project_user_ roles that you chose, and then create them. To make sure these operations happen smoothly:
+
+-   Connect with a superuser role, or any role with the `CREATEROLE` and `CREATEDB` privileges and owning the current _groupomania_ database.
+-   If the chosen _project_admin_ and _project-user_ roles already exist and own objects, make sure to reassign (with `REASSIGN OWNED` for example) or delete (with `DROP OWNED` for example) all those objects. Otherwise, these roles can't be deleted.
+-   If the _groupomania_ database already exist, close all connections so that it can be dropped.
+
+**Note**: once the database is created, before creating the tables and other objects, you will be prompted to enter the _project_admin_ role's password you chose.
+
+Once the structure is installed, you can add data to the tables with:
+
+```
+psql -U project_admin -d groupomania -f path/init.sql
 ```
 
-We also recommend not using the superuser to access the database with the application, for security reasons. You should create a user with limited access on the tables and objects.
-
-```sql
-CREATE ROLE role_name WITH LOGIN PASSWORD 'password';
-GRANT USAGE ON SCHEMA admin, authentication, users, posts TO role_name;
-GRANT USAGE ON ALL SEQUENCES IN SCHEMA admin, authentication, users, posts TO role_name;
-GRANT SELECT ON admin.roles TO role_name;
-GRANT SELECT, INSERT, UPDATE, DELETE ON authentication.refresh_tokens, users.users, posts.posts, posts. likes TO role_name;
-```
+This time, you must connect to the new _groupomania_ database with the new _project_admin_ role. `path/init.sql` must be replaced by the path to **init.sql**.
 
 For more informations on the `psql` command and all it's options, visit [the documentation](https://docs.postgresql.fr/10/app-psql.html).
 
