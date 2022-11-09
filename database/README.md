@@ -27,7 +27,7 @@ In the following instructions, _project_admin_ and _project_user_ will refer to 
 To install the database, first execute:
 
 ```
-psql -U superuser -d postgres -f path/create.sql
+psql -U superuser -W -d postgres -f path/create.sql
 ```
 
 -   `superuser` is the name of the role you want to use to connect to the database. This is not the _project_admin_ role. More informations bellow.
@@ -47,7 +47,7 @@ These statements will first create the _groupomania_ database as well as the _pr
 Once the structure is installed, you can add data to the tables with:
 
 ```
-psql -U project_admin -d groupomania -f path/init.sql
+psql -U project_admin -W -d groupomania -f path/init.sql
 ```
 
 This time, you must connect to the new _groupomania_ database with the new _project_admin_ role. `path/init.sql` must be replaced by the path to **init.sql**.
