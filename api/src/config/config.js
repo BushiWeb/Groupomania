@@ -1,7 +1,6 @@
 import convict from 'convict';
 import toml from '@ltd/j-toml';
-import {dirname, join} from 'node:path';
-import {fileURLToPath} from 'node:url';
+import {access} from 'node:fs/promises';
 
 
 // Add TOML parser to Convict
@@ -22,11 +21,24 @@ let config = convict({
         default: 3000,
         env: 'PORT',
         arg: 'port'
+    },
+    test: {
+        format: String,
+        default: 'test'
     }
 });
 
-// Import configuration files
+// Import global configuration files
 config.loadFile('./config/config.toml');
+
+// Import environment specific configuration files
+const envConfigFileName = `./config/${config.get('env')}-config.toml`;
+try {
+    await access(envConfigFileName);
+    config.loadFile(envConfigFileName);
+} catch (error) {
+    console.log(`${envConfigFileName} doesn't exist, no environment specific configuration is loaded.`);
+}
 
 // Validate configuration
 config.validate({allowed: 'strict'});
