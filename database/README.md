@@ -22,7 +22,7 @@ You are free to choose any role, but _we suggest you create new ones_, to avoid 
 
 In the following instructions, _project_admin_ and _project_user_ will refer to the roles you choose.
 
-### Using psql
+### Install the database
 
 To install the database, first execute:
 
@@ -44,6 +44,8 @@ These statements will first create the _groupomania_ database as well as the _pr
 
 **Note**: after creating the database and before creating the tables and other objects, you will be prompted to enter the _project_admin_ role's password you chose.
 
+### Add data to the database
+
 Once the structure is installed, you can add data to the tables with:
 
 ```
@@ -53,10 +55,6 @@ psql -U project_admin -W -d groupomania -f path/init.sql
 This time, you must connect to the new _groupomania_ database with the new _project_admin_ role. `path/init.sql` must be replaced by the path to **init.sql**.
 
 For more informations on the `psql` command and all it's options, visit [the documentation](https://docs.postgresql.fr/10/app-psql.html).
-
-### Using pgAdmin
-
-You can import the database using any administration tool, like **[pgAdmin](https://www.pgadmin.org/)**.
 
 ## Structure
 
