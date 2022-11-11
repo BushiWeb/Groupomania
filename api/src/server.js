@@ -5,11 +5,12 @@ import {
     getConnectionInformations,
     errorHandler,
 } from './utils/server-utils.js';
+import config from './config/config.js';
 
 // Get the port
 let port;
 try {
-    port = normalizePort(process.env.PORT);
+    port = normalizePort(config.get('port'));
 } catch (error) {
     port = normalizePort('3000');
     console.warn(
