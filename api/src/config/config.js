@@ -26,7 +26,7 @@ let config = convict({
 });
 
 // Import configuration files
-config.loadFile(join(dirname(fileURLToPath(import.meta.url)), 'config.toml'));
+config.loadFile('./config/config.toml');
 
 // Validate configuration
 config.validate({allowed: 'strict'});
