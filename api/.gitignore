@@ -2,3 +2,4 @@ node_modules
 api.code-workspace
 coverage
 .env
+logs

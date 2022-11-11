@@ -25,6 +25,8 @@
         "@ltd/j-toml": "^1.35.2",
         "convict": "^6.2.3",
         "dotenv": "^16.0.3",
-        "express": "^4.18.2"
+        "express": "^4.18.2",
+        "winston": "^3.8.2",
+        "winston-daily-rotate-file": "^4.7.1"
     }
 }
