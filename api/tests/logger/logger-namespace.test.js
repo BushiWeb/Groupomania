@@ -1,5 +1,5 @@
 import createLoggerNamespace from '../../src/logger/logger-namespace.js';
-import Logger from '../../src/logger/logger.js';
+import {Logger} from '../../src/logger/logger.js';
 import {jest} from '@jest/globals';
 import winstonOptions from '../../src/logger/logger-config.js';
 

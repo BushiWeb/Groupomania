@@ -1,4 +1,4 @@
-import Logger from './logger.js';
+import Logger from './main-logger.js';
 import winstonOptions from './logger-config.js';
 
 /**

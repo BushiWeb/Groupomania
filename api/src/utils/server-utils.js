@@ -1,5 +1,5 @@
 import process from 'node:process';
-import createLoggerNamespace from '../logger/logger-namespace.js';
+import {createLoggerNamespace} from '../logger/logger.js';
 
 const serverLogger = createLoggerNamespace('groupomania:api:server');
 

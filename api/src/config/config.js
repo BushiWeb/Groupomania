@@ -1,7 +1,7 @@
 import convict from 'convict';
 import toml from '@ltd/j-toml';
 import {access} from 'node:fs/promises';
-import createLoggerNamespace from '../logger/logger-namespace.js';
+import {createLoggerNamespace} from '../logger/logger.js';
 
 const confLogger = createLoggerNamespace('groupomania:api:config');
 
