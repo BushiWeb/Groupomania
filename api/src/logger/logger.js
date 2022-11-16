@@ -6,7 +6,7 @@ import LOGGER_CONFIG from './logger-config/global-logger-config.js';
 
 let winstonOptions = {...LOGGER_CONFIG};
 
-// Try to load environment specific logger configuration
+// Try to load environment specific logger configuration.
 let environment = parser(process.argv.slice(2)).env?.toLowerCase() ||
     process.env.NODE_ENV?.toLowerCase() ||
     'development';
