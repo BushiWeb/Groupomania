@@ -1,4 +1,5 @@
 import Logger from './logger.js';
+import winstonOptions from './logger-config.js';
 
 /**
  * Create a logging function that automatically adds a label to each message.
@@ -28,6 +29,13 @@ export default function createLoggerNamespace(namespace) {
         }
 
         Logger.log(level, labelledInfo);
+    }
+
+    // Add level specific methods to the functions to emulate more the winston logger.
+    for(const level in winstonOptions.levels) {
+        namespaceLogger[level] = function (info, ...splat) {
+            this(level, info, ...splat);
+        };
     }
 
     return namespaceLogger;

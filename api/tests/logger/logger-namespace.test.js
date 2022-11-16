@@ -1,6 +1,7 @@
 import createLoggerNamespace from '../../src/logger/logger-namespace.js';
 import Logger from '../../src/logger/logger.js';
 import {jest} from '@jest/globals';
+import winstonOptions from '../../src/logger/logger-config.js';
 
 const mockWinstonLog = jest.spyOn(Logger, 'log').mockImplementation(() => {});
 
@@ -84,5 +85,21 @@ describe('createLoggerNamespace returned function test suite', () => {
 
     });
 
-    describe('Logging methods test suite', () => {});
+    describe('Logging methods test suite', () => {
+        const loggerNamespace = createLoggerNamespace(namespace);
+
+        it('should have a method for each login level', () => {
+            for (const level in winstonOptions.levels) {
+                expect(loggerNamespace).toHaveProperty(level);
+            }
+        });
+
+        it('should call the main log function with the right level', () => {
+            for (const level in winstonOptions.levels) {
+                loggerNamespace[level](defaultMessage, ...splatArray);
+                expect(mockWinstonLog).toHaveBeenCalled();
+                expect(mockWinstonLog).toHaveBeenCalledWith(level, {message: defaultMessage, label: namespace, splat: splatArray});
+            }
+        });
+    });
 });
