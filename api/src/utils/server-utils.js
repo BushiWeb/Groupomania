@@ -1,4 +1,4 @@
-import { exit } from 'node:process';
+import process from 'node:process';
 
 /**
  * Return the port value as a number.
@@ -44,5 +44,5 @@ export const getConnectionInformations = (server, port) => {
  */
 export const errorHandler = (error) => {
     console.error(error.message);
-    exit(1);
+    process.exit(1);
 };

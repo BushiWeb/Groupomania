@@ -6,6 +6,7 @@
     "type": "module",
     "scripts": {
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+        "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
         "start": "node -r dotenv/config ./src/server.js --env production",
         "dev": "nodemon -r dotenv/config ./src/server.js"
     },

@@ -1,5 +1,6 @@
 import process from 'node:process';
 import { normalizePort, getConnectionInformations, errorHandler } from '../../src/utils/server-utils.js';
+import {jest} from '@jest/globals';
 
 describe('Server utils test suite', () => {
     describe('normalizePort test suite', () => {
