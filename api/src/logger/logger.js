@@ -1,5 +1,5 @@
 import winston from 'winston';
-import winstonOptions from './logger-config';
+import winstonOptions from './logger-config.js';
 
 // Add colors
 winston.addColors(winstonOptions.colors);

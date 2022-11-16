@@ -1,6 +1,9 @@
 import convict from 'convict';
 import toml from '@ltd/j-toml';
 import {access} from 'node:fs/promises';
+import createLoggerNamespace from '../logger/logger-namespace.js';
+
+const confLogger = createLoggerNamespace('groupomania:api:config');
 
 
 // Add TOML parser to Convict
@@ -24,23 +27,29 @@ let config = convict({
     },
     test: {
         format: String,
-        default: 'test'
+        default: 'test',
     }
 });
+confLogger.debug('Configuration schema created');
 
 // Import global configuration files
 config.loadFile('./config/config.toml');
+confLogger.debug('Global configuration loaded');
 
 // Import environment specific configuration files
 const envConfigFileName = `./config/${config.get('env')}-config.toml`;
 try {
+    confLogger.debug(`Trying to access ${envConfigFileName}`);
     await access(envConfigFileName);
     config.loadFile(envConfigFileName);
 } catch (error) {
-    console.log(`${envConfigFileName} doesn't exist, no environment specific configuration is loaded.`);
+    confLogger.error(error);
+    confLogger.warn(`${envConfigFileName} doesn't exist, no environment specific configuration is loaded.`);
 }
+confLogger.verbose('Configuration files loaded');
 
 // Validate configuration
-config.validate({allowed: 'strict'});
+config.validate({allowed: 'strict', output: confLogger.warn});
+confLogger.verbose('Configuration validated');
 
 export default config;

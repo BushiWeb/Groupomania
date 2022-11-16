@@ -1,4 +1,7 @@
 import process from 'node:process';
+import createLoggerNamespace from '../logger/logger-namespace.js';
+
+const serverLogger = createLoggerNamespace('groupomania:api:server');
 
 /**
  * Return the port value as a number.
@@ -7,6 +10,7 @@ import process from 'node:process';
  * @throws Throws an error if the parameter is neither a string nor an number.
  */
 export const normalizePort = (val) => {
+    serverLogger.debug('Normalizing server port');
     let port = val;
 
     if (typeof val === 'string') {
@@ -43,6 +47,6 @@ export const getConnectionInformations = (server, port) => {
  * @param {Error} error - Thrown error object.
  */
 export const errorHandler = (error) => {
-    console.error(error.message);
+    serverLogger.fatal(error.message);
     process.exit(1);
 };

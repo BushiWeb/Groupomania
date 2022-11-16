@@ -1,6 +1,7 @@
 import process from 'node:process';
 import { normalizePort, getConnectionInformations, errorHandler } from '../../src/utils/server-utils.js';
 import {jest} from '@jest/globals';
+import Logger from '../../src/logger/logger.js';
 
 describe('Server utils test suite', () => {
     describe('normalizePort test suite', () => {
@@ -72,18 +73,18 @@ describe('Server utils test suite', () => {
         }
 
         const mockProcessExit = jest.spyOn(process, 'exit').mockImplementation(() => {});
-        const mockConsoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+        const mockLoggerLog = jest.spyOn(Logger, 'log').mockImplementation(() => {});
 
         beforeEach(() => {
             mockProcessExit.mockClear();
-            mockConsoleError.mockClear();
+            mockLoggerLog.mockClear();
         });
 
         it('should log the error and exit the program', () => {
             const error = new MockSystemError('listen', 'EADDRINUSE', 'test message');
             errorHandler(error);
 
-            expect(mockConsoleError).toHaveBeenCalled();
+            expect(mockLoggerLog).toHaveBeenCalled();
             expect(mockProcessExit).toHaveBeenCalled();
         });
     });
