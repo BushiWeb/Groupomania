@@ -7,7 +7,7 @@ This folder contains all the tools and informations to generate an up-to-date do
 When you download the source code, you can execute:
 
 ```
-npm instal
+npm install
 ```
 
 This command will install all the required packages to build the documentation.
@@ -24,11 +24,11 @@ You have two options:
 The folliwing command generates a **groupomania_doc.html** file. This file is dependance free and can easily be shared.
 
 ```
-npm run build
+npm run buildDoc
 ```
 
 ### Serving the documentation
 
 ```
-npm start
+npm run watchDoc
 ```

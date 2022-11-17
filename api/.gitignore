@@ -3,3 +3,4 @@ api.code-workspace
 coverage
 .env
 logs
+doc/groupomania_doc.html

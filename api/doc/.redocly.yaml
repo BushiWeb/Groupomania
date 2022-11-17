@@ -1,5 +1,6 @@
-apiDefinitions:
-    main: groupomania_openapi.yaml
+apis:
+    Groupomania:
+        root: doc/groupomania_openapi.yaml
 features.openapi:
     pathInMiddlePanel: true
     expandDefaultServerVariables: true
