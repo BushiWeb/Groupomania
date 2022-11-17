@@ -5,14 +5,16 @@
     "main": "server.js",
     "type": "module",
     "scripts": {
-        "test": "jest",
-        "start": "node ./src/server.js",
-        "dev": "nodemon ./src/server.js"
+        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+        "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+        "start": "node -r dotenv/config ./src/server.js --env production",
+        "dev": "nodemon -r dotenv/config ./src/server.js"
     },
     "author": "Emeric Francisod",
     "license": "MIT",
     "devDependencies": {
         "@babel/core": "^7.19.6",
+        "@babel/plugin-transform-modules-commonjs": "^7.19.6",
         "@babel/preset-env": "^7.19.4",
         "@types/jest": "^29.2.1",
         "babel-jest": "^29.2.2",
@@ -22,6 +24,13 @@
         "nodemon": "^2.0.20"
     },
     "dependencies": {
-        "express": "^4.18.2"
+        "@ltd/j-toml": "^1.35.2",
+        "convict": "^6.2.3",
+        "dotenv": "^16.0.3",
+        "express": "^4.18.2",
+        "morgan": "^1.10.0",
+        "winston": "^3.8.2",
+        "winston-daily-rotate-file": "^4.7.1",
+        "yargs-parser": "^21.1.1"
     }
 }
