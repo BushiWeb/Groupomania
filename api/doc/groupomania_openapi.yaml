@@ -10,6 +10,10 @@ info:
         name: Emeric Francisod
         email: emeric.francisod@gmail.com
     summary: MVP for the Groupomania's social network's API.
+    license:
+        name: MIT
+        url: 'https://github.com/emeric-francisod/P7_Creez_un_reseau_social_d_entreprise_Francisod_Emeric/blob/development/LICENSE'
+
 servers:
     - url: 'http://{domain}:{port}/api/v1'
       description: Development server

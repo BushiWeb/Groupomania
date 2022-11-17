@@ -4,3 +4,5 @@ apis:
 features.openapi:
     pathInMiddlePanel: true
     expandDefaultServerVariables: true
+rules:
+    no-unused-components: off
