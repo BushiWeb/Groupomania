@@ -1,8 +1,8 @@
-# Groupomania API documentation
+# Groupomania API
 
-This folder contains all the tools and informations to generate an up-to-date documentation for the Groupomania API.
+The Groupomania API allows to execute actions related to the Groupomania social network, like loging in, creating posts or liking those posts;
 
-## Installing
+## Installation and execution
 
 When you download the source code, you can execute:
 
@@ -10,16 +10,32 @@ When you download the source code, you can execute:
 npm install
 ```
 
-This command will install all the required packages to build the documentation.
+This command will install all the required packages.
 
-## Viewing the documentation
+### Starting the server
+
+To start the server in development mode, use
+
+```
+npm run dev
+```
+
+It uses _nodemon_ to watch for file changes.
+
+To start the server for production, use
+
+```
+npm start
+```
+
+### Building the API
 
 You have two options:
 
 1. Build the documentation as a static and dependance free HTML file
 2. Serve the documentation using a local server
 
-### Building the documentation
+#### Building the documentation
 
 The folliwing command generates a **groupomania_doc.html** file. This file is dependance free and can easily be shared.
 
@@ -27,8 +43,20 @@ The folliwing command generates a **groupomania_doc.html** file. This file is de
 npm run buildDoc
 ```
 
-### Serving the documentation
+#### Serving the documentation
 
 ```
 npm run watchDoc
+```
+
+### Running the tests
+
+```
+npm test
+```
+
+Runs all the tests. If you wan't to check the coverage, use
+
+```
+npm run coverage
 ```
