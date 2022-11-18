@@ -1,6 +1,7 @@
 import cors from 'cors';
 import helmet from 'helmet';
 import createLoggerNamespace from '../logger/logger-namespace.js';
+import config from '../config/config.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:api:loader:headers');
 
@@ -11,9 +12,9 @@ const loaderLogger = createLoggerNamespace('groupomania:api:loader:headers');
 export default function headersLoader (app) {
     // Add CORS headers
     let corsOptions = {
-        origin: true,
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-        allowedHeaders: ['Origin', 'X-Requested-With', 'Accept', 'Content-Type', 'Authorization']
+        origin: config.get('cors.origin'),
+        methods: config.get('cors.methods'),
+        allowedHeaders: config.get('cors.allowedHeaders')
     };
     app.use(cors(corsOptions));
     loaderLogger.verbose('CORS middleware added');

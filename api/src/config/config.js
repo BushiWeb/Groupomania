@@ -25,9 +25,22 @@ let config = convict({
         env: 'PORT',
         arg: 'port'
     },
-    test: {
-        format: String,
-        default: 'test',
+    cors: {
+        origin: {
+            doc: 'CORS Origin header value',
+            format: '*',
+            default: true
+        },
+        methods: {
+            doc: 'CORS Allowed Methods header value',
+            format: Array,
+            default: ['GET', 'POST', 'PUT', 'DELETE', 'OPTION']
+        },
+        allowedHeaders: {
+            doc: 'CORS Allowed Headers header value',
+            format: Array,
+            default: ['Origin', 'X-Requested-With', 'Accept', 'Content-Type', 'Authorization']
+        }
     }
 });
 confLogger.debug('Configuration schema created');
