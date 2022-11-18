@@ -62,6 +62,59 @@ let config = convict({
             default: null,
             nullable: true
         }
+    },
+    db: {
+        sgbd: {
+            doc: 'SGBD used to store the data, must be a valid sequelize dialect value',
+            format: String,
+            default: 'postgres',
+            env: 'DB_SGBD'
+        },
+        name: {
+            doc: 'Database name',
+            format: String,
+            default: null,
+            nullable: false,
+            env: 'DB_NAME'
+        },
+        username: {
+            doc: 'Username to use to connect to the database',
+            format: String,
+            default: null,
+            nullable: false,
+            env: 'DB_USER'
+        },
+        password: {
+            doc: 'Password associated to the username',
+            format: String,
+            default: null,
+            nullable: false,
+            env: 'DB_PASSWORD'
+        },
+        host: {
+            doc: 'Database host',
+            format: String,
+            default: 'localhost',
+            env: 'DB_HOST'
+        },
+        port: {
+            doc: 'Database port',
+            format: 'int',
+            default: 5432,
+            env: 'DB_PORT'
+        },
+        protocol: {
+            doc: 'Database connection protocol',
+            format: String,
+            default: 'tcp',
+            env: 'DB_PROTOCOL'
+        },
+        useSSL: {
+            doc: 'Weither to use SSL or not',
+            format: Boolean,
+            default: false,
+            env: 'DB_SSL'
+        }
     }
 });
 confLogger.debug('Configuration schema created');
