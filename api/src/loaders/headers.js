@@ -11,11 +11,13 @@ const loaderLogger = createLoggerNamespace('groupomania:api:loader:headers');
  */
 export default function headersLoader (app) {
     // Add CORS headers
-    let corsOptions = {
-        origin: config.get('cors.origin'),
-        methods: config.get('cors.methods'),
-        allowedHeaders: config.get('cors.allowedHeaders')
-    };
+    let corsOptions = {};
+    const corsConfiguration = config.get('cors');
+    for(const parameter in corsConfiguration) {
+        if (corsConfiguration[parameter]) {
+            corsOptions[parameter] = corsConfiguration[parameter];
+        }
+    }
     app.use(cors(corsOptions));
     loaderLogger.verbose('CORS middleware added');
     loaderLogger.debug('CORS middleware options are %O', corsOptions);

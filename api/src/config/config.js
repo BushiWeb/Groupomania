@@ -27,19 +27,40 @@ let config = convict({
     },
     cors: {
         origin: {
-            doc: 'CORS Origin header value',
+            doc: 'Access-Control-Allow-Origin header value. Can be a string with one origin, an array with multiple origins, true to accept all origins and false to disable CORS.',
             format: '*',
-            default: true
+            default: true,
+            nullable: false
         },
         methods: {
-            doc: 'CORS Allowed Methods header value',
+            doc: 'Access-Control-Allow-Methods header value.',
             format: Array,
-            default: ['GET', 'POST', 'PUT', 'DELETE', 'OPTION']
+            default: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTION'],
+            nullable: false
         },
         allowedHeaders: {
-            doc: 'CORS Allowed Headers header value',
+            doc: 'Access-Control-Allow-Headers header value. If null, reflects the value of Access-Control-Request-Headers.',
             format: Array,
-            default: ['Origin', 'X-Requested-With', 'Accept', 'Content-Type', 'Authorization']
+            default: ['Origin', 'X-Requested-With', 'Accept', 'Content-Type', 'Authorization'],
+            nullable: true
+        },
+        exposedHeaders: {
+            doc: 'Access-Control-Expose-Headers header value. If null, no custom headers are exposed.',
+            format: Array,
+            default: null,
+            nullable: true
+        },
+        credentials: {
+            doc: 'Access-Control-Allow-Credentials header value. If set to true, the header os passed with the response. If null, the header is not sent.',
+            format: Boolean,
+            default: null,
+            nullable: true
+        },
+        maxAge: {
+            doc: 'Access-Control-Max-Age header value. If null, the parameter is omitted.',
+            format: 'int',
+            default: null,
+            nullable: true
         }
     }
 });
