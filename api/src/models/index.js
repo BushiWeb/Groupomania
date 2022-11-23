@@ -1,20 +1,23 @@
 import { Sequelize } from 'sequelize';
-import { createLoggerNamespace } from '../logger/logger.js';
 import initModels from './init-models.js';
 import initDatabaseConnection from './init-db-connection.js';
 
-const dbLogger = createLoggerNamespace('groupomania:api:database');
+let db = {
+    Sequelize: Sequelize,
+    _sequelize: undefined,
 
-let db = {};
-db.Sequelize = Sequelize;
+    set sequelize(sequelize) {
+        this._sequelize = sequelize;
+    },
 
-// Database connection
-db.sequelize = await initDatabaseConnection();
-dbLogger.verbose('Database connection initialized');
+    get sequelize() {
+        return this._sequelize;
+    },
 
-// Module initialisation
-initModels(db.sequelize);
-dbLogger.verbose('Database models initialized');
-
+    get models() {
+        return this._sequelize.models;
+    }
+};
 
 export default db;
+export { initModels, initDatabaseConnection, db };

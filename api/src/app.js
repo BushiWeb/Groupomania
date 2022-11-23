@@ -7,6 +7,6 @@ const appLogger = createLoggerNamespace('groupomania:api:app');
 const app = express();
 appLogger.verbose('App initialized');
 
-loadApp(app);
+await loadApp(app);
 
 export default app;

@@ -10,6 +10,7 @@ const loaderLogger = createLoggerNamespace('groupomania:api:loader:headers');
  * @param {Express.Application} app - Express application
  */
 export default function headersLoader (app) {
+    loaderLogger.verbose('Loading global headers');
     // Add CORS headers
     let corsOptions = {};
     const corsConfiguration = config.get('cors');
