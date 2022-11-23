@@ -1,32 +1,20 @@
 import { Sequelize } from 'sequelize';
-import config from '../config/config.js';
 import { createLoggerNamespace } from '../logger/logger.js';
+import initModels from './init-models.js';
+import initDatabaseConnection from './init-db-connection.js';
 
 const dbLogger = createLoggerNamespace('groupomania:api:database');
-const sequelizeLogger = createLoggerNamespace('groupomania:api:sequelize');
 
 let db = {};
-const dbConfig = config.get('db');
+db.Sequelize = Sequelize;
 
-db.sequelize = new Sequelize({
-    dialect: dbConfig.sgbd,
-    host: dbConfig.host,
-    port: dbConfig.port,
-    database: dbConfig.name,
-    username: dbConfig.username,
-    password: dbConfig.password,
-    protocol: dbConfig.protocol,
-    logging: msg => sequelizeLogger.debug(msg),
-    ssl: dbConfig.useSSL
-});
+// Database connection
+db.sequelize = await initDatabaseConnection();
+dbLogger.verbose('Database connection initialized');
 
-try {
-    await db.sequelize.authenticate();
-    dbLogger.info('Connection to database has been establish successfully');
-} catch (error) {
-    dbLogger.error(error);
-    process.exit(1);
-}
+// Module initialisation
+initModels(db.sequelize);
+dbLogger.verbose('Database models initialized');
 
 
 export default db;
