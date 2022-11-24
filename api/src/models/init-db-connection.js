@@ -8,7 +8,8 @@ const sequelizeLogger = createLoggerNamespace('groupomania:api:sequelize');
 /**
  * Connects to the database and tests the connection.
  * Exit if the connection can't be created.
- * @returns Returns the sequelize instance.
+ * @returns {Sequelize} Returns the sequelize instance.
+ * @async
  */
 export default async function initDatabaseConnection() {
     dbLogger.debug('Database connection starting');

@@ -6,7 +6,7 @@ const dbLogger = createLoggerNamespace('groupomania:api:database');
 /**
  * Creates the post model.
  * @param {Sequelize} sequelize - Sequelize instance to use to create the model.
- * @return Returns the model.
+ * @return {Model} Returns the model.
  */
 export default function createPostModel(sequelize) {
     dbLogger.debug('Post model creation');
@@ -14,7 +14,6 @@ export default function createPostModel(sequelize) {
         postId: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
-            allowNull: false,
             primaryKey: true,
             field: 'post_id'
         },
@@ -34,7 +33,7 @@ export default function createPostModel(sequelize) {
         creationDate: {
             type: DataTypes.DATE,
             allowNull: false,
-            defaultValue: 'CURRENT_TIMESTAMP(0)',
+            defaultValue: DataTypes.NOW,
             field: 'creation_date'
         },
         lastUpdateDate: {
@@ -58,15 +57,6 @@ export default function createPostModel(sequelize) {
         schema: 'posts',
         hasTrigger: true,
         timestamps: false,
-        underscored: true,
-        indexes: [
-            {
-                name: 'posts_pkey',
-                unique: true,
-                fields: [
-                    { name: 'post_id' },
-                ]
-            },
-        ]
+        underscored: true
     });
 }

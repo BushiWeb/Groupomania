@@ -4,6 +4,11 @@ import databaseLoader from './database.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:api:loader');
 
+/**
+ * Calls all application's loaders.
+ * @param {Express.Application} app - Express application.
+ * @async
+ */
 export default async function loadApp (app) {
     headersLoader(app);
     loaderLogger.verbose('Header middleware initialized');

@@ -6,7 +6,7 @@ const dbLogger = createLoggerNamespace('groupomania:api:database');
 /**
  * Creates the user model.
  * @param {Sequelize} sequelize - Sequelize instance to use to create the model.
- * @return Returns the model.
+ * @return {Model} Returns the model.
  */
 export default function createUserModel(sequelize) {
     dbLogger.debug('User model creation');
@@ -14,7 +14,6 @@ export default function createUserModel(sequelize) {
         userId: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
-            allowNull: false,
             primaryKey: true,
             field: 'user_id'
         },
@@ -55,22 +54,6 @@ export default function createUserModel(sequelize) {
         schema: 'users',
         hasTrigger: true,
         timestamps: false,
-        underscored: true,
-        indexes: [
-            {
-                name: 'users_email_key',
-                unique: true,
-                fields: [
-                    { name: 'email' },
-                ]
-            },
-            {
-                name: 'users_pkey',
-                unique: true,
-                fields: [
-                    { name: 'user_id' },
-                ]
-            },
-        ]
+        underscored: true
     });
 }

@@ -2,20 +2,26 @@ import { Sequelize } from 'sequelize';
 import initModels from './init-models.js';
 import initDatabaseConnection from './init-db-connection.js';
 
-let db = {
+/**
+ * Object containing all elements to use the database.
+ * @namespace
+ * @property Sequelize - Sequelize constructor, to use static methods.
+ * @property {Sequelize} sequelize - Sequelize instance.
+ * @property {Object.<string, Model>} models - List of available models
+ */
+const db = {
     Sequelize: Sequelize,
-    _sequelize: undefined,
 
-    set sequelize(sequelize) {
-        this._sequelize = sequelize;
-    },
+    /**
+     * @type {Sequelize}
+     */
+    sequelize: undefined,
 
-    get sequelize() {
-        return this._sequelize;
-    },
-
+    /**
+     * @type {Object.<string, Model>}
+     */
     get models() {
-        return this._sequelize.models;
+        return this.sequelize.models;
     }
 };
 
