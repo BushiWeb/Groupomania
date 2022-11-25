@@ -4,4 +4,4 @@ coverage
 .env
 logs
 doc/groupomania_doc.html
-src/models/models.test.js
+src/models/testingModel.js
