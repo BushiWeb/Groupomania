@@ -5,7 +5,7 @@
     "main": "server.js",
     "type": "module",
     "scripts": {
-        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+        "test": "node --experimental-vm-modules -r dotenv/config node_modules/jest/bin/jest.js",
         "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
         "start": "node -r dotenv/config ./src/server.js --env production",
         "dev": "nodemon -r dotenv/config ./src/server.js",
@@ -30,9 +30,15 @@
     "dependencies": {
         "@ltd/j-toml": "^1.35.2",
         "convict": "^6.2.3",
+        "cors": "^2.8.5",
         "dotenv": "^16.0.3",
         "express": "^4.18.2",
+        "helmet": "^6.0.0",
         "morgan": "^1.10.0",
+        "pg": "^8.8.0",
+        "pg-hstore": "^2.3.4",
+        "sequelize": "^6.25.6",
+        "uuid": "^9.0.0",
         "winston": "^3.8.2",
         "winston-daily-rotate-file": "^4.7.1",
         "yargs-parser": "^21.1.1"

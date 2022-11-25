@@ -83,6 +83,14 @@ describe('createLoggerNamespace returned function test suite', () => {
             expect(mockWinstonLog.mock.calls[0][1]).toEqual({...info, label: namespace});
         });
 
+        it('should call the winston log methode with an object containing the error object as a message and the new label', () => {
+            const loggerNamespace = createLoggerNamespace(namespace);
+            const error = new Error(defaultMessage);
+            loggerNamespace(logLevel, error);
+
+            expect(mockWinstonLog.mock.calls[0][1]).toEqual({message: error, label: namespace});
+        });
+
     });
 
     describe('Logging methods test suite', () => {
