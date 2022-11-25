@@ -16,8 +16,8 @@ export default function createLoggerNamespace(namespace) {
     function namespaceLogger(level, info, ...splat) {
         let labelledInfo = {};
 
-        // If info is an object and possesses a message, even if falsy, then add the label to it. Otherwise, create an object with the info as a message and the label
-        if (typeof info === 'object' && info.message !== undefined) {
+        // If info is an object and possesses a message, even if falsy, then add the label to it. Otherwise, create an object with the info as a message and the label. If the object is an error, it behaves as if it as no message
+        if (typeof info === 'object' && !(info instanceof Error) && info.message !== undefined) {
             labelledInfo = {label: namespace, ...info}; // If the info already possesses a label, then the namespace is going to be overriden
         } else {
             labelledInfo = {message: info, label: namespace};
