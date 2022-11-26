@@ -55,6 +55,7 @@ CREATE TABLE authentication.refresh_tokens(
 CREATE TABLE users.users(
    user_id SERIAL PRIMARY KEY,
    email VARCHAR(255) UNIQUE NOT NULL CHECK (email ~ '^(?:[A-Za-z0-9!#$%&''*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#$%&''*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$'),
+   normalized_email VARCHAR(255) UNIQUE NOT NULL,
    password VARCHAR(60) NOT NULL,
    failed_login_attempt_count INTEGER NOT NULL DEFAULT 0,
    locked_until TIMESTAMP WITH TIME ZONE,
@@ -114,6 +115,32 @@ FOR EACH ROW
 WHEN (NEW.failed_login_attempt_count IS DISTINCT FROM OLD.failed_login_attempt_count)
 EXECUTE PROCEDURE users.trigger_locked_until_update();
 
+-- Trigger to fill the normilized email with the lowercase email when the user is added or updated.
+CREATE FUNCTION users.trigger_email_normalize()
+   RETURNS TRIGGER
+   LANGUAGE PLPGSQL
+   AS
+$$
+BEGIN
+
+   NEW.normalized_email := LOWER(NEW.email);
+
+   RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER user_email_update
+BEFORE UPDATE
+ON users.users
+FOR EACH ROW
+EXECUTE PROCEDURE users.trigger_email_normalize();
+
+CREATE TRIGGER user_email_insert
+BEFORE INSERT
+ON users.users
+FOR EACH ROW
+EXECUTE PROCEDURE users.trigger_email_normalize();
+
 -- Trigger to update the 'last_update_date' field of the posts table when the table is updated.
 CREATE FUNCTION posts.trigger_last_updated_update()
    RETURNS TRIGGER
@@ -133,6 +160,7 @@ BEFORE UPDATE
 ON posts.posts
 FOR EACH ROW
 EXECUTE PROCEDURE posts.trigger_last_updated_update();
+
 
 
 ------------------------------------------------------
