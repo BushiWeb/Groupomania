@@ -10,10 +10,10 @@ export default async function databaseLoader () {
     loaderLogger.verbose('Database loading');
 
     // Connecting to the database
-    db.sequelize = await initDatabaseConnection();
+    db.ormInstance = await initDatabaseConnection();
     loaderLogger.verbose('Database connection initialized');
 
     // Initializing models
-    initModels(db.sequelize);
+    initModels(db.ormInstance);
     loaderLogger.verbose('Database models initialized');
 }
