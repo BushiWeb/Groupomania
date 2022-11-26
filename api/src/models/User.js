@@ -22,6 +22,11 @@ export default function createUserModel(sequelize) {
             allowNull: false,
             unique: 'users_email_key'
         },
+        normalizedEmail: {
+            type: DataTypes.STRING(255),
+            field: 'normalized_email',
+            unique: 'users_normalized_email_key'
+        },
         password: {
             type: DataTypes.STRING(60),
             allowNull: false
