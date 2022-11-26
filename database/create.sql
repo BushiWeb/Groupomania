@@ -68,7 +68,7 @@ CREATE TABLE posts.posts(
    post_id SERIAL PRIMARY KEY,
    title TEXT NOT NULL,
    message TEXT NOT NULL,
-   image_url TEXT,
+   image_url TEXT CHECK (image_url ~ '^(https?)://((?:[!$&''()+,;=A-Za-z0-9_.~-]|%[A-Fa-f\d]{2})+)(:[0-9]+)?(/(?:[!$&''()+,;=A-Za-z0-9_.~@:-]|%[A-Fa-f\d]{2})+(?:/(?:[!$&''()+,;=A-Za-z0-9_.~@:-]|%[A-Fa-f\d]{2})+)*)?(\?(?:[!$&''()+,;=A-Za-z0-9_.~:@-]|%[A-Fa-f\d]{2})+)?(#(?:[!$&''()+,;=A-Za-z0-9_.~:@-]|%[A-Fa-f\d]{2})+)?$'),
    creation_date TIMESTAMP (0) WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
    last_update_date TIMESTAMP (0) WITH TIME ZONE,
    writer_id INTEGER NOT NULL,
