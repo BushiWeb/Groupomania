@@ -3,13 +3,13 @@ import helmet from 'helmet';
 import createLoggerNamespace from '../logger/logger-namespace.js';
 import config from '../config/config.js';
 
-const loaderLogger = createLoggerNamespace('groupomania:api:loader:headers');
+const loaderLogger = createLoggerNamespace('groupomania:api:loader:error');
 
 /**
- * Add all middlewared adding headers.
+ * Add all middleware adding headers.
  * @param {Express.Application} app - Express application
  */
-export default function headersLoader (app) {
+export default function headersLoaders (app) {
     loaderLogger.verbose('Loading global headers');
     // Add CORS headers
     let corsOptions = {};
