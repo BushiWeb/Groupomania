@@ -2,7 +2,7 @@ import createLoggerNamespace from '../logger/logger-namespace.js';
 import NotFoundError from '../errors/errors/NotFoundError.js';
 import { errorHandler } from '../errors/error-middleware.js';
 
-const loaderLogger = createLoggerNamespace('groupomania:api:loader:headers');
+const loaderLogger = createLoggerNamespace('groupomania:api:loader:errors');
 
 /**
  * Add all error related middlewares.

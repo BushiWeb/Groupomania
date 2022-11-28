@@ -3,7 +3,7 @@ import helmet from 'helmet';
 import createLoggerNamespace from '../logger/logger-namespace.js';
 import config from '../config/config.js';
 
-const loaderLogger = createLoggerNamespace('groupomania:api:loader:error');
+const loaderLogger = createLoggerNamespace('groupomania:api:loader:headers');
 
 /**
  * Add all middleware adding headers.
