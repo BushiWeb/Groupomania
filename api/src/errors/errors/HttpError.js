@@ -17,7 +17,7 @@ export default class HttpError extends Error {
         super(summary);
         this.statusCode = statusCode;
         this.name = 'HttpError';
-        this.timestamp = new Date();
+        this.dateTime = new Date();
         this.path = path;
         this.method = method;
         if (description) {
@@ -40,7 +40,7 @@ export default class HttpError extends Error {
             type: this.name,
             title: this.message,
             statusCode: this.statusCode,
-            timestamp: this.timestamp,
+            timestamp: this.dateTime,
             path: this.path,
             method: this.method
         };
