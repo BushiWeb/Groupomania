@@ -13,7 +13,7 @@ function printfFormat({ level, message, timestamp, label, stack, ...metadata }) 
 
     delete metadata.splat;
     if (metadata && Object.keys(metadata).length > 0) {
-        formatedMessage += ' ' + JSON.stringify(metadata);
+        formatedMessage += '\n' + JSON.stringify(metadata, null, 2);
     }
 
     return formatedMessage;
