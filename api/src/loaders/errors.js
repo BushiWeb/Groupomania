@@ -1,4 +1,5 @@
 import createLoggerNamespace from '../logger/logger-namespace.js';
+import NotFoundError from '../errors/errors/NotFoundError.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:api:loader:headers');
 
@@ -11,8 +12,7 @@ export default function errorsLoader (app) {
 
     // Intercept Express 404 errors, sent when the method or the URL isn't defined
     app.use((req, res, next) => {
-        const error = new Error('Sorry, we can\'t find the ressource you are looking for.');
-        error.status = 404;
+        const error = new NotFoundError(req.path, req.method, 'We have a problem understanding your request. Please, double check your request and try again.', 'You may check the request method or path, we are not handling this one yet.');
         next(error);
     });
 }
