@@ -12,7 +12,11 @@ const errorLogger = createLoggerNamespace('groupomania:api:error');
 // eslint-disable-next-line no-unused-vars
 export function errorHandler(err, req, res, next) {
     errorLogger.verbose('Error handler execution');
-    res.status(err.statusCode).json(err.getErrorResponse());
+    if (err.getErrorResponse) {
+        res.status(err.statusCode).json(err.getErrorResponse());
+    } else {
+        res.status(500).json({error: { message: err.message, type: err.name }});
+    }
 
     errorLogger.error(err);
 }
