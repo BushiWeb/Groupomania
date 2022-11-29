@@ -25,6 +25,14 @@ let config = convict({
         env: 'PORT',
         arg: 'port'
     },
+    passwordHash: {
+        saltRound: {
+            doc: 'Number of rounds for the bcrypt algorithm',
+            format: 'int',
+            default: 10,
+            env: 'SALT_ROUND'
+        }
+    },
     cors: {
         origin: {
             doc: 'Access-Control-Allow-Origin header value. Can be a string with one origin, an array with multiple origins, true to accept all origins and false to disable CORS.',

@@ -29,6 +29,7 @@
     },
     "dependencies": {
         "@ltd/j-toml": "^1.35.2",
+        "bcrypt": "^5.1.0",
         "convict": "^6.2.3",
         "cors": "^2.8.5",
         "dotenv": "^16.0.3",

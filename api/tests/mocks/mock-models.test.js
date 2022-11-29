@@ -133,17 +133,17 @@ describe('Model mock test suite', () => {
 
             it('should return a promise rejected with the chosen value if save rejects', async () => {
                 mockSave.mockRejectedValueOnce(testReturn);
-                expect(MockModel.create(testValues)).rejects.toBe(testReturn);
+                await expect(MockModel.create(testValues)).rejects.toBe(testReturn);
             });
 
-            it('should return a promised resolved with the chosen value when mocked', () => {
+            it('should return a promised resolved with the chosen value when mocked', async () => {
                 mockCreate.mockResolvedValueOnce(testReturn);
-                expect(MockModel.create()).resolves.toBe(testReturn);
+                await expect(MockModel.create()).resolves.toBe(testReturn);
             });
 
-            it('should return a promised resolved with the chosen value when mocked', () => {
+            it('should return a promised resolved with the chosen value when mocked', async () => {
                 mockCreate.mockRejectedValueOnce(testReturn);
-                expect(MockModel.create()).rejects.toBe(testReturn);
+                await expect(MockModel.create()).rejects.toBe(testReturn);
             });
         });
     });
