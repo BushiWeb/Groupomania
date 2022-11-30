@@ -1,4 +1,4 @@
-import { matchedData, validationResult } from 'express-validator';
+import { checkSchema, matchedData, validationResult } from 'express-validator';
 import createUserBodySchema from './create-user-body.js';import { createLoggerNamespace } from '../logger/logger.js';
 
 const validationLogger = createLoggerNamespace('groupomania:api:validation');
@@ -10,7 +10,7 @@ const validationLogger = createLoggerNamespace('groupomania:api:validation');
  * @param {Express.Response} res - Express response object.
  * @param next - Next middleware to execute.
  */
-export default function validationMiddleware(req, res, next) {
+function validationHandlingMiddleware(req, res, next) {
     validationLogger.verbose('Validation middleware execution');
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -26,4 +26,14 @@ export default function validationMiddleware(req, res, next) {
     next();
 }
 
-export {createUserBodySchema};
+
+/**
+ * Returns all the required middlewares to handle the validation.
+ * @param {Object} schema - Validation schema to use.
+ * @returns {Array} Returns an array containing the middleware in the order of execution.
+ */
+export default function validationMiddlewares(schema) {
+    return [checkSchema(schema), validationHandlingMiddleware];
+}
+
+export {createUserBodySchema, validationHandlingMiddleware};
