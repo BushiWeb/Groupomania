@@ -3,6 +3,7 @@ import createLoggerNamespace from '../logger/logger-namespace.js';
 import databaseLoader from './database.js';
 import errorsLoader from './errors.js';
 import usersRouteLoader from './users.js';
+import loggingMiddelwareLoader from './logger.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:api:loader');
 
@@ -12,6 +13,9 @@ const loaderLogger = createLoggerNamespace('groupomania:api:loader');
  * @async
  */
 export default async function loadApp (app) {
+    loggingMiddelwareLoader(app);
+    loaderLogger.verbose('Logging middleware initialized');
+
     headersLoader(app);
     loaderLogger.verbose('Header middleware initialized');
 
