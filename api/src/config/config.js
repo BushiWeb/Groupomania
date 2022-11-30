@@ -123,6 +123,13 @@ let config = convict({
             default: false,
             env: 'DB_SSL'
         }
+    },
+    payload: {
+        maxSize: {
+            doc: 'Payload\'s max size in number of bytes',
+            format : 'int',
+            default: 10240
+        }
     }
 });
 confLogger.debug('Configuration schema created');
