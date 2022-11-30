@@ -3,6 +3,7 @@ import { createLoggerNamespace } from '../logger/logger.js';
 import { createUserController } from '../controllers/user-controllers.js';
 import config from '../config/config.js';
 import validationMiddlewares, { createUserBodySchema } from '../schemas/index.js';
+import createBodyParser from '../middlewares/body-parsing.js';
 
 const userRoutesLogger = createLoggerNamespace('groupomania:api:routes:user');
 
@@ -21,7 +22,12 @@ const expressJsonOptions = {
  */
 router.post(
     '/',
-    express.json(expressJsonOptions),
+    createBodyParser({
+        'application/json': {
+            parser: 'json',
+            options: expressJsonOptions
+        }
+    }),
     validationMiddlewares(createUserBodySchema),
     createUserController
 );
