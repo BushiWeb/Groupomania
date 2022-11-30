@@ -181,15 +181,6 @@ describe('createBodyParser and its middleware test suite', () => {
             expect(next.mock.calls[0]).toHaveLength(1);
         });
 
-        it('should call the next error middleware if the middleware throws', () => {
-            request.headers['content-type'] = 'text/plain';
-            const error = new Error('Error');
-            mockExpressReturnedMiddleware.mockImplementation(() => {throw error;});
-            middlewarePositive(request, response, next);
-            expect(next).toHaveBeenCalled();
-            expect(next).toHaveBeenCalledWith(error);
-        });
-
         it('should call the next error middleware if the middleware calls it\'s next middleware with an error', () => {
             request.headers['content-type'] = 'text/plain';
             const error = new Error('Error');
