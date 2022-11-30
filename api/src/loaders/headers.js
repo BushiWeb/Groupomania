@@ -11,6 +11,10 @@ const loaderLogger = createLoggerNamespace('groupomania:api:loader:headers');
  */
 export default function headersLoaders (app) {
     loaderLogger.verbose('Loading global headers');
+
+    // Remove X-Powered-By
+    app.disable('x-powered-by');
+
     // Add CORS headers
     let corsOptions = {};
     const corsConfiguration = config.get('cors');
