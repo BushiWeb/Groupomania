@@ -130,6 +130,33 @@ let config = convict({
             format : 'int',
             default: 10240
         }
+    },
+    password: {
+        minLength: {
+            doc: 'Minimum length for the password',
+            format: 'int',
+            default: 8
+        },
+        minLowercase: {
+            doc: 'Minimum number of lowercase letters in the password',
+            format: 'int',
+            default: 1
+        },
+        minUppercase: {
+            doc: 'Minimum number of uppercase letters in the password',
+            format: 'int',
+            default: 1
+        },
+        minNumbers: {
+            doc: 'Minimum number of number characters in the password',
+            format: 'int',
+            default: 1
+        },
+        minSymbols: {
+            doc: 'Minimum number of symbols in the password',
+            format: 'int',
+            default: 1
+        }
     }
 });
 confLogger.debug('Configuration schema created');

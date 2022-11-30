@@ -2,6 +2,8 @@ import express from 'express';
 import { createLoggerNamespace } from '../logger/logger.js';
 import { createUserController } from '../controllers/user-controllers.js';
 import config from '../config/config.js';
+import validationMiddleware, { createUserBodySchema } from '../schemas/index.js';
+import { checkSchema } from 'express-validator';
 
 const userRoutesLogger = createLoggerNamespace('groupomania:api:routes:user');
 
@@ -18,6 +20,13 @@ const expressJsonOptions = {
  * Validates and sanitizes body data.
  * Call the corresponding controller.
  */
-router.post('/', express.json(expressJsonOptions), createUserController);
+router.post(
+    '/',
+    express.json(expressJsonOptions),
+    checkSchema(createUserBodySchema),
+    validationMiddleware,
+    createUserController
+);
+userRoutesLogger.debug('POST / - create user route added');
 
 export default router;
