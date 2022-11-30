@@ -37,7 +37,7 @@ describe('HttpError test suite', () => {
             expect(error).toHaveProperty('method', errorInformations.method);
             expect(error).toHaveProperty('statusCode', errorInformations.statusCode);
             expect(error).toHaveProperty('details', errorInformations.details);
-            expect(error).toHaveProperty('timestamp');
+            expect(error).toHaveProperty('dateTime');
         });
 
         it('should create an instance without details', () => {
@@ -56,7 +56,7 @@ describe('HttpError test suite', () => {
             expect(error).toHaveProperty('method', errorInformations.method);
             expect(error).toHaveProperty('statusCode', errorInformations.statusCode);
             expect(error).not.toHaveProperty('details');
-            expect(error).toHaveProperty('timestamp');
+            expect(error).toHaveProperty('dateTime');
         });
 
         it('should create an instance and transform the detail in an array', () => {
@@ -76,7 +76,7 @@ describe('HttpError test suite', () => {
             expect(error).toHaveProperty('method', errorInformations.method);
             expect(error).toHaveProperty('statusCode', errorInformations.statusCode);
             expect(error).toHaveProperty('details', [errorInformations.details[0]]);
-            expect(error).toHaveProperty('timestamp');
+            expect(error).toHaveProperty('dateTime');
         });
 
         it('should create an instance without details and description', () => {
@@ -94,7 +94,7 @@ describe('HttpError test suite', () => {
             expect(error).toHaveProperty('method', errorInformations.method);
             expect(error).toHaveProperty('statusCode', errorInformations.statusCode);
             expect(error).not.toHaveProperty('details');
-            expect(error).toHaveProperty('timestamp');
+            expect(error).toHaveProperty('dateTime');
         });
 
         it('should create an instance with default status code', () => {
@@ -111,7 +111,7 @@ describe('HttpError test suite', () => {
             expect(error).toHaveProperty('method', errorInformations.method);
             expect(error).toHaveProperty('statusCode', 500);
             expect(error).not.toHaveProperty('details');
-            expect(error).toHaveProperty('timestamp');
+            expect(error).toHaveProperty('dateTime');
         });
     });
 
@@ -137,7 +137,7 @@ describe('HttpError test suite', () => {
             expect(errorResponse).toHaveProperty('error.method', error.method);
             expect(errorResponse).toHaveProperty('error.statusCode', error.statusCode);
             expect(errorResponse).toHaveProperty('error.details', error.details);
-            expect(errorResponse).toHaveProperty('error.timestamp', error.timestamp);
+            expect(errorResponse).toHaveProperty('error.timestamp', error.dateTime);
         });
 
         it('should return an object with no details if the error has no details', () => {
@@ -158,7 +158,7 @@ describe('HttpError test suite', () => {
             expect(errorResponse).toHaveProperty('error.method', error.method);
             expect(errorResponse).toHaveProperty('error.statusCode', error.statusCode);
             expect(errorResponse).not.toHaveProperty('error.details');
-            expect(errorResponse).toHaveProperty('error.timestamp', error.timestamp);
+            expect(errorResponse).toHaveProperty('error.timestamp', error.dateTime);
         });
 
         it('should return an object with no message if the error has no description', () => {
@@ -178,7 +178,7 @@ describe('HttpError test suite', () => {
             expect(errorResponse).toHaveProperty('error.method', error.method);
             expect(errorResponse).toHaveProperty('error.statusCode', error.statusCode);
             expect(errorResponse).not.toHaveProperty('error.details');
-            expect(errorResponse).toHaveProperty('error.timestamp', error.timestamp);
+            expect(errorResponse).toHaveProperty('error.timestamp', error.dateTime);
         });
     });
 });

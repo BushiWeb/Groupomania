@@ -35,7 +35,7 @@ describe('NotFoundError test suite', () => {
             expect(error).toHaveProperty('method', errorInformations.method);
             expect(error).toHaveProperty('statusCode', 404);
             expect(error).toHaveProperty('details', errorInformations.details);
-            expect(error).toHaveProperty('timestamp');
+            expect(error).toHaveProperty('dateTime');
         });
 
         it('should create an instance without details', () => {
@@ -53,7 +53,7 @@ describe('NotFoundError test suite', () => {
             expect(error).toHaveProperty('method', errorInformations.method);
             expect(error).toHaveProperty('statusCode', 404);
             expect(error).not.toHaveProperty('details');
-            expect(error).toHaveProperty('timestamp');
+            expect(error).toHaveProperty('dateTime');
         });
 
         it('should create an instance and transform the detail in an array', () => {
@@ -72,7 +72,7 @@ describe('NotFoundError test suite', () => {
             expect(error).toHaveProperty('method', errorInformations.method);
             expect(error).toHaveProperty('statusCode', 404);
             expect(error).toHaveProperty('details', [errorInformations.details[0]]);
-            expect(error).toHaveProperty('timestamp');
+            expect(error).toHaveProperty('dateTime');
         });
 
         it('should create an instance without details and description', () => {
@@ -89,7 +89,7 @@ describe('NotFoundError test suite', () => {
             expect(error).toHaveProperty('method', errorInformations.method);
             expect(error).toHaveProperty('statusCode', 404);
             expect(error).not.toHaveProperty('details');
-            expect(error).toHaveProperty('timestamp');
+            expect(error).toHaveProperty('dateTime');
         });
 
         it('should create an instance with default status message', () => {
@@ -106,7 +106,7 @@ describe('NotFoundError test suite', () => {
             expect(error).toHaveProperty('method', errorInformations.method);
             expect(error).toHaveProperty('statusCode', 404);
             expect(error).not.toHaveProperty('details');
-            expect(error).toHaveProperty('timestamp');
+            expect(error).toHaveProperty('dateTime');
         });
     });
 });
