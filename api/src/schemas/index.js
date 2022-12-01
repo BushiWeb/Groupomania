@@ -1,7 +1,46 @@
 import { checkSchema, matchedData, validationResult } from 'express-validator';
-import createUserBodySchema from './create-user-body.js';import { createLoggerNamespace } from '../logger/logger.js';
+import createUserBodySchema from './create-user-body.js';
+import { createLoggerNamespace } from '../logger/logger.js';
+import UserInputValidationError from '../errors/errors/UserInputValidationError.js';
 
 const validationLogger = createLoggerNamespace('groupomania:api:validation');
+
+/**
+ * Formats the validations error recursively.
+ * Remove all values to avoid leaking or logging sensitive informations.
+ * @param {Object} error - Object containing the error informations.
+ * @param {string} [error.param] - Name of the parameter that is not valid.
+ * @param {string} [error.msg] - Error message.
+ * @param {string} [error.location] - Location of the parameter (body, cookie, param, query, headers).
+ * @param {string} [error.value] - Value of the parameter.
+ * @param {{param: string, msg: string, location: string, value: string, nestedErrors: Array}[]} [error.nestedErrors] - Contains suberrors. These errors have the same structure as the error parameter.
+ * @returns Returns the formated error.
+ */
+function validationErrorFormatter({ param, msg, location, nestedErrors }) {
+    let errorObject = {};
+
+    if (param) {
+        errorObject.param = param;
+    }
+
+    if (msg) {
+        errorObject.message = msg;
+    }
+
+    if (location) {
+        errorObject.location = location;
+    }
+
+    if (nestedErrors) {
+        errorObject.nestedErrors = [];
+        for (const nestedError of nestedErrors) {
+            errorObject.nestedErrors.push(validationErrorFormatter(nestedError));
+        }
+    }
+
+    return errorObject;
+}
+
 
 /**
  * Middleware handling the validation results.
@@ -12,10 +51,14 @@ const validationLogger = createLoggerNamespace('groupomania:api:validation');
  */
 function validationHandlingMiddleware(req, res, next) {
     validationLogger.verbose('Validation middleware execution');
-    const errors = validationResult(req);
+
+    // Format the error objects: remove the value for security reasons
+    const errors = validationResult(req).formatWith(validationErrorFormatter);
+
     if (!errors.isEmpty()) {
         validationLogger.debug('Validation unsuccessful');
-        return next(new Error(JSON.stringify(errors.mapped())));
+        const validationError = new UserInputValidationError(req.path, req.method, 'We are having trouble processin the data you provided. You may take a look at the details for more informations on how to solve this problem.', '', errors.array());
+        return next(validationError);
     }
 
     validationLogger.debug('Validation successful');
@@ -36,4 +79,4 @@ export default function validationMiddlewares(schema) {
     return [checkSchema(schema), validationHandlingMiddleware];
 }
 
-export {createUserBodySchema, validationHandlingMiddleware};
+export { createUserBodySchema, validationHandlingMiddleware, validationErrorFormatter };
