@@ -6,6 +6,7 @@ const defaultError = new Error('Error');
 
 const mockParserAlone = jest.fn((res, req, next) => next());
 const mockParserWithDataFormating = jest.fn((res, req, next) => next());
+const mockParserDirect = jest.fn((res, req, next) => next());
 const mockParserNextError = jest.fn((res, req, next) => next(defaultError));
 const mockParserThrowError = jest.fn(() => { throw defaultError; });
 const mockDataFormating = jest.fn((body) => ({...body}));
@@ -13,13 +14,14 @@ const mockDataFormatingThrowError = jest.fn(() => { throw defaultError; });
 
 const parserOptionsAllowEmpty = {
     'empty': {},
-    'text/plain': {
+    'parser/alone': {
         parser: mockParserAlone
     },
-    'application/json': {
+    'parser/withDataFormatting': {
         parser: mockParserWithDataFormating,
         dataFormatting: mockDataFormating
-    }
+    },
+    'parser/noObject': mockParserDirect
 };
 
 const parserOptionsForbidEmpty = {
@@ -52,7 +54,11 @@ const response = mockResponse();
 beforeEach(() => {
     mockParserAlone.mockClear();
     mockParserWithDataFormating.mockClear();
+    mockParserDirect.mockClear();
+    mockParserNextError.mockClear();
+    mockParserThrowError.mockClear();
     mockDataFormating.mockClear();
+    mockDataFormatingThrowError.mockClear();
     next.mockClear();
 });
 
@@ -65,8 +71,8 @@ describe('createBodyParser and its middleware test suite', () => {
             expect(next.mock.calls[0]).toHaveLength(0);
         });
 
-        it('should call the middleware associated to the Content-Type text/plain', () => {
-            request.headers['content-type'] = 'text/plain';
+        it('should call the middleware associated to the Content-Type parser/alone', () => {
+            request.headers['content-type'] = 'parser/alone';
             parserMiddleware(request, response, next);
             expect(mockParserAlone).toHaveBeenCalled();
             expect(mockParserAlone.mock.calls[0]).toContainEqual(request);
@@ -75,8 +81,8 @@ describe('createBodyParser and its middleware test suite', () => {
             expect(next.mock.calls[0]).toHaveLength(0);
         });
 
-        it('should call the middleware associated to the Content-Type text/plain if the Content-Type is text/plain;charset=utf-8', () => {
-            request.headers['content-type'] = 'text/plain;charset=utf-8';
+        it('should call the middleware associated to the Content-Type parser/alone if the Content-Type is parser/alone;charset=utf-8', () => {
+            request.headers['content-type'] = 'parser/alone;charset=utf-8';
             parserMiddleware(request, response, next);
             expect(mockParserAlone).toHaveBeenCalled();
             expect(mockParserAlone.mock.calls[0]).toContainEqual(request);
@@ -85,21 +91,26 @@ describe('createBodyParser and its middleware test suite', () => {
             expect(next.mock.calls[0]).toHaveLength(0);
         });
 
-        it('should call the middleware associated to the Content-Type application/json', () => {
-            request.headers['content-type'] = 'application/json';
+        it('should call the middleware and dataFormatting function associated to the Content-Type parser/withDataFormatting', () => {
+            request.headers['content-type'] = 'parser/withDataFormatting';
             parserMiddleware(request, response, next);
             expect(mockParserWithDataFormating).toHaveBeenCalled();
             expect(mockParserWithDataFormating.mock.calls[0]).toContainEqual(request);
             expect(mockParserWithDataFormating.mock.calls[0]).toContainEqual(response);
             expect(next).toHaveBeenCalled();
             expect(next.mock.calls[0]).toHaveLength(0);
-        });
-
-        it('should call the data formatting function if the Content-Type is application/json', () => {
-            request.headers['content-type'] = 'application/json';
-            parserMiddleware(request, response, next);
             expect(mockDataFormating).toHaveBeenCalled();
             expect(mockDataFormating).toHaveBeenCalledWith(request.body);
+        });
+
+        it('should call the middleware function associated to the Content-Type parser/noObject', () => {
+            request.headers['content-type'] = 'parser/noObject';
+            parserMiddleware(request, response, next);
+            expect(mockParserDirect).toHaveBeenCalled();
+            expect(mockParserDirect.mock.calls[0]).toContainEqual(request);
+            expect(mockParserDirect.mock.calls[0]).toContainEqual(response);
+            expect(next).toHaveBeenCalled();
+            expect(next.mock.calls[0]).toHaveLength(0);
         });
 
         it('should call the next error middleware if the Content-Type is not allowed', () => {

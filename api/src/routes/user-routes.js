@@ -23,9 +23,7 @@ const expressJsonOptions = {
 router.post(
     '/',
     createBodyParser({
-        'application/json': {
-            parser: express.json(expressJsonOptions)
-        }
+        'application/json': express.json(expressJsonOptions)
     }),
     validationMiddlewares(createUserBodySchema),
     createUserController

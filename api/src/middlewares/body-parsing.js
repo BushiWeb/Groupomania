@@ -5,7 +5,7 @@ const parsingLogger = createLoggerNamespace('groupomania:api:body-parsing');
 /**
  * Function returning a middleware validating the content type and parsin the request body.
  * The fonction configures the middleware with the accepted content-type and their related parsers.
- * @param {Object.<string, {parser: Function, dataFormatting: Function}} parsers - Object representing the accepted content types. The keys are the MIME types of the accepted Content-Types, or "empty" if the request also accepts requests with no body. For each MIME type, parser gives the middleware to execute to parse the corresponding body. This can be the result of functions like express.json, or multer.single. Finaly, dataFormatting contains a function that is going to be executed after the body is parsed. This function receives the body of the request and returns the new body. If the property name is "empty", the corresponding object is ignored.
+ * @param {Object.<string, {parser: Function, dataFormatting: Function}|Function} parsers - Object representing the accepted content types. The keys are the MIME types of the accepted Content-Types, or "empty" if the request also accepts requests with no body. The values is either the middleware to parse the body (i.e. the result of express.json, multer.single(), ...); or an object containing that middleware and an optionnal function. This function is going to e executed after the parser, it takes the request's body as a parameter and sends it back. It can be used to change the structure of the body.
  * @returns {Function} Returns the configured middleware.
  */
 export default function createBodyParser(parsers) {
@@ -45,9 +45,11 @@ export default function createBodyParser(parsers) {
             return next(new Error('The Content-Type is not allowed.'));
         }
 
+        const middleware = parser.parser ? parser.parser : parser;
+
         // Execute the parser, then execute the data formatter
         try {
-            parser.parser(req, res, (err) => {
+            middleware(req, res, (err) => {
                 parsingLogger.debug('Parsing middleware executed, analysing result');
 
                 if (err) {
