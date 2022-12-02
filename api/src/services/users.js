@@ -39,7 +39,7 @@ export async function createUser({email, password, roleId}) {
 
         return newUser;
     } catch (error) {
-        usersServicesLogger.error(error);
+        usersServicesLogger.debug('Create user service error');
         throw error;
     }
 }
