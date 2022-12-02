@@ -34,7 +34,7 @@ export async function createUser({email, password, roleId}) {
             userInfos.roleId = roleId;
         }
 
-        const newUser = db.models.User.create(userInfos);
+        const newUser = await db.models.User.create(userInfos);
         usersServicesLogger.debug('User created');
 
         return newUser;
