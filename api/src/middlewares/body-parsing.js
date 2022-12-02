@@ -1,4 +1,5 @@
 import { createLoggerNamespace } from '../logger/logger.js';
+import UnsupportedMediaTypeError from '../errors/errors/UnsupportedMediaTypeError.js';
 
 const parsingLogger = createLoggerNamespace('groupomania:api:body-parsing');
 
@@ -31,7 +32,14 @@ export default function createBodyParser(parsers) {
                 return next();
             }
             parsingLogger.debug('Empty body is forbidden for this endpoint, throwing an error');
-            return next(new Error('The request needs a body to be fulfilled.'));
+            const unsupportedMediaType = new UnsupportedMediaTypeError(
+                req.path,
+                req.method,
+                'We couldn\'t find the request Content-Type. Please, make sure you are sending a body and it\'s Content-Type with the request, and try again.',
+                'The list off all supported data formats for this endpoint is given in the details. An empty body is not allowed for this endpoint.',
+                Object.keys(parsers)
+            );
+            return next(unsupportedMediaType);
         }
 
         // Remove the parameters from the MIME type of the Content-Type
@@ -42,7 +50,14 @@ export default function createBodyParser(parsers) {
         // Throw if the Content-Type is not allowed
         if (!parser) {
             parsingLogger.debug('Unsupported Content-Typed, throwing an error');
-            return next(new Error('The Content-Type is not allowed.'));
+            const unsupportedMediaType = new UnsupportedMediaTypeError(
+                req.path,
+                req.method,
+                `We currently don't support the ${rawContentType} Content-Type. Please, try again with a different data format.`,
+                `The list off all supported data formats for this endpoint is given in the details. ${emptyAllowed ? 'This endpoint can also be called with an empty body.' : 'This endpoint needs a well formed and supported body to be executed.'}`,
+                Object.keys(parsers)
+            );
+            return next(unsupportedMediaType);
         }
 
         const middleware = parser.parser ? parser.parser : parser;
