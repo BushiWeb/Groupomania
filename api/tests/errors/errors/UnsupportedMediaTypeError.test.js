@@ -15,11 +15,33 @@ describe('UnsupportedMediaTypeError test suite', () => {
                 info: 'Details object',
                 error: 'Invalid'
             }
-        ]
+        ],
+        origin: new Error('Error message')
     };
 
     describe('Constructor test suite', () => {
         it('should create an instance with the specified informations', () => {
+            const error = new UnsupportedMediaTypeError(
+                errorInformations.path,
+                errorInformations.method,
+                errorInformations.summary,
+                errorInformations.description,
+                errorInformations.details,
+                errorInformations.origin
+            );
+
+            expect(error).toHaveProperty('name', 'UnsupportedMediaTypeError');
+            expect(error).toHaveProperty('message', errorInformations.summary);
+            expect(error).toHaveProperty('description', errorInformations.description);
+            expect(error).toHaveProperty('path', errorInformations.path);
+            expect(error).toHaveProperty('method', errorInformations.method);
+            expect(error).toHaveProperty('statusCode', 415);
+            expect(error).toHaveProperty('details', errorInformations.details);
+            expect(error).toHaveProperty('dateTime');
+            expect(error).toHaveProperty('originError', errorInformations.origin);
+        });
+
+        it('should create an instance without the origin', () => {
             const error = new UnsupportedMediaTypeError(
                 errorInformations.path,
                 errorInformations.method,
@@ -36,6 +58,7 @@ describe('UnsupportedMediaTypeError test suite', () => {
             expect(error).toHaveProperty('statusCode', 415);
             expect(error).toHaveProperty('details', errorInformations.details);
             expect(error).toHaveProperty('dateTime');
+            expect(error).not.toHaveProperty('originError');
         });
 
         it('should create an instance without details', () => {
@@ -54,6 +77,7 @@ describe('UnsupportedMediaTypeError test suite', () => {
             expect(error).toHaveProperty('statusCode', 415);
             expect(error).not.toHaveProperty('details');
             expect(error).toHaveProperty('dateTime');
+            expect(error).not.toHaveProperty('originError');
         });
 
         it('should create an instance and transform the detail in an array', () => {
@@ -73,6 +97,7 @@ describe('UnsupportedMediaTypeError test suite', () => {
             expect(error).toHaveProperty('statusCode', 415);
             expect(error).toHaveProperty('details', [errorInformations.details[0]]);
             expect(error).toHaveProperty('dateTime');
+            expect(error).not.toHaveProperty('originError');
         });
 
         it('should create an instance without details and description', () => {
@@ -90,6 +115,7 @@ describe('UnsupportedMediaTypeError test suite', () => {
             expect(error).toHaveProperty('statusCode', 415);
             expect(error).not.toHaveProperty('details');
             expect(error).toHaveProperty('dateTime');
+            expect(error).not.toHaveProperty('originError');
         });
 
         it('should create an instance with default status message', () => {
@@ -107,6 +133,7 @@ describe('UnsupportedMediaTypeError test suite', () => {
             expect(error).toHaveProperty('statusCode', 415);
             expect(error).not.toHaveProperty('details');
             expect(error).toHaveProperty('dateTime');
+            expect(error).not.toHaveProperty('originError');
         });
     });
 });

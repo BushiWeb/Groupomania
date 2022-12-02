@@ -1,10 +1,10 @@
 import HttpError from './HttpError.js';
 
 /**
- * Class representing validation errors. The details contains all errors descriptions.
+ * Class representing an error in the API.
  * Inherits from the HttpError object.
  */
-export default class UserInputValidationError extends HttpError {
+export default class ConflictError extends HttpError {
     /**
      * HttpError constructor.
      * Calls the error constructor and sets the status.
@@ -16,9 +16,9 @@ export default class UserInputValidationError extends HttpError {
      * @param {*} [origin] - Original error, used to generate the HTTP error.
      */
     constructor(path, method, summary, description, details, origin) {
-        const statusCode = 400;
-        summary ||= 'We are having trouble using the data you provided. Please, check your data to make sure they match the constraints.';
+        const statusCode = 409;
+        summary ||= 'We couldn\'t complete the request due to a conflict with the ressources.';
         super(summary, path, method, statusCode, description, details, origin);
-        this.name = 'UserInputValidationError';
+        this.name = 'ConflictError';
     }
 }

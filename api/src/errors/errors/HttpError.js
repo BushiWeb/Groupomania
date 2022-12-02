@@ -12,8 +12,9 @@ export default class HttpError extends Error {
      * @param {number} [statusCode=500] - The error status code, to send back to the user.
      * @param {string} [description] - More detailed explanation about the error.
      * @param {Array|*} [details] - More informations about the error, that would be unclear if depicted in a string.
+     * @param {*} [origin] - Original error, used to generate the HTTP error.
      */
-    constructor(summary, path, method, statusCode = 500, description, details) {
+    constructor(summary, path, method, statusCode = 500, description, details, origin) {
         super(summary);
         this.statusCode = statusCode;
         this.name = 'HttpError';
@@ -28,6 +29,10 @@ export default class HttpError extends Error {
             this.details = details;
         } else if (details) {
             this.details = [details];
+        }
+
+        if (origin) {
+            this.originError = origin;
         }
     }
 
