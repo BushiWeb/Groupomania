@@ -57,7 +57,12 @@ function validationHandlingMiddleware(req, res, next) {
 
     if (!errors.isEmpty()) {
         validationLogger.debug('Validation unsuccessful');
-        const validationError = new UserInputValidationError(req.path, req.method, 'We are having trouble processin the data you provided. You may take a look at the details for more informations on how to solve this problem.', '', errors.array());
+        const validationError = new UserInputValidationError({
+            path: req.path,
+            method: req.method,
+            description: 'We are having trouble processin the data you provided. You may take a look at the details for more informations on how to solve this problem. You may solve the problems and try again.',
+            details: errors.array()
+        });
         return next(validationError);
     }
 

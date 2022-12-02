@@ -13,7 +13,12 @@ export default function errorsLoader (app) {
 
     // Intercept Express 404 errors, sent when the method or the URL isn't defined
     app.use((req, res, next) => {
-        const error = new NotFoundError(req.path, req.method, 'We have a problem understanding your request. Please, double check your request and try again.', 'You may check the request method or path, we are not handling this one yet.');
+        const error = new NotFoundError({
+            path: req.path,
+            method: req.method,
+            summary: 'The request you sent can\'t be processed.',
+            description: 'We have a problem understanding your request. You may check your request and make sure we can understand it, then try again.'
+        });
         next(error);
     });
     loaderLogger.verbose('Middleware to intercept Express Not Found error added.');

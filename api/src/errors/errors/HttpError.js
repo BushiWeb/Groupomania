@@ -6,15 +6,18 @@ export default class HttpError extends Error {
     /**
      * HttpError constructor.
      * Calls the error constructor and sets the status.
-     * @param {string} summary - Error's summary.
-     * @param {string} path - Path of the request that generated the error.
-     * @param {string} method - Method of the request that generated the error.
-     * @param {number} [statusCode=500] - The error status code, to send back to the user.
-     * @param {string} [description] - More detailed explanation about the error.
-     * @param {Array|*} [details] - More informations about the error, that would be unclear if depicted in a string.
+     * @param {Object} error - Object containing the public error informations.
+     * @param {string} error.summary - Error's summary.
+     * @param {string} error.path - Path of the request that generated the error.
+     * @param {string} error.method - Method of the request that generated the error.
+     * @param {number} [error.statusCode=500] - The error status code, to send back to the user.
+     * @param {string} [error.description] - More detailed explanation about the error.
+     * @param {Array|*} [error.details] - More informations about the error, that would be unclear if depicted in a string.
+     * @param {Object} [log] - Object containing the data to log. If the log parameter is absent, the public error informations will be used.
+     * @param {string|Error} [log.message] - Message to log. It can be a string or an error instance. If absent, the summary and description will be used.
      * @param {*} [origin] - Original error, used to generate the HTTP error.
      */
-    constructor(summary, path, method, statusCode = 500, description, details, origin) {
+    constructor({summary, path, method, statusCode = 500, description, details}, log, origin) {
         super(summary);
         this.statusCode = statusCode;
         this.name = 'HttpError';
@@ -29,6 +32,10 @@ export default class HttpError extends Error {
             this.details = details;
         } else if (details) {
             this.details = [details];
+        }
+
+        if (log) {
+            this.logInformations = log;
         }
 
         if (origin) {
