@@ -1,6 +1,6 @@
 import createLoggerNamespace from '../logger/logger-namespace.js';
 import NotFoundError from '../errors/errors/NotFoundError.js';
-import { errorHandler } from '../errors/error-middleware.js';
+import { errorHandler, errorParser } from '../errors/error-middleware.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:api:loader:errors');
 
@@ -17,6 +17,10 @@ export default function errorsLoader (app) {
         next(error);
     });
     loaderLogger.verbose('Middleware to intercept Express Not Found error added.');
+
+    // Normalizes error format
+    app.use(errorParser);
+    loaderLogger.verbose('Error parsing middleware added');
 
     // Create error responses
     app.use(errorHandler);
