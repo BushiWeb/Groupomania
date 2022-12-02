@@ -1,3 +1,5 @@
+import { UniqueConstraintError } from 'sequelize';
+import ConflictError from '../errors/errors/ConflictError.js';
 import { createLoggerNamespace } from '../logger/logger.js';
 import { createUser } from '../services/users.js';
 
@@ -26,6 +28,17 @@ export async function createUserController(req, res, next) {
         };
         res.status(201).json(responseData);
     } catch (error) {
-        return next(error);
+        let normalizedError;
+        if (error instanceof UniqueConstraintError) {
+            normalizedError = new ConflictError(
+                req.path,
+                req.method,
+                'This email address already exists.',
+                'It appears that you already have an account. You may try to login.',
+                undefined,
+                error
+            );
+        }
+        return next(normalizedError);
     }
 }
