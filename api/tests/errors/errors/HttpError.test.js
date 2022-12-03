@@ -20,8 +20,11 @@ describe('HttpError test suite', () => {
     };
     const origin = new Error('Error message');
     const log = {
-        message: 'Logging message',
-        otherData: 'data'
+        label: 'log label',
+        message: 'log message',
+        details: 'details',
+        metadata: 'metadata',
+        moreData: 'More!'
     };
 
     describe('Constructor test suite', () => {
@@ -36,77 +39,27 @@ describe('HttpError test suite', () => {
             expect(error).toHaveProperty('statusCode', errorInformations.statusCode);
             expect(error).toHaveProperty('details', errorInformations.details);
             expect(error).toHaveProperty('dateTime');
-            expect(error).toHaveProperty('originError', origin);
-            expect(error).toHaveProperty('logInformations', log);
+            expect(error).toHaveProperty('cause', origin);
+            expect(error).toHaveProperty('logInformations');
+            expect(error.logInformations).toHaveProperty('label', log.label);
+            expect(error.logInformations).toHaveProperty('message', log.message);
+            expect(error.logInformations).toHaveProperty('path', error.path);
+            expect(error.logInformations).toHaveProperty('method', error.method);
+            expect(error.logInformations).toHaveProperty('errorDate', error.dateTime);
+            expect(error.logInformations).toHaveProperty('statusCode', error.statusCode);
+            expect(error.logInformations).toHaveProperty('details', log.details);
+            expect(error.logInformations).toHaveProperty('stack', error.stack);
+            expect(error.logInformations).toHaveProperty('originStack', origin.stack);
+            expect(error.logInformations).toHaveProperty('metadata', log.metadata);
+            expect(error.logInformations).toHaveProperty('moreData', log.moreData);
         });
 
-        it('should create an instance without the origin', () => {
-            const error = new HttpError(errorInformations, log);
-
-            expect(error).toHaveProperty('name', 'HttpError');
-            expect(error).toHaveProperty('message', errorInformations.summary);
-            expect(error).toHaveProperty('description', errorInformations.description);
-            expect(error).toHaveProperty('path', errorInformations.path);
-            expect(error).toHaveProperty('method', errorInformations.method);
-            expect(error).toHaveProperty('statusCode', errorInformations.statusCode);
-            expect(error).toHaveProperty('details', errorInformations.details);
-            expect(error).toHaveProperty('dateTime');
-            expect(error).toHaveProperty('logInformations', log);
-            expect(error).not.toHaveProperty('originError');
-        });
-
-        it('should create an instance without the log', () => {
-            const error = new HttpError(errorInformations);
-
-            expect(error).toHaveProperty('name', 'HttpError');
-            expect(error).toHaveProperty('message', errorInformations.summary);
-            expect(error).toHaveProperty('description', errorInformations.description);
-            expect(error).toHaveProperty('path', errorInformations.path);
-            expect(error).toHaveProperty('method', errorInformations.method);
-            expect(error).toHaveProperty('statusCode', errorInformations.statusCode);
-            expect(error).toHaveProperty('details', errorInformations.details);
-            expect(error).toHaveProperty('dateTime');
-            expect(error).not.toHaveProperty('logInformations');
-            expect(error).not.toHaveProperty('originError');
-        });
-
-        it('should create an instance without details', () => {
-            const lessErrorInformations = {...errorInformations};
-            delete lessErrorInformations.details;
-            const error = new HttpError(lessErrorInformations);
-
-            expect(error).toHaveProperty('name', 'HttpError');
-            expect(error).toHaveProperty('message', errorInformations.summary);
-            expect(error).toHaveProperty('description', errorInformations.description);
-            expect(error).toHaveProperty('path', errorInformations.path);
-            expect(error).toHaveProperty('method', errorInformations.method);
-            expect(error).toHaveProperty('statusCode', errorInformations.statusCode);
-            expect(error).not.toHaveProperty('details');
-            expect(error).toHaveProperty('dateTime');
-            expect(error).not.toHaveProperty('logInformations');
-            expect(error).not.toHaveProperty('originError');
-        });
-
-        it('should create an instance and transform the detail in an array', () => {
-            const lessErrorInformations = {...errorInformations};
-            lessErrorInformations.details = errorInformations.details[0];
-            const error = new HttpError(lessErrorInformations);
-
-            expect(error).toHaveProperty('name', 'HttpError');
-            expect(error).toHaveProperty('message', errorInformations.summary);
-            expect(error).toHaveProperty('description', errorInformations.description);
-            expect(error).toHaveProperty('path', errorInformations.path);
-            expect(error).toHaveProperty('method', errorInformations.method);
-            expect(error).toHaveProperty('statusCode', errorInformations.statusCode);
-            expect(error).toHaveProperty('details', [errorInformations.details[0]]);
-            expect(error).toHaveProperty('dateTime');
-            expect(error).not.toHaveProperty('logInformations');
-            expect(error).not.toHaveProperty('originError');
-        });
-
-        it('should create an instance without description', () => {
-            const lessErrorInformations = {...errorInformations};
-            delete lessErrorInformations.description;
+        it('should create an instance with the default informations', () => {
+            const lessErrorInformations = {
+                summary: errorInformations.summary,
+                path: errorInformations.path,
+                method: errorInformations.method
+            };
             const error = new HttpError(lessErrorInformations);
 
             expect(error).toHaveProperty('name', 'HttpError');
@@ -114,16 +67,29 @@ describe('HttpError test suite', () => {
             expect(error).not.toHaveProperty('description');
             expect(error).toHaveProperty('path', errorInformations.path);
             expect(error).toHaveProperty('method', errorInformations.method);
-            expect(error).toHaveProperty('statusCode', errorInformations.statusCode);
-            expect(error).toHaveProperty('details', errorInformations.details);
+            expect(error).toHaveProperty('statusCode', 500);
+            expect(error).not.toHaveProperty('details');
             expect(error).toHaveProperty('dateTime');
-            expect(error).not.toHaveProperty('logInformations');
-            expect(error).not.toHaveProperty('originError');
+            expect(error).not.toHaveProperty('cause');
+            expect(error).toHaveProperty('logInformations');
+            expect(error.logInformations).toHaveProperty('label', error.name);
+            expect(error.logInformations).toHaveProperty('message', error.message);
+            expect(error.logInformations).toHaveProperty('path', error.path);
+            expect(error.logInformations).toHaveProperty('method', error.method);
+            expect(error.logInformations).toHaveProperty('errorDate', error.dateTime);
+            expect(error.logInformations).toHaveProperty('statusCode', error.statusCode);
+            expect(error.logInformations).not.toHaveProperty('details');
+            expect(error.logInformations).toHaveProperty('stack', error.stack);
+            expect(error.logInformations).not.toHaveProperty('originStack');
         });
 
-        it('should create an instance with default status code', () => {
-            const lessErrorInformations = {...errorInformations};
-            delete lessErrorInformations.statusCode;
+        it('should create an instance with the default options except the description', () => {
+            const lessErrorInformations = {
+                summary: errorInformations.summary,
+                path: errorInformations.path,
+                method: errorInformations.method,
+                description: errorInformations.description
+            };
             const error = new HttpError(lessErrorInformations);
 
             expect(error).toHaveProperty('name', 'HttpError');
@@ -132,10 +98,49 @@ describe('HttpError test suite', () => {
             expect(error).toHaveProperty('path', errorInformations.path);
             expect(error).toHaveProperty('method', errorInformations.method);
             expect(error).toHaveProperty('statusCode', 500);
-            expect(error).toHaveProperty('details', errorInformations.details);
+            expect(error).not.toHaveProperty('details');
             expect(error).toHaveProperty('dateTime');
-            expect(error).not.toHaveProperty('logInformations');
-            expect(error).not.toHaveProperty('originError');
+            expect(error).not.toHaveProperty('cause');
+            expect(error).toHaveProperty('logInformations');
+            expect(error.logInformations).toHaveProperty('label', error.name);
+            expect(error.logInformations).toHaveProperty('message', error.description);
+            expect(error.logInformations).toHaveProperty('path', error.path);
+            expect(error.logInformations).toHaveProperty('method', error.method);
+            expect(error.logInformations).toHaveProperty('errorDate', error.dateTime);
+            expect(error.logInformations).toHaveProperty('statusCode', error.statusCode);
+            expect(error.logInformations).not.toHaveProperty('details');
+            expect(error.logInformations).toHaveProperty('stack', error.stack);
+            expect(error.logInformations).not.toHaveProperty('originStack');
+        });
+
+        it('should create an instance with details that is not an array', () => {
+            const lessErrorInformations = {
+                summary: errorInformations.summary,
+                path: errorInformations.path,
+                method: errorInformations.method,
+                details: errorInformations.details[0]
+            };
+            const error = new HttpError(lessErrorInformations);
+
+            expect(error).toHaveProperty('name', 'HttpError');
+            expect(error).toHaveProperty('message', errorInformations.summary);
+            expect(error).not.toHaveProperty('description');
+            expect(error).toHaveProperty('path', errorInformations.path);
+            expect(error).toHaveProperty('method', errorInformations.method);
+            expect(error).toHaveProperty('statusCode', 500);
+            expect(error).toHaveProperty('details', [errorInformations.details[0]]);
+            expect(error).toHaveProperty('dateTime');
+            expect(error).not.toHaveProperty('cause');
+            expect(error).toHaveProperty('logInformations');
+            expect(error.logInformations).toHaveProperty('label', error.name);
+            expect(error.logInformations).toHaveProperty('message', error.message);
+            expect(error.logInformations).toHaveProperty('path', error.path);
+            expect(error.logInformations).toHaveProperty('method', error.method);
+            expect(error.logInformations).toHaveProperty('errorDate', error.dateTime);
+            expect(error.logInformations).toHaveProperty('statusCode', error.statusCode);
+            expect(error.logInformations).toHaveProperty('details', error.details);
+            expect(error.logInformations).toHaveProperty('stack', error.stack);
+            expect(error.logInformations).not.toHaveProperty('originStack');
         });
     });
 
@@ -157,37 +162,23 @@ describe('HttpError test suite', () => {
             expect(errorResponse).toHaveProperty('error.timestamp', error.dateTime);
         });
 
-        it('should return an object with no details if the error has no details', () => {
-            const lessErrorInformations = {...errorInformations};
-            delete lessErrorInformations.details;
+        it('should return an object with no optionnal informations', () => {
+            const lessErrorInformations = {
+                summary: errorInformations.summary,
+                path: errorInformations.path,
+                method: errorInformations.method
+            };
             const error = new HttpError(lessErrorInformations);
             const errorResponse = error.getErrorResponse();
 
             expect(errorResponse).toHaveProperty('error');
             expect(errorResponse).toHaveProperty('error.type', error.name);
             expect(errorResponse).toHaveProperty('error.title', error.message);
-            expect(errorResponse).toHaveProperty('error.message', error.description);
+            expect(errorResponse).not.toHaveProperty('error.message');
             expect(errorResponse).toHaveProperty('error.path', error.path);
             expect(errorResponse).toHaveProperty('error.method', error.method);
             expect(errorResponse).toHaveProperty('error.statusCode', error.statusCode);
             expect(errorResponse).not.toHaveProperty('error.details');
-            expect(errorResponse).toHaveProperty('error.timestamp', error.dateTime);
-        });
-
-        it('should return an object with no message if the error has no description', () => {
-            const lessErrorInformations = {...errorInformations};
-            delete lessErrorInformations.description;
-            const error = new HttpError(lessErrorInformations);
-            const errorResponse = error.getErrorResponse();
-
-            expect(errorResponse).toHaveProperty('error');
-            expect(errorResponse).toHaveProperty('error.type', error.name);
-            expect(errorResponse).toHaveProperty('error.title', error.message);
-            expect(errorResponse).not.toHaveProperty('error.message', error.description);
-            expect(errorResponse).toHaveProperty('error.path', error.path);
-            expect(errorResponse).toHaveProperty('error.method', error.method);
-            expect(errorResponse).toHaveProperty('error.statusCode', error.statusCode);
-            expect(errorResponse).toHaveProperty('error.details', error.details);
             expect(errorResponse).toHaveProperty('error.timestamp', error.dateTime);
         });
     });

@@ -13,12 +13,16 @@ export default class HttpError extends Error {
      * @param {number} [error.statusCode=500] - The error status code, to send back to the user.
      * @param {string} [error.description] - More detailed explanation about the error.
      * @param {Array|*} [error.details] - More informations about the error, that would be unclear if depicted in a string.
-     * @param {Object} [log] - Object containing the data to log. If the log parameter is absent, the public error informations will be used.
+     * @param {Object} [log = {}] - Object containing the data to log. If the log parameter is absent, the public error informations will be used.
+     * @param {string} [log.label] - Label of the log. If absent, the error name will be used.
      * @param {string|Error} [log.message] - Message to log. It can be a string or an error instance. If absent, the summary and description will be used.
-     * @param {*} [origin] - Original error, used to generate the HTTP error.
+     * @param {*} [log.details] - More informations about the error. If absent, the error's details will be used.
+     * @param {*} [cause] - Original error, used to generate the HTTP error.
      */
-    constructor({summary, path, method, statusCode = 500, description, details}, log, origin) {
-        super(summary);
+    constructor({summary, path, method, statusCode = 500, description, details}, log = {}, cause) {
+        // Load error informations
+        super(summary, {...(cause && {cause})});
+
         this.statusCode = statusCode;
         this.name = 'HttpError';
         this.dateTime = new Date();
@@ -34,13 +38,8 @@ export default class HttpError extends Error {
             this.details = [details];
         }
 
-        if (log) {
-            this.logInformations = log;
-        }
-
-        if (origin) {
-            this.originError = origin;
-        }
+        // Create log informations. The log informations contains default values that may be overriden by the log parameter.
+        this.generateLogInformations(log);
     }
 
     /**
@@ -66,5 +65,30 @@ export default class HttpError extends Error {
         }
 
         return { error };
+    }
+
+
+    /**
+     * Generates the logInformations object.
+     * @param {Object} [log] - Object containing the data to log. If the log parameter is absent, the public error informations will be used.
+     * @param {string} [log.label] - Label of the log. If absent, the error name will be used.
+     * @param {string|Error} [log.message] - Message to log. It can be a string or an error instance. If absent, the summary and description will be used.
+     * @param {*} [log.details] - More informations about the error. If absent, the error's details will be used.
+     */
+    generateLogInformations({label, message, details, ...otherData}) {
+        this.logInformations = {
+            label: label || this.name,
+            message: message || this.description || this.message,
+            path: this.path,
+            method: this.method,
+            errorDate: this.dateTime,
+            statusCode: this.statusCode,
+            stack: this.stack,
+            // If either logDetails or this.details is defined, add it
+            ...((details || this.details) && {details: details || this.details}),
+            // If this.originError.stack is defined, add it
+            ...(this.cause?.stack && {originStack: this.cause.stack}),
+            ...otherData
+        };
     }
 }
