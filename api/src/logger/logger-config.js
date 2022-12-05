@@ -1,17 +1,15 @@
-import parser from 'yargs-parser';
+import { getEnvironment } from '../utils/utils.js';
 import LOGGER_CONFIG from './logger-config/global-logger-config.js';
 
 
 let winstonOptions = {...LOGGER_CONFIG};
 
 // Try to load environment specific logger configuration.
-let environment = parser(process.argv.slice(2)).env?.toLowerCase() ||
-    process.env.NODE_ENV?.toLowerCase() ||
-    'development';
+let environment = getEnvironment();
 
 try {
     let {default: environmentConfig} = await import(`./logger-config/${environment}-logger-config.js`);
-    console.log('Environment specific logger configuration loaded');
+    console.log(`${environment} environment specific logger configuration loaded`);
     winstonOptions = {...winstonOptions, ...environmentConfig};
 } catch (error) {
     console.error(error);
