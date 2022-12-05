@@ -1,7 +1,7 @@
 import winston from 'winston';
 
 const TEST_LOGGER_CONFIG = {
-    level: 'error',
+    level: 'fatal',
     format: winston.format.combine(
         winston.format.errors({stack: true}),
         winston.format.splat(),
