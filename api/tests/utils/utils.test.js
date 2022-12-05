@@ -14,9 +14,11 @@ describe('Utils functions test suite', () => {
         });
 
         it('should return the value of the env parameter', () => {
-            process.argv.push('--env', envValue);
+            const envArgument = `--env=${envValue}`;
+            process.argv.push(envArgument);
 
             expect(getEnvironment()).toBe(envValue.toLowerCase());
+            process.argv.pop();
         });
 
         it('should return the value of the node_env environment variable', () => {
