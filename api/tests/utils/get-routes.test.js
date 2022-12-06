@@ -125,7 +125,7 @@ describe('getRoutesRegexp test suite', () => {
 
         expect(Array.isArray(routeRegexps)).toBe(true);
         expect(routeRegexps).toHaveLength(1);
-        expect(routeRegexps[0]).toBe(regexps[1].regexp);
+        expect(routeRegexps[0]).toEqual(regexps[1].regexp);
     });
 
     it('should return the complete regexp of the router', () => {
