@@ -2,7 +2,7 @@ import headersLoader from './headers.js';
 import createLoggerNamespace from '../logger/logger-namespace.js';
 import databaseLoader from './database.js';
 import errorsLoader from './errors.js';
-import usersRouteLoader from './users.js';
+import routeLoader from './routes.js';
 import loggingMiddelwareLoader from './logger.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:api:loader');
@@ -22,7 +22,7 @@ export default async function loadApp (app) {
     await databaseLoader();
     loaderLogger.verbose('Database initialized');
 
-    usersRouteLoader(app);
+    routeLoader(app);
     loaderLogger.verbose('User routes added');
 
     errorsLoader(app);

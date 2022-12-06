@@ -7,7 +7,7 @@ const loaderLogger = createLoggerNamespace('groupomania:api:loader:users');
  * Add all users related routes and middlewares.
  * @param {Express.Application} app - Express application
  */
-export default function usersRouteLoader (app) {
+export default function routeLoader (app) {
     loaderLogger.verbose('Loading users routes and middlewares');
 
     app.use('/api/v1/users', UserRouter);
