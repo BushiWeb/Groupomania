@@ -26,7 +26,7 @@ export default function getRoutesRegexp(layer, prefix) {
         if (prefix) {
             returnedRegexp = concatPathRegexp(prefix, returnedRegexp);
         }
-        return [returnedRegexp];
+        return [new RegExp(returnedRegexp)];
     }
 
     return [];
@@ -46,11 +46,11 @@ function concatPathRegexp(start, end) {
     }
 
     if (start && !end) {
-        return start;
+        return new RegExp(start);
     }
 
     if (!start && end) {
-        return end;
+        return new RegExp(end);
     }
 
     // For the start, remove the first '/', and the ending '/$/i', '/|$)/i' and '/?(?='

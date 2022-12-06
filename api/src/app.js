@@ -9,6 +9,4 @@ appLogger.verbose('App initialized');
 
 await loadApp(app);
 
-console.log(app._router.stack[7].handle.stack[0]);
-
 export default app;
