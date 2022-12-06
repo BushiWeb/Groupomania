@@ -192,4 +192,14 @@ describe('getRoutesRegexp test suite', () => {
         expect(Array.isArray(routeRegexps)).toBe(true);
         expect(routeRegexps).toHaveLength(0);
     });
+
+    it('should return the complete regexp of all the routes in the application but only once per regexp', () => {
+        const repeatRegexps = [ regexps[1], regexps[1] ];
+        const app = createAppMock(repeatRegexps);
+        const routeRegexps = getRoutesRegexp(app);
+
+        expect(Array.isArray(routeRegexps)).toBe(true);
+        expect(routeRegexps).toHaveLength(1);
+        expect(routeRegexps).toContainEqual(regexps[1].regexp);
+    });
 });

@@ -13,7 +13,7 @@ export default function getRoutesRegexp(layer, prefix) {
         let appRegexp = [];
         for (const subLayer of layer._router.stack) {
             const subLayerRegexp = getRoutesRegexp(subLayer);
-            appRegexp = appRegexp.concat(subLayerRegexp);
+            appRegexp = concatUniqueRegexpArrays(appRegexp, subLayerRegexp);
         }
         return appRegexp;
     }
@@ -36,7 +36,7 @@ export default function getRoutesRegexp(layer, prefix) {
         }
         for (const route of layer.handle.stack) {
             const routeRegexp = getRoutesRegexp(route, newPrefix);
-            layerRegexp = layerRegexp.concat(routeRegexp);
+            layerRegexp = concatUniqueRegexpArrays(layerRegexp, routeRegexp);
         }
         return layerRegexp;
     }
@@ -92,4 +92,22 @@ function concatPathRegexp(start, end) {
 
 
     return RegExp(startStr + endStr, 'i');
+}
+
+
+/**
+ * Fuse two arrays containing regexp, so that each regexp is unique.
+ * @param {RegExp[]} array1 - First array.
+ * @param {RegExp[]} array2 - Second array.
+ * @returns {RegExp[]} Return the combined arrays.
+ */
+function concatUniqueRegexpArrays(array1, array2) {
+    // Remove the regexp of array2 that are already in array 1
+    const filteredArray2 = array2.filter(
+        (array2Value) => !(array1.some(
+            (array1Value) => array2Value.toString() === array1Value.toString()
+        ))
+    );
+
+    return array1.concat(filteredArray2);
 }
