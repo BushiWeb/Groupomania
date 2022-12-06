@@ -6,16 +6,18 @@
  * @returns {Array} Returns all the route regexp in the layer in an Array.
  */
 export default function getRoutesRegexp(layer, prefix) {
-    console.log(layer);
+    // If the layer is a router or an Express application
+    if (layer._router?.stack || layer.name === 'router' && layer.handle?.stack) {
+        const stack = layer._router?.stack || layer.handle.stack;
+        let layerRegexp = [];
+        let newPrefix = concatPathRegexp(prefix, layer.regexp);
 
-    // If the layer is an Express Appliation
-    if (layer._router?.stack) {
-        let appRegexp = [];
-        for (const subLayer of layer._router.stack) {
-            const subLayerRegexp = getRoutesRegexp(subLayer);
-            appRegexp = concatUniqueRegexpArrays(appRegexp, subLayerRegexp);
+        for (const route of stack) {
+            const routeRegexp = getRoutesRegexp(route, newPrefix);
+            layerRegexp = concatUniqueRegexpArrays(layerRegexp, routeRegexp);
         }
-        return appRegexp;
+
+        return layerRegexp;
     }
 
     // If the layer is a middleware defined with an HTTP verb or all
@@ -25,20 +27,6 @@ export default function getRoutesRegexp(layer, prefix) {
             returnedRegexp = concatPathRegexp(prefix, returnedRegexp);
         }
         return [returnedRegexp];
-    }
-
-    // If the layer is a router
-    if (layer.name === 'router' && layer.handle?.stack) {
-        let layerRegexp = [];
-        let newPrefix = layer.regexp;
-        if (prefix) {
-            newPrefix = concatPathRegexp(prefix, newPrefix);
-        }
-        for (const route of layer.handle.stack) {
-            const routeRegexp = getRoutesRegexp(route, newPrefix);
-            layerRegexp = concatUniqueRegexpArrays(layerRegexp, routeRegexp);
-        }
-        return layerRegexp;
     }
 
     return [];
@@ -53,6 +41,18 @@ export default function getRoutesRegexp(layer, prefix) {
  * @returns {RegExp} Returns the new path regexp.
  */
 function concatPathRegexp(start, end) {
+    if (!start && !end) {
+        return undefined;
+    }
+
+    if (start && !end) {
+        return start;
+    }
+
+    if (!start && end) {
+        return end;
+    }
+
     // For the start, remove the first '/', and the ending '/$/i', '/|$)/i' and '/?(?='
     const forbiddenEndingString = ['/$/i', '/|$)/i', '/?(?='];
     let startStr = start
@@ -78,7 +78,7 @@ function concatPathRegexp(start, end) {
         .toString()
         .split('\\')
         .reduce((accumulator, currentValue, currentIndex, array) => {
-            // If we are at the end and we find forbidden strings
+            // If we are at the start and we find forbidden strings
             if (accumulator === '' && forbiddenStartingString.includes(currentValue)) {
                 return accumulator;
             }
