@@ -7,8 +7,9 @@ function printfFormat({ level, message, timestamp, label, stack, ...metadata }) 
         formatedMessage += label ? `[${label}] ` : '';
         formatedMessage += message;
     } else {
-        formatedMessage += label ? `[${label}] ` : '[Error]';
-        formatedMessage += ' ' + stack;
+        formatedMessage += label ? `[${label}] ` : '[Error] ';
+        formatedMessage += message;
+        formatedMessage += '\n' + stack;
     }
 
     delete metadata.splat;

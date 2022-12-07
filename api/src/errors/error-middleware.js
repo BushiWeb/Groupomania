@@ -44,8 +44,11 @@ export function errorHandler(err, req, res, next) {
     } else {
         res.status(500).json({error: { message: err.message, type: err.name }});
     }
-
-    errorLogger.error(err);
+    if (err.getErrorLogInformations) {
+        errorLogger.error(err.getErrorLogInformations());
+    } else {
+        errorLogger.error(err);
+    }
 }
 
 
@@ -74,15 +77,17 @@ export function unHandledRequestHandler (req, res, next) {
     if (unprocessableUrl) {
         errorLogger.debug(`The route ${req.originalUrl} is not defined in the application.`);
         error = new NotFoundError({
-            path: req.path,
-            method: req.method,
-            summary: 'The request you sent can\'t be processed.',
-            description: 'We have a problem understanding your request. You may check your request and make sure we can understand it, then try again.'
+            message: 'The request path isn\'t defined in the API.',
+            title: 'The request you sent can\'t be processed.',
+            description: 'We have a problem understanding your request. You may check the documentation to see which path we understand, and try again.',
+            path: req.originalUrl,
+            method: req.method
         });
 
     } else {
         errorLogger.debug(`The method ${req.method} is not accepted with the route ${req.originalUrl}`);
         error = new MethodNotAllowedError({
+            message: `The method ${req.method} can't be used on the path ${req.originalUrl}`,
             path: req.originalUrl,
             method: req.method
         });

@@ -33,10 +33,11 @@ export default function createBodyParser(parsers) {
             }
             parsingLogger.debug('Empty body is forbidden for this endpoint, throwing an error');
             const unsupportedMediaType = new UnsupportedMediaTypeError({
-                path: req.path,
-                method: req.method,
-                summary: 'The request is missing a body content.',
+                message: `The request ${req.method} ${req.originalUrl} requires a content.`,
+                title: 'The request is missing a body content.',
                 description: 'We couldn\'t find the request Content-Type. Please, make sure you are sending a body and it\'s Content-Type with the request, and try again. The list off all supported data formats for this endpoint is given in the details. An empty body is not allowed for this endpoint.',
+                path: req.originalUrl,
+                method: req.method,
                 details: Object.keys(parsers)
             });
             return next(unsupportedMediaType);
@@ -51,10 +52,11 @@ export default function createBodyParser(parsers) {
         if (!parser) {
             parsingLogger.debug('Unsupported Content-Typed, throwing an error');
             const unsupportedMediaType = new UnsupportedMediaTypeError({
-                path: req.path,
+                message: `The endpoint ${req.method} ${req.originalUrl} don't handle ${rawContentType} bodies.`,
+                title: 'The request\'s body can\'t be parsed.',
+                description: `We currently don't support the ${rawContentType} Content-Type. Please, try again with a different data format. The list off all supported data formats for this endpoint is given in the details. ${emptyAllowed ? 'This endpoint can also be called with an empty body.' : 'An empty body is not allowed for this endpoint.'}`,
+                path: req.originalUrl,
                 method: req.method,
-                summary: 'The request\'s body can\'t be parsed.',
-                description: `We currently don't support the ${rawContentType} Content-Type. Please, try again with a different data format. The list off all supported data formats for this endpoint is given in the details. ${emptyAllowed ? 'This endpoint can also be called with an empty body.' : 'This endpoint needs a well formed and supported body to be executed.'}`,
                 details: Object.keys(parsers)
             });
             return next(unsupportedMediaType);
@@ -78,14 +80,14 @@ export default function createBodyParser(parsers) {
                         parsingLogger.debug('Data formating executed');
                     }
                 } catch (error) {
-                    parsingLogger.error(error);
+                    parsingLogger.verbose('Error while executing the data formatting function');
                     return next(error);
                 }
 
                 next();
             });
         } catch (error) {
-            parsingLogger.error(error);
+            parsingLogger.verbose('Error while executing the parsing middleware');
             next(error);
         }
     };
