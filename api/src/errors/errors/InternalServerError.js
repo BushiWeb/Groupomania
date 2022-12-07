@@ -1,12 +1,12 @@
 import HttpError from './HttpError.js';
 
 /**
- * Class representing an error occuring when a request is done on a known path but with a not allowed method in the API.
+ * Class representing a server error.
  * Inherits from the HttpError object.
  */
-export default class MethodNotAllowedError extends HttpError {
+export default class InternalServerError extends HttpError {
     /**
-     * MethodNotAllowed constructor.
+     * InternalServerError constructor.
      * Calls the error constructor and sets the status.
      * @param {Object} error - Object containing the public error informations. This object may contain any property, even if not defined in the documentation. Any other property will be logged, but not sent to the user.
      * @param {string} error.message - Error message.
@@ -19,10 +19,10 @@ export default class MethodNotAllowedError extends HttpError {
      * @param {Object} [headers = {}] - Headers to add to the response.
      */
     constructor({message, title: optionnalTitle, description: optionnalDescription, details, path, method, ...otherData}, cause, headers = {}) {
-        const statusCode = 405;
-        const name = 'MethodNotAllowedError';
-        const title = optionnalTitle || 'This method can\'t be used with this ressource.';
-        const description = optionnalDescription || `We can't execute you request because the ${method} can't be used on the ${path} path. Please, verify which methods are allowed and try again.`;
+        const statusCode = 500;
+        const name = 'InternalServerError';
+        const title = optionnalTitle || 'We encoutered an unexpected error.';
+        const description = optionnalDescription || 'We had a problem while processing your request. You may try again. If the problem persists, don\'t hesitate to contact us.';
         super({ message, name, title, description, details, statusCode, path, method, ...otherData }, cause, headers);
     }
 }

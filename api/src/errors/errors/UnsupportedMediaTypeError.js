@@ -12,7 +12,7 @@ export default class UnsupportedMediaTypeError extends HttpError {
      * @param {string} error.message - Error message.
      * @param {string} [error.title] - User friendly short error message.
      * @param {string} [error.description] - User friendly more in depth error description
-     * @param {Array|*} [error.details] - More informations about the error, that would be unclear if depicted in a string.
+     * @param {Array|*} [error.details] - More informations about the error, that would be unclear if depicted in a string. These data will be shown to the user. If you need the data for logging reasons only, add them as standalone properties in the error.
      * @param {string} error.path - Path of the request that generated the error.
      * @param {string} error.method - Method of the request that generated the error.
      * @param {*} [cause] - Original error, used to generate the HTTP error.

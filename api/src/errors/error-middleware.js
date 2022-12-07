@@ -2,13 +2,16 @@ import { createLoggerNamespace } from '../logger/logger.js';
 import HttpError from './errors/HttpError.js';
 import NotFoundError from './errors/NotFoundError.js';
 import MethodNotAllowedError from './errors/MethodNotAllowedError.js';
+import InternalServerError from './errors/InternalServerError.js';
+import createError from 'http-errors';
 
 const errorLogger = createLoggerNamespace('groupomania:api:error');
 
 /**
  * Error parser, normalizes errors.
- * Transforms all errors that don't inherit from HttpError into HttpErrors.
  * After this middleware, all errors have the same structure and can be handled the same way.
+ * Errors from Express (http-errors module) already have status and headers which will be kepts.
+ * Other errors will have status code 500 and a generic user message.
  * @param {HttpError} err - Error thrown by a middleware.
  * @param {Express.Request} req - Express request object.
  * @param {Express.Response} res - Express response object.
@@ -23,8 +26,39 @@ export function errorParser(err, req, res, next) {
         return next(err);
     }
 
-    // Temporary, to avoid request hanging
-    next(err);
+    // http-errors handling
+    if (createError.isHttpError(err)) {
+        errorLogger.debug('Express error, minimal parsing');
+        // Assemble error details. These details will be sent to the user if the status is amongst the 400 errors, and only logged otherwise.
+        const details = {
+            ...(err.type && { type: err.type }),
+            ...(err.body && { body: err.body }),
+            ...(err.charset && { charset: err.charset }),
+            ...(err.received && { bytesReceivedNb: err.received }),
+            ...(err.expected && { bytesExpectedNb: err.expected }),
+            ...(err.limit && { maxSize: err.limit }),
+            ...(err.length && { bodySize: err.length }),
+        };
+
+        return next(new HttpError({
+            message: err.message,
+            name: err.name,
+            title: err.expose ? err.message : 'We had a problem while processing your request. You may try again. If the problem persists, don\'t hesitate to contact us.',
+            statusCode: err.statusCode,
+            path: req.originalUrl,
+            method: req.method,
+            ...(err.statusCode < 500 ? { details } : { logData: details }),
+        }, err, err.headers));
+    }
+
+    // Normalize other errors
+    errorLogger.debug('Generix error, normalizing');
+    next(new InternalServerError({
+        message: err.message,
+        path: req.originalUrl,
+        method: req.method,
+        originalName: err.name
+    }, err));
 
 }
 
@@ -39,14 +73,11 @@ export function errorParser(err, req, res, next) {
 // eslint-disable-next-line no-unused-vars
 export function errorHandler(err, req, res, next) {
     errorLogger.verbose('Error handler execution');
-    if (err.getErrorResponse) {
+    if (err instanceof HttpError) {
         res.status(err.statusCode).json(err.getErrorResponse());
-    } else {
-        res.status(500).json({error: { message: err.message, type: err.name }});
-    }
-    if (err.getErrorLogInformations) {
         errorLogger.error(err.getErrorLogInformations());
     } else {
+        res.status(500).json({error: { message: err.message, type: err.name }});
         errorLogger.error(err);
     }
 }
