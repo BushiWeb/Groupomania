@@ -52,7 +52,7 @@ export function errorParser(err, req, res, next) {
     }
 
     // Normalize other errors
-    errorLogger.debug('Generix error, normalizing');
+    errorLogger.debug('Generic error, normalizing');
     next(new InternalServerError({
         message: err.message,
         path: req.originalUrl,
@@ -77,8 +77,15 @@ export function errorHandler(err, req, res, next) {
         res.status(err.statusCode).json(err.getErrorResponse());
         errorLogger.error(err.getErrorLogInformations());
     } else {
-        res.status(500).json({error: { message: err.message, type: err.name }});
-        errorLogger.error(err);
+        errorLogger.debug('Unparsed error');
+        const error = new InternalServerError({
+            message: err.message,
+            path: req.originalUrl,
+            method: req.method,
+            originalName: err.name
+        }, err);
+        res.status(500).json(error.getErrorResponse());
+        errorLogger.error(error.getErrorLogInformations());
     }
 }
 
