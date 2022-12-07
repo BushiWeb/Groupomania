@@ -16,12 +16,13 @@ export default class UnsupportedMediaTypeError extends HttpError {
      * @param {string} error.path - Path of the request that generated the error.
      * @param {string} error.method - Method of the request that generated the error.
      * @param {*} [cause] - Original error, used to generate the HTTP error.
+     * @param {Object} [headers = {}] - Headers to add to the response.
      */
-    constructor({message, title: optionnalTitle, description: optionnalDescription, details, path, method, ...otherData}, cause) {
+    constructor({message, title: optionnalTitle, description: optionnalDescription, details, path, method, ...otherData}, cause, headers = {}) {
         const statusCode = 415;
         const name = 'UnsupportedMediaTypeError';
         const title = optionnalTitle || 'the Content-Type is not supported.';
         const description = optionnalDescription || 'We currently can\'t handle this Content-Type. You may try again with a different data format.';
-        super({ message, name, title, description, details, statusCode, path, method, ...otherData }, cause);
+        super({ message, name, title, description, details, statusCode, path, method, ...otherData }, cause, headers);
     }
 }

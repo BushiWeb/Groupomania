@@ -16,8 +16,9 @@ export default class HttpError extends Error {
      * @param {string} error.path - Path of the request that generated the error.
      * @param {string} error.method - Method of the request that generated the error.
      * @param {*} [cause] - Original error, used to generate the HTTP error.
+     * @param {Object} [headers = {}] - Headers to add to the response.
      */
-    constructor({message, name = 'HttpError', title, description, details, statusCode = 500, path, method, ...otherData}, cause) {
+    constructor({message, name = 'HttpError', title, description, details, statusCode = 500, path, method, ...otherData}, cause, headers = {}) {
         // Load error informations
         super(message, {...(cause && {cause})});
 
@@ -33,7 +34,7 @@ export default class HttpError extends Error {
 
         this.more = otherData;
 
-
+        this.headers = headers;
     }
 
     /**

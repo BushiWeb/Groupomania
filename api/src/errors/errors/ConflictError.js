@@ -16,12 +16,13 @@ export default class ConflictError extends HttpError {
      * @param {string} error.path - Path of the request that generated the error.
      * @param {string} error.method - Method of the request that generated the error.
      * @param {*} [cause] - Original error, used to generate the HTTP error.
+     * @param {Object} [headers = {}] - Headers to add to the response.
      */
-    constructor({message, title: optionnalTitle, description: optionnalDescription, details, path, method, ...otherData}, cause) {
+    constructor({message, title: optionnalTitle, description: optionnalDescription, details, path, method, ...otherData}, cause, headers = {}) {
         const statusCode = 409;
         const name = 'ConflictError';
         const title = optionnalTitle || 'There is a conflict with the target ressource.';
         const description = optionnalDescription || 'We couldn\'t complete the request due to a conflict with the ressources. Please, solve the conflict before trying again.';
-        super({ message, name, title, description, details, statusCode, path, method, ...otherData }, cause);
+        super({ message, name, title, description, details, statusCode, path, method, ...otherData }, cause, headers);
     }
 }

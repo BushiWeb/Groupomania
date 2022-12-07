@@ -16,12 +16,13 @@ export default class UserInputValidationError extends HttpError {
      * @param {string} error.path - Path of the request that generated the error.
      * @param {string} error.method - Method of the request that generated the error.
      * @param {*} [cause] - Original error, used to generate the HTTP error.
+     * @param {Object} [headers = {}] - Headers to add to the response.
      */
-    constructor({message, title: optionnalTitle, description: optionnalDescription, details, path, method, ...otherData}, cause) {
+    constructor({message, title: optionnalTitle, description: optionnalDescription, details, path, method, ...otherData}, cause, headers = {}) {
         const statusCode = 400;
         const name = 'UserInputValidationError';
         const title = optionnalTitle || 'The received data are invalid.';
         const description = optionnalDescription || 'We are having trouble using the data you provided. Please, check your data to make sure they match the constraints.';
-        super({ message, name, title, description, details, statusCode, path, method, ...otherData }, cause);
+        super({ message, name, title, description, details, statusCode, path, method, ...otherData }, cause, headers);
     }
 }

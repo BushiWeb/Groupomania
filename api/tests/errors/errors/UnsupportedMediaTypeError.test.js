@@ -21,10 +21,14 @@ describe('UnsupportedMediaTypeError test suite', () => {
         moreData2: 'Second supplement'
     };
     const origin = new Error('Error message');
+    const headers = {
+        'header1': 'value',
+        'header2': 'value'
+    };
 
     describe('Constructor test suite', () => {
         it('should create an instance with the specified informations', () => {
-            const error = new UnsupportedMediaTypeError(errorInformations, origin);
+            const error = new UnsupportedMediaTypeError(errorInformations, origin, headers);
 
             expect(error).toHaveProperty('name', 'UnsupportedMediaTypeError');
             expect(error).toHaveProperty('message', errorInformations.message);
@@ -39,6 +43,7 @@ describe('UnsupportedMediaTypeError test suite', () => {
             expect(error).toHaveProperty('more');
             expect(error.more).toHaveProperty('moreData1', errorInformations.moreData1);
             expect(error.more).toHaveProperty('moreData2', errorInformations.moreData2);
+            expect(error).toHaveProperty('headers', headers);
         });
 
         it('should create an instance with the default informations', () => {
@@ -66,6 +71,7 @@ describe('UnsupportedMediaTypeError test suite', () => {
             expect(error).not.toHaveProperty('cause');
             expect(error).toHaveProperty('more');
             expect(error.more).toEqual({});
+            expect(error).toHaveProperty('headers', {});
         });
     });
 });
