@@ -2,10 +2,9 @@ import UnsupportedMediaTypeError from '../../../src/errors/errors/UnsupportedMed
 
 describe('UnsupportedMediaTypeError test suite', () => {
     const errorInformations = {
-        summary: 'Error summary',
+        message: 'Error message',
+        title: 'Error short user description',
         description: 'More informations about the error',
-        path: 'api/error',
-        method: 'GET',
         details: [
             {
                 info: 'Details object',
@@ -16,69 +15,57 @@ describe('UnsupportedMediaTypeError test suite', () => {
                 error: 'Invalid'
             }
         ],
+        path: 'api/error',
+        method: 'GET',
+        moreData1: 'Supplement',
+        moreData2: 'Second supplement'
     };
     const origin = new Error('Error message');
-    const log = {
-        label: 'log label',
-        message: 'log message',
-        details: 'details',
-        metadata: 'metadata',
-        moreData: 'More!'
-    };
 
     describe('Constructor test suite', () => {
         it('should create an instance with the specified informations', () => {
-            const error = new UnsupportedMediaTypeError(errorInformations, log, origin);
+            const error = new UnsupportedMediaTypeError(errorInformations, origin);
 
             expect(error).toHaveProperty('name', 'UnsupportedMediaTypeError');
-            expect(error).toHaveProperty('message', errorInformations.summary);
+            expect(error).toHaveProperty('message', errorInformations.message);
+            expect(error).toHaveProperty('title', errorInformations.title);
             expect(error).toHaveProperty('description', errorInformations.description);
+            expect(error).toHaveProperty('details', errorInformations.details);
+            expect(error).toHaveProperty('statusCode', 415);
             expect(error).toHaveProperty('path', errorInformations.path);
             expect(error).toHaveProperty('method', errorInformations.method);
-            expect(error).toHaveProperty('statusCode', 415);
-            expect(error).toHaveProperty('details', errorInformations.details);
             expect(error).toHaveProperty('dateTime');
             expect(error).toHaveProperty('cause', origin);
-            expect(error).toHaveProperty('logInformations');
-            expect(error.logInformations).toHaveProperty('label', log.label);
-            expect(error.logInformations).toHaveProperty('message', log.message);
-            expect(error.logInformations).toHaveProperty('path', error.path);
-            expect(error.logInformations).toHaveProperty('method', error.method);
-            expect(error.logInformations).toHaveProperty('errorDate', error.dateTime);
-            expect(error.logInformations).toHaveProperty('statusCode', error.statusCode);
-            expect(error.logInformations).toHaveProperty('details', log.details);
-            expect(error.logInformations).toHaveProperty('stack', error.stack);
-            expect(error.logInformations).toHaveProperty('originStack', origin.stack);
-            expect(error.logInformations).toHaveProperty('metadata', log.metadata);
-            expect(error.logInformations).toHaveProperty('moreData', log.moreData);
+            expect(error).toHaveProperty('more');
+            expect(error.more).toHaveProperty('moreData1', errorInformations.moreData1);
+            expect(error.more).toHaveProperty('moreData2', errorInformations.moreData2);
         });
 
         it('should create an instance with the default informations', () => {
             const lessErrorInformations = {
+                message: errorInformations.message,
                 path: errorInformations.path,
                 method: errorInformations.method
             };
             const error = new UnsupportedMediaTypeError(lessErrorInformations);
 
             expect(error).toHaveProperty('name', 'UnsupportedMediaTypeError');
-            expect(error).toHaveProperty('message');
+            expect(error).toHaveProperty('message', errorInformations.message);
+            expect(error).toHaveProperty('title');
+            expect(error.title).not.toBeUndefined();
+            expect(typeof error.title).toBe('string');
             expect(error).toHaveProperty('description');
+            expect(error.description).not.toBeUndefined();
+            expect(typeof error.description).toBe('string');
+            expect(error).toHaveProperty('details');
+            expect(error.details).toBeUndefined();
+            expect(error).toHaveProperty('statusCode', 415);
             expect(error).toHaveProperty('path', errorInformations.path);
             expect(error).toHaveProperty('method', errorInformations.method);
-            expect(error).toHaveProperty('statusCode', 415);
-            expect(error).not.toHaveProperty('details');
             expect(error).toHaveProperty('dateTime');
             expect(error).not.toHaveProperty('cause');
-            expect(error).toHaveProperty('logInformations');
-            expect(error.logInformations).toHaveProperty('label', error.name);
-            expect(error.logInformations).toHaveProperty('message', error.description);
-            expect(error.logInformations).toHaveProperty('path', error.path);
-            expect(error.logInformations).toHaveProperty('method', error.method);
-            expect(error.logInformations).toHaveProperty('errorDate', error.dateTime);
-            expect(error.logInformations).toHaveProperty('statusCode', error.statusCode);
-            expect(error.logInformations).not.toHaveProperty('details');
-            expect(error.logInformations).toHaveProperty('stack', error.stack);
-            expect(error.logInformations).not.toHaveProperty('originStack');
+            expect(error).toHaveProperty('more');
+            expect(error.more).toEqual({});
         });
     });
 });

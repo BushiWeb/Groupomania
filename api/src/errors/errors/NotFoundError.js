@@ -1,31 +1,27 @@
 import HttpError from './HttpError.js';
 
 /**
- * Class representing an error in the API.
+ * Class representing an error occuring when a ressource can't be found in the API.
  * Inherits from the HttpError object.
  */
 export default class NotFoundError extends HttpError {
     /**
-     * HttpError constructor.
+     * NotFoundError constructor.
      * Calls the error constructor and sets the status.
-     * @param {Object} error - Object containing the public error informations.
-     * @param {string} [error.summary] - Error's summary.
+     * @param {Object} error - Object containing the public error informations. This object may contain any property, even if not defined in the documentation. Any other property will be logged, but not sent to the user.
+     * @param {string} error.message - Error message.
+     * @param {string} [error.title] - User friendly short error message.
+     * @param {string} [error.description] - User friendly more in depth error description
+     * @param {Array|*} [error.details] - More informations about the error, that would be unclear if depicted in a string.
      * @param {string} error.path - Path of the request that generated the error.
      * @param {string} error.method - Method of the request that generated the error.
-     * @param {string} [error.description] - More detailed explanation about the error.
-     * @param {Array|*} [error.details] - More informations about the error, that would be unclear if depicted in a string.
-     * @param {Object} [log = {}] - Object containing the data to log. If the log parameter is absent, the public error informations will be used.
-     * @param {string} [log.label] - Label of the log. If absent, the error name will be used.
-     * @param {string|Error} [log.message] - Message to log. It can be a string or an error instance. If absent, the summary and description will be used.
-     * @param {*} [log.details] - More informations about the error. If absent, the error's details will be used.
      * @param {*} [cause] - Original error, used to generate the HTTP error.
      */
-    constructor({path, method, summary, description, details}, log = {}, cause) {
+    constructor({message, title: optionnalTitle, description: optionnalDescription, details, path, method, ...otherData}, cause) {
         const statusCode = 404;
-        summary ||= 'The ressource you are requesting can\'t be found.';
-        description ||= 'We can\'t find the ressource you\'re requesting. It may have been deleted, modified, move, or may have never existed. Please, double check your request and try again.';
-        super({summary, path, method, description, details, statusCode}, {}, cause);
-        this.name = 'NotFoundError';
-        this.generateLogInformations(log);
+        const name = 'NotFoundError';
+        const title = optionnalTitle || 'The ressource you are requesting can\'t be found.';
+        const description = optionnalDescription || 'We can\'t find the ressource you\'re requesting. It may have been deleted, modified, move, or may have never existed. Please, double check your request and try again.';
+        super({ message, name, title, description, details, statusCode, path, method, ...otherData }, cause);
     }
 }
