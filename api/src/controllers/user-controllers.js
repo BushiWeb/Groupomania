@@ -30,13 +30,14 @@ export async function createUserController(req, res, next) {
     } catch (error) {
         let normalizedError;
         if (error instanceof UniqueConstraintError) {
-            normalizedError = new ConflictError(
-                req.path,
-                req.method,
-                'This email address already exists.',
-                'It appears that you already have an account. You may try to login.',
-                undefined,
-                error
+            normalizedError = new ConflictError({
+                message: 'Email address must be unique.',
+                title: 'This email address already exists',
+                description: 'It appears that you already have an account. You may try to log in.',
+                path: req.originalUrl,
+                method: req.method
+            },
+            error
             );
         }
         return next(normalizedError);
