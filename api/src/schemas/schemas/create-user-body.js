@@ -1,10 +1,10 @@
-import config from '../config/config.js';
+import config from '../../config/config.js';
 
 const passwordConfiguration = config.get('password');
 
 /**
  * Schema for the create user request's body.
- * Contains an required email.
+ * Contains a required email.
  * Contains a required, strong password. Password strength can be changed in the configuration.
  */
 const createUserBodySchema = {
