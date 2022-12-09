@@ -37,6 +37,13 @@ const mockBuild = jest.fn(function (values) {
     return new MockModel(values);
 });
 
+// Il est nécessaire de faire retourner à cette fonction la promesse résolue avec la bonne valeur
+const mockFindOne = jest.fn(function () {
+    return new Promise((resolve) => {
+        resolve(this);
+    });
+});
+
 class MockModel {
     constructor(values) {
         this.dataValues = values;
@@ -51,6 +58,8 @@ class MockModel {
     static create = mockCreate;
 
     static build = mockBuild;
+
+    static findOne = mockFindOne;
 
 
     // Instance methods
@@ -72,9 +81,10 @@ function clearMocks() {
     mockValidate.mockClear();
     MockModel.create.mockClear();
     MockModel.build.mockClear();
+    mockFindOne.mockClear();
 }
 
-export { mockSave, mockValidate, mockCreate, mockBuild, MockModel, clearMocks };
+export { mockSave, mockValidate, mockCreate, mockBuild, MockModel, mockFindOne, clearMocks };
 export default MockModel;
 
 beforeEach(() => {
@@ -144,6 +154,20 @@ describe('Model mock test suite', () => {
             it('should return a promised resolved with the chosen value when mocked', async () => {
                 mockCreate.mockRejectedValueOnce(testReturn);
                 await expect(MockModel.create()).rejects.toBe(testReturn);
+            });
+        });
+
+        describe('findOne method test suite', () => {
+            it('should return a promised resolved with the prepared data', async () => {
+                const returnedData = {
+                    email: 'email@example.com',
+                    password: 'dfqdqfqpoihqdfhqosihdfqhqkdfqjhsfqskdjh',
+                    role: 2
+                };
+                mockFindOne.mockResolvedValueOnce(new MockModel(returnedData));
+                const data = await MockModel.findOne(testValues);
+                expect(data).toBeInstanceOf(MockModel);
+                expect(data.dataValues).toEqual(returnedData);
             });
         });
     });
