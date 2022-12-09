@@ -10,15 +10,16 @@ export default class HttpError extends Error {
      * @param {string} error.message - Error message.
      * @param {string} [error.name = 'HttpError'] - Error name.
      * @param {string} [error.title] - User friendly short error message.
-     * @param {string} [error.description] - User friendly more in depth error description
-     * @param {Array|*} [error.details] - More informations about the error, that would be unclear if depicted in a string. These data will be shown to the user. If you need the data for logging reasons only, add them as standalone properties in the error.
+     * @param {string} [error.description] - User friendly more in depth error description.
+     * @param {Array|*} [error.details] - More informations about the error, that would be unclear if depicted in a string. These data will be shown to the user. If you need the data for logging reasons only, add them as logDetails.
+     * @param {Array|*} [error.logDetails] - More informations about the error, that would be unclear if depicted in a string. These data will not be shown to the user but will be displayed in the log.
      * @param {number} [error.statusCode=500] - The error status code, to send back to the user.
-     * @param {string} error.path - Path of the request that generated the error.
-     * @param {string} error.method - Method of the request that generated the error.
+     * @param {string} [error.path] - Path of the request that generated the error.
+     * @param {string} [error.method] - Method of the request that generated the error.
      * @param {*} [cause] - Original error, used to generate the HTTP error.
      * @param {Object} [headers = {}] - Headers to add to the response.
      */
-    constructor({message, name = 'HttpError', title, description, details, statusCode = 500, path, method, ...otherData}, cause, headers = {}) {
+    constructor({message, name = 'HttpError', title, description, details, logDetails, statusCode = 500, path, method, ...otherData}, cause, headers = {}) {
         // Load error informations
         super(message, {...(cause && {cause})});
 
@@ -26,6 +27,7 @@ export default class HttpError extends Error {
         this.title = title;
         this.description = description;
         this.details = !details || Array.isArray(details) ? details : [details];
+        this.logDetails = !logDetails  || Array.isArray(logDetails) ? logDetails : [logDetails];
         this.statusCode = statusCode;
         this.path = path;
         this.method = method;
@@ -50,8 +52,8 @@ export default class HttpError extends Error {
                 ...(this.details && { details: this.details }),
                 statusCode: this.statusCode,
                 timestamp: this.dateTime,
-                path: this.path,
-                method: this.method
+                ...(this.path && { path: this.path }),
+                ...(this.method && { method: this.method })
             }
         };
     }
@@ -65,14 +67,24 @@ export default class HttpError extends Error {
         return {
             label: this.name,
             message: this.message,
-            ...(this.details && { details: this.details }),
+            ...(this.logDetails && { details: this.logDetails } || this.details && { details: this.details }),
             statusCode: this.statusCode,
             errorDate: this.dateTime,
-            path: this.path,
-            method: this.method,
+            ...(this.path && { path: this.path }),
+            ...(this.method && { method: this.method }),
             stack: this.stack,
             ...(this.cause?.stack && { originStack: this.cause.stack }),
             ...(this.more)
         };
+    }
+
+    /**
+     * Set the path and method properties.
+     * @param {string} path - Path to set.
+     * @param {string} method - Method to set.
+     */
+    setRequestInformations(path, method) {
+        this.path = path;
+        this.method = method;
     }
 }
