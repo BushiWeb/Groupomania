@@ -151,17 +151,20 @@ const CONFIG_SCHEMA = {
             doc: 'Key to use with the chosen hash function',
             format: String,
             default: null,
-            nullable: false
+            nullable: false,
+            env: 'JWT_KEY'
         },
         alg: {
             doc: 'JWT algorithm to use',
             format: String,
-            default: 'HS256'
+            default: 'HS256',
+            env: 'JWT_ALG'
         },
         exp: {
             doc: 'Number of seconds before the JWT expires',
             format: 'int',
-            default: 600
+            default: 600,
+            env: 'JWT_VALID'
         }
     }
 };
