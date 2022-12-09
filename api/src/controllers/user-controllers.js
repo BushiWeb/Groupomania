@@ -27,6 +27,7 @@ export async function createUserController(req, res, next) {
             email: newUser.email
         };
         res.status(201).json(responseData);
+        userControllerLogger.verbose('Response sent');
     } catch (error) {
         let normalizedError;
         if (error instanceof UniqueConstraintError) {
