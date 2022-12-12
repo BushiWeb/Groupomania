@@ -1,4 +1,4 @@
-import { createLoggerNamespace, morganMiddleware } from '../logger/logger.js';
+import { createLoggerNamespace, morganMiddleware } from '../logger/index.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:api:loader:logger');
 

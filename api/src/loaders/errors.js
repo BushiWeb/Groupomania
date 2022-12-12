@@ -1,5 +1,5 @@
-import createLoggerNamespace from '../logger/logger-namespace.js';
-import { unHandledRequestHandler, errorHandler, errorParser } from '../errors/error-middleware.js';
+import { createLoggerNamespace } from '../logger/index.js';
+import { unHandledRequestHandler, errorHandler, errorParser } from '../middlewares/errors.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:api:loader:errors');
 

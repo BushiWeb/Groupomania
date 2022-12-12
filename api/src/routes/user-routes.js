@@ -1,8 +1,8 @@
 import express from 'express';
-import { createLoggerNamespace } from '../logger/logger.js';
+import { createLoggerNamespace } from '../logger/index.js';
 import { createUserController } from '../controllers/user-controllers.js';
 import config from '../config/config.js';
-import validationMiddlewares, { createUserBodySchema } from '../schemas/index.js';
+import validationMiddlewares, { createUserBodySchema } from '../middlewares/user-input-validation.js';
 import createBodyParser from '../middlewares/body-parsing.js';
 
 const userRoutesLogger = createLoggerNamespace('groupomania:api:routes:user');

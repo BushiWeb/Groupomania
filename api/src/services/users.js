@@ -1,4 +1,4 @@
-import { createLoggerNamespace } from '../logger/logger.js';
+import { createLoggerNamespace } from '../logger/index.js';
 import bcrypt from 'bcrypt';
 import config from '../config/config.js';
 import db from '../models/index.js';

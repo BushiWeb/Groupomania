@@ -1,5 +1,5 @@
 import headersLoader from './headers.js';
-import createLoggerNamespace from '../logger/logger-namespace.js';
+import { createLoggerNamespace } from '../logger/index.js';
 import databaseLoader from './database.js';
 import errorsLoader from './errors.js';
 import routeLoader from './routes.js';

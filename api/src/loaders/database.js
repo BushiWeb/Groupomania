@@ -1,4 +1,4 @@
-import createLoggerNamespace from '../logger/logger-namespace.js';
+import { createLoggerNamespace } from '../logger/index.js';
 import { db, initDatabaseConnection, initModels} from '../models/index.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:api:loader:database');

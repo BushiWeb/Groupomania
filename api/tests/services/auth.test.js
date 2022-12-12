@@ -3,7 +3,7 @@ import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
 import MockModel, * as mockModelMethods from '../mocks/mock-models.test.js';
 import bcrypt from 'bcrypt';
-import UnauthorizedError from '../../src/errors/errors/UnauthorizedError.js';
+import { UnauthorizedError } from '../../src/errors/index.js';
 
 jest.spyOn(db, 'models', 'get').mockImplementation(
     () => new Proxy(

@@ -1,8 +1,8 @@
 import { checkSchema, matchedData, validationResult } from 'express-validator';
-import createUserBodySchema from './schemas/create-user-body.js';
-import loginBodySchema from './schemas/login.js';
-import { createLoggerNamespace } from '../logger/logger.js';
-import UserInputValidationError from '../errors/errors/UserInputValidationError.js';
+import createUserBodySchema from '../schemas/create-user-body.js';
+import loginBodySchema from '../schemas/login.js';
+import { createLoggerNamespace } from '../logger/index.js';
+import { UserInputValidationError } from '../errors/index.js';
 
 const validationLogger = createLoggerNamespace('groupomania:api:validation');
 

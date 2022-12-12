@@ -3,7 +3,7 @@ import createRefreshTokenModel from './RefreshToken.js';
 import createUserModel from './User.js';
 import createPostModel from './Post.js';
 import createLikeModel from './Like.js';
-import { createLoggerNamespace } from '../logger/logger.js';
+import { createLoggerNamespace } from '../logger/index.js';
 
 const dbLogger = createLoggerNamespace('groupomania:api:database');
 

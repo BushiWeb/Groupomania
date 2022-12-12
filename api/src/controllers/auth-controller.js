@@ -1,5 +1,5 @@
-import UnauthorizedError from '../errors/errors/UnauthorizedError.js';
-import { createLoggerNamespace } from '../logger/logger.js';
+import { UnauthorizedError } from '../errors/index.js';
+import { createLoggerNamespace } from '../logger/index.js';
 import { login } from '../services/auth.js';
 
 const authControllerLogger = createLoggerNamespace('groupomania:api:controllers:auth');

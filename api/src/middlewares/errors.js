@@ -1,9 +1,11 @@
-import { createLoggerNamespace } from '../logger/logger.js';
-import HttpError from './errors/HttpError.js';
-import NotFoundError from './errors/NotFoundError.js';
-import MethodNotAllowedError from './errors/MethodNotAllowedError.js';
-import InternalServerError from './errors/InternalServerError.js';
-import UnauthorizedError from './errors/UnauthorizedError.js';
+import { createLoggerNamespace } from '../logger/index.js';
+import {
+    HttpError,
+    NotFoundError,
+    InternalServerError,
+    UnauthorizedError,
+    MethodNotAllowedError
+} from '../errors/index.js';
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 

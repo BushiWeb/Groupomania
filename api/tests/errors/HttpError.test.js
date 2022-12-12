@@ -1,4 +1,4 @@
-import HttpError from '../../../src/errors/errors/HttpError.js';
+import HttpError from '../../src/errors/HttpError.js';
 
 describe('HttpError test suite', () => {
     const errorInformations = {

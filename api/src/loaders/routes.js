@@ -1,4 +1,4 @@
-import createLoggerNamespace from '../logger/logger-namespace.js';
+import { createLoggerNamespace } from '../logger/index.js';
 import UserRouter from '../routes/user-routes.js';
 import getRoutesRegexp from '../utils/get-routes.js';
 import AuthRouter from '../routes/auth-routes.js';

@@ -1,5 +1,5 @@
-import { createLoggerNamespace } from '../logger/logger.js';
-import UnsupportedMediaTypeError from '../errors/errors/UnsupportedMediaTypeError.js';
+import { createLoggerNamespace } from '../logger/index.js';
+import { UnsupportedMediaTypeError } from '../errors/index.js';
 
 const parsingLogger = createLoggerNamespace('groupomania:api:body-parsing');
 

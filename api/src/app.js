@@ -1,5 +1,5 @@
 import express from 'express';
-import {createLoggerNamespace} from './logger/logger.js';
+import {createLoggerNamespace} from './logger/index.js';
 import loadApp from './loaders/index.js';
 
 const appLogger = createLoggerNamespace('groupomania:api:app');

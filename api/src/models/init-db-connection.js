@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 import config from '../config/config.js';
-import { createLoggerNamespace } from '../logger/logger.js';
+import { createLoggerNamespace } from '../logger/index.js';
 
 const dbLogger = createLoggerNamespace('groupomania:api:database');
 const sequelizeLogger = createLoggerNamespace('groupomania:api:sequelize');

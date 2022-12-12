@@ -1,6 +1,6 @@
 import cors from 'cors';
 import helmet from 'helmet';
-import createLoggerNamespace from '../logger/logger-namespace.js';
+import { createLoggerNamespace } from '../logger/index.js';
 import config from '../config/config.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:api:loader:headers');

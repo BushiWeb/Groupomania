@@ -1,6 +1,6 @@
-import authenticate from '../../src/middlewares/authentication';
+import authenticate from '../../src/middlewares/authentication.js';
 import { mockNext, mockResponse, mockRequest } from '../mocks/mock-express.js';
-import UnauthorizedError from '../../src/errors/errors/UnauthorizedError.js';
+import { UnauthorizedError } from '../../src/errors/index.js';
 import jwt from 'jsonwebtoken';
 import { jest } from '@jest/globals';
 

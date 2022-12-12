@@ -1,6 +1,6 @@
 import { UniqueConstraintError } from 'sequelize';
-import ConflictError from '../errors/errors/ConflictError.js';
-import { createLoggerNamespace } from '../logger/logger.js';
+import { ConflictError } from '../errors/index.js';
+import { createLoggerNamespace } from '../logger/index.js';
 import { createUser } from '../services/users.js';
 
 const userControllerLogger = createLoggerNamespace('groupomania:api:controllers:user');

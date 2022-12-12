@@ -1,4 +1,4 @@
-import { validationErrorFormatter } from '../../src/schemas/index.js';
+import { validationErrorFormatter } from '../../src/middlewares/user-input-validation.js';
 
 describe('validationErrorFormatter test suite', () => {
     const errorObject = {
