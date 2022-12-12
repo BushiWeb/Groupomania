@@ -1,9 +1,92 @@
-import { createLoggerNamespace } from '../logger/logger.js';
-import UnauthorizedError from '../errors/errors/UnauthorizedError.js';
+import { createLoggerNamespace } from '../logger/index.js';
+import { UnauthorizedError } from '../errors/index.js';
 import jwt from 'jsonwebtoken';
 import config from '../config/config.js';
 
 const authLogger = createLoggerNamespace('groupomania:api:authentication');
+
+/**
+ * Checks if the request has an authorization header.
+ * @param {Express.Request} req - Express request object.
+ * @return Returns the value of the header.
+ * @throws {UnauthorizedError} Throws if the header is missing
+ */
+function getAuthorizationHeader(req) {
+    authLogger.debug('Checking the authorization header');
+
+    let authorizationHeader = req.get('authorization');
+
+    if (!authorizationHeader) {
+        authLogger.debug('No authorization header, throwing an error');
+        throw new UnauthorizedError({
+            message: 'Missing authorization header',
+            title: 'Can\'t find the authentication informations',
+            description: 'We are having trouble figuring who you are. Make sure you provided your authentication informations in the "Authorization" header as a bearer token before trying again.'
+        });
+    }
+
+    return authorizationHeader;
+}
+
+/**
+ * Checks if the request has the bearer authorization scheme and get the token.
+ * @param {string} authorizationHeader - Content of the authorization header.
+ * @return Returns the token.
+ * @throws {UnauthorizedError} Throws if the scheme is not bearer.
+ */
+function getTokenFromAuthorization(authorizationHeader) {
+    authLogger.debug('Checking the authorization scheme');
+
+    let [scheme, token] = authorizationHeader.split(' ');
+
+    if (scheme.toLowerCase() !== 'bearer') {
+        authLogger.debug(`Used ${scheme} authentication scheme instead of Bearer, throwing an error`);
+        throw new UnauthorizedError({
+            message: `Wrong authentication scheme, using ${scheme} instead of Bearer`,
+            title: 'Can\'t get the authentication informations',
+            description: 'We are having trouble understanding your authentication informations. Make sure you provided your authentication informations in the "Authorization" header as a bearer token before trying again.',
+            details: {
+                receivedScheme: scheme,
+                expectedSchemes: ['Bearer']
+            }
+        });
+    }
+
+    return token;
+}
+
+/**
+ * Checks the payload format.
+ * @param {string} tokenPayload - Payload of the token.
+ * @throws {UnauthorizedError} Throws if the scheme is not bearer.
+ */
+function checkTokenPayload(tokenPayload) {
+    authLogger.debug('Checking the payload format');
+
+    if (!tokenPayload.userId) {
+        authLogger.debug('The payload doesn\'t contain the userId, throwing an error');
+        throw new UnauthorizedError({
+            message: 'Missing informations in the payload',
+            title: 'Authentication informations incomplete',
+            description: 'We are missing authentication informations. Please, verify you token and check it\'s origin. If the token doesn\'t come from us, do not use it. Otherwise, you may try again.',
+            logDetails: {
+                missingProperty: 'userId'
+            }
+        });
+    }
+
+    if (!tokenPayload.role) {
+        authLogger.debug('The payload doesn\'t contain the role, throwing an error');
+        throw new UnauthorizedError({
+            message: 'Missing informations in the payload',
+            title: 'Authentication informations incomplete',
+            description: 'We are missing authentication informations. Please, verify you token and check it\'s origin. If the token doesn\'t come from us, do not use it. Otherwise, you may try again.',
+            logDetails: {
+                missingProperty: 'role'
+            }
+        });
+    }
+}
 
 /**
  * Middleware checking if the user is authenticated.
@@ -15,80 +98,29 @@ const authLogger = createLoggerNamespace('groupomania:api:authentication');
 export default function authenticate(req, res, next) {
     authLogger.verbose('Authentication middleware starting');
 
-    // Check the authorization header
-    let authorizationHeader = req.get('authorization');
-    if (!authorizationHeader) {
-        authLogger.debug('No authorization header, throwing an error');
-        return next(new UnauthorizedError({
-            message: 'Missing authorization header',
-            title: 'Can\'t find the authentication informations',
-            description: 'We are having trouble figuring who you are. Make sure you provided your authentication informations in the "Authorization" header as a bearer token before trying again.',
-            path: req.originalUrl,
-            method: req.method
-        }));
-    }
-    authLogger.debug('Authorization header checked');
-
-    // Check the authorization scheme
-    let [scheme, token] = authorizationHeader.split(' ');
-    if (scheme.toLowerCase() !== 'bearer') {
-        authLogger.debug(`Used ${scheme} authentication scheme instead of Bearer, throwing an error`);
-        return next(new UnauthorizedError({
-            message: `Wrong authentication scheme, using ${scheme} instead of Bearer`,
-            title: 'Can\'t get the authentication informations',
-            description: 'We are having trouble understanding your authentication informations. Make sure you provided your authentication informations in the "Authorization" header as a bearer token before trying again.',
-            details: {
-                receivedScheme: scheme,
-                expectedSchemes: ['Bearer']
-            },
-            path: req.originalUrl,
-            method: req.method
-        }));
-    }
-    authLogger.debug(`Authorization scheme checkes, using ${scheme}`);
-
-    // Verify the token and get the payload
     let tokenPayload;
+
     try {
+        const authorizationHeader = getAuthorizationHeader(req);
+        authLogger.debug('Authorization header checked');
+
+        const token = getTokenFromAuthorization(authorizationHeader);
+        authLogger.debug('Authorization scheme checked, token retrieved');
+
         tokenPayload = jwt.verify(token, config.get('jwt.key'), { algorithms: [config.get('jwt.alg')] });
         authLogger.debug('Authentication payload valid');
+
+        checkTokenPayload(tokenPayload);
+        authLogger.debug('Token payload valid');
     } catch (error) {
-        authLogger.debug('Token invalid');
+        if (error instanceof UnauthorizedError) {
+            error.setRequestInformations(req.originalUrl, req.method);
+        }
         return next(error);
     }
 
-    // Verify and save the payload
-    if (!tokenPayload.userId) {
-        authLogger.debug('The payload doesn\'t contain the userId, throwing an error');
-        return next(new UnauthorizedError({
-            message: 'Missing informations in the payload',
-            title: 'Authentication informations incomplete',
-            description: 'We are missing authentication informations. Please, verify you token and check it\'s origin. If the token doesn\'t come from us, do not use it. Otherwise, you may try again.',
-            logDetails: {
-                missingProperty: 'userId'
-            },
-            path: req.originalUrl,
-            method: req.method
-        }));
-    }
-
-    if (!tokenPayload.role) {
-        authLogger.debug('The payload doesn\'t contain the role, throwing an error');
-        return next(new UnauthorizedError({
-            message: 'Missing informations in the payload',
-            title: 'Authentication informations incomplete',
-            description: 'We are missing authentication informations. Please, verify you token and check it\'s origin. If the token doesn\'t come from us, do not use it. Otherwise, you may try again.',
-            logDetails: {
-                missingProperty: 'role'
-            },
-            path: req.originalUrl,
-            method: req.method
-        }));
-    }
-
-    authLogger.debug('Payload valid, saving the data');
     res.locals.auth = tokenPayload;
 
-    authLogger.debug('End of authentication middleware');
+    authLogger.debug('Data saved, end of authentication middleware');
     next();
 }
