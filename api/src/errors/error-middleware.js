@@ -3,13 +3,16 @@ import HttpError from './errors/HttpError.js';
 import NotFoundError from './errors/NotFoundError.js';
 import MethodNotAllowedError from './errors/MethodNotAllowedError.js';
 import InternalServerError from './errors/InternalServerError.js';
+import UnauthorizedError from './errors/UnauthorizedError.js';
 import createError from 'http-errors';
+import jwt from 'jsonwebtoken';
 
 const errorLogger = createLoggerNamespace('groupomania:api:error');
 
 /**
  * Error parser, normalizes errors.
  * After this middleware, all errors have the same structure and can be handled the same way.
+ * JsonWebTokens are normalized here.
  * Errors from Express (http-errors module) already have status and headers which will be kepts.
  * Other errors will have status code 500 and a generic user message.
  * @param {HttpError} err - Error thrown by a middleware.
@@ -24,6 +27,43 @@ export function errorParser(err, req, res, next) {
     if (err instanceof HttpError) {
         errorLogger.debug('HttpError, no need for parsing');
         return next(err);
+    }
+
+    // JsonWebToken normalization
+    if (err instanceof jwt.TokenExpiredError) {
+        errorLogger.debug('JsonWebToken TokenExpiredError normalization');
+        return next(new UnauthorizedError({
+            message: err.message,
+            title: 'The token has expired',
+            description: 'We can\'t validate your authentication token because it has expired. You may ask for a new one and try again.',
+            details: {
+                expirationDate: err.expiredAt
+            },
+            path: req.originalUrl,
+            method: req.method
+        }, err));
+
+    } else if (err instanceof jwt.NotBeforeError) {
+        errorLogger.debug('JsonWebToken NotBeforeError normalization');
+        return next(new UnauthorizedError({
+            message: err.message,
+            title: 'The token is not yet active',
+            description: 'We can\'t validate your authentication token because it is not active yet. You should wait until it activeates before trying again.',
+            details: {
+                activationDate: err.date
+            },
+            path: req.originalUrl,
+            method: req.method
+        }, err));
+
+    } else if (err instanceof jwt.JsonWebTokenError) {
+        errorLogger.debug('JsonWebTokenError normalization');
+        return next(new InternalServerError({
+            message: err.message,
+            path: req.originalUrl,
+            method: req.method,
+            originalName: err.name
+        }, err));
     }
 
     // http-errors handling

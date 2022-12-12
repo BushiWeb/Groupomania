@@ -15,25 +15,17 @@ const authLogger = createLoggerNamespace('groupomania:api:authentication');
 export default function authenticate(req, res, next) {
     authLogger.verbose('Authentication middleware starting');
 
-    const wwwAuthenticateValue = 'Bearer';
-
     // Check the authorization header
     let authorizationHeader = req.get('authorization');
     if (!authorizationHeader) {
         authLogger.debug('No authorization header, throwing an error');
-        return next(new UnauthorizedError(
-            {
-                message: 'Missing authorization header',
-                title: 'Can\'t find the authentication informations',
-                description: 'We are having trouble figuring who you are. Make sure you provided your authentication informations in the "Authorization" header as a bearer token before trying again.',
-                path: req.originalUrl,
-                method: req.method
-            },
-            null,
-            {
-                'www-authenticate': wwwAuthenticateValue
-            }
-        ));
+        return next(new UnauthorizedError({
+            message: 'Missing authorization header',
+            title: 'Can\'t find the authentication informations',
+            description: 'We are having trouble figuring who you are. Make sure you provided your authentication informations in the "Authorization" header as a bearer token before trying again.',
+            path: req.originalUrl,
+            method: req.method
+        }));
     }
     authLogger.debug('Authorization header checked');
 
@@ -41,23 +33,17 @@ export default function authenticate(req, res, next) {
     let [scheme, token] = authorizationHeader.split(' ');
     if (scheme.toLowerCase() !== 'bearer') {
         authLogger.debug(`Used ${scheme} authentication scheme instead of Bearer, throwing an error`);
-        return next(new UnauthorizedError(
-            {
-                message: `Wrong authentication scheme, using ${scheme} instead of Bearer`,
-                title: 'Can\'t get the authentication informations',
-                description: 'We are having trouble understanding your authentication informations. Make sure you provided your authentication informations in the "Authorization" header as a bearer token before trying again.',
-                details: {
-                    receivedScheme: scheme,
-                    expectedSchemes: ['Bearer']
-                },
-                path: req.originalUrl,
-                method: req.method
+        return next(new UnauthorizedError({
+            message: `Wrong authentication scheme, using ${scheme} instead of Bearer`,
+            title: 'Can\'t get the authentication informations',
+            description: 'We are having trouble understanding your authentication informations. Make sure you provided your authentication informations in the "Authorization" header as a bearer token before trying again.',
+            details: {
+                receivedScheme: scheme,
+                expectedSchemes: ['Bearer']
             },
-            null,
-            {
-                'www-authenticate': wwwAuthenticateValue
-            }
-        ));
+            path: req.originalUrl,
+            method: req.method
+        }));
     }
     authLogger.debug(`Authorization scheme checkes, using ${scheme}`);
 
@@ -74,42 +60,30 @@ export default function authenticate(req, res, next) {
     // Verify and save the payload
     if (!tokenPayload.userId) {
         authLogger.debug('The payload doesn\'t contain the userId, throwing an error');
-        return next(new UnauthorizedError(
-            {
-                message: 'Missing informations in the payload',
-                title: 'Authentication informations incomplete',
-                description: 'We are missing authentication informations. Please, verify you token and check it\'s origin. If the token doesn\'t come from us, do not use it. Otherwise, you may try again.',
-                logDetails: {
-                    missingProperty: 'userId'
-                },
-                path: req.originalUrl,
-                method: req.method
+        return next(new UnauthorizedError({
+            message: 'Missing informations in the payload',
+            title: 'Authentication informations incomplete',
+            description: 'We are missing authentication informations. Please, verify you token and check it\'s origin. If the token doesn\'t come from us, do not use it. Otherwise, you may try again.',
+            logDetails: {
+                missingProperty: 'userId'
             },
-            null,
-            {
-                'www-authenticate': wwwAuthenticateValue
-            }
-        ));
+            path: req.originalUrl,
+            method: req.method
+        }));
     }
 
     if (!tokenPayload.role) {
         authLogger.debug('The payload doesn\'t contain the role, throwing an error');
-        return next(new UnauthorizedError(
-            {
-                message: 'Missing informations in the payload',
-                title: 'Authentication informations incomplete',
-                description: 'We are missing authentication informations. Please, verify you token and check it\'s origin. If the token doesn\'t come from us, do not use it. Otherwise, you may try again.',
-                logDetails: {
-                    missingProperty: 'role'
-                },
-                path: req.originalUrl,
-                method: req.method
+        return next(new UnauthorizedError({
+            message: 'Missing informations in the payload',
+            title: 'Authentication informations incomplete',
+            description: 'We are missing authentication informations. Please, verify you token and check it\'s origin. If the token doesn\'t come from us, do not use it. Otherwise, you may try again.',
+            logDetails: {
+                missingProperty: 'role'
             },
-            null,
-            {
-                'www-authenticate': wwwAuthenticateValue
-            }
-        ));
+            path: req.originalUrl,
+            method: req.method
+        }));
     }
 
     authLogger.debug('Payload valid, saving the data');

@@ -43,7 +43,7 @@ export async function login({email, password}) {
                 message: 'The password is invalid.',
                 title: 'The credentials are not working.',
                 description: 'It seems we can identify you with those credentials. Please, check your inputs and try again. If you are not registered, you must first create an account before loging in.'
-            });
+            }, null, {});
         }
 
         // Generate the JWT
