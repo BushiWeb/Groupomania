@@ -47,7 +47,7 @@ const parserMiddleware = createBodyParser(parserOptionsAllowEmpty);
 const nonEmptyParserMiddleware = createBodyParser(parserOptionsForbidEmpty);
 const errorsParserMiddleware = createBodyParser(parserOptionsErrors);
 
-const request = mockRequest({}, '');
+const request = mockRequest({});
 const next = mockNext();
 const response = mockResponse();
 
@@ -60,6 +60,7 @@ beforeEach(() => {
     mockDataFormating.mockClear();
     mockDataFormatingThrowError.mockClear();
     next.mockClear();
+    request.clean();
 });
 
 
