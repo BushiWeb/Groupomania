@@ -1,6 +1,7 @@
 import createBodyParser from '../../src/middlewares/body-parsing.js';
 import { jest } from '@jest/globals';
 import { mockNext, mockResponse, mockRequest } from '../mocks/mock-express.js';
+import { UnsupportedMediaTypeError } from '../../src/errors/index.js';
 
 const defaultError = new Error('Error');
 
@@ -13,13 +14,12 @@ const mockDataFormating = jest.fn((body) => ({...body}));
 const mockDataFormatingThrowError = jest.fn(() => { throw defaultError; });
 
 const parserOptionsAllowEmpty = {
-    'empty': {},
     'parser/alone': {
         parser: mockParserAlone
     },
     'parser/withDataFormatting': {
         parser: mockParserWithDataFormating,
-        dataFormatting: mockDataFormating
+        dataFormatter: mockDataFormating
     },
     'parser/noObject': mockParserDirect
 };
@@ -39,13 +39,13 @@ const parserOptionsErrors = {
     },
     'dataFormatting/throw': {
         parser: mockParserWithDataFormating,
-        dataFormatting: mockDataFormatingThrowError
+        dataFormatter: mockDataFormatingThrowError
     }
 };
 
 const parserMiddleware = createBodyParser(parserOptionsAllowEmpty);
-const nonEmptyParserMiddleware = createBodyParser(parserOptionsForbidEmpty);
-const errorsParserMiddleware = createBodyParser(parserOptionsErrors);
+const nonEmptyParserMiddleware = createBodyParser(parserOptionsForbidEmpty, false);
+const errorsParserMiddleware = createBodyParser(parserOptionsErrors, false);
 
 const request = mockRequest({});
 const next = mockNext();
@@ -119,6 +119,7 @@ describe('createBodyParser and its middleware test suite', () => {
             parserMiddleware(request, response, next);
             expect(next).toHaveBeenCalled();
             expect(next.mock.calls[0]).toHaveLength(1);
+            expect(next.mock.calls[0][0]).toBeInstanceOf(UnsupportedMediaTypeError);
         });
 
         it('should call the next error middleware if the Content-Type is "empty"', () => {
@@ -126,6 +127,7 @@ describe('createBodyParser and its middleware test suite', () => {
             parserMiddleware(request, response, next);
             expect(next).toHaveBeenCalled();
             expect(next.mock.calls[0]).toHaveLength(1);
+            expect(next.mock.calls[0][0]).toBeInstanceOf(UnsupportedMediaTypeError);
         });
 
         it('should call the next error middleware if there is no body but a body is required', () => {
@@ -133,6 +135,7 @@ describe('createBodyParser and its middleware test suite', () => {
             nonEmptyParserMiddleware(request, response, next);
             expect(next).toHaveBeenCalled();
             expect(next.mock.calls[0]).toHaveLength(1);
+            expect(next.mock.calls[0][0]).toBeInstanceOf(UnsupportedMediaTypeError);
         });
 
         it('should call the next error middleware if the middleware calls it\'s next middleware with an error', () => {

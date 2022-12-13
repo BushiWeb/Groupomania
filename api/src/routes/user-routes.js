@@ -24,7 +24,7 @@ router.post(
     '/',
     createBodyParser({
         'application/json': express.json(expressJsonOptions)
-    }),
+    }, false),
     validationMiddlewares(createUserBodySchema),
     createUserController
 );

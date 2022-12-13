@@ -24,7 +24,7 @@ router.post(
     '/login',
     createBodyParser({
         'application/json': express.json(expressJsonOptions)
-    }),
+    }, false),
     validationMiddlewares(loginBodySchema),
     loginController
 );
