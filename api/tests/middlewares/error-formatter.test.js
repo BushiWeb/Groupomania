@@ -46,6 +46,12 @@ describe('validationErrorFormatter test suite', () => {
         expect(formatedError).not.toHaveProperty('value');
     });
 
+    it('should return an empty object if no informations is present', () => {
+        const formatedError = validationErrorFormatter({});
+
+        expect(formatedError).toEqual({});
+    });
+
     it('should format the nested errors', () => {
         const formatedError = validationErrorFormatter(objectWithNestedErrors);
 

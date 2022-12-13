@@ -18,19 +18,11 @@ const validationLogger = createLoggerNamespace('groupomania:api:validation');
  * @returns Returns the formated error.
  */
 function validationErrorFormatter({ param, msg, location, nestedErrors }) {
-    let errorObject = {};
-
-    if (param) {
-        errorObject.param = param;
-    }
-
-    if (msg) {
-        errorObject.message = msg;
-    }
-
-    if (location) {
-        errorObject.location = location;
-    }
+    let errorObject = {
+        ...(param && { param }),
+        ...(msg && { message: msg }),
+        ...(location && { location }),
+    };
 
     if (nestedErrors) {
         errorObject.nestedErrors = [];
