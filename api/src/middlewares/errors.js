@@ -12,7 +12,74 @@ import jwt from 'jsonwebtoken';
 const errorLogger = createLoggerNamespace('groupomania:api:error');
 
 /**
- * Error parser, normalizes errors.
+ * Handles express' http-error normalization.
+ * @param {jwt.JsonWebTokenError} err - Express error to normalize.
+ * @returns {HttpError} Returns the associated HttpError.
+ */
+function normalizeExpressError(err) {
+    errorLogger.debug('Express error normalization');
+    // Assemble error details. These details will be sent to the user if the status is amongst the 400 errors, and only logged otherwise.
+    const details = {
+        ...(err.type && { type: err.type }),
+        ...(err.body && { body: err.body }),
+        ...(err.charset && { charset: err.charset }),
+        ...(err.received && { bytesReceivedNb: err.received }),
+        ...(err.expected && { bytesExpectedNb: err.expected }),
+        ...(err.limit && { maxSize: err.limit }),
+        ...(err.length && { bodySize: err.length }),
+    };
+
+    return new HttpError({
+        message: err.message,
+        name: err.name,
+        title: err.expose ? err.message : 'We had a problem while processing your request. You may try again. If the problem persists, don\'t hesitate to contact us.',
+        statusCode: err.statusCode,
+        ...(err.statusCode < 500 ? { details } : { logData: details }),
+    }, err, err.headers);
+}
+
+/**
+ * Handles JSW errors normalization.
+ * @param {jwt.JsonWebTokenError} err - JWT error to normalize.
+ * @returns {HttpError} Returns the associated HttpError.
+ */
+function normalizeJwtError(err) {
+    if (err instanceof jwt.TokenExpiredError) {
+        errorLogger.debug('JsonWebToken TokenExpiredError normalization');
+        return new UnauthorizedError({
+            message: err.message,
+            title: 'The token has expired',
+            description: 'We can\'t validate your authentication token because it has expired. You may ask for a new one and try again.',
+            details: {
+                expirationDate: err.expiredAt
+            }
+        }, err);
+
+    }
+
+    if (err instanceof jwt.NotBeforeError) {
+        errorLogger.debug('JsonWebToken NotBeforeError normalization');
+        return new UnauthorizedError({
+            message: err.message,
+            title: 'The token is not yet active',
+            description: 'We can\'t validate your authentication token because it is not active yet. You should wait until it activeates before trying again.',
+            details: {
+                activationDate: err.date
+            }
+        }, err);
+
+    }
+
+    errorLogger.debug('JsonWebTokenError normalization');
+    return new InternalServerError({
+        message: err.message,
+        originalName: err.name
+    }, err);
+}
+
+
+/**
+ * Normalizes errors.
  * After this middleware, all errors have the same structure and can be handled the same way.
  * JsonWebTokens are normalized here.
  * Errors from Express (http-errors module) already have status and headers which will be kepts.
@@ -22,75 +89,21 @@ const errorLogger = createLoggerNamespace('groupomania:api:error');
  * @param {Express.Response} res - Express response object.
  * @param next - Next middleware to execute.
  */
-export function errorParser(err, req, res, next) {
+export function errorNormalizer(err, req, res, next) {
     errorLogger.verbose('Error parser execution');
 
-    // HttpErrors don't need to be normalized
     if (err instanceof HttpError) {
-        errorLogger.debug('HttpError, no need for parsing');
+        errorLogger.debug('HttpError, no need for normalizing');
         return next(err);
     }
 
-    // JsonWebToken normalization
     if (err instanceof jwt.TokenExpiredError) {
-        errorLogger.debug('JsonWebToken TokenExpiredError normalization');
-        return next(new UnauthorizedError({
-            message: err.message,
-            title: 'The token has expired',
-            description: 'We can\'t validate your authentication token because it has expired. You may ask for a new one and try again.',
-            details: {
-                expirationDate: err.expiredAt
-            },
-            path: req.originalUrl,
-            method: req.method
-        }, err));
-
-    } else if (err instanceof jwt.NotBeforeError) {
-        errorLogger.debug('JsonWebToken NotBeforeError normalization');
-        return next(new UnauthorizedError({
-            message: err.message,
-            title: 'The token is not yet active',
-            description: 'We can\'t validate your authentication token because it is not active yet. You should wait until it activeates before trying again.',
-            details: {
-                activationDate: err.date
-            },
-            path: req.originalUrl,
-            method: req.method
-        }, err));
-
-    } else if (err instanceof jwt.JsonWebTokenError) {
-        errorLogger.debug('JsonWebTokenError normalization');
-        return next(new InternalServerError({
-            message: err.message,
-            path: req.originalUrl,
-            method: req.method,
-            originalName: err.name
-        }, err));
+        return next(normalizeJwtError(err).setRequestInformations(req.originalUrl, req.method));
     }
 
-    // http-errors handling
+    // Express' errors handling
     if (createError.isHttpError(err)) {
-        errorLogger.debug('Express error, minimal parsing');
-        // Assemble error details. These details will be sent to the user if the status is amongst the 400 errors, and only logged otherwise.
-        const details = {
-            ...(err.type && { type: err.type }),
-            ...(err.body && { body: err.body }),
-            ...(err.charset && { charset: err.charset }),
-            ...(err.received && { bytesReceivedNb: err.received }),
-            ...(err.expected && { bytesExpectedNb: err.expected }),
-            ...(err.limit && { maxSize: err.limit }),
-            ...(err.length && { bodySize: err.length }),
-        };
-
-        return next(new HttpError({
-            message: err.message,
-            name: err.name,
-            title: err.expose ? err.message : 'We had a problem while processing your request. You may try again. If the problem persists, don\'t hesitate to contact us.',
-            statusCode: err.statusCode,
-            path: req.originalUrl,
-            method: req.method,
-            ...(err.statusCode < 500 ? { details } : { logData: details }),
-        }, err, err.headers));
+        return next(normalizeExpressError(err).setRequestInformations(req.originalUrl, req.method));
     }
 
     // Normalize other errors
@@ -159,19 +172,16 @@ export function unHandledRequestHandler (req, res, next) {
         error = new NotFoundError({
             message: 'The request path isn\'t defined in the API.',
             title: 'The request you sent can\'t be processed.',
-            description: 'We have a problem understanding your request. You may check the documentation to see which path we understand, and try again.',
-            path: req.originalUrl,
-            method: req.method
+            description: 'We have a problem understanding your request. You may check the documentation to see which path we understand, and try again.'
         });
 
     } else {
         errorLogger.debug(`The method ${req.method} is not accepted with the route ${req.originalUrl}`);
         error = new MethodNotAllowedError({
-            message: `The method ${req.method} can't be used on the path ${req.originalUrl}`,
-            path: req.originalUrl,
-            method: req.method
+            message: `The method ${req.method} can't be used on the path ${req.originalUrl}`
         });
     }
+    error.setRequestInformations(req.originalUrl, req.method);
 
     next(error);
 }
