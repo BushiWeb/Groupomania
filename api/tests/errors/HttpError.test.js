@@ -242,16 +242,17 @@ describe('HttpError test suite', () => {
 
 
     describe('setRequestInformations test suite', () => {
-        it('should update the path and the method', () => {
+        it('should update the path and the method and return the instance', () => {
             const lessErrorInformations = {
                 message: errorInformations.message
             };
             const error = new HttpError(lessErrorInformations);
 
-            error.setRequestInformations(errorInformations.path, errorInformations.method);
+            const errorInstance = error.setRequestInformations(errorInformations.path, errorInformations.method);
 
             expect(error.path).toBe(errorInformations.path);
             expect(error.method).toBe(errorInformations.method);
+            expect(errorInstance).toBe(error);
         });
     });
 });

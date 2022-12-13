@@ -82,9 +82,11 @@ export default class HttpError extends Error {
      * Set the path and method properties.
      * @param {string} path - Path to set.
      * @param {string} method - Method to set.
+     * @returns {HttpError} Returns the current instance of HttpError for method chaining.
      */
     setRequestInformations(path, method) {
         this.path = path;
         this.method = method;
+        return this;
     }
 }
