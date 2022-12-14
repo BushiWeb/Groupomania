@@ -2,6 +2,7 @@ import { createLoggerNamespace } from '../logger/index.js';
 import bcrypt from 'bcrypt';
 import config from '../config/config.js';
 import db from '../models/index.js';
+import { NotFoundError } from '../errors/index.js';
 
 const usersServicesLogger = createLoggerNamespace('groupomania:api:services:users');
 
@@ -40,6 +41,37 @@ export async function createUser({email, password, roleId}) {
         return newUser;
     } catch (error) {
         usersServicesLogger.debug('Create user service error');
+        throw error;
+    }
+}
+
+/**
+ * Fetch the user corresponding to the given email
+ * Starts by encrypting the password.
+ * @param {string} email - User email.
+ * @returns {User} Returns the newly created user.
+ * @throws {NotFoundError} Throws an error if the user doesn't exist.
+ */
+export async function getUserByEmail(email) {
+    usersServicesLogger.verbose('Get user by email service starting');
+
+    try {
+        const user = await db.models.User.findOne({
+            where: { email }
+        });
+        if (user === null) {
+            usersServicesLogger.debug('The email is invalid. Throwing an error');
+            throw new NotFoundError({
+                message: `No user has the email address ${email}.`,
+                title: 'The user can\'t be found.',
+                description: 'We can\'t find the user corresponding to the email address. Please, verify your input and try again. If the user does not yet exist, you may create it.'
+            });
+        }
+
+        usersServicesLogger.debug('User fetched');
+        return user;
+    } catch (error) {
+        usersServicesLogger.debug('Get user by email service error');
         throw error;
     }
 }

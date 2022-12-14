@@ -23,66 +23,28 @@ beforeEach(() => {
 
 describe('Auth services test suite', () => {
     const userInfos = {
-        email: 'test@example.com',
-        password: 'password123'
-    };
-
-    const returnedUserInfos = {
-        email: userInfos.email,
+        email: 'email@example.com',
         password: 'mockedBcryptHash',
         roleId: 2,
         userId: 113
     };
 
+    const password = 'password';
+
     describe('Login service test suite', () => {
         it('should return the authenticated user and the JWT', async () => {
-            mockModelMethods.mockFindOne.mockResolvedValueOnce(new MockModel(returnedUserInfos));
             mockBcryptCompare.mockResolvedValueOnce(true);
-            const newUser = await login(userInfos);
+            const newUser = await login(userInfos, password);
 
-            expect(newUser).toHaveProperty('userId', returnedUserInfos.userId);
+            expect(newUser).toHaveProperty('userId', userInfos.userId);
             expect(newUser).toHaveProperty('accessToken');
-        });
-
-        it('should throw an error if the email doesn\'t exist', async () => {
-            expect.assertions(1);
-
-            mockModelMethods.mockFindOne.mockResolvedValueOnce(null);
-            mockBcryptCompare.mockResolvedValueOnce(true);
-
-            await expect(login(userInfos)).rejects.toBeInstanceOf(UnauthorizedError);
         });
 
         it('should throw an error if the password is incorrect', async () => {
             expect.assertions(1);
-
-            mockModelMethods.mockFindOne.mockResolvedValueOnce(new MockModel(returnedUserInfos));
             mockBcryptCompare.mockResolvedValueOnce(false);
 
             await expect(login(userInfos)).rejects.toBeInstanceOf(UnauthorizedError);
-        });
-
-        it('should throw errors with the same public informations wether the email or password is invalid', async () => {
-            mockModelMethods.mockFindOne.mockResolvedValueOnce(new MockModel(returnedUserInfos));
-            mockBcryptCompare.mockResolvedValueOnce(false);
-            let wrongPasswordError;
-            try {
-                await login(userInfos);
-            } catch (error) {
-                wrongPasswordError = error;
-            }
-
-            mockModelMethods.mockFindOne.mockResolvedValueOnce(null);
-            mockBcryptCompare.mockResolvedValueOnce(true);
-            let wrongEmailError;
-            try {
-                await login(userInfos);
-            } catch (error) {
-                wrongEmailError = error;
-            }
-
-            expect(wrongPasswordError.title).toBe(wrongEmailError.title);
-            expect(wrongPasswordError.description).toBe(wrongEmailError.description);
         });
     });
 });

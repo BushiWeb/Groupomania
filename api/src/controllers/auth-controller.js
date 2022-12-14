@@ -1,6 +1,7 @@
-import { UnauthorizedError } from '../errors/index.js';
+import { NotFoundError, UnauthorizedError } from '../errors/index.js';
 import { createLoggerNamespace } from '../logger/index.js';
 import { login } from '../services/auth.js';
+import { getUserByEmail } from '../services/users.js';
 
 const authControllerLogger = createLoggerNamespace('groupomania:api:controllers:auth');
 
@@ -15,18 +16,27 @@ const authControllerLogger = createLoggerNamespace('groupomania:api:controllers:
 export async function loginController(req, res, next) {
     authControllerLogger.verbose('Login middleware starting');
     try {
-        const userInfos = {
-            email: req.body.email,
-            password: req.body.password
-        };
-        const authInfos = await login(userInfos);
+        const user = await getUserByEmail(req.body.email);
+        const authInfos = await login(user, req.body.password);
 
         res.status(200).json(authInfos);
         authControllerLogger.verbose('Response sent');
     } catch (error) {
-        if (error instanceof UnauthorizedError) {
-            error.setRequestInformations(req.path, req.method);
+        let normalizedError = error;
+
+        if (error instanceof NotFoundError) {
+            normalizedError = new UnauthorizedError({
+                message: 'The user corresponding the the email can\'t be found'
+            }, error, {});
         }
-        return next(error);
+        if (normalizedError instanceof UnauthorizedError) {
+            normalizedError
+                .setRequestInformations(req.path, req.method)
+                .setPublicMessages(
+                    'The credentials are not working.',
+                    'It seems we can identify you with those credentials. Please, check your inputs and try again. If you are not registered, you must first create an account before loging in.'
+                );
+        }
+        return next(normalizedError);
     }
 }

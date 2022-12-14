@@ -255,4 +255,21 @@ describe('HttpError test suite', () => {
             expect(errorInstance).toBe(error);
         });
     });
+
+
+
+    describe('setPublicMessages test suite', () => {
+        it('should update the title and the description and return the instance', () => {
+            const lessErrorInformations = {
+                message: errorInformations.message
+            };
+            const error = new HttpError(lessErrorInformations);
+
+            const errorInstance = error.setPublicMessages(errorInformations.title, errorInformations.description);
+
+            expect(error.title).toBe(errorInformations.title);
+            expect(error.description).toBe(errorInformations.description);
+            expect(errorInstance).toBe(error);
+        });
+    });
 });

@@ -1,8 +1,9 @@
-import { createUser } from '../../src/services/users.js';
+import { createUser, getUserByEmail } from '../../src/services/users.js';
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
 import MockModel, * as mockModelMethods from '../mocks/mock-models.test.js';
 import bcrypt from 'bcrypt';
+import { NotFoundError } from '../../src/errors/index.js';
 
 jest.spyOn(db, 'models', 'get').mockImplementation(
     () => new Proxy(
@@ -57,6 +58,30 @@ describe('User services test suite', () => {
             expect.assertions(1);
             mockModelMethods.mockCreate.mockRejectedValue(testError);
             await expect(createUser(userInfos)).rejects.toEqual(testError);
+        });
+    });
+
+    describe('Get user by email service test suite', () => {
+        it('should get the user informations', async () => {
+            const returnedUserInfos = {
+                email: userInfos.email,
+                password: 'mockedBcryptHash',
+                roleId: userInfos.roleId,
+                userId: 113
+            };
+            mockModelMethods.mockFindOne.mockResolvedValueOnce(new MockModel(returnedUserInfos));
+            const user = await getUserByEmail(returnedUserInfos.email);
+
+            expect(user).toHaveProperty('email', returnedUserInfos.email);
+            expect(user).toHaveProperty('password');
+            expect(user).toHaveProperty('roleId', returnedUserInfos.roleId);
+            expect(user).toHaveProperty('userId', returnedUserInfos.userId);
+        });
+
+        it('should create throw a NotFoundError if the user doesn\'t exist', async () => {
+            expect.assertions(1);
+            mockModelMethods.mockFindOne.mockResolvedValueOnce(null);
+            await expect(getUserByEmail(userInfos.email)).rejects.toBeInstanceOf(NotFoundError);
         });
     });
 });

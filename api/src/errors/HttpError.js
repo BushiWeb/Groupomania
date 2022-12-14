@@ -89,4 +89,16 @@ export default class HttpError extends Error {
         this.method = method;
         return this;
     }
+
+    /**
+     * Set the title and the description.
+     * @param {string} title
+     * @param {string} description
+     * @returns {HttpError} Returns the current instance of HttpError for method chaining.
+     */
+    setPublicMessages(title, description) {
+        this.title = title;
+        this.description = description;
+        return this;
+    }
 }
