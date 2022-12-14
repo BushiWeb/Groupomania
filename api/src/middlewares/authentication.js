@@ -58,69 +58,71 @@ function getTokenFromAuthorization(authorizationHeader) {
 /**
  * Checks the payload format.
  * @param {string} tokenPayload - Payload of the token.
- * @throws {UnauthorizedError} Throws if the scheme is not bearer.
+ * @param {boolean} isRefreshToken - Boolean indicating if the payload corresponds to a refresh token payload (if true) or an access token payload (if false).
+ * @throws {UnauthorizedError} Throws if the payload is invalid.
  */
-function checkTokenPayload(tokenPayload) {
+function checkTokenPayload(tokenPayload, isRefreshToken) {
     authLogger.debug('Checking the payload format');
 
-    if (!tokenPayload.userId) {
-        authLogger.debug('The payload doesn\'t contain the userId, throwing an error');
-        throw new UnauthorizedError({
-            message: 'Missing informations in the payload',
-            title: 'Authentication informations incomplete',
-            description: 'We are missing authentication informations. Please, verify you token and check it\'s origin. If the token doesn\'t come from us, do not use it. Otherwise, you may try again.',
-            logDetails: {
-                missingProperty: 'userId'
-            }
-        });
-    }
+    const missingProperty = !tokenPayload.userId && 'userId' || !tokenPayload.role && 'role' || !tokenPayload.jti && isRefreshToken && 'jti' || '';
 
-    if (!tokenPayload.role) {
-        authLogger.debug('The payload doesn\'t contain the role, throwing an error');
+    if (missingProperty) {
+        authLogger.debug(`The payload doesn't contain the ${missingProperty}, throwing an error`);
         throw new UnauthorizedError({
             message: 'Missing informations in the payload',
             title: 'Authentication informations incomplete',
             description: 'We are missing authentication informations. Please, verify you token and check it\'s origin. If the token doesn\'t come from us, do not use it. Otherwise, you may try again.',
             logDetails: {
-                missingProperty: 'role'
+                missingProperty: missingProperty
             }
         });
     }
 }
 
+
 /**
- * Middleware checking if the user is authenticated.
- * If the user is authenticated, then the execution continues. Otherwise, we call the error handling middleware.
- * @param {Express.Request} req - Express request object.
- * @param {Express.Response} res - Express response object.
- * @param next - Next middleware to execute.
+ * Function generating the authentication middleware.
+ * Allows to either check an access token or a refresh token.
+ * @param {boolean} [isRefreshToken=false] - Boolean indicating if the middleware should handle a refresh token (if true) or an access token (if false).
+ * @return Returns the configured authentication middleware.
  */
-export default function authenticate(req, res, next) {
-    authLogger.verbose('Authentication middleware starting');
+export default function authenticate(isRefreshToken = false) {
+    /**
+     * Middleware checking if the user is authenticated.
+     * If the user is authenticated, then the execution continues. Otherwise, we call the error handling middleware.
+     * @param {Express.Request} req - Express request object.
+     * @param {Express.Response} res - Express response object.
+     * @param next - Next middleware to execute.
+     */
+    return function (req, res, next) {
+        authLogger.verbose('Authentication middleware starting');
 
-    let tokenPayload;
+        let tokenPayload;
 
-    try {
-        const authorizationHeader = getAuthorizationHeader(req);
-        authLogger.debug('Authorization header checked');
+        try {
+            const authorizationHeader = getAuthorizationHeader(req);
+            authLogger.debug('Authorization header checked');
 
-        const token = getTokenFromAuthorization(authorizationHeader);
-        authLogger.debug('Authorization scheme checked, token retrieved');
+            const token = getTokenFromAuthorization(authorizationHeader);
+            authLogger.debug('Authorization scheme checked, token retrieved');
 
-        tokenPayload = jwt.verify(token, config.get('jwt.key'), { algorithms: [config.get('jwt.alg')] });
-        authLogger.debug('Authentication payload valid');
+            const tokenKey = isRefreshToken ? config.get('refreshJwt.key') : config.get('jwt.key');
 
-        checkTokenPayload(tokenPayload);
-        authLogger.debug('Token payload valid');
-    } catch (error) {
-        if (error instanceof UnauthorizedError) {
-            error.setRequestInformations(req.originalUrl, req.method);
+            tokenPayload = jwt.verify(token, tokenKey, { algorithms: [config.get('jwt.alg')] });
+            authLogger.debug('Authentication payload valid');
+
+            checkTokenPayload(tokenPayload, isRefreshToken);
+            authLogger.debug('Token payload valid');
+        } catch (error) {
+            if (error instanceof UnauthorizedError) {
+                error.setRequestInformations(req.originalUrl, req.method);
+            }
+            return next(error);
         }
-        return next(error);
-    }
 
-    res.locals.auth = tokenPayload;
+        res.locals.auth = tokenPayload;
 
-    authLogger.debug('Data saved, end of authentication middleware');
-    next();
+        authLogger.debug('Data saved, end of authentication middleware');
+        next();
+    };
 }

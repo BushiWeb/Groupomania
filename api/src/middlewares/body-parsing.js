@@ -73,7 +73,12 @@ function getParser(contentType, parsers) {
 export default function createBodyParser(parsers, emptyAllowed = true) {
     parsingLogger.verbose('Starting parsing middleware creation');
     parsingLogger.debug(`This request accepts the following Content-Types : ${Object.keys(parsers)}${emptyAllowed ? ', as well as empty bodies': ''}`);
-
+    /**
+     * Middleware validating the content-type and parsing the request body.
+     * @param {Express.Request} req - Express request object.
+     * @param {Express.Response} res - Express response object.
+     * @param next - Next middleware to execute.
+     */
     return (req, res, next) => {
         parsingLogger.verbose('Starting body parsing');
 
