@@ -38,6 +38,7 @@ describe('Auth services test suite', () => {
 
             expect(newUser).toHaveProperty('userId', userInfos.userId);
             expect(newUser).toHaveProperty('accessToken');
+            expect(newUser).toHaveProperty('refreshToken');
         });
 
         it('should throw an error if the password is incorrect', async () => {

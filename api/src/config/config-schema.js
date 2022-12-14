@@ -166,6 +166,27 @@ const CONFIG_SCHEMA = {
             default: 600,
             env: 'JWT_VALID'
         }
+    },
+    refreshJwt: {
+        key: {
+            doc: 'Key to use with the chosen hash function',
+            format: String,
+            default: null,
+            nullable: false,
+            env: 'REFRESH_JWT_KEY'
+        },
+        alg: {
+            doc: 'JWT algorithm to use',
+            format: String,
+            default: 'HS256',
+            env: 'REFRESH_JWT_ALG'
+        },
+        exp: {
+            doc: 'Number of seconds before the JWT expires',
+            format: 'int',
+            default: 86400,
+            env: 'REFRESH_JWT_VALID'
+        }
     }
 };
 

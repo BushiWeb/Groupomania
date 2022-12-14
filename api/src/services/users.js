@@ -19,30 +19,25 @@ const usersServicesLogger = createLoggerNamespace('groupomania:api:services:user
 export async function createUser({email, password, roleId}) {
     usersServicesLogger.verbose('Create User service starting');
 
-    try {
-        // Hash password
-        const saltRound = config.get('passwordHash.saltRound');
-        let hashedPassword = await bcrypt.hash(password, saltRound);
-        usersServicesLogger.debug('Password hashed');
+    // Hash password
+    const saltRound = config.get('passwordHash.saltRound');
+    let hashedPassword = await bcrypt.hash(password, saltRound);
+    usersServicesLogger.debug('Password hashed');
 
-        // User creation
-        let userInfos = {
-            email,
-            password: hashedPassword
-        };
+    // User creation
+    let userInfos = {
+        email,
+        password: hashedPassword
+    };
 
-        if (roleId) {
-            userInfos.roleId = roleId;
-        }
-
-        const newUser = await db.models.User.create(userInfos);
-        usersServicesLogger.debug('User created');
-
-        return newUser;
-    } catch (error) {
-        usersServicesLogger.debug('Create user service error');
-        throw error;
+    if (roleId) {
+        userInfos.roleId = roleId;
     }
+
+    const newUser = await db.models.User.create(userInfos);
+    usersServicesLogger.debug('User created');
+
+    return newUser;
 }
 
 /**
@@ -55,23 +50,18 @@ export async function createUser({email, password, roleId}) {
 export async function getUserByEmail(email) {
     usersServicesLogger.verbose('Get user by email service starting');
 
-    try {
-        const user = await db.models.User.findOne({
-            where: { email }
+    const user = await db.models.User.findOne({
+        where: { email }
+    });
+    if (user === null) {
+        usersServicesLogger.debug('The email is invalid. Throwing an error');
+        throw new NotFoundError({
+            message: `No user has the email address ${email}.`,
+            title: 'The user can\'t be found.',
+            description: 'We can\'t find the user corresponding to the email address. Please, verify your input and try again. If the user does not yet exist, you may create it.'
         });
-        if (user === null) {
-            usersServicesLogger.debug('The email is invalid. Throwing an error');
-            throw new NotFoundError({
-                message: `No user has the email address ${email}.`,
-                title: 'The user can\'t be found.',
-                description: 'We can\'t find the user corresponding to the email address. Please, verify your input and try again. If the user does not yet exist, you may create it.'
-            });
-        }
-
-        usersServicesLogger.debug('User fetched');
-        return user;
-    } catch (error) {
-        usersServicesLogger.debug('Get user by email service error');
-        throw error;
     }
+
+    usersServicesLogger.debug('User fetched');
+    return user;
 }

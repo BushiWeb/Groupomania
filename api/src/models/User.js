@@ -38,7 +38,7 @@ export default function createUserModel(sequelize) {
             field: 'failed_login_attempt_count'
         },
         lockedUntil: {
-            type: DataTypes.DATE,
+            type: DataTypes.DATE(6),
             allowNull: true,
             field: 'locked_until'
         },

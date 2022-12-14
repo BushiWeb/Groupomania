@@ -9,5 +9,6 @@ TEST_CONFIG_SCHEMA.db.name.nullable = true;
 TEST_CONFIG_SCHEMA.db.username.nullable = true;
 TEST_CONFIG_SCHEMA.db.password.nullable = true;
 TEST_CONFIG_SCHEMA.jwt.key.default = 'test';
+TEST_CONFIG_SCHEMA.refreshJwt.key.default = 'testRefresh';
 
 export default TEST_CONFIG_SCHEMA;

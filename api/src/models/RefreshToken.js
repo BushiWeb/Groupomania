@@ -17,7 +17,7 @@ export default function createRefreshTokenModel(sequelize) {
             field: 'token_id'
         },
         tokenValue: {
-            type: DataTypes.STRING(60),
+            type: DataTypes.TEXT,
             allowNull: false,
             field: 'token_value'
         },
