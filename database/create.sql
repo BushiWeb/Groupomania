@@ -44,13 +44,6 @@ CREATE TABLE admin.roles(
    name VARCHAR(50) UNIQUE NOT NULL
 );
 
--- Table containing all the refresh tokens that haven't been invalidated. The primary key is not a number, part of a sequence, but a UUID that is set by the user accessing the database.
-CREATE TABLE authentication.refresh_tokens(
-   token_id UUID PRIMARY KEY,
-   token_value VARCHAR(60) NOT NULL,
-   expiration TIMESTAMP (0) WITH TIME ZONE NOT NULL
-);
-
 -- This table contains all the registered users. The email must be unique and it's format is checked. this table also keeps count of the consecutive failed login attempts, and the date until the user is locked.
 CREATE TABLE users.users(
    user_id SERIAL PRIMARY KEY,
@@ -59,9 +52,19 @@ CREATE TABLE users.users(
    password VARCHAR(60) NOT NULL,
    failed_login_attempt_count INTEGER NOT NULL DEFAULT 0,
    locked_until TIMESTAMP WITH TIME ZONE,
-   role_id INTEGER NOT NULL DEFAULT 2,
+   role_id SMALLINT NOT NULL DEFAULT 2,
    FOREIGN KEY(role_id) REFERENCES admin.roles(role_id)
    ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
+-- Table containing all the refresh tokens that haven't been invalidated. The primary key is not a number, part of a sequence, but a UUID that is set by the user accessing the database.
+CREATE TABLE authentication.refresh_tokens(
+   token_id UUID PRIMARY KEY,
+   token_value VARCHAR(60) NOT NULL,
+   expiration TIMESTAMP (0) WITH TIME ZONE NOT NULL,
+   user_id INTEGER NOT NULL,
+   FOREIGN KEY(user_id) REFERENCES users.users(user_id)
+   ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- This table contains the list of all the posts, including their creation date and last update date. One post belongs to one user.
