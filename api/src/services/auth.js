@@ -1,7 +1,7 @@
 import { createLoggerNamespace } from '../logger/index.js';
 import bcrypt from 'bcrypt';
 import config from '../config/config.js';
-import { UnauthorizedError } from '../errors/index.js';
+import { InternalServerError, UnauthorizedError } from '../errors/index.js';
 import jwt from 'jsonwebtoken';
 import { v4 as UUIDv4} from 'uuid';
 import db from '../models/index.js';
@@ -127,6 +127,54 @@ export async function validateRefreshToken(tokenId) {
 }
 
 
+
+/**
+ * Invalidate one or multiple refresh token, by deleting them from the database.
+ * The action depends on the parameter:
+ *      - If the parameter is an instance of RefreshToken, then delete the entry corresponding to the instance.
+ *      - If the parameter is a string representing a token id, then delete the token corresponding to the id.
+ *      - If the parameter is a number representing a user id, delete all the tokens associated to the user.
+ * @param {RefreshToken|number|string} identifier - Identifier of the token, either an instance of RefreshToken, a string representing a token id or a number representing a user id.
+ * @throws {InternalServerError} Throws if the identifier does not represent anything.
+ */
+export async function invalidateRefreshToken(identifier) {
+    authServicesLogger.verbose('Invalidate refresh token service starting');
+
+    const RefreshToken = db.models.RefreshToken;
+
+    if (identifier instanceof RefreshToken) {
+        authServicesLogger.debug('Delete from an instance of RefreshToken');
+        return await identifier.destroy();
+
+    }
+
+    if (typeof identifier === 'string') {
+        authServicesLogger.debug('Delete from a tokenId');
+        return await RefreshToken.destroy({
+            where: {
+                tokenId: identifier
+            }
+        });
+
+    }
+
+    if (typeof identifier === 'number') {
+        authServicesLogger.debug('Delete from a userId');
+        return await RefreshToken.destroy({
+            where: {
+                userId: identifier
+            }
+        });
+
+    }
+
+    authServicesLogger.debug('The identifier can not be processed, throwing an error');
+    throw new InternalServerError({
+        message: 'The identifier of the invalidateRefreshToken service is neither a number, neither a string nor an instance of RefreshToken.'
+    });
+}
+
+
 /**
  * Log a user in.
  * Compares the password and generates a JWT.
@@ -162,10 +210,7 @@ export async function login(user, password) {
 export async function logout(tokenId) {
     authServicesLogger.verbose('Logout service starting');
 
-    await db.models.RefreshToken.destroy({
-        where: {
-            tokenId
-        }
-    });
+    await invalidateRefreshToken(tokenId);
+
     authServicesLogger.verbose('Refresh token deleted, logout successful');
 }

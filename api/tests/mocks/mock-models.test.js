@@ -57,6 +57,12 @@ const mockStaticDestroy = jest.fn(function () {
     });
 });
 
+const mockInstanceDestroy = jest.fn(function () {
+    return new Promise((resolve) => {
+        resolve();
+    });
+});
+
 class MockModel {
     constructor(values) {
         this.dataValues = values;
@@ -91,6 +97,8 @@ class MockModel {
     save = mockSave;
 
     validate = mockValidate;
+
+    destroy = mockInstanceDestroy;
 }
 
 function clearMocks() {
@@ -101,9 +109,10 @@ function clearMocks() {
     mockFindOne.mockClear();
     mockFindByPk.mockClear();
     mockStaticDestroy.mockClear();
+    mockInstanceDestroy.mockClear();
 }
 
-export { mockSave, mockValidate, mockCreate, mockBuild, MockModel, mockFindOne, mockStaticDestroy, mockFindByPk, clearMocks };
+export { mockSave, mockValidate, mockCreate, mockBuild, MockModel, mockFindOne, mockStaticDestroy, mockFindByPk, mockInstanceDestroy, clearMocks };
 export default MockModel;
 
 beforeEach(() => {

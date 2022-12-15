@@ -1,9 +1,9 @@
-import { login, logout, createRefreshToken, createAccessToken, validatePassword, validateRefreshToken } from '../../src/services/auth.js';
+import { login, logout, createRefreshToken, createAccessToken, validatePassword, validateRefreshToken, invalidateRefreshToken } from '../../src/services/auth.js';
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
 import MockModel, * as mockModelMethods from '../mocks/mock-models.test.js';
 import bcrypt from 'bcrypt';
-import { UnauthorizedError } from '../../src/errors/index.js';
+import { InternalServerError, UnauthorizedError } from '../../src/errors/index.js';
 import jwt from 'jsonwebtoken';
 
 jest.spyOn(db, 'models', 'get').mockImplementation(
@@ -141,6 +141,46 @@ describe('Auth services test suite', () => {
         it('should return false if the password is invalid', async () => {
             mockModelMethods.mockFindByPk.mockResolvedValueOnce(null);
             await expect(validateRefreshToken(tokenId)).rejects.toBeInstanceOf(UnauthorizedError);
+        });
+    });
+
+    describe('invalidateRefreshToken test suite', () => {
+        const tokenId = 'tokenId';
+        const userId = 113;
+        const refreshToken = new MockModel({
+            tokenId,
+            expiration: 11111111111,
+            tokenValue: 'hashed token value',
+            userId
+        });
+
+        it('should use the token id to choose the refresh token to delete', async () => {
+            await invalidateRefreshToken(tokenId);
+            expect(mockModelMethods.mockStaticDestroy).toHaveBeenCalled();
+            expect(mockModelMethods.mockStaticDestroy).toHaveBeenCalledWith({
+                where: {
+                    tokenId
+                }
+            });
+        });
+
+        it('should use the user id to choose the refresh token to delete', async () => {
+            await invalidateRefreshToken(userId);
+            expect(mockModelMethods.mockStaticDestroy).toHaveBeenCalled();
+            expect(mockModelMethods.mockStaticDestroy).toHaveBeenCalledWith({
+                where: {
+                    userId
+                }
+            });
+        });
+
+        it('should delete the token corresponding to the RefreshToken instance given', async () => {
+            await invalidateRefreshToken(refreshToken);
+            expect(mockModelMethods.mockInstanceDestroy).toHaveBeenCalled();
+        });
+
+        it('should throw if the parameter don\'t have the right type', async () => {
+            await expect(invalidateRefreshToken(true)).rejects.toBeInstanceOf(InternalServerError);
         });
     });
 });
