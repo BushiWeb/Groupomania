@@ -71,9 +71,10 @@ function normalizeJwtError(err) {
     }
 
     errorLogger.debug('JsonWebTokenError normalization');
-    return new InternalServerError({
+    return new UnauthorizedError({
         message: err.message,
-        originalName: err.name
+        title: 'There is a problem with the authentication token',
+        description: 'We can\'t process the authentication token you provided. Please, check that this token is the right one and try again.'
     }, err);
 }
 
@@ -97,7 +98,7 @@ export function errorNormalizer(err, req, res, next) {
         return next(err);
     }
 
-    if (err instanceof jwt.TokenExpiredError) {
+    if (err instanceof jwt.JsonWebTokenError) {
         return next(normalizeJwtError(err).setRequestInformations(req.originalUrl, req.method));
     }
 

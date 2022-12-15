@@ -44,7 +44,7 @@ function getTokenFromAuthorization(authorizationHeader) {
         throw new UnauthorizedError({
             message: `Wrong authentication scheme, using ${scheme} instead of Bearer`,
             title: 'Can\'t get the authentication informations',
-            description: 'We are having trouble understanding your authentication informations. Make sure you provided your authentication informations in the "Authorization" header as a bearer token before trying again.',
+            description: 'We are having trouble understanding your authentication informations. Make sure you provided your authentication informations in the Authorization header as a bearer token before trying again.',
             details: {
                 receivedScheme: scheme,
                 expectedSchemes: ['Bearer']
