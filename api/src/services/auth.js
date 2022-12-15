@@ -11,10 +11,11 @@ const authServicesLogger = createLoggerNamespace('groupomania:api:services:auth'
 /**
  * Creates a refresh token an save it in the database.
  * @param {number} userId - Id of the user the token belongs to.
+ * @param {number} role - Role id of the user the token belongs to.
  * @returns {string} Returns the token.
  * @throws Throws an error if something unexpected occurs while saving the token.
  */
-async function createRefreshToken(userId) {
+async function createRefreshToken(userId, role) {
     authServicesLogger.verbose('Refresh token creation service starting');
 
     const tokenId = UUIDv4();
@@ -24,7 +25,8 @@ async function createRefreshToken(userId) {
     const expirationDate = issuedAtDate + config.get('refreshJwt.exp');
     const refreshToken = jwt.sign(
         {
-            userId: userId,
+            userId,
+            role,
             exp: expirationDate,
             iat: issuedAtDate
         },
@@ -86,7 +88,7 @@ export async function login(user, password) {
     authServicesLogger.debug('User\'s token created');
 
     // Generate the refresh token
-    const refreshToken = await createRefreshToken(user.userId);
+    const refreshToken = await createRefreshToken(user.userId, user.roleId);
 
     return {
         userId: user.userId,

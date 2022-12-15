@@ -3,7 +3,7 @@ import UserRouter from '../routes/user-routes.js';
 import getRoutesRegexp from '../utils/get-routes.js';
 import AuthRouter from '../routes/auth-routes.js';
 
-const loaderLogger = createLoggerNamespace('groupomania:api:loader:users');
+const loaderLogger = createLoggerNamespace('groupomania:api:loader:routes');
 
 /**
  * Add all users related routes and middlewares.

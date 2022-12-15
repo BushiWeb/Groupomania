@@ -23,7 +23,7 @@ export default async function loadApp (app) {
     loaderLogger.verbose('Database initialized');
 
     routeLoader(app);
-    loaderLogger.verbose('User routes added');
+    loaderLogger.verbose('Routes added');
 
     errorsLoader(app);
     loaderLogger.verbose('Error middlewares initialized');

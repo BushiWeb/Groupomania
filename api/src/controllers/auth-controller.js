@@ -1,6 +1,6 @@
 import { NotFoundError, UnauthorizedError } from '../errors/index.js';
 import { createLoggerNamespace } from '../logger/index.js';
-import { login } from '../services/auth.js';
+import { login, logout } from '../services/auth.js';
 import { getUserByEmail } from '../services/users.js';
 
 const authControllerLogger = createLoggerNamespace('groupomania:api:controllers:auth');
@@ -38,5 +38,25 @@ export async function loginController(req, res, next) {
                 );
         }
         return next(normalizedError);
+    }
+}
+
+/**
+ * Logout controller.
+ * Calls the right service.
+ * Sends a message to the client with status 204 if the logout is successful, or calls the error handler middleware if an error occurs.
+ * @param {Express.Request} req - Express request object.
+ * @param {Express.Response} res - Express response object.
+ * @param next - Next middleware to execute.
+ */
+export async function logoutController(req, res, next) {
+    authControllerLogger.verbose('Logout middleware starting');
+    try {
+        await logout(res.locals.auth.jti);
+
+        res.status(204).end();
+        authControllerLogger.verbose('Response sent');
+    } catch (error) {
+        return next(error);
     }
 }
