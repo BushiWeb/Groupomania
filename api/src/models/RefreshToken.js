@@ -24,6 +24,17 @@ export default function createRefreshTokenModel(sequelize) {
         expiration: {
             type: DataTypes.DATE,
             allowNull: false
+        },
+        userId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            field: 'user_id',
+            references: {
+                model: 'users',
+                key: 'user_id'
+            },
+            onUpdate: 'RESTRICT',
+            onDelete: 'RESTRICT'
         }
     }, {
         tableName: 'refresh_tokens',

@@ -43,7 +43,7 @@ export default function createUserModel(sequelize) {
             field: 'locked_until'
         },
         roleId: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.SMALLINT,
             allowNull: false,
             defaultValue: 2,
             field: 'role_id',

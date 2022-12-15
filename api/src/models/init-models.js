@@ -15,7 +15,7 @@ export default function initModels(sequelize) {
     dbLogger.debug('Models initialization starting');
 
     // Create models
-    createRefreshTokenModel(sequelize);
+    var refreshToken = createRefreshTokenModel(sequelize);
     dbLogger.debug('Refresh token model created');
     var role = createRoleModel(sequelize);
     dbLogger.debug('Role model created');
@@ -31,6 +31,11 @@ export default function initModels(sequelize) {
     user.belongsTo(role, { as: 'role', foreignKey: 'role_id'});
     role.hasMany(user, { as: 'users', foreignKey: 'role_id'});
     dbLogger.debug('One to many relation created between role and user');
+
+    // user 1->N refresh token
+    refreshToken.belongsTo(user, { as: 'user', foreignKey: 'user_id'});
+    user.hasMany(refreshToken, { as: 'refreshTokens', foreignKey: 'user_id'});
+    dbLogger.debug('One to many relation created between user and refresh token');
 
     // user 1->N post
     post.belongsTo(user, { as: 'writer', foreignKey: 'writer_id'});
