@@ -175,31 +175,6 @@ export async function invalidateRefreshToken(identifier) {
 }
 
 
-/**
- * Log a user in.
- * Compares the password and generates a JWT.
- * @param {User} user - User model, containing all user informations.
- * @param {string} password - User's password.
- * @returns {{userId: number, accessToken: string}} Returns the user id, the refresh token and the access JWT.
- */
-export async function login(user, password) {
-    authServicesLogger.verbose('Login service starting');
-
-    authServicesLogger.debug('Comparing passwords');
-    await validatePassword(password, user);
-
-    authServicesLogger.debug('The password is valid, generating the tokens');
-    const accessToken = await createAccessToken(user.userId, user.roleId);
-    const refreshToken = await createRefreshToken(user.userId, user.roleId);
-
-    return {
-        userId: user.userId,
-        accessToken,
-        refreshToken
-    };
-}
-
-
 
 /**
  * Log a user out.

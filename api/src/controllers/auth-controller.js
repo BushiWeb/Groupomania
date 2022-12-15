@@ -1,13 +1,13 @@
 import { NotFoundError, UnauthorizedError } from '../errors/index.js';
 import { createLoggerNamespace } from '../logger/index.js';
-import { login, logout } from '../services/auth.js';
+import { createAccessToken, createRefreshToken, logout, validatePassword } from '../services/auth.js';
 import { getUserByEmail } from '../services/users.js';
 
 const authControllerLogger = createLoggerNamespace('groupomania:api:controllers:auth');
 
 /**
  * Login controller.
- * Calls the right service.
+ * Fetches the user to check the password. Generates the tokens if the assword is valid.
  * Sends a message to the client with status 200 and the authentication tokens if the request is successful, or calls the error handler middleware if an error occurs.
  * @param {Express.Request} req - Express request object.
  * @param {Express.Response} res - Express response object.
@@ -17,9 +17,20 @@ export async function loginController(req, res, next) {
     authControllerLogger.verbose('Login middleware starting');
     try {
         const user = await getUserByEmail(req.body.email);
-        const authInfos = await login(user, req.body.password);
+        authControllerLogger.debug('User fetched');
+        await validatePassword(req.body.password, user);
+        authControllerLogger.debug('Password valid');
+        const accessToken = await createAccessToken(user.userId, user.roleId);
+        authControllerLogger.debug('Access token created');
+        const refreshToken = await createRefreshToken(user.userId, user.roleId);
+        authControllerLogger.debug('Refresh token created');
 
-        res.status(200).json(authInfos);
+        res.status(200).json({
+            userId: user.userId,
+            accessToken,
+            refreshToken
+        });
+
         authControllerLogger.verbose('Response sent');
     } catch (error) {
         let normalizedError = error;

@@ -1,4 +1,4 @@
-import { login, logout, createRefreshToken, createAccessToken, validatePassword, validateRefreshToken, invalidateRefreshToken } from '../../src/services/auth.js';
+import { logout, createRefreshToken, createAccessToken, validatePassword, validateRefreshToken, invalidateRefreshToken } from '../../src/services/auth.js';
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
 import MockModel, * as mockModelMethods from '../mocks/mock-models.test.js';
@@ -34,25 +34,6 @@ describe('Auth services test suite', () => {
         userId: 113
     };
 
-    const password = 'password';
-
-    describe('Login service test suite', () => {
-        it('should return the authenticated user and the JWT', async () => {
-            mockBcryptCompare.mockResolvedValueOnce(true);
-            const newUser = await login(userInfos, password);
-
-            expect(newUser).toHaveProperty('userId', userInfos.userId);
-            expect(newUser).toHaveProperty('accessToken');
-            expect(newUser).toHaveProperty('refreshToken');
-        });
-
-        it('should throw an error if the password is incorrect', async () => {
-            expect.assertions(1);
-            mockBcryptCompare.mockResolvedValueOnce(false);
-
-            await expect(login(userInfos)).rejects.toBeInstanceOf(UnauthorizedError);
-        });
-    });
 
     describe('Logout service test suite', () => {
         const tokenId = 'fffffff-fffffffff-ffffffffffffffffff';
