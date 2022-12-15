@@ -48,7 +48,7 @@ CREATE TABLE admin.roles(
 CREATE TABLE authentication.refresh_tokens(
    token_id UUID PRIMARY KEY,
    token_value VARCHAR(60) NOT NULL,
-   expiration TIMESTAMP WITH TIME ZONE NOT NULL
+   expiration TIMESTAMP (0) WITH TIME ZONE NOT NULL
 );
 
 -- This table contains all the registered users. The email must be unique and it's format is checked. this table also keeps count of the consecutive failed login attempts, and the date until the user is locked.
