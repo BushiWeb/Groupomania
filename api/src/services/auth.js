@@ -100,6 +100,33 @@ export async function validatePassword(password, user) {
 }
 
 
+
+/**
+ * Checks if the refresh token is valid, i.e. it hasn't been invalidated.
+ * Validation regarding the expiration or the key for example should be done earlier, using the authentication middleware.
+ * @param {string} tokenId - Id of the token to check. Should have the UUID format.
+ * @returns {RefreshToken} Returns the corresponding refresh token model if the refresh token is valid.
+ * @throws {UnauthorizedError} Throws if the refresh token is not valid anymore.
+ */
+export async function validateRefreshToken(tokenId) {
+    authServicesLogger.verbose('Validate refresh token service starting');
+
+    const refreshToken = await db.models.RefreshToken.findByPk(tokenId);
+
+    if (refreshToken === null) {
+        authServicesLogger.debug('The refresh token is invalid. Throwing an error');
+        throw new UnauthorizedError({
+            message: 'The refresh token is invalid.',
+            title: 'The authentication token is invalid',
+            description: 'the token is not valid anymore. It may have invalidated following a logout or for safety reasons. You may try to log back in using your email and password.'
+        }, null);
+    }
+
+    authServicesLogger.debug('Refresh token found, so the refresh token is valid');
+    return refreshToken;
+}
+
+
 /**
  * Log a user in.
  * Compares the password and generates a JWT.
@@ -113,9 +140,8 @@ export async function login(user, password) {
     authServicesLogger.debug('Comparing passwords');
     await validatePassword(password, user);
 
-    authServicesLogger.debug('The password is valid, generating the token');
+    authServicesLogger.debug('The password is valid, generating the tokens');
     const accessToken = await createAccessToken(user.userId, user.roleId);
-
     const refreshToken = await createRefreshToken(user.userId, user.roleId);
 
     return {

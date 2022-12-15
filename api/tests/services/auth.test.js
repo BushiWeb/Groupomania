@@ -1,4 +1,4 @@
-import { login, logout, createRefreshToken, createAccessToken, validatePassword } from '../../src/services/auth.js';
+import { login, logout, createRefreshToken, createAccessToken, validatePassword, validateRefreshToken } from '../../src/services/auth.js';
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
 import MockModel, * as mockModelMethods from '../mocks/mock-models.test.js';
@@ -110,7 +110,7 @@ describe('Auth services test suite', () => {
     });
 
     describe('validatePassword test suite', () => {
-        const user = new db.models.User({ password: 'passwordhash' });
+        const user = new MockModel({ password: 'passwordhash' });
         const password = 'password';
 
         it('should return true if the password is valid', async () => {
@@ -121,6 +121,26 @@ describe('Auth services test suite', () => {
         it('should return false if the password is invalid', async () => {
             mockBcryptCompare.mockResolvedValueOnce(false);
             await expect(validatePassword(password, user)).rejects.toBeInstanceOf(UnauthorizedError);
+        });
+    });
+
+    describe('validateRefreshToken test suite', () => {
+        const tokenId = 'tokenId';
+        const refreshToken = new MockModel({
+            tokenId,
+            expiration: 11111111111,
+            tokenValue: 'hashed token value',
+            userId: 113
+        });
+
+        it('should return true if the password is valid', async () => {
+            mockModelMethods.mockFindByPk.mockResolvedValueOnce(refreshToken);
+            await expect(validateRefreshToken(tokenId)).resolves.toBe(refreshToken);
+        });
+
+        it('should return false if the password is invalid', async () => {
+            mockModelMethods.mockFindByPk.mockResolvedValueOnce(null);
+            await expect(validateRefreshToken(tokenId)).rejects.toBeInstanceOf(UnauthorizedError);
         });
     });
 });

@@ -44,6 +44,13 @@ const mockFindOne = jest.fn(function () {
     });
 });
 
+// Il est nécessaire de faire retourner à cette fonction la promesse résolue avec la bonne valeur
+const mockFindByPk = jest.fn(function () {
+    return new Promise((resolve) => {
+        resolve(this);
+    });
+});
+
 const mockStaticDestroy = jest.fn(function () {
     return new Promise((resolve) => {
         resolve(1);
@@ -69,6 +76,8 @@ class MockModel {
 
     static destroy = mockStaticDestroy;
 
+    static findByPk = mockFindByPk;
+
 
     // Instance methods
     get (value) {
@@ -90,10 +99,11 @@ function clearMocks() {
     MockModel.create.mockClear();
     MockModel.build.mockClear();
     mockFindOne.mockClear();
+    mockFindByPk.mockClear();
     mockStaticDestroy.mockClear();
 }
 
-export { mockSave, mockValidate, mockCreate, mockBuild, MockModel, mockFindOne, mockStaticDestroy, clearMocks };
+export { mockSave, mockValidate, mockCreate, mockBuild, MockModel, mockFindOne, mockStaticDestroy, mockFindByPk, clearMocks };
 export default MockModel;
 
 beforeEach(() => {
@@ -175,6 +185,20 @@ describe('Model mock test suite', () => {
                 };
                 mockFindOne.mockResolvedValueOnce(new MockModel(returnedData));
                 const data = await MockModel.findOne(testValues);
+                expect(data).toBeInstanceOf(MockModel);
+                expect(data.dataValues).toEqual(returnedData);
+            });
+        });
+
+        describe('findByPk method test suite', () => {
+            it('should return a promised resolved with the prepared data', async () => {
+                const returnedData = {
+                    email: 'email@example.com',
+                    password: 'dfqdqfqpoihqdfhqosihdfqhqkdfqjhsfqskdjh',
+                    role: 2
+                };
+                mockFindByPk.mockResolvedValueOnce(new MockModel(returnedData));
+                const data = await MockModel.findByPk(testValues);
                 expect(data).toBeInstanceOf(MockModel);
                 expect(data.dataValues).toEqual(returnedData);
             });
