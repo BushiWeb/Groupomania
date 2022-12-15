@@ -37,9 +37,11 @@ async function createRefreshToken(userId) {
     authServicesLogger.debug('Refresh token created');
 
     // Save the token
+    const saltRound = config.get('hash.saltRound');
+    const tokenValue = await bcrypt.hash(refreshToken, saltRound);
     await db.models.RefreshToken.create({
         tokenId,
-        tokenValue: refreshToken,
+        tokenValue,
         expiration: expirationDate * 1000
     });
     authServicesLogger.debug('Refresh token saved');

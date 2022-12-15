@@ -20,7 +20,7 @@ export async function createUser({email, password, roleId}) {
     usersServicesLogger.verbose('Create User service starting');
 
     // Hash password
-    const saltRound = config.get('passwordHash.saltRound');
+    const saltRound = config.get('hash.saltRound');
     let hashedPassword = await bcrypt.hash(password, saltRound);
     usersServicesLogger.debug('Password hashed');
 

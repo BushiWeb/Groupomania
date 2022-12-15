@@ -13,7 +13,7 @@ const CONFIG_SCHEMA = {
         env: 'PORT',
         arg: 'port'
     },
-    passwordHash: {
+    hash: {
         saltRound: {
             doc: 'Number of rounds for the bcrypt algorithm',
             format: 'int',
