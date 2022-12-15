@@ -1,4 +1,4 @@
-import { login, logout, createRefreshToken, createAccessToken } from '../../src/services/auth.js';
+import { login, logout, createRefreshToken, createAccessToken, validatePassword } from '../../src/services/auth.js';
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
 import MockModel, * as mockModelMethods from '../mocks/mock-models.test.js';
@@ -106,6 +106,21 @@ describe('Auth services test suite', () => {
             const newRefreshToken = await createAccessToken(userInfos.userId, userInfos.roleId);
 
             expect(newRefreshToken).toBe(accessToken);
+        });
+    });
+
+    describe('validatePassword test suite', () => {
+        const user = new db.models.User({ password: 'passwordhash' });
+        const password = 'password';
+
+        it('should return true if the password is valid', async () => {
+            mockBcryptCompare.mockResolvedValueOnce(true);
+            await expect(validatePassword(password, user)).resolves.toBe(true);
+        });
+
+        it('should return false if the password is invalid', async () => {
+            mockBcryptCompare.mockResolvedValueOnce(false);
+            await expect(validatePassword(password, user)).rejects.toBeInstanceOf(UnauthorizedError);
         });
     });
 });

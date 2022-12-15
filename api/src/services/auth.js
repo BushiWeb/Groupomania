@@ -79,6 +79,27 @@ export async function createAccessToken(userId, role) {
 }
 
 
+
+/**
+ * Validates a password.
+ * @param {string} password - Password to validate.
+ * @param {User} user - User owning the password.
+ * @return {boolean} Returns true if the password is valid.
+ * @throws {UnauthorizedError} Throws if the password is invalid.
+ */
+export async function validatePassword(password, user) {
+    authServicesLogger.debug('Password validation service starting');
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+        authServicesLogger.debug('The password is invalid. Throwing an error');
+        throw new UnauthorizedError({ message: 'The password is invalid.' }, null, {});
+    }
+
+    return true;
+}
+
+
 /**
  * Log a user in.
  * Compares the password and generates a JWT.
@@ -89,19 +110,12 @@ export async function createAccessToken(userId, role) {
 export async function login(user, password) {
     authServicesLogger.verbose('Login service starting');
 
-    // Compare the passwords
     authServicesLogger.debug('Comparing passwords');
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-        authServicesLogger.debug('The password is invalid. Throwing an error');
-        throw new UnauthorizedError({ message: 'The password is invalid.' }, null, {});
-    }
+    await validatePassword(password, user);
 
-    // Generate the access token
     authServicesLogger.debug('The password is valid, generating the token');
     const accessToken = await createAccessToken(user.userId, user.roleId);
 
-    // Generate the refresh token
     const refreshToken = await createRefreshToken(user.userId, user.roleId);
 
     return {
