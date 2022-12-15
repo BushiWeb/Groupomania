@@ -1,6 +1,6 @@
 import { NotFoundError, UnauthorizedError } from '../errors/index.js';
 import { createLoggerNamespace } from '../logger/index.js';
-import { createAccessToken, createRefreshToken, logout, validatePassword } from '../services/auth.js';
+import { createAccessToken, createRefreshToken, validatePassword, invalidateRefreshToken } from '../services/auth.js';
 import { getUserByEmail } from '../services/users.js';
 
 const authControllerLogger = createLoggerNamespace('groupomania:api:controllers:auth');
@@ -31,7 +31,7 @@ export async function loginController(req, res, next) {
             refreshToken
         });
 
-        authControllerLogger.verbose('Response sent');
+        authControllerLogger.verbose('Response sent, login successful');
     } catch (error) {
         let normalizedError = error;
 
@@ -63,10 +63,10 @@ export async function loginController(req, res, next) {
 export async function logoutController(req, res, next) {
     authControllerLogger.verbose('Logout middleware starting');
     try {
-        await logout(res.locals.auth.jti);
+        await invalidateRefreshToken(res.locals.auth.jti);
 
         res.status(204).end();
-        authControllerLogger.verbose('Response sent');
+        authControllerLogger.verbose('Response sent, logout successful');
     } catch (error) {
         return next(error);
     }

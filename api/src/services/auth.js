@@ -173,19 +173,3 @@ export async function invalidateRefreshToken(identifier) {
         message: 'The identifier of the invalidateRefreshToken service is neither a number, neither a string nor an instance of RefreshToken.'
     });
 }
-
-
-
-/**
- * Log a user out.
- * Delete the refresh token from the database.
- * When a user logs out, he logs out from the user agent used to send the request, and only the refresh token is invalidated.
- * @param {string} tokenId - Refresh token id used for loging out.
- */
-export async function logout(tokenId) {
-    authServicesLogger.verbose('Logout service starting');
-
-    await invalidateRefreshToken(tokenId);
-
-    authServicesLogger.verbose('Refresh token deleted, logout successful');
-}

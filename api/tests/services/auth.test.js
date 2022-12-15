@@ -1,4 +1,4 @@
-import { logout, createRefreshToken, createAccessToken, validatePassword, validateRefreshToken, invalidateRefreshToken } from '../../src/services/auth.js';
+import { createRefreshToken, createAccessToken, validatePassword, validateRefreshToken, invalidateRefreshToken } from '../../src/services/auth.js';
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
 import MockModel, * as mockModelMethods from '../mocks/mock-models.test.js';
@@ -33,20 +33,6 @@ describe('Auth services test suite', () => {
         roleId: 2,
         userId: 113
     };
-
-
-    describe('Logout service test suite', () => {
-        const tokenId = 'fffffff-fffffffff-ffffffffffffffffff';
-        it('should call the destroy method', async () => {
-            await logout(tokenId);
-            expect(mockModelMethods.mockStaticDestroy).toHaveBeenCalled();
-            expect(mockModelMethods.mockStaticDestroy).toHaveBeenCalledWith({
-                where: {
-                    tokenId
-                }
-            });
-        });
-    });
 
     describe('createRefreshToken service test suite', () => {
         const refreshToken = 'refresh...';
