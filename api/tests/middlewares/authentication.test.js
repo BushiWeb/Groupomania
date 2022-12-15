@@ -70,7 +70,7 @@ describe('authenticate middleware test suite', () => {
 
         expect(next).toHaveBeenCalled();
         expect(next.mock.calls[0][0]).toBeInstanceOf(UnauthorizedError);
-        expect(next.mock.calls[0][0]).toHaveProperty('headers[www-authenticate]', 'Bearer');
+        expect(next.mock.calls[0][0]).toHaveProperty('headers[WWW-Authenticate]', 'Bearer');
     });
 
     it('should call the next error middleware if the authentication scheme is not bearer', () => {
@@ -79,7 +79,7 @@ describe('authenticate middleware test suite', () => {
 
         expect(next).toHaveBeenCalled();
         expect(next.mock.calls[0][0]).toBeInstanceOf(UnauthorizedError);
-        expect(next.mock.calls[0][0]).toHaveProperty('headers[www-authenticate]', 'Bearer');
+        expect(next.mock.calls[0][0]).toHaveProperty('headers[WWW-Authenticate]', 'Bearer');
     });
 
     it('should call the next error middleware if the token is not valid anymore', () => {
@@ -130,7 +130,7 @@ describe('authenticate middleware test suite', () => {
 
         expect(next).toHaveBeenCalled();
         expect(next.mock.calls[0][0]).toBeInstanceOf(UnauthorizedError);
-        expect(next.mock.calls[0][0]).toHaveProperty('headers[www-authenticate]', 'Bearer');
+        expect(next.mock.calls[0][0]).toHaveProperty('headers[WWW-Authenticate]', 'Bearer');
         expect(next.mock.calls[0][0].logDetails[0]).toHaveProperty('missingProperty', 'userId');
     });
 
@@ -144,7 +144,7 @@ describe('authenticate middleware test suite', () => {
 
         expect(next).toHaveBeenCalled();
         expect(next.mock.calls[0][0]).toBeInstanceOf(UnauthorizedError);
-        expect(next.mock.calls[0][0]).toHaveProperty('headers[www-authenticate]', 'Bearer');
+        expect(next.mock.calls[0][0]).toHaveProperty('headers[WWW-Authenticate]', 'Bearer');
         expect(next.mock.calls[0][0].logDetails[0]).toHaveProperty('missingProperty', 'role');
     });
 
@@ -159,7 +159,7 @@ describe('authenticate middleware test suite', () => {
 
         expect(next).toHaveBeenCalled();
         expect(next.mock.calls[0][0]).toBeInstanceOf(UnauthorizedError);
-        expect(next.mock.calls[0][0]).toHaveProperty('headers[www-authenticate]', 'Bearer');
+        expect(next.mock.calls[0][0]).toHaveProperty('headers[WWW-Authenticate]', 'Bearer');
         expect(next.mock.calls[0][0].logDetails[0]).toHaveProperty('missingProperty', 'jti');
     });
 });
