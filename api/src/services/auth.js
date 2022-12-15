@@ -53,6 +53,33 @@ export async function createRefreshToken(userId, role, expiration) {
 
 
 /**
+ * Creates an access token.
+ * @param {number} userId - Id of the user the token belongs to.
+ * @param {number} role - Role id of the user the token belongs to.
+ * @returns {string} Returns the token.
+ */
+export async function createAccessToken(userId, role) {
+    authServicesLogger.verbose('Access token creation service starting');
+
+    // Generate the token
+    const accessToken = jwt.sign(
+        {
+            userId,
+            role
+        },
+        config.get('jwt.key'),
+        {
+            algorithm: config.get('jwt.alg'),
+            expiresIn: config.get('jwt.exp')
+        }
+    );
+    authServicesLogger.debug('Access token created');
+
+    return accessToken;
+}
+
+
+/**
  * Log a user in.
  * Compares the password and generates a JWT.
  * @param {User} user - User model, containing all user informations.
@@ -72,18 +99,7 @@ export async function login(user, password) {
 
     // Generate the access token
     authServicesLogger.debug('The password is valid, generating the token');
-    const accessToken = jwt.sign(
-        {
-            userId: user.userId,
-            role: user.roleId
-        },
-        config.get('jwt.key'),
-        {
-            algorithm: config.get('jwt.alg'),
-            expiresIn: config.get('jwt.exp')
-        }
-    );
-    authServicesLogger.debug('User\'s token created');
+    const accessToken = await createAccessToken(user.userId, user.roleId);
 
     // Generate the refresh token
     const refreshToken = await createRefreshToken(user.userId, user.roleId);
@@ -94,6 +110,8 @@ export async function login(user, password) {
         refreshToken
     };
 }
+
+
 
 /**
  * Log a user out.

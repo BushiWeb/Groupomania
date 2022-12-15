@@ -1,4 +1,4 @@
-import { login, logout, createRefreshToken } from '../../src/services/auth.js';
+import { login, logout, createRefreshToken, createAccessToken } from '../../src/services/auth.js';
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
 import MockModel, * as mockModelMethods from '../mocks/mock-models.test.js';
@@ -94,6 +94,18 @@ describe('Auth services test suite', () => {
             expect(mockModelMethods.mockCreate).toHaveBeenCalled();
             expect(mockModelMethods.mockCreate.mock.calls[0][0]).toHaveProperty('userId', userInfos.userId);
             expect(mockModelMethods.mockCreate.mock.calls[0][0]).toHaveProperty('expiration', expiration * 1000);
+        });
+    });
+
+    describe('createRefreshToken service test suite', () => {
+        const accessToken = 'access!';
+
+        it('should return an access token', async () => {
+            mockJwtSign.mockReturnValueOnce(accessToken);
+
+            const newRefreshToken = await createAccessToken(userInfos.userId, userInfos.roleId);
+
+            expect(newRefreshToken).toBe(accessToken);
         });
     });
 });
