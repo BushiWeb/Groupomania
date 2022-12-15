@@ -130,6 +130,7 @@ export function errorNormalizer(err, req, res, next) {
 export function errorHandler(err, req, res, next) {
     errorLogger.verbose('Error handler execution');
     if (err instanceof HttpError) {
+        res.header(err.headers);
         res.status(err.statusCode).json(err.getErrorResponse());
         errorLogger.error(err.getErrorLogInformations());
     } else {

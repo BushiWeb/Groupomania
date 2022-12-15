@@ -17,9 +17,9 @@ export default class UnauthorizedError extends HttpError {
      * @param {string} [error.path] - Path of the request that generated the error.
      * @param {string} [error.method] - Method of the request that generated the error.
      * @param {*} [cause] - Original error, used to generate the HTTP error.
-     * @param {Object} [headers = {}] - Headers to add to the response By default, it contains the WWW-Authenticate header with the 'Bearer' value.
+     * @param {Object} [headers = { 'www-authenticate': 'Bearer' }] - Headers to add to the response By default, it contains the WWW-Authenticate header with the 'Bearer' value.
      */
-    constructor({message, title: optionnalTitle, description: optionnalDescription, details, logDetails, path, method, ...otherData}, cause, headers = { 'www-authenticate': 'Bearer' }) {
+    constructor({message, title: optionnalTitle, description: optionnalDescription, details, logDetails, path, method, ...otherData}, cause, headers = { 'WWW-Authenticate': 'Bearer' }) {
         const statusCode = 401;
         const name = 'UnauthorizedError';
         const title = optionnalTitle || 'You need to be authenticated.';
