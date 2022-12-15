@@ -14,7 +14,6 @@ const authServicesLogger = createLoggerNamespace('groupomania:api:services:auth'
  * @param {number} role - Role id of the user the token belongs to.
  * @param {number} [expiration] - Timestamp representing the expiration date. Use second precision, not milliseconds. If undefined, the expiration date will be calculated.
  * @returns {string} Returns the token.
- * @throws Throws an error if something unexpected occurs while saving the token.
  */
 export async function createRefreshToken(userId, role, expiration) {
     authServicesLogger.verbose('Refresh token creation service starting');
@@ -59,7 +58,6 @@ export async function createRefreshToken(userId, role, expiration) {
  * @param {User} user - User model, containing all user informations.
  * @param {string} password - User's password.
  * @returns {{userId: number, accessToken: string}} Returns the user id, the refresh token and the access JWT.
- * @throws Throws an error if something unexpected occurs.
  */
 export async function login(user, password) {
     authServicesLogger.verbose('Login service starting');
@@ -102,7 +100,6 @@ export async function login(user, password) {
  * Delete the refresh token from the database.
  * When a user logs out, he logs out from the user agent used to send the request, and only the refresh token is invalidated.
  * @param {string} tokenId - Refresh token id used for loging out.
- * @throws Throws an error if something unexpected occurs.
  */
 export async function logout(tokenId) {
     authServicesLogger.verbose('Logout service starting');

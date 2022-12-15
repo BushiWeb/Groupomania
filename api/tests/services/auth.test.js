@@ -65,13 +65,6 @@ describe('Auth services test suite', () => {
                 }
             });
         });
-
-        it('should throw an error if the deletion of the token throws an error', async () => {
-            expect.assertions(1);
-            const error = new Error('Message');
-            mockModelMethods.mockStaticDestroy.mockRejectedValueOnce(error);
-            await expect(logout(tokenId)).rejects.toEqual(error);
-        });
     });
 
     describe('createRefreshToken service test suite', () => {
@@ -101,27 +94,6 @@ describe('Auth services test suite', () => {
             expect(mockModelMethods.mockCreate).toHaveBeenCalled();
             expect(mockModelMethods.mockCreate.mock.calls[0][0]).toHaveProperty('userId', userInfos.userId);
             expect(mockModelMethods.mockCreate.mock.calls[0][0]).toHaveProperty('expiration', expiration * 1000);
-        });
-
-        it('should throw an error if the token creations throws an error', async () => {
-            expect.assertions(1);
-            const error = new Error('Message');
-            mockJwtSign.mockImplementationOnce(() => { throw error; });
-            await expect(createRefreshToken(userInfos.userId, userInfos.roleId)).rejects.toEqual(error);
-        });
-
-        it('should throw an error if the token hash is rejected with an error', async () => {
-            expect.assertions(1);
-            const error = new Error('Message');
-            mockBcryptHash.mockRejectedValueOnce(error);
-            await expect(createRefreshToken(userInfos.userId, userInfos.roleId)).rejects.toEqual(error);
-        });
-
-        it('should throw an error if the database entry creation is rejected with an error', async () => {
-            expect.assertions(1);
-            const error = new Error('Message');
-            mockModelMethods.mockCreate.mockRejectedValueOnce(error);
-            await expect(createRefreshToken(userInfos.userId, userInfos.roleId)).rejects.toEqual(error);
         });
     });
 });

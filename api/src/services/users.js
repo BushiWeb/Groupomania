@@ -14,7 +14,6 @@ const usersServicesLogger = createLoggerNamespace('groupomania:api:services:user
  * @param {string} userInfos.password - User's password.
  * @param {string} [userInfos.roleId] - User's role, optionnal.
  * @returns {User} Returns the newly created user.
- * @throws Throws an error if something unexpected occurs.
  */
 export async function createUser({email, password, roleId}) {
     usersServicesLogger.verbose('Create User service starting');

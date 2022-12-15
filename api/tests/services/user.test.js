@@ -28,7 +28,6 @@ describe('User services test suite', () => {
         roleId: 1
     };
 
-    const testError = new Error('Error');
 
     describe('Create user service test suite', () => {
         it('should create a user with the default role id and return the user', async () => {
@@ -46,18 +45,6 @@ describe('User services test suite', () => {
             expect(newUser).toHaveProperty('password');
             expect(newUser.password).toHaveLength(60);
             expect(newUser).toHaveProperty('roleId', 1);
-        });
-
-        it('should throw an error if the password hash fails', async () => {
-            expect.assertions(1);
-            mockBcryptHash.mockRejectedValue(testError);
-            await expect(createUser(userInfos)).rejects.toEqual(testError);
-        });
-
-        it('should throw an error if the saving fails', async () => {
-            expect.assertions(1);
-            mockModelMethods.mockCreate.mockRejectedValue(testError);
-            await expect(createUser(userInfos)).rejects.toEqual(testError);
         });
     });
 
