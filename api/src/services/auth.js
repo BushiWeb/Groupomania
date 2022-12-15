@@ -94,3 +94,21 @@ export async function login(user, password) {
         refreshToken
     };
 }
+
+/**
+ * Log a user out.
+ * Delete the refresh token from the database.
+ * When a user logs out, he logs out from the user agent used to send the request, and only the refresh token is invalidated.
+ * @param {string} tokenId - Refresh token id used for loging out.
+ * @throws Throws an error if something unexpected occurs.
+ */
+export async function logout(tokenId) {
+    authServicesLogger.verbose('Logout service starting');
+
+    await db.models.RefreshToken.destroy({
+        where: {
+            tokenId
+        }
+    });
+    authServicesLogger.verbose('Refresh token deleted, logout successful');
+}

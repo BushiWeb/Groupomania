@@ -44,6 +44,12 @@ const mockFindOne = jest.fn(function () {
     });
 });
 
+const mockStaticDestroy = jest.fn(function () {
+    return new Promise((resolve) => {
+        resolve(1);
+    });
+});
+
 class MockModel {
     constructor(values) {
         this.dataValues = values;
@@ -60,6 +66,8 @@ class MockModel {
     static build = mockBuild;
 
     static findOne = mockFindOne;
+
+    static destroy = mockStaticDestroy;
 
 
     // Instance methods
@@ -82,9 +90,10 @@ function clearMocks() {
     MockModel.create.mockClear();
     MockModel.build.mockClear();
     mockFindOne.mockClear();
+    mockStaticDestroy.mockClear();
 }
 
-export { mockSave, mockValidate, mockCreate, mockBuild, MockModel, mockFindOne, clearMocks };
+export { mockSave, mockValidate, mockCreate, mockBuild, MockModel, mockFindOne, mockStaticDestroy, clearMocks };
 export default MockModel;
 
 beforeEach(() => {
@@ -168,6 +177,13 @@ describe('Model mock test suite', () => {
                 const data = await MockModel.findOne(testValues);
                 expect(data).toBeInstanceOf(MockModel);
                 expect(data.dataValues).toEqual(returnedData);
+            });
+        });
+
+        describe('destroy method test suite', () => {
+            it('should return a promised resolved with 1', async () => {
+                const data = await MockModel.destroy();
+                expect(data).toBe(1);
             });
         });
     });
