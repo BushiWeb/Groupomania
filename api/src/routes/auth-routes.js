@@ -1,6 +1,6 @@
 import express from 'express';
 import { createLoggerNamespace } from '../logger/index.js';
-import { loginController, logoutController } from '../controllers/auth-controller.js';
+import { loginController, logoutController, getAccessTokenController } from '../controllers/auth-controller.js';
 import config from '../config/config.js';
 import validationMiddlewares, { loginBodySchema } from '../middlewares/user-input-validation.js';
 import authenticate from '../middlewares/authentication.js';
@@ -34,14 +34,28 @@ authRoutesLogger.debug('POST /login - login route added');
 /**
  * Logout route.
  * Checks that the body is empty.
- * Authenticate the user.
- * Call the corresponding controller.
+ * Authenticates the user with the refresh token.
+ * Calls the corresponding controller.
  */
 router.post(
     '/logout',
     createBodyParser({}),
     authenticate(true),
     logoutController
+);
+authRoutesLogger.debug('POST /logout - logout route added');
+
+/**
+ * Route to get a new access token. Also rotates the refresh token.
+ * Checks that the body is empty.
+ * Authenticate the user with the refres token.
+ * Calls the corresponding controller.
+ */
+router.post(
+    '/accessToken',
+    createBodyParser({}),
+    authenticate(true),
+    getAccessTokenController
 );
 authRoutesLogger.debug('POST /logout - logout route added');
 

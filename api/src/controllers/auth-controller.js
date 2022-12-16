@@ -1,6 +1,6 @@
 import { NotFoundError, UnauthorizedError } from '../errors/index.js';
 import { createLoggerNamespace } from '../logger/index.js';
-import { createAccessToken, createRefreshToken, validatePassword, invalidateRefreshToken } from '../services/auth.js';
+import { createAccessToken, createRefreshToken, validatePassword, invalidateRefreshToken, validateRefreshToken } from '../services/auth.js';
 import { getUserByEmail } from '../services/users.js';
 
 const authControllerLogger = createLoggerNamespace('groupomania:api:controllers:auth');
@@ -52,9 +52,11 @@ export async function loginController(req, res, next) {
     }
 }
 
+
+
 /**
  * Logout controller.
- * Calls the right service.
+ * Deletes the refresh token from the database.
  * Sends a message to the client with status 204 if the logout is successful, or calls the error handler middleware if an error occurs.
  * @param {Express.Request} req - Express request object.
  * @param {Express.Response} res - Express response object.
@@ -68,6 +70,44 @@ export async function logoutController(req, res, next) {
         res.status(204).end();
         authControllerLogger.verbose('Response sent, logout successful');
     } catch (error) {
+        return next(error);
+    }
+}
+
+
+
+/**
+ * Get new access token controller.
+ * Calls the right services.
+ * Sends a message to the client with status 204 if the logout is successful, or calls the error handler middleware if an error occurs.
+ * @param {Express.Request} req - Express request object.
+ * @param {Express.Response} res - Express response object.
+ * @param next - Next middleware to execute.
+ */
+export async function getAccessTokenController(req, res, next) {
+    authControllerLogger.verbose('Logout middleware starting');
+    try {
+        const currentRefreshToken = res.locals.auth;
+        const refreshTokenModel = await validateRefreshToken(currentRefreshToken.jti);
+        authControllerLogger.debug('Refresh token still valid');
+        await invalidateRefreshToken(refreshTokenModel);
+        authControllerLogger.debug('Refresh token invalidated');
+        const refreshToken = await createRefreshToken(currentRefreshToken.userId, currentRefreshToken.role, currentRefreshToken.exp);
+        authControllerLogger.debug('New refresh token created');
+        const accessToken = await createAccessToken(currentRefreshToken.userId, currentRefreshToken.role);
+        authControllerLogger.debug('New access token created');
+
+        res.status(200).json({
+            userId: currentRefreshToken.userId,
+            accessToken,
+            refreshToken
+        });
+        authControllerLogger.verbose('Response sent, new tokens generated');
+    } catch (error) {
+        if (error instanceof UnauthorizedError) {
+            error.setRequestInformations(req.originalUrl, req.method);
+            await invalidateRefreshToken(res.locals.auth.userId);
+        }
         return next(error);
     }
 }
