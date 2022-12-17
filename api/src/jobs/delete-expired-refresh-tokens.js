@@ -6,16 +6,14 @@ import createRefreshTokenModel from '../models/RefreshToken.js';
 
 const jobsLogger = createLoggerNamespace('groupomania:job:deleteExpiredRefreshTokens');
 
-// Delete all refresh tokens whose expiration date are already passed.
-/* const numberOfDeletedTokens = await db.models.RefreshToken.destroy({
-    where: {
-
-    }
-}); */
 jobsLogger.info('Starting deleteExpiredRefreshTokens job');
+
+let sequelize;
+
 try {
-    const sequelize = await initDatabaseConnection();
+    sequelize = await initDatabaseConnection();
     jobsLogger.debug('Database connection established');
+
     const RefreshToken = createRefreshTokenModel(sequelize);
     jobsLogger.debug('Refresh token model created');
 
@@ -26,12 +24,14 @@ try {
             }
         }
     });
+
     const message = `Refresh tokens deleted: ${deletedTokensNumber}`;
     jobsLogger.debug(message);
     parentPort.postMessage(message);
-} catch (error) {
-    jobsLogger.error(error);
-    process.exit(1);
+
+} finally {
+    sequelize.close();
+    jobsLogger.debug('Database connection closed');
 }
 
 process.exit(0);
