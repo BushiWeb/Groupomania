@@ -4,6 +4,7 @@ import databaseLoader from './database.js';
 import errorsLoader from './errors.js';
 import routeLoader from './routes.js';
 import loggingMiddelwareLoader from './logger.js';
+import jobsLoader from './jobs.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:api:loader');
 
@@ -15,6 +16,9 @@ const loaderLogger = createLoggerNamespace('groupomania:api:loader');
 export default async function loadApp (app) {
     loggingMiddelwareLoader(app);
     loaderLogger.verbose('Logging middleware initialized');
+
+    await jobsLoader();
+    loaderLogger.verbose('Jobs initialized');
 
     headersLoader(app);
     loaderLogger.verbose('Header middleware initialized');

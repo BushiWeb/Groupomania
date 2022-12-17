@@ -9,7 +9,7 @@ const loaderLogger = createLoggerNamespace('groupomania:api:loader:headers');
  * Add all middleware adding headers.
  * @param {Express.Application} app - Express application
  */
-export default function headersLoaders (app) {
+export default function headersLoader (app) {
     loaderLogger.verbose('Loading global headers');
 
     // Remove X-Powered-By
