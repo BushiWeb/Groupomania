@@ -21,7 +21,7 @@ function getAuthorizationHeader(req) {
         throw new UnauthorizedError({
             message: 'Missing authorization header',
             title: 'Can\'t find the authentication informations',
-            description: 'We are having trouble figuring who you are. Make sure you provided your authentication informations in the "Authorization" header as a bearer token before trying again.'
+            description: 'We are having trouble figuring who you are. Make sure you provided your authentication informations in the Authorization header as a bearer token before trying again.'
         });
     }
 
@@ -114,9 +114,6 @@ export default function authenticate(isRefreshToken = false) {
             checkTokenPayload(tokenPayload, isRefreshToken);
             authLogger.debug('Token payload valid');
         } catch (error) {
-            if (error instanceof UnauthorizedError) {
-                error.setRequestInformations(req.originalUrl, req.method);
-            }
             return next(error);
         }
 

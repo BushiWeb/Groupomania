@@ -1,6 +1,7 @@
 import { checkSchema, matchedData, validationResult } from 'express-validator';
 import createUserBodySchema from '../schemas/create-user-body.js';
 import loginBodySchema from '../schemas/login.js';
+import getUserSchema from '../schemas/get-user.js';
 import { createLoggerNamespace } from '../logger/index.js';
 import { UserInputValidationError } from '../errors/index.js';
 
@@ -54,8 +55,6 @@ function validationHandlingMiddleware(req, res, next) {
             message: 'Errors while validating user inputs.',
             title: 'The received data are invalid.',
             description: 'We are having trouble processing the data you provided. You may take a look at the details for more informations on how to solve this problem. You may solve the problems and try again.',
-            path: req.originalUrl,
-            method: req.method,
             details: errors.array()
         });
         return next(validationError);
@@ -65,6 +64,8 @@ function validationHandlingMiddleware(req, res, next) {
 
     // Remove unused properties, that haven't gone through validation
     req.body = matchedData(req, {locations: ['body']});
+    req.params = matchedData(req, {locations: ['params']});
+    req.query = matchedData(req, {locations: ['query']});
 
     next();
 }
@@ -79,4 +80,4 @@ export default function validationMiddlewares(schema) {
     return [checkSchema(schema), validationHandlingMiddleware];
 }
 
-export { loginBodySchema, createUserBodySchema, validationHandlingMiddleware, validationErrorFormatter };
+export { loginBodySchema, createUserBodySchema, getUserSchema, validationHandlingMiddleware, validationErrorFormatter };

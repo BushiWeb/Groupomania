@@ -42,7 +42,6 @@ export async function loginController(req, res, next) {
         }
         if (normalizedError instanceof UnauthorizedError) {
             normalizedError
-                .setRequestInformations(req.path, req.method)
                 .setPublicMessages(
                     'The credentials are not working.',
                     'It seems we can identify you with those credentials. Please, check your inputs and try again. If you are not registered, you must first create an account before loging in.'
@@ -105,7 +104,6 @@ export async function getAccessTokenController(req, res, next) {
         authControllerLogger.verbose('Response sent, new tokens generated');
     } catch (error) {
         if (error instanceof UnauthorizedError) {
-            error.setRequestInformations(req.originalUrl, req.method);
             await invalidateRefreshToken(res.locals.auth.userId);
         }
         return next(error);

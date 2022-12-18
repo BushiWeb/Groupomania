@@ -95,6 +95,7 @@ export function errorNormalizer(err, req, res, next) {
 
     if (err instanceof HttpError) {
         errorLogger.debug('HttpError, no need for normalizing');
+        err.setRequestInformations(req.originalUrl, req.method);
         return next(err);
     }
 

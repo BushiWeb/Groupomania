@@ -1,9 +1,10 @@
 import express from 'express';
 import { createLoggerNamespace } from '../logger/index.js';
-import { createUserController } from '../controllers/user-controllers.js';
+import { createUserController, getuserByIdController } from '../controllers/user-controllers.js';
 import config from '../config/config.js';
-import validationMiddlewares, { createUserBodySchema } from '../middlewares/user-input-validation.js';
+import validationMiddlewares, { createUserBodySchema, getUserSchema } from '../middlewares/user-input-validation.js';
 import createBodyParser from '../middlewares/body-parsing.js';
+import authenticate from '../middlewares/authentication.js';
 
 const userRoutesLogger = createLoggerNamespace('groupomania:api:routes:user');
 
@@ -27,6 +28,21 @@ router.post(
     }, false),
     validationMiddlewares(createUserBodySchema),
     createUserController
+);
+userRoutesLogger.debug('POST / - create user route added');
+
+/**
+ * User fetching route.
+ * Checks that there is no body
+ * Validates and sanitizes request parameters.
+ * Call the corresponding controller.
+ */
+router.get(
+    '/:id',
+    createBodyParser({}),
+    validationMiddlewares(getUserSchema),
+    authenticate(),
+    getuserByIdController
 );
 userRoutesLogger.debug('POST / - create user route added');
 

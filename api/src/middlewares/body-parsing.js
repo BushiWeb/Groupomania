@@ -114,7 +114,6 @@ export default function createBodyParser(parsers, emptyAllowed = true) {
             });
         } catch (error) {
             if (error instanceof UnsupportedMediaTypeError) {
-                error.setRequestInformations(req.originalUrl, req.method);
                 error.details = [].concat(emptyAllowed ? 'Empty body allowed' : [], Object.keys(parsers));
             }
             next(error);

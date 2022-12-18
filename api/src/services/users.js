@@ -40,10 +40,47 @@ export async function createUser({email, password, roleId}) {
 }
 
 /**
+ * Fetch the user corresponding to the given id
+ * @param {number} userId - User id.
+ * @param {Object} options - Search options.
+ * @param {boolean} [options.roleInfo=false] - Wether to add the role informations to the user or just the role id.
+ * @returns {User} Returns the user.
+ * @throws {NotFoundError} Throws an error if the user doesn't exist.
+ */
+export async function getUserById(userId, { roleInfo=false } = { roleInfo: false }) {
+    usersServicesLogger.verbose('Get user by id service starting');
+
+    let searchOptions = {
+        attributes: ['userId', 'email', 'roleId']
+    };
+
+    if (roleInfo) {
+        searchOptions.include = {
+            association: 'role',
+            attributes: ['roleId', 'name']
+        };
+        searchOptions.attributes.pop();
+    }
+
+    const user = await db.models.User.findByPk(userId, searchOptions);
+
+    if (user === null) {
+        usersServicesLogger.debug('The user doesn\'t exist. Throwing an error');
+        throw new NotFoundError({
+            message: `No user has the id ${userId}.`,
+            title: 'The user can\'t be found.',
+            description: 'We can\'t find the user corresponding to the id you gave. Please, verify your input and try again.'
+        });
+    }
+
+    usersServicesLogger.debug('User fetched');
+    return user;
+}
+
+/**
  * Fetch the user corresponding to the given email
- * Starts by encrypting the password.
  * @param {string} email - User email.
- * @returns {User} Returns the newly created user.
+ * @returns {User} Returns the user.
  * @throws {NotFoundError} Throws an error if the user doesn't exist.
  */
 export async function getUserByEmail(email) {
