@@ -49,7 +49,6 @@ export async function createUser({email, password, roleId}) {
  * @param {number} [option.page] - Which page to get, usefull for pagination. Requires the limit parameter.
  * @param {number} [option.limit] - Number of entry to return, usefull for pagination.
  * @returns {User} Returns the user.
- * @throws {NotFoundError} Throws an error if the user doesn't exist.
  */
 export async function getAllUsers({ roleInfo = false, role, page, limit } = { roleInfo: false }) {
     usersServicesLogger.verbose('Get all users service starting');
