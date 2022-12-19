@@ -187,6 +187,18 @@ const CONFIG_SCHEMA = {
             default: 86400,
             env: 'REFRESH_JWT_VALID'
         }
+    },
+    adminUser: {
+        roleId: {
+            doc: 'Role id for the administrator role',
+            format: 'int',
+            default: 1
+        },
+        email: {
+            doc: 'Default admin user email',
+            format: String,
+            default: 'admin@groupomania.com'
+        }
     }
 };
 

@@ -5,3 +5,17 @@ allowedHeaders = ["Origin", "X-Requested-With", "Accept", "Content-Type", "Autho
 # exposedHeaders
 # credentials
 # maxAge
+
+# [payload]
+# maxSize = 10240
+
+# [password]
+# minLength = 8
+# minLowercase = 1
+# minUppercase = 1
+# minNumbers = 1
+# minSymbols = 1
+
+# [adminUser]
+# roleId = 1
+# email = 'admin@groupomania.fr'
