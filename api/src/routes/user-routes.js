@@ -1,8 +1,8 @@
 import express from 'express';
 import { createLoggerNamespace } from '../logger/index.js';
-import { createUserController, getuserByIdController } from '../controllers/user-controllers.js';
+import { createUserController, getAllUsersController, getuserByIdController } from '../controllers/user-controllers.js';
 import config from '../config/config.js';
-import validationMiddlewares, { createUserBodySchema, getUserSchema } from '../middlewares/user-input-validation.js';
+import validationMiddlewares, { createUserBodySchema, getAllUsersSchema, getUserSchema } from '../middlewares/user-input-validation.js';
 import createBodyParser from '../middlewares/body-parsing.js';
 import authenticate from '../middlewares/authentication.js';
 
@@ -35,6 +35,7 @@ userRoutesLogger.debug('POST / - create user route added');
  * User fetching route.
  * Checks that there is no body
  * Validates and sanitizes request parameters.
+ * Authenticate the client with the access token.
  * Call the corresponding controller.
  */
 router.get(
@@ -44,6 +45,22 @@ router.get(
     authenticate(),
     getuserByIdController
 );
-userRoutesLogger.debug('POST / - create user route added');
+userRoutesLogger.debug('POST / - get user route added');
+
+/**
+ * All users fetching route.
+ * Checks that there is no body
+ * Validates and sanitizes request parameters.
+ * Authenticate the client with the access token.
+ * Call the corresponding controller.
+ */
+router.get(
+    '/',
+    createBodyParser({}),
+    validationMiddlewares(getAllUsersSchema),
+    authenticate(),
+    getAllUsersController
+);
+userRoutesLogger.debug('POST / - get user route added');
 
 export default router;

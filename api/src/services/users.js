@@ -98,8 +98,6 @@ export async function getAllUsers({ roleInfo = false, role, page, limit } = { ro
         searchOptions.offset = (page - 1) * limit;
     }
 
-    console.log(searchOptions);
-
     const users = await db.models.User.findAll(searchOptions);
 
     usersServicesLogger.debug('Users fetched');

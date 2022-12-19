@@ -2,6 +2,7 @@ import { checkSchema, matchedData, validationResult } from 'express-validator';
 import createUserBodySchema from '../schemas/create-user-body.js';
 import loginBodySchema from '../schemas/login.js';
 import getUserSchema from '../schemas/get-user.js';
+import getAllUsersSchema from '../schemas/get-all-users.js';
 import { createLoggerNamespace } from '../logger/index.js';
 import { UserInputValidationError } from '../errors/index.js';
 
@@ -80,4 +81,4 @@ export default function validationMiddlewares(schema) {
     return [checkSchema(schema), validationHandlingMiddleware];
 }
 
-export { loginBodySchema, createUserBodySchema, getUserSchema, validationHandlingMiddleware, validationErrorFormatter };
+export { loginBodySchema, createUserBodySchema, getUserSchema, getAllUsersSchema, validationHandlingMiddleware, validationErrorFormatter };
