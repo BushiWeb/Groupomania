@@ -39,15 +39,84 @@ export async function createUser({email, password, roleId}) {
     return newUser;
 }
 
+
+
+/**
+ * Fetch all users, ordered by email.
+ * @param {Object} options - Search options.
+ * @param {boolean} [options.roleInfo=false] - Whether to add the role informations to the user or just the role id.
+ * @param {string|number} [options.role] - Filtering user by role, either role name or role id.
+ * @param {number} [option.page] - Which page to get, usefull for pagination. Requires the limit parameter.
+ * @param {number} [option.limit] - Number of entry to return, usefull for pagination.
+ * @returns {User} Returns the user.
+ * @throws {NotFoundError} Throws an error if the user doesn't exist.
+ */
+export async function getAllUsers({ roleInfo = false, role, page, limit } = { roleInfo: false }) {
+    usersServicesLogger.verbose('Get all users service starting');
+
+    let searchOptions = {
+        attributes: ['userId', 'email', 'roleId'],
+        order: [['email', 'ASC']]
+    };
+
+    // Creating role filter
+    if (role && typeof role === 'string') {
+        usersServicesLogger.debug('Filtering by role name');
+        searchOptions.include = {
+            association: 'role',
+            attributes: []
+        };
+        searchOptions.where = {
+            '$role.name$': role
+        };
+
+    } else if (role && typeof role === 'number') {
+        usersServicesLogger.debug('Filtering by role id');
+        searchOptions.where = {
+            roleId: role
+        };
+    }
+
+    // Adding role informations
+    if (roleInfo) {
+        usersServicesLogger.debug('Adding role informations to the results');
+        searchOptions.include = {
+            association: 'role',
+            attributes: ['roleId', 'name']
+        };
+        searchOptions.attributes.pop();
+    }
+
+    // Adding pagination informations
+    if (limit) {
+        usersServicesLogger.debug(`Limiting the number of results to ${limit}`);
+        searchOptions.limit = limit;
+    }
+
+    if (limit && page) {
+        usersServicesLogger.debug(`Paginating the result, getting the page number ${page}`);
+        searchOptions.offset = (page - 1) * limit;
+    }
+
+    console.log(searchOptions);
+
+    const users = await db.models.User.findAll(searchOptions);
+
+    usersServicesLogger.debug('Users fetched');
+    return users;
+}
+
+
+
 /**
  * Fetch the user corresponding to the given id
  * @param {number} userId - User id.
  * @param {Object} options - Search options.
- * @param {boolean} [options.roleInfo=false] - Wether to add the role informations to the user or just the role id.
+ * @param {boolean} [options.roleInfo=false] - Whether to add the role informations to the user or just the role id.
  * @returns {User} Returns the user.
  * @throws {NotFoundError} Throws an error if the user doesn't exist.
  */
-export async function getUserById(userId, { roleInfo=false } = { roleInfo: false }) {
+export async function getUserById(userId, { roleInfo = false } = { roleInfo: false }) {
     usersServicesLogger.verbose('Get user by id service starting');
 
     let searchOptions = {
@@ -55,6 +124,7 @@ export async function getUserById(userId, { roleInfo=false } = { roleInfo: false
     };
 
     if (roleInfo) {
+        usersServicesLogger.debug('Adding role informations to the result');
         searchOptions.include = {
             association: 'role',
             attributes: ['roleId', 'name']
@@ -76,6 +146,8 @@ export async function getUserById(userId, { roleInfo=false } = { roleInfo: false
     usersServicesLogger.debug('User fetched');
     return user;
 }
+
+
 
 /**
  * Fetch the user corresponding to the given email

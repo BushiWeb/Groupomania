@@ -51,6 +51,13 @@ const mockFindByPk = jest.fn(function () {
     });
 });
 
+// Il est nécessaire de faire retourner à cette fonction la promesse résolue avec la bonne valeur
+const mockFindAll = jest.fn(function () {
+    return new Promise((resolve) => {
+        resolve(this);
+    });
+});
+
 const mockStaticDestroy = jest.fn(function () {
     return new Promise((resolve) => {
         resolve(1);
@@ -84,6 +91,8 @@ class MockModel {
 
     static findByPk = mockFindByPk;
 
+    static findAll = mockFindAll;
+
 
     // Instance methods
     get (value) {
@@ -110,9 +119,10 @@ function clearMocks() {
     mockFindByPk.mockClear();
     mockStaticDestroy.mockClear();
     mockInstanceDestroy.mockClear();
+    mockFindAll.mockClear();
 }
 
-export { mockSave, mockValidate, mockCreate, mockBuild, MockModel, mockFindOne, mockStaticDestroy, mockFindByPk, mockInstanceDestroy, clearMocks };
+export { mockSave, mockValidate, mockCreate, mockBuild, MockModel, mockFindOne, mockStaticDestroy, mockFindByPk, mockInstanceDestroy, mockFindAll, clearMocks };
 export default MockModel;
 
 beforeEach(() => {
@@ -120,7 +130,7 @@ beforeEach(() => {
 });
 
 
-describe('Model mock test suite', () => {
+describe.skip('Model mock test suite', () => {
     const testValues = {
         value1: 3,
         value2: 'test'
