@@ -2,6 +2,7 @@ import { createLoggerNamespace } from '../logger/index.js';
 import UserRouter from '../routes/user-routes.js';
 import getRoutesRegexp from '../utils/get-routes.js';
 import AuthRouter from '../routes/auth-routes.js';
+import RoleRouter from '../routes/role-routes.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:api:loader:routes');
 
@@ -17,6 +18,9 @@ export default function routeLoader (app) {
 
     app.use('/api/v1/auth', AuthRouter);
     loaderLogger.debug('Authentication router added');
+
+    app.use('/api/v1/roles', RoleRouter);
+    loaderLogger.debug('Role router added');
 
     // Finds all available routes to analyse errors
     app.set('routes-regexp', getRoutesRegexp(app));

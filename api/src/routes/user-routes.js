@@ -45,7 +45,7 @@ router.get(
     authenticate(),
     getuserByIdController
 );
-userRoutesLogger.debug('POST / - get user route added');
+userRoutesLogger.debug('GET /:id - get user route added');
 
 /**
  * All users fetching route.
@@ -61,6 +61,6 @@ router.get(
     authenticate(),
     getAllUsersController
 );
-userRoutesLogger.debug('POST / - get user route added');
+userRoutesLogger.debug('GET / - get all users route added');
 
 export default router;

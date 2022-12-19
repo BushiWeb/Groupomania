@@ -8,7 +8,7 @@ const rolesServicesLogger = createLoggerNamespace('groupomania:api:services:role
  * @returns {Role} Returns the user.
  */
 export async function getAllRoles() {
-    rolesServicesLogger.verbose('Get all users service starting');
+    rolesServicesLogger.verbose('Get all roles service starting');
 
     let searchOptions = {
         order: [['roleId', 'ASC']]
@@ -16,6 +16,6 @@ export async function getAllRoles() {
 
     const roles = await db.models.Role.findAll(searchOptions);
 
-    rolesServicesLogger.debug('Users fetched');
+    rolesServicesLogger.debug('Roles fetched');
     return roles;
 }
