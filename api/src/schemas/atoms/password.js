@@ -16,13 +16,17 @@ export default function generatePasswordSchema(
     return {
         in: location,
 
-        ...(required && {
+        ...(required ? {
             exists: {
                 errorMessage: 'The password is required.',
                 options: {
-                    checkFalsy: true
+                    checkNull: true
                 },
                 bail: true
+            }
+        } : {
+            optional: {
+                options: { nullable: true }
             }
         }),
 

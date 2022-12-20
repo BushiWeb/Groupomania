@@ -22,7 +22,7 @@ export default async function adminUserLoader () {
         });
 
         if (adminUserCount > 0) {
-            loaderLogger.debug('Admin user already created');
+            loaderLogger.info('Admin user already created');
             return;
         }
 

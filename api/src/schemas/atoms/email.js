@@ -1,3 +1,6 @@
+import config from '../../config/config.js';
+import ForbiddenError from '../../errors/ForbiddenError.js';
+
 /**
  * Returns an email schema description.
  * @param {Object} [options] - Options to generate the schema.
@@ -13,13 +16,17 @@ export default function generateEmailSchema(
     return {
         in: location,
 
-        ...(required && {
+        ...(required ? {
             exists: {
                 errorMessage: 'The email is required.',
                 options: {
-                    checkFalsy: true
+                    checkNull: true
                 },
                 bail: true
+            }
+        } : {
+            optional: {
+                options: { nullable: true }
             }
         }),
 
@@ -29,6 +36,16 @@ export default function generateEmailSchema(
             isEmail: {
                 errorMessage: 'The email must have the right format. It must contain your email username, followed by an @, followed by a domain name.',
                 bail: true
+            },
+
+            equals: {
+                errorMessage: new ForbiddenError({
+                    message: `The clients tried to use the ${config.get('adminUser.email')} email address.`,
+                    title: 'You don\'t have the right to use this email address to sign up.',
+                    description: `The email ${config.get('adminUser.email')} is reserved and can not be used. Please, change your sign up email address to another one.`
+                }),
+                negated: true,
+                options: config.get('adminUser.email')
             }
         })
     };

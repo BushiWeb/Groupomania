@@ -18,4 +18,4 @@ allowedHeaders = ["Origin", "X-Requested-With", "Accept", "Content-Type", "Autho
 
 # [adminUser]
 # roleId = 1
-# email = 'admin@groupomania.fr'
+# email = 'admin@groupomania.com'

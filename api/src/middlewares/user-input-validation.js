@@ -4,7 +4,7 @@ import loginBodySchema from '../schemas/login.js';
 import getUserSchema from '../schemas/get-user.js';
 import getAllUsersSchema from '../schemas/get-all-users.js';
 import { createLoggerNamespace } from '../logger/index.js';
-import { UserInputValidationError } from '../errors/index.js';
+import { HttpError, UserInputValidationError } from '../errors/index.js';
 
 const validationLogger = createLoggerNamespace('groupomania:api:validation');
 
@@ -50,6 +50,14 @@ function validationHandlingMiddleware(req, res, next) {
     // Format the error objects: remove the value for security reasons
     const errors = validationResult(req).formatWith(validationErrorFormatter);
 
+    // Search for custom errors
+    const customError = errors.errors?.find(value => value.msg instanceof HttpError);
+    if (customError) {
+        validationLogger.debug('Validation unsuccessful with a custom error');
+        return next(customError.msg);
+    }
+
+    // Search for errors
     if (!errors.isEmpty()) {
         validationLogger.debug('Validation unsuccessful');
         const validationError = new UserInputValidationError({
