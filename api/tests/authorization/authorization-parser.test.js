@@ -89,13 +89,13 @@ describe('Authorization parser test suite', () => {
     it('should return the parsed object', () => {
         const parsedRules = parseAccessControlRules([rules[0], rules[1]]);
         expect(parsedRules[0]).toMatchObject({
-            actions: rules[0].actions,
+            actions: [rules[0].actions],
             subject: rules[0].subject,
             fields: rules[0].fields
         });
         expect(parsedRules[0].conditions).toBeInstanceOf(Condition);
         expect(parsedRules[1]).toMatchObject({
-            actions: rules[1].actions,
+            actions: [rules[1].actions],
             subject: rules[1].subject,
             fields: rules[1].fields
         });
@@ -117,9 +117,9 @@ describe('Authorization parser test suite', () => {
     it('should return the parsed object if the fields is string', () => {
         const parsedRules = parseAccessControlRules([rules[3]]);
         expect(parsedRules[0]).toMatchObject({
-            actions: rules[3].actions,
+            actions: [rules[3].actions],
             subject: rules[3].subject,
-            fields: rules[3].fields
+            fields: [rules[3].fields]
         });
         expect(parsedRules[0].conditions).toBeInstanceOf(Condition);
     });
@@ -158,11 +158,11 @@ describe('Authorization parser test suite', () => {
     it('should return the parsed object if the fields are missing', () => {
         const parsedRules = parseAccessControlRules([rules[9]]);
         expect(parsedRules[0]).toMatchObject({
-            actions: rules[9].actions,
-            subject: rules[9].subject
+            actions: [rules[9].actions],
+            subject: rules[9].subject,
+            fields: []
         });
         expect(parsedRules[0].conditions).toBeInstanceOf(Condition);
-        expect(parsedRules[0]).not.toHaveProperty('fields');
     });
 
 
@@ -181,7 +181,7 @@ describe('Authorization parser test suite', () => {
     it('should return the parsed object if the conditions are missing', () => {
         const parsedRules = parseAccessControlRules([rules[12]]);
         expect(parsedRules[0]).toMatchObject({
-            actions: rules[12].actions,
+            actions: [rules[12].actions],
             subject: rules[12].subject,
             fields: rules[12].fields
         });
