@@ -18,7 +18,7 @@ const db = {
     ormInstance: undefined,
 
     /**
-     * @type {Object.<string, Model>}
+     * @returns {Object.<string, Model>}
      */
     get models() {
         return this.ormInstance.models;
