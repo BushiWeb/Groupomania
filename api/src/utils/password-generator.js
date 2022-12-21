@@ -147,27 +147,16 @@ export function generatePassword(
 
 
     for (let i = 0; i < length; i++) {
-        let message = '-----------------\nNew round\n';
-        message += `Count: ${JSON.stringify(count)}\n\n`;
-        message += `i: ${i}\n\n`;
-        message += `Characters left: ${length - i}\n\n`;
         let nextChar;
         if (count.total < length - i) {
-            message += 'Use all character sets\n\n';
             nextChar = getRandomCharacter(characterSet);
         } else {
             const characterSubset = getCharacterSet(count, characterSet);
-            message += `Use character subset ${JSON.stringify(characterSubset)}\n\n`;
             nextChar = getRandomCharacter(characterSubset);
         }
 
-        message += `Next character: ${nextChar} \n\n`;
-
         count = updateCharacterCount(count, characterSet, nextChar);
-        message += `New count: ${JSON.stringify(count)}\n\n`;
         password += nextChar;
-        message += `Temporary password: ${password}`;
-        console.log(message);
     }
 
     return password;
