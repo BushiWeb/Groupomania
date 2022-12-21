@@ -58,6 +58,13 @@ const mockFindAll = jest.fn(function () {
     });
 });
 
+// Il est nécessaire de faire retourner à cette fonction la promesse résolue avec la bonne valeur
+const mockGetAttributes = jest.fn(function () {
+    return new Promise((resolve) => {
+        resolve(this);
+    });
+});
+
 const mockStaticDestroy = jest.fn(function () {
     return new Promise((resolve) => {
         resolve(1);
@@ -93,6 +100,8 @@ class MockModel {
 
     static findAll = mockFindAll;
 
+    static getAttributes = mockGetAttributes;
+
 
     // Instance methods
     get (value) {
@@ -120,9 +129,10 @@ function clearMocks() {
     mockStaticDestroy.mockClear();
     mockInstanceDestroy.mockClear();
     mockFindAll.mockClear();
+    mockGetAttributes.mockClear();
 }
 
-export { mockSave, mockValidate, mockCreate, mockBuild, MockModel, mockFindOne, mockStaticDestroy, mockFindByPk, mockInstanceDestroy, mockFindAll, clearMocks };
+export { mockSave, mockValidate, mockCreate, mockBuild, MockModel, mockFindOne, mockStaticDestroy, mockFindByPk, mockInstanceDestroy, mockFindAll, mockGetAttributes, clearMocks };
 export default MockModel;
 
 beforeEach(() => {
