@@ -26,12 +26,16 @@ describe('authenticate middleware test suite', () => {
             userId: 13,
             role: 2
         };
+        const savedPayload = {
+            userId: tokenPayload.userId,
+            roleId: tokenPayload.role
+        };
         mockJwtVerify.mockReturnValueOnce(tokenPayload);
         authenticate()(request, response, next);
 
         expect(next).toHaveBeenCalled();
         expect(next.mock.calls[0]).toHaveLength(0);
-        expect(response.locals).toHaveProperty('auth', tokenPayload);
+        expect(response.locals).toHaveProperty('auth', savedPayload);
         expect(mockJwtVerify.mock.calls[0][1]).toEqual(config.get('jwt.key'));
     });
 
@@ -42,12 +46,17 @@ describe('authenticate middleware test suite', () => {
             jti: 'ffffff-ffffffff-fffffffffffffffff',
             role: 2
         };
+        const savedPayload = {
+            userId: tokenPayload.userId,
+            roleId: tokenPayload.role,
+            jti: tokenPayload.jti
+        };
         mockJwtVerify.mockReturnValueOnce(tokenPayload);
         authenticate(true)(request, response, next);
 
         expect(next).toHaveBeenCalled();
         expect(next.mock.calls[0]).toHaveLength(0);
-        expect(response.locals).toHaveProperty('auth', tokenPayload);
+        expect(response.locals).toHaveProperty('auth', savedPayload);
         expect(mockJwtVerify.mock.calls[0][1]).toEqual(config.get('refreshJwt.key'));
     });
 
@@ -57,12 +66,17 @@ describe('authenticate middleware test suite', () => {
             userId: 13,
             role: 2
         };
+        const savedPayload = {
+            userId: tokenPayload.userId,
+            roleId: tokenPayload.role,
+            jti: tokenPayload.jti
+        };
         mockJwtVerify.mockReturnValueOnce(tokenPayload);
         authenticate()(request, response, next);
 
         expect(next).toHaveBeenCalled();
         expect(next.mock.calls[0]).toHaveLength(0);
-        expect(response.locals).toHaveProperty('auth', tokenPayload);
+        expect(response.locals).toHaveProperty('auth', savedPayload);
     });
 
     it('should call the next error middleware if there is no Authorization header', () => {

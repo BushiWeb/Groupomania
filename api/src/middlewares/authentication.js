@@ -117,7 +117,11 @@ export default function authenticate(isRefreshToken = false) {
             return next(error);
         }
 
-        res.locals.auth = tokenPayload;
+        res.locals.auth = {
+            userId: tokenPayload.userId,
+            roleId: tokenPayload.role,
+            ...(tokenPayload.jti && { jti: tokenPayload.jti})
+        };
 
         authLogger.debug('Data saved, end of authentication middleware');
         next();
