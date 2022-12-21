@@ -6,6 +6,7 @@ import routeLoader from './routes.js';
 import loggingMiddelwareLoader from './logger.js';
 import jobsLoader from './jobs.js';
 import adminUserLoader from './admin-user.js';
+import accessControlLoader from './authorization.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:api:loader');
 
@@ -20,6 +21,9 @@ export default async function loadApp (app) {
 
     await databaseLoader();
     loaderLogger.verbose('Database initialized');
+
+    accessControlLoader();
+    loaderLogger.verbose('Access controle rules initialized');
 
     await adminUserLoader();
     loaderLogger.verbose('Admin user available');

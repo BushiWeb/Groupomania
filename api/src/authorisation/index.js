@@ -1,6 +1,7 @@
 import parseAccessControlRules from './authorisation-parser.js';
 import { createLoggerNamespace } from '../logger/index.js';
 import { CompoundCondition } from '@ucast/core';
+import rawRules from './authorizations.js';
 
 const accessControlLogger = createLoggerNamespace('groupomania:api:authorization');
 
@@ -50,4 +51,4 @@ const accessControlRules = {
 };
 
 export default accessControlRules;
-export { accessControlRules, parseAccessControlRules };
+export { accessControlRules, parseAccessControlRules, rawRules };

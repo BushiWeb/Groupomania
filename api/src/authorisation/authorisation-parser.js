@@ -61,7 +61,6 @@ export default function parseAccessControlRules(rules) {
             validateProperty(rule, 'subject', { required: true });
             validateProperty(rule, 'fields', { multiple: true });
 
-            ruleParserLogger.debug('Actions, subject and fields valid');
             parsedRule.actions = Array.isArray(rule.actions) ? rule.actions : [rule.actions];
             parsedRule.subject = rule.subject;
             parsedRule.fields = [];
@@ -71,7 +70,6 @@ export default function parseAccessControlRules(rules) {
 
             // Parsing the conditions
             if (rule.conditions) {
-                ruleParserLogger.debug('Parsing conditions');
                 parsedRule.conditions = parser.parse(rule.conditions);
             }
 
