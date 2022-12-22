@@ -91,7 +91,6 @@ describe('Password generator test suite', () => {
                 minSymbols: 5
             };
             let password = generatePassword(options);
-            console.log(password);
 
             const count = password.split('').reduce(
                 (accumulator, value) => {
