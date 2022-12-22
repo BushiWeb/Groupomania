@@ -1,4 +1,5 @@
-import { getValue, get } from '../../src/authorization/condition-operators.js';
+import { getValue, get, eq } from '../../src/authorization/condition-operators.js';
+import { compare } from '@ucast/js';
 
 describe('Operators test suite', () => {
     const error = new Error('error');
@@ -20,14 +21,18 @@ describe('Operators test suite', () => {
         role: {
             roleId: 1,
             name: 'user'
-        }
+        },
+        subjects: [56]
     };
 
     const baseSubject = {
         id: 12,
         title: 'title',
-        message: 'message'
+        message: 'message',
+        users: [baseUser.userId, 54]
     };
+
+    baseUser.subjects.push(baseSubject.id);
 
     const data = {
         User: new Proxy(baseUser, proxyHandler),
@@ -124,6 +129,69 @@ describe('Operators test suite', () => {
             };
 
             await expect(getValue(condition, data)).rejects.toEqual(error);
+        });
+    });
+
+
+
+    describe('eq test suite', () => {
+        it('should return true if both values are equal', async () => {
+            const condition = {
+                field: 'User.userId',
+                value: '{{User.userId}}'
+            };
+
+            const result = await eq(condition, data, { compare });
+
+            expect(result).toBe(true);
+        });
+
+
+        it('should return false if both value are different', async () => {
+            const condition = {
+                field: 'User.userId',
+                value: '{{Subject.id}}'
+            };
+
+            const result = await eq(condition, data, { compare });
+
+            expect(result).toBe(false);
+        });
+
+
+        it('should return true if the value of the object is an array containing the value of the condition', async () => {
+            const condition = {
+                field: 'Subject.users',
+                value: '{{User.userId}}'
+            };
+
+            const result = await eq(condition, data, { compare });
+
+            expect(result).toBe(true);
+        });
+
+
+        it('should return false if the value of the object is an array that does not include the value of the condition', async () => {
+            const condition = {
+                field: 'Subject.users',
+                value: '{{User.role.name}}'
+            };
+
+            const result = await eq(condition, data, { compare });
+
+            expect(result).toBe(false);
+        });
+
+
+        it('should return false if both values are arrays', async () => {
+            const condition = {
+                field: 'User.subjects',
+                value: '{{Subject.users}}'
+            };
+
+            const result = await eq(condition, data, { compare });
+
+            expect(result).toBe(false);
         });
     });
 });

@@ -1,4 +1,4 @@
-import parseAccessControlRules from '../../src/authorisation/authorisation-parser.js';
+import parseAccessControlRules from '../../src/authorization/authorization-parser.js';
 import { Condition } from '@ucast/core';
 import { jest } from '@jest/globals';
 

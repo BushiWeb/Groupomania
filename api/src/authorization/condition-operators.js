@@ -49,8 +49,43 @@ export async function getValue(condition, object) {
 
 
 
-export async function eq(condition, object, context) {
+/**
+ * Checks if a value is inside an array.
+ * This function is a copy of the include utils function from @ucast/js.
+ * @param {Array} item
+ * @param value
+ * @param compare
+ * @returns {Boolean} Returns true if value is in array, false otherwise.
+ */
+export function includes(items, value, compare) {
+    for (let i = 0, length = items.length; i < length; i++) {
+        if (compare(items[i], value) === 0) {
+            return true;
+        }
+    }
 
+    return false;
+}
+
+
+
+/**
+ * This function tests equality.
+ * To values are equal if they have the same value or if the object property is an array containing the condition value.
+ * @param {{field: string, value: *}} condition
+ * @param {Object} object
+ * @param {{compare: Function}} context
+ * @returns {Boolean} Returns true if the values are considered equal, false otherwise.
+ */
+export async function eq(condition, object, { compare }) {
+    const conditionValue = await getValue(condition, object);
+    const objectValue = await get(object, condition.field);
+
+    if(Array.isArray(objectValue) && !Array.isArray(conditionValue)) {
+        return includes(objectValue, conditionValue, compare);
+    }
+
+    return compare(objectValue, conditionValue) === 0;
 }
 
 
