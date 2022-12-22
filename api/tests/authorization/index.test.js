@@ -188,33 +188,33 @@ describe('Access control object test suite', () => {
             const idValue = await proxy.id;
 
             expect(idValue).toBe(base.id);
-            expect(mockModelMethods.mockFindOne).not.toHaveBeenCalled();
+            expect(mockModelMethods.mockFindAll).not.toHaveBeenCalled();
             expect(mockModelMethods.mockGetAttributes).not.toHaveBeenCalled();
         });
 
 
         it('should fetch the property form the datase and save it if the property is not in the object', async () => {
             mockModelMethods.mockGetAttributes.mockReturnValueOnce(dbEntry);
-            mockModelMethods.mockFindOne.mockResolvedValueOnce(dbEntry);
+            mockModelMethods.mockFindAll.mockResolvedValueOnce([dbEntry]);
 
             const proxy = accessControlRules.PIP(modelName, base);
             const ageValue = await proxy.age;
 
             expect(ageValue).toBe(dbEntry.age);
-            expect(mockModelMethods.mockFindOne).toHaveBeenCalled();
+            expect(mockModelMethods.mockFindAll).toHaveBeenCalled();
             expect(mockModelMethods.mockGetAttributes).toHaveBeenCalled();
 
             mockModelMethods.clearMocks();
 
             expect(await proxy.age).toBe(dbEntry.age);
-            expect(mockModelMethods.mockFindOne).not.toHaveBeenCalled();
+            expect(mockModelMethods.mockFindAll).not.toHaveBeenCalled();
             expect(mockModelMethods.mockGetAttributes).not.toHaveBeenCalled();
         });
 
 
         it('should throw a NotFoundError if the object doesn\'t have a corresponding entry in the database', async () => {
             mockModelMethods.mockGetAttributes.mockReturnValueOnce(dbEntry);
-            mockModelMethods.mockFindOne.mockResolvedValueOnce(null);
+            mockModelMethods.mockFindAll.mockResolvedValueOnce([]);
 
             const proxy = accessControlRules.PIP(modelName, base);
             await expect(proxy.roleId).rejects.toBeInstanceOf(NotFoundError);
@@ -223,10 +223,18 @@ describe('Access control object test suite', () => {
 
         it('should throw an InternalServerError if the property isn\'t defined in the model', async () => {
             mockModelMethods.mockGetAttributes.mockReturnValueOnce(dbEntry);
-            mockModelMethods.mockFindOne.mockResolvedValueOnce(dbEntry);
 
             const proxy = accessControlRules.PIP(modelName, base);
             await expect(proxy.absentProp).rejects.toBeInstanceOf(InternalServerError);
+        });
+
+
+        it('should throw an NotFoundError if multiple entries are found', async () => {
+            mockModelMethods.mockGetAttributes.mockReturnValueOnce(dbEntry);
+            mockModelMethods.mockFindAll.mockResolvedValueOnce([dbEntry, dbEntry]);
+
+            const proxy = accessControlRules.PIP(modelName, base);
+            await expect(proxy.roleId).rejects.toBeInstanceOf(NotFoundError);
         });
     });
 });

@@ -60,7 +60,7 @@ const accessControlRules = {
      * @param {Object} base - Base object, contains informations about the entity. These informations will be used to fetch the entry from the database if needed. Thus, they need to have only properties defined in the model, and to avoid unpredicable results, they need to be able to identify a single entry. Providing the primary key is a safe way to go about it.
      * @returns {Proxy} Returns a proxy of the base object, intercepting all property access to make sure they are present. If event after fetching the entity informations the property can't be found, the proxy throws a InternalServerError. If no entity matches the base, the proxy throws a NotFoundError.
      * @throws {InternalServerError} Throws if the required property is not defined in the Model.
-     * @throws {NotFoundError} Throws if the entry corresponding to the base data doesn't exist.
+     * @throws {NotFoundError} Throws if the entry corresponding to the base data doesn't exist, or if multiple entries are returned.
      */
     PIP: function(modelName, base) {
         const Model = db.models[modelName];
@@ -83,12 +83,12 @@ const accessControlRules = {
                     });
                 }
 
-                const targetEntry = await Model.findOne({
+                const targetEntry = await Model.findAll({
                     where: base
                 });
 
                 // Throw if the entity doesn't exist
-                if (targetEntry === null) {
+                if (targetEntry.length === 0) {
                     accessControlLogger.debug('The entity can\'t be found in the database, throwing an error');
                     throw new NotFoundError({
                         message: 'The database entry corresponding to the proxy base object can\'t be found.',
@@ -101,7 +101,21 @@ const accessControlRules = {
                     });
                 }
 
-                Object.assign(base, targetEntry);
+                // Throw if multiple entries are returned
+                if (targetEntry.length > 1) {
+                    accessControlLogger.debug('Multiple entries returned, throwing an error');
+                    throw new NotFoundError({
+                        message: 'There are multuple database entry corresponding to the proxy base objectthat have been found.',
+                        title: 'The ressource can\'t be found.',
+                        description: 'We can\'t find the requested ressource. Please, make sure the informations you gave us are correct and try again. If the problem persist, you may contact us.',
+                        logDetails: {
+                            base,
+                            prop
+                        }
+                    });
+                }
+
+                Object.assign(base, targetEntry[0]);
                 return base[prop];
             }
         };
