@@ -1,5 +1,5 @@
 import { createLoggerNamespace } from '../logger/index.js';
-import { accessControlRules, parseAccessControlRules, rawRules } from '../authorisation/index.js';
+import { accessControlRules, parseAccessControlRules, rawRules } from '../authorization/index.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:api:loader:authorization');
 

@@ -1,4 +1,4 @@
-import parseAccessControlRules from './authorisation-parser.js';
+import parseAccessControlRules from './authorization-parser.js';
 import { createLoggerNamespace } from '../logger/index.js';
 import { CompoundCondition } from '@ucast/core';
 import rawRules from './authorizations.js';

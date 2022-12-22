@@ -1,4 +1,4 @@
-import accessControlRules from '../../src/authorisation';
+import accessControlRules from '../../src/authorization/index.js';
 import { Condition } from '@ucast/core';
 import db from '../../src/models/index.js';
 import MockModel, * as mockModelMethods from '../mocks/mock-models.test.js';

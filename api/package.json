@@ -26,6 +26,7 @@
         "@ladjs/graceful": "^3.2.1",
         "@ltd/j-toml": "^1.35.2",
         "@ucast/core": "^1.10.1",
+        "@ucast/js": "^3.0.2",
         "@ucast/mongo": "^2.4.2",
         "bcrypt": "^5.1.0",
         "bree": "^9.1.3",
