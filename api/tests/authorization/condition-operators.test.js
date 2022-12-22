@@ -1,5 +1,6 @@
-import { getValue, get, eq } from '../../src/authorization/condition-operators.js';
+import interpret, { getValue, get, eq } from '../../src/authorization/condition-operators.js';
 import { compare } from '@ucast/js';
+import { FieldCondition } from '@ucast/core';
 
 describe('Operators test suite', () => {
     const error = new Error('error');
@@ -192,6 +193,40 @@ describe('Operators test suite', () => {
             const result = await eq(condition, data, { compare });
 
             expect(result).toBe(false);
+        });
+    });
+
+
+
+    describe('Interpreter test suite', () => {
+        const simpleData = {
+            number: 3
+        };
+
+        it('should return a Promise resolved with true', async () => {
+            const condition = new FieldCondition('eq', 'number', simpleData.number);
+            const result = interpret(condition, simpleData);
+
+            expect(result).toBeInstanceOf(Promise);
+            expect(result).resolves.toBe(true);
+        });
+
+
+        it('should return a Promise resolved with false', async () => {
+            const condition = new FieldCondition('eq', 'number', simpleData.number + 1);
+            const result = interpret(condition, simpleData);
+
+            expect(result).toBeInstanceOf(Promise);
+            expect(result).resolves.toBe(false);
+        });
+
+
+        it('should return a Promise rejected with an error', () => {
+            const condition = new FieldCondition('eq', 'User.error', 3);
+            const result = interpret(condition, data);
+
+            expect(result).toBeInstanceOf(Promise);
+            expect(result).rejects.toEqual(error);
         });
     });
 });
