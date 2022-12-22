@@ -6,7 +6,9 @@ export const mockRequest = (body = {}, {contentType, authorization} = {}) => {
         headers: {
             ...(contentType && {'content-type': contentType}),
             ...(authorization && {'authorization': authorization})
-        }
+        },
+        query: {},
+        params: {}
     };
     req.get = jest.fn().mockImplementation((parameter) => {
         return req.headers[parameter.toLowerCase()];
@@ -18,6 +20,8 @@ export const mockRequest = (body = {}, {contentType, authorization} = {}) => {
     req.restore = () => {
         req.get.mockClear();
         req.body = {};
+        req.query = {};
+        req.params = {};
         req.headers = {};
     };
     return req;
