@@ -2,6 +2,24 @@
 import { createJsInterpreter } from '@ucast/js';
 
 /**
+ * Async equivalent of the Array.prototype.some method.
+ * @param {Array} array
+ * @param {Function} fct - This function MUST be asynchronous.
+ * @returns {Boolean}
+ */
+async function asyncSome(array, fct) {
+    for(const index in array) {
+        if (await fct(array[index], index, array)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+
+/**
  * Get the property value of an object, given the property as a string representing the path throught the object.
  * @param {Proxy|Object} object - Objet ou proxy.
  * @param path
@@ -89,4 +107,17 @@ export async function eq(condition, object, { compare }) {
 }
 
 
-export default createJsInterpreter({ eq });
+
+/**
+ * This function returns true if one of the conditions it contains returns true.
+ * @param {{field: string, value: Array}} condition
+ * @param {Object} object
+ * @param {{interpret: Function}} context
+ * @returns {Boolean}
+ */
+export async function or(condition, object, { interpret }) {
+    return asyncSome(condition.value, async (condition) => interpret(condition, object));
+}
+
+
+export default createJsInterpreter({ eq, or });

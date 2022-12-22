@@ -1,4 +1,4 @@
-import interpret, { getValue, get, eq } from '../../src/authorization/condition-operators.js';
+import interpret, { getValue, get, eq, or } from '../../src/authorization/condition-operators.js';
 import { compare } from '@ucast/js';
 import { FieldCondition } from '@ucast/core';
 
@@ -192,6 +192,41 @@ describe('Operators test suite', () => {
 
             const result = await eq(condition, data, { compare });
 
+            expect(result).toBe(false);
+        });
+    });
+
+
+
+    describe('or test suite', () => {
+        it('should return true if one condition is true', async () => {
+            const condition = {
+                value: [
+                    new FieldCondition('eq', 'User.userId', baseUser.userId),
+                    new FieldCondition('eq', 'User.userId', baseUser.userId + 1)
+                ]
+            };
+
+            const result = await or(condition, data, { interpret });
+
+            expect(await interpret(condition.value[0], data)).toBe(true);
+            expect(await interpret(condition.value[1], data)).toBe(false);
+            expect(result).toBe(true);
+        });
+
+
+        it('should return false no condition is true', async () => {
+            const condition = {
+                value: [
+                    new FieldCondition('eq', 'User.userId', baseUser.userId - 1),
+                    new FieldCondition('eq', 'User.userId', baseUser.userId + 1)
+                ]
+            };
+
+            const result = await or(condition, data, { interpret });
+
+            expect(await interpret(condition.value[0], data)).toBe(false);
+            expect(await interpret(condition.value[1], data)).toBe(false);
             expect(result).toBe(false);
         });
     });

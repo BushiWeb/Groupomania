@@ -59,6 +59,8 @@ const accessControlRules = {
      * @param {string} modelName - Name of the model to use to interact with the database.
      * @param {Object} base - Base object, contains informations about the entity. These informations will be used to fetch the entry from the database if needed. Thus, they need to have only properties defined in the model, and to avoid unpredicable results, they need to be able to identify a single entry. Providing the primary key is a safe way to go about it.
      * @returns {Proxy} Returns a proxy of the base object, intercepting all property access to make sure they are present. If event after fetching the entity informations the property can't be found, the proxy throws a InternalServerError. If no entity matches the base, the proxy throws a NotFoundError.
+     * @throws {InternalServerError} Throws if the required property is not defined in the Model.
+     * @throws {NotFoundError} Throws if the entry corresponding to the base data doesn't exist.
      */
     PIP: function(modelName, base) {
         const Model = db.models[modelName];
