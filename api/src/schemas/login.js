@@ -7,7 +7,7 @@ import generatePasswordSchema from './atoms/password.js';
  * Contains a required password.
  */
 const loginBodySchema = {
-    email: generateEmailSchema(),
+    email: generateEmailSchema({ checkForbidden: false }),
     password: generatePasswordSchema({ checkStrength: false })
 };
 

@@ -6,11 +6,12 @@ import ForbiddenError from '../../errors/ForbiddenError.js';
  * @param {Object} [options] - Options to generate the schema.
  * @param {boolean} [options.required=true] - Weither to add the required option or not.
  * @param {boolean} [options.checkFormat=true] - Weither to check if the email has the right format or not.
+ * @param {boolean} [options.checkForbidden=true] - Wether to check if the email is not reserved.
  * @param {boolean} [options.trim=true] - Weither to trim the email or not.
  * @param {Array} [location=['body']] - Where the email is located.
  */
 export default function generateEmailSchema(
-    { required=true, checkFormat=true, trim=true } = { required: true, checkFormat: true, trim: true },
+    { required=true, checkFormat=true, trim=true, checkForbidden=true } = { required: true, checkFormat: true, trim: true, checkForbidden: true },
     location = ['body']
 ) {
     return {
@@ -36,8 +37,10 @@ export default function generateEmailSchema(
             isEmail: {
                 errorMessage: 'The email must have the right format. It must contain your email username, followed by an @, followed by a domain name.',
                 bail: true
-            },
+            }
+        }),
 
+        ...(checkForbidden && {
             equals: {
                 errorMessage: new ForbiddenError({
                     message: `The clients tried to use the ${config.get('adminUser.email')} email address.`,
