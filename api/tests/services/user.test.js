@@ -1,4 +1,4 @@
-import { createUser, getUserByEmail, getUserById, getAllUsers, updateUser } from '../../src/services/users.js';
+import { createUser, getUserByEmail, getUserById, getAllUsers, updateUser, deleteUser } from '../../src/services/users.js';
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
 import MockModel, * as mockModelMethods from '../mocks/mock-models.test.js';
@@ -343,6 +343,24 @@ describe('User services test suite', () => {
             expect.assertions(1);
             mockModelMethods.mockUpdate.mockResolvedValueOnce([0]);
             await expect(updateUser(113, { email: userInfos.email })).rejects.toBeInstanceOf(NotFoundError);
+        });
+    });
+
+
+
+    describe('Delete user service test suite', () => {
+        it('should return true', async () => {
+            mockModelMethods.mockStaticDestroy.mockResolvedValueOnce(1);
+            const user = await deleteUser(113);
+
+            expect(user).toBe(true);
+        });
+
+
+        it('should throw a NotFoundError if the user doesn\'t exist', async () => {
+            expect.assertions(1);
+            mockModelMethods.mockStaticDestroy.mockResolvedValueOnce(0);
+            await expect(deleteUser(113)).rejects.toBeInstanceOf(NotFoundError);
         });
     });
 });

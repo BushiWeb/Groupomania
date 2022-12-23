@@ -174,6 +174,31 @@ export async function getUserByEmail(email) {
 
 
 /**
+ * Deletes an existing user.
+ * @param {number} userId - Id of the user to delete.
+ * @returns {Boolean} Returns true if the operation succeeds.
+ * @throws {NotFoundError} Throws a not found error if the user doesn't exist.
+ */
+export async function deleteUser(userId) {
+    usersServicesLogger.verbose('Delete User service starting');
+
+    const deleteNumber = await db.models.User.destroy({where: { userId }});
+
+    if (deleteNumber === 0) {
+        usersServicesLogger.debug('The user doesn\'t exist. Throwing an error');
+        throw new NotFoundError({
+            message: `No user has the id ${userId}.`,
+            title: 'The user can\'t be found.',
+            description: 'We can\'t find the user corresponding to the id you gave. Please, verify your input and try again.'
+        });
+    }
+
+    return true;
+}
+
+
+
+/**
  * Updates an existing user.
  * @param {number} userId - Id of the user to update.
  * @param {Object} userInfos - Object containing the new user informations.
