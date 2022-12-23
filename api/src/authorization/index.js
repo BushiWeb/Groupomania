@@ -26,6 +26,13 @@ const accessControlRules = {
      */
     PEP: function (subject, action, fields) {
         accessControlLogger.debug(`Starting PEP: searching conditions for subject ${subject}, action ${action} ${fields ? `and fields ${fields}` : ''}`);
+
+        // Parses the conditions if needed
+        if (!this.parsedRules) {
+            this.parsedRules = parseAccessControlRules(rawRules);
+            accessControlLogger.debug('Access control rules parsed');
+        }
+
         const conditions = [];
         let ruleFound = false;
 
