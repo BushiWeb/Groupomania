@@ -1,6 +1,4 @@
 import { createLoggerNamespace } from '../logger/index.js';
-import bcrypt from 'bcrypt';
-import config from '../config/config.js';
 import db from '../models/index.js';
 import { NotFoundError } from '../errors/index.js';
 
@@ -11,22 +9,16 @@ const usersServicesLogger = createLoggerNamespace('groupomania:api:services:user
  * Starts by encrypting the password.
  * @param {Object} userInfos - Object containing the user informations.
  * @param {string} userInfos.email - User's email.
- * @param {string} userInfos.password - User's password.
+ * @param {string} userInfos.password - User's password. The password should be hashed using a secure cryptographic function.
  * @param {string} [userInfos.roleId] - User's role, optionnal.
  * @returns {User} Returns the newly created user.
  */
 export async function createUser({email, password, roleId}) {
     usersServicesLogger.verbose('Create User service starting');
 
-    // Hash password
-    const saltRound = config.get('hash.saltRound');
-    let hashedPassword = await bcrypt.hash(password, saltRound);
-    usersServicesLogger.debug('Password hashed');
-
-    // User creation
     let userInfos = {
         email,
-        password: hashedPassword
+        password
     };
 
     if (roleId) {
@@ -203,7 +195,7 @@ export async function deleteUser(userId) {
  * @param {number} userId - Id of the user to update.
  * @param {Object} userInfos - Object containing the new user informations.
  * @param {string} [userInfos.email] - User's email.
- * @param {string} [userInfos.password] - User's password.
+ * @param {string} [userInfos.password] - User's password. The password should be hashed with a secure cryptographic function.
  * @param {string} [userInfos.roleId] - User's role, optionnal.
  * @returns {Boolean} Returns true if the operation succeeds.
  * @throws {NotFoundError} Throws a not found error if the user doesn't exist.

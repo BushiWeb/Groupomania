@@ -1,4 +1,4 @@
-import { createRefreshToken, createAccessToken, validatePassword, validateRefreshToken, invalidateRefreshToken } from '../../src/services/auth.js';
+import { createRefreshToken, createAccessToken, validatePassword, validateRefreshToken, invalidateRefreshToken, hashPassword } from '../../src/services/auth.js';
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
 import MockModel, * as mockModelMethods from '../mocks/mock-models.test.js';
@@ -48,6 +48,7 @@ describe('Auth services test suite', () => {
             expect(mockModelMethods.mockCreate).toHaveBeenCalled();
         });
 
+
         it('should return a refresh token with a custom expiration date', async () => {
             mockJwtSign.mockReturnValueOnce(refreshToken);
             const expiration = 999999999;
@@ -64,6 +65,8 @@ describe('Auth services test suite', () => {
         });
     });
 
+
+
     describe('createRefreshToken service test suite', () => {
         const accessToken = 'access!';
 
@@ -76,6 +79,22 @@ describe('Auth services test suite', () => {
         });
     });
 
+
+
+    describe('hashPassword service test suite', () => {
+        const password = 'password';
+        const hashedPassword = 'hashed password';
+
+        it('should return the hashed password', async () => {
+            mockBcryptHash.mockResolvedValueOnce(hashedPassword);
+            const result = await hashPassword(password);
+
+            expect(result).toBe(hashedPassword);
+        });
+    });
+
+
+
     describe('validatePassword test suite', () => {
         const user = new MockModel({ password: 'passwordhash' });
         const password = 'password';
@@ -85,11 +104,14 @@ describe('Auth services test suite', () => {
             await expect(validatePassword(password, user)).resolves.toBe(true);
         });
 
+
         it('should return false if the password is invalid', async () => {
             mockBcryptCompare.mockResolvedValueOnce(false);
             await expect(validatePassword(password, user)).rejects.toBeInstanceOf(UnauthorizedError);
         });
     });
+
+
 
     describe('validateRefreshToken test suite', () => {
         const tokenId = 'tokenId';
@@ -105,11 +127,14 @@ describe('Auth services test suite', () => {
             await expect(validateRefreshToken(tokenId)).resolves.toBe(refreshToken);
         });
 
+
         it('should return false if the password is invalid', async () => {
             mockModelMethods.mockFindByPk.mockResolvedValueOnce(null);
             await expect(validateRefreshToken(tokenId)).rejects.toBeInstanceOf(UnauthorizedError);
         });
     });
+
+
 
     describe('invalidateRefreshToken test suite', () => {
         const tokenId = 'tokenId';
@@ -131,6 +156,7 @@ describe('Auth services test suite', () => {
             });
         });
 
+
         it('should use the user id to choose the refresh token to delete', async () => {
             await invalidateRefreshToken(userId);
             expect(mockModelMethods.mockStaticDestroy).toHaveBeenCalled();
@@ -141,10 +167,12 @@ describe('Auth services test suite', () => {
             });
         });
 
+
         it('should delete the token corresponding to the RefreshToken instance given', async () => {
             await invalidateRefreshToken(refreshToken);
             expect(mockModelMethods.mockInstanceDestroy).toHaveBeenCalled();
         });
+
 
         it('should throw if the parameter don\'t have the right type', async () => {
             await expect(invalidateRefreshToken(true)).rejects.toBeInstanceOf(InternalServerError);

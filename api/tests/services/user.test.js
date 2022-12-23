@@ -34,16 +34,14 @@ describe('User services test suite', () => {
             const newUser = await createUser({email: userInfos.email, password: userInfos.password});
 
             expect(newUser).toHaveProperty('email', userInfos.email);
-            expect(newUser).toHaveProperty('password');
-            expect(newUser.password).toHaveLength(60);
+            expect(newUser).toHaveProperty('password', userInfos.password);
         });
 
         it('should create a user with the given role id and return the user', async () => {
             const newUser = await createUser(userInfos);
 
             expect(newUser).toHaveProperty('email', userInfos.email);
-            expect(newUser).toHaveProperty('password');
-            expect(newUser.password).toHaveLength(60);
+            expect(newUser).toHaveProperty('password', userInfos.password);
             expect(newUser).toHaveProperty('roleId', 1);
         });
     });

@@ -2,6 +2,7 @@ import { UniqueConstraintError } from 'sequelize';
 import { ConflictError } from '../errors/index.js';
 import { createLoggerNamespace } from '../logger/index.js';
 import { createUser, getAllUsers, getUserById } from '../services/users.js';
+import { hashPassword } from '../services/auth.js';
 
 const userControllerLogger = createLoggerNamespace('groupomania:api:controllers:user');
 
@@ -16,9 +17,12 @@ const userControllerLogger = createLoggerNamespace('groupomania:api:controllers:
 export async function createUserController(req, res, next) {
     userControllerLogger.verbose('Create user middleware starting');
     try {
+        const hashedPassword = await hashPassword(req.body.password);
+        userControllerLogger.debug('Password hashed');
+
         const userInfos = {
             email: req.body.email,
-            password: req.body.password
+            password: hashedPassword
         };
         const newUser = await createUser(userInfos);
 

@@ -102,6 +102,20 @@ export async function validatePassword(password, user) {
 
 
 /**
+ * Hashes a password.
+ * @param {string} password - Password to validate.
+ * @return {string} Returns the hashed password.
+ */
+export async function hashPassword(password) {
+    authServicesLogger.debug('Password hash service starting');
+
+    const saltRound = config.get('hash.saltRound');
+    return bcrypt.hash(password, saltRound);
+}
+
+
+
+/**
  * Checks if the refresh token is valid, i.e. it hasn't been invalidated.
  * Validation regarding the expiration or the key for example should be done earlier, using the authentication middleware.
  * @param {string} tokenId - Id of the token to check. Should have the UUID format.
