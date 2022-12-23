@@ -1,13 +1,14 @@
 import { UniqueConstraintError } from 'sequelize';
 import { ConflictError } from '../errors/index.js';
 import { createLoggerNamespace } from '../logger/index.js';
-import { createUser, getAllUsers, getUserById } from '../services/users.js';
+import { createUser, getAllUsers, getUserById, updateUser } from '../services/users.js';
 import { hashPassword } from '../services/auth.js';
 
 const userControllerLogger = createLoggerNamespace('groupomania:api:controllers:user');
 
 /**
  * User creation controller.
+ * Hashes the password.
  * Calls the right service.
  * Sends a message to the client with status 201 if the request is successful, or calls the error handler middleware if an error occurs.
  * @param {Express.Request} req - Express request object.
@@ -47,6 +48,8 @@ export async function createUserController(req, res, next) {
     }
 }
 
+
+
 /**
  * User fetching.
  * Calls the right service.
@@ -70,6 +73,8 @@ export async function getuserByIdController(req, res, next) {
         return next(error);
     }
 }
+
+
 
 /**
  * All users fetching.
@@ -96,5 +101,43 @@ export async function getAllUsersController(req, res, next) {
         userControllerLogger.verbose('Response sent');
     } catch (error) {
         return next(error);
+    }
+}
+
+
+
+/**
+ * User update controller. Allows to update email and password.
+ * Hashes the password if the password is updated.
+ * Calls the right service.
+ * Sends a response with status 204 to the client if the request is successful, or calls the error handler middleware if an error occurs.
+ * @param {Express.Request} req - Express request object.
+ * @param {Express.Response} res - Express response object.
+ * @param next - Next middleware to execute.
+ */
+export async function updateUserController(req, res, next) {
+    userControllerLogger.verbose('Update user middleware starting');
+    try {
+        const newData = {
+            ...(req.body.email && { email: req.body.email }),
+            ...(req.body.password && { password: await hashPassword(req.body.password) })
+        };
+
+        await updateUser(req.params.userId, newData);
+
+        res.status(204).end();
+        userControllerLogger.verbose('Response sent');
+    } catch (error) {
+        let normalizedError;
+        if (error instanceof UniqueConstraintError) {
+            normalizedError = new ConflictError({
+                message: 'Email address must be unique.',
+                title: 'This email address already exists',
+                description: 'It appears that you already have an account. You may try to log in.'
+            },
+            error
+            );
+        }
+        return next(normalizedError);
     }
 }
