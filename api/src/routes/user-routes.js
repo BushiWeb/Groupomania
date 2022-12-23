@@ -1,8 +1,8 @@
 import express from 'express';
 import { createLoggerNamespace } from '../logger/index.js';
-import { createUserController, getAllUsersController, getuserByIdController, updateUserController, updateUserRoleController } from '../controllers/user-controllers.js';
+import { createUserController, deleteUserController, getAllUsersController, getuserByIdController, updateUserController, updateUserRoleController } from '../controllers/user-controllers.js';
 import config from '../config/config.js';
-import validationMiddlewares, { createUserBodySchema, getAllUsersSchema, getUserSchema, updateUserRoleSchema, updateUserSchema } from '../middlewares/user-input-validation.js';
+import validationMiddlewares, { createUserBodySchema, deleteUserSchema, getAllUsersSchema, getUserSchema, updateUserRoleSchema, updateUserSchema } from '../middlewares/user-input-validation.js';
 import createBodyParser from '../middlewares/body-parsing.js';
 import authenticate from '../middlewares/authentication.js';
 import authorise from '../middlewares/authorization.js';
@@ -119,5 +119,31 @@ router.put(
     updateUserRoleController
 );
 userRoutesLogger.debug('PUT /:userId/role - update user\'s role route added');
+
+/**
+ * User deletion route.
+ * Checks that there is no body.
+ * Validates and sanitizes request parameters and body.
+ * Authenticate the client with the access token.
+ * Checks if the user has the right to execute this action.
+ * Call the corresponding controller.
+ */
+router.delete(
+    '/:userId',
+    createBodyParser({}),
+    validationMiddlewares(deleteUserSchema),
+    authenticate(),
+    authorise('delete', 'User', {
+        User: {
+            origin: 'res',
+            field: 'auth'
+        },
+        Subject: {
+            origin: 'params'
+        }
+    }),
+    deleteUserController
+);
+userRoutesLogger.debug('DELETE /:userId - delete user route added');
 
 export default router;

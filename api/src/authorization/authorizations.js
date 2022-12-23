@@ -37,7 +37,7 @@ export default [
         subject: 'User',
         conditions: {
             $or: [
-                { 'User.roleId': 1 },
+                { 'User.roleId': config.get('adminUser.roleId') },
                 { 'User.userId': '{{Subject.userId}}' }
             ]
         }

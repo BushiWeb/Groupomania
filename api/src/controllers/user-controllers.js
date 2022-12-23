@@ -1,8 +1,8 @@
 import { ForeignKeyConstraintError, UniqueConstraintError } from 'sequelize';
 import { ConflictError, UserInputValidationError } from '../errors/index.js';
 import { createLoggerNamespace } from '../logger/index.js';
-import { createUser, getAllUsers, getUserById, updateUser } from '../services/users.js';
-import { hashPassword } from '../services/auth.js';
+import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from '../services/users.js';
+import { hashPassword, invalidateRefreshToken } from '../services/auth.js';
 
 const userControllerLogger = createLoggerNamespace('groupomania:api:controllers:user');
 
@@ -34,7 +34,7 @@ export async function createUserController(req, res, next) {
         res.status(201).json(responseData);
         userControllerLogger.verbose('Response sent');
     } catch (error) {
-        let normalizedError;
+        let normalizedError = error;
         if (error instanceof UniqueConstraintError) {
             normalizedError = new ConflictError({
                 message: 'Email address must be unique.',
@@ -126,7 +126,7 @@ export async function updateUserRoleController(req, res, next) {
         res.status(204).end();
         userControllerLogger.verbose('Response sent');
     } catch (error) {
-        let normalizedError;
+        let normalizedError = error;
         if (error instanceof ForeignKeyConstraintError) {
             normalizedError = new UserInputValidationError({
                 message: 'The roleId does not match with an existing role.',
@@ -164,7 +164,7 @@ export async function updateUserController(req, res, next) {
         res.status(204).end();
         userControllerLogger.verbose('Response sent');
     } catch (error) {
-        let normalizedError;
+        let normalizedError = error;
         if (error instanceof UniqueConstraintError) {
             normalizedError = new ConflictError({
                 message: 'Email address must be unique.',
@@ -175,5 +175,31 @@ export async function updateUserController(req, res, next) {
             );
         }
         return next(normalizedError);
+    }
+}
+
+
+
+/**
+ * User deletion controller.
+ * Calls the right service.
+ * Sends a response with status 204 to the client if the request is successful, or calls the error handler middleware if an error occurs.
+ * @param {Express.Request} req - Express request object.
+ * @param {Express.Response} res - Express response object.
+ * @param next - Next middleware to execute.
+ */
+export async function deleteUserController(req, res, next) {
+    userControllerLogger.verbose('Delete user middleware starting');
+    try {
+        await deleteUser(req.params.userId);
+        userControllerLogger.debug('User deleted');
+
+        await invalidateRefreshToken(req.params.userId);
+        userControllerLogger.debug('User\'s refreh tokens deleted');
+
+        res.status(204).end();
+        userControllerLogger.verbose('Response sent');
+    } catch (error) {
+        return next(error);
     }
 }
