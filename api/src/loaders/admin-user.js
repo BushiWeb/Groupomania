@@ -1,6 +1,7 @@
 import { createLoggerNamespace } from '../logger/index.js';
 import db from '../models/index.js';
 import { createUser } from '../services/users.js';
+import { hashPassword } from '../services/auth.js';
 import config from '../config/config.js';
 import { generatePassword } from '../utils/password-generator.js';
 
@@ -28,9 +29,13 @@ export default async function adminUserLoader () {
 
         // Create a new admin user
         loaderLogger.debug('No admin user, creating one');
+        const clearPassword = generatePassword({ length: 12 });
+        loaderLogger.debug('Password generated');
+        const hashedPassword = await hashPassword(clearPassword);
+        loaderLogger.debug('Password hashed');
         const adminUserInfos = {
             email: config.get('adminUser.email'),
-            password: generatePassword({ length: 12 }),
+            password: hashedPassword,
             roleId: config.get('adminUser.roleId')
         };
         await createUser(adminUserInfos);
@@ -38,7 +43,7 @@ export default async function adminUserLoader () {
             'Admin user created. Make sure to update the authentication credentials as soon as possible.',
             {
                 email: adminUserInfos.email,
-                password: adminUserInfos.password
+                password: clearPassword
             }
         );
 
