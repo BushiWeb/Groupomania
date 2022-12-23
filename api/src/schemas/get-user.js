@@ -8,7 +8,7 @@ import generateMoreInfoSchema from './atoms/moreInfo.js';
  * Contains an optional boolean roleInfo query parameter.
  */
 const getUserSchema = {
-    id: generateIdSchema(),
+    userId: generateIdSchema(),
     roleInfo: generateMoreInfoSchema()
 };
 

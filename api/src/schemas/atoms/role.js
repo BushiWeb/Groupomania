@@ -3,10 +3,11 @@
  * @param {Object} [options] - Options to generate the schema.
  * @param {boolean} [options.required=false] - Weither to add the required option or not.
  * @param {boolean} [options.checkFormat=true] - Weither to check if the email has the right format or not.
+ * @param {boolean} [options.allowString=true] - Weither the role can also be a role name or just a role id.
  * @param {Array} [location=['query']] - Where the email is located.
  */
 export default function generateRoleSchema(
-    { required=false, checkFormat=true } = { required: false, checkFormat: true },
+    { required=false, checkFormat=true, allowString=true } = { required: false, checkFormat: true, allowString: true },
     location = ['query']
 ) {
     return {
@@ -26,7 +27,7 @@ export default function generateRoleSchema(
             }
         }),
 
-        ...(checkFormat && {
+        ...(checkFormat && allowString && {
             isString: {
                 errorMessage: 'The parameter must either be a string or an integer.',
                 bail: true
@@ -41,6 +42,15 @@ export default function generateRoleSchema(
                     return value;
                 }
             }
+        }),
+
+        ...(checkFormat && !allowString && {
+            isInt: {
+                errorMessage: 'The role id must be an integer.',
+                bail: true
+            },
+
+            toInt: true,
         })
     };
 }

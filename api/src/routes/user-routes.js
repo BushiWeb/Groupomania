@@ -1,8 +1,8 @@
 import express from 'express';
 import { createLoggerNamespace } from '../logger/index.js';
-import { createUserController, getAllUsersController, getuserByIdController, updateUserController } from '../controllers/user-controllers.js';
+import { createUserController, getAllUsersController, getuserByIdController, updateUserController, updateUserRoleController } from '../controllers/user-controllers.js';
 import config from '../config/config.js';
-import validationMiddlewares, { createUserBodySchema, getAllUsersSchema, getUserSchema, updateUserSchema } from '../middlewares/user-input-validation.js';
+import validationMiddlewares, { createUserBodySchema, getAllUsersSchema, getUserSchema, updateUserRoleSchema, updateUserSchema } from '../middlewares/user-input-validation.js';
 import createBodyParser from '../middlewares/body-parsing.js';
 import authenticate from '../middlewares/authentication.js';
 import authorise from '../middlewares/authorization.js';
@@ -40,13 +40,13 @@ userRoutesLogger.debug('POST / - create user route added');
  * Call the corresponding controller.
  */
 router.get(
-    '/:id',
+    '/:userId',
     createBodyParser({}),
     validationMiddlewares(getUserSchema),
     authenticate(),
     getuserByIdController
 );
-userRoutesLogger.debug('GET /:id - get user route added');
+userRoutesLogger.debug('GET /:userId - get user route added');
 
 /**
  * All users fetching route.
@@ -67,7 +67,7 @@ userRoutesLogger.debug('GET / - get all users route added');
 /**
  * User update route.
  * Checks that there is a JSON body.
- * Validates and sanitizes request parameters.
+ * Validates and sanitizes request parameters and body.
  * Authenticate the client with the access token.
  * Checks if the user has the right to execute this action.
  * Call the corresponding controller.
@@ -90,6 +90,34 @@ router.put(
     }, ['email', 'password']),
     updateUserController
 );
-userRoutesLogger.debug('PUT /:id - update user route added');
+userRoutesLogger.debug('PUT /:userId - update user route added');
+
+/**
+ * User's role update route.
+ * Checks that there is a JSON body.
+ * Validates and sanitizes request parameters and body.
+ * Authenticate the client with the access token.
+ * Checks if the user has the right to execute this action.
+ * Call the corresponding controller.
+ */
+router.put(
+    '/:userId/role',
+    createBodyParser({
+        'application/json': express.json(expressJsonOptions)
+    }, false),
+    validationMiddlewares(updateUserRoleSchema),
+    authenticate(),
+    authorise('update', 'User', {
+        User: {
+            origin: 'res',
+            field: 'auth'
+        },
+        Subject: {
+            origin: 'params'
+        }
+    }, 'roleId'),
+    updateUserRoleController
+);
+userRoutesLogger.debug('PUT /:userId/role - update user\'s role route added');
 
 export default router;

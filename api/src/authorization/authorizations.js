@@ -1,3 +1,5 @@
+import config from '../config/config.js';
+
 /**
  * Contains all authorizations rules.
  * Each rule contains:
@@ -25,7 +27,7 @@ export default [
         subject: 'User',
         fields: 'roleId',
         conditions: {
-            'User.roleId': 1
+            'User.roleId': config.get('adminUser.roleId')
         }
     },
 

@@ -4,6 +4,7 @@ import loginBodySchema from '../schemas/login.js';
 import getUserSchema from '../schemas/get-user.js';
 import getAllUsersSchema from '../schemas/get-all-users.js';
 import updateUserSchema from '../schemas/update-user.js';
+import updateUserRoleSchema from '../schemas/update-user-role.js';
 import { createLoggerNamespace } from '../logger/index.js';
 import { HttpError, UserInputValidationError } from '../errors/index.js';
 
@@ -90,4 +91,4 @@ export default function validationMiddlewares(schema) {
     return [checkSchema(schema), validationHandlingMiddleware];
 }
 
-export { loginBodySchema, createUserBodySchema, getUserSchema, getAllUsersSchema, updateUserSchema, validationHandlingMiddleware, validationErrorFormatter };
+export { loginBodySchema, createUserBodySchema, getUserSchema, getAllUsersSchema, updateUserSchema, updateUserRoleSchema, validationHandlingMiddleware, validationErrorFormatter };

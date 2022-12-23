@@ -1,5 +1,5 @@
-import { UniqueConstraintError } from 'sequelize';
-import { ConflictError } from '../errors/index.js';
+import { ForeignKeyConstraintError, UniqueConstraintError } from 'sequelize';
+import { ConflictError, UserInputValidationError } from '../errors/index.js';
 import { createLoggerNamespace } from '../logger/index.js';
 import { createUser, getAllUsers, getUserById, updateUser } from '../services/users.js';
 import { hashPassword } from '../services/auth.js';
@@ -65,7 +65,7 @@ export async function getuserByIdController(req, res, next) {
         const options = {
             ...(req.query.roleInfo && { roleInfo: req.query.roleInfo })
         };
-        const user = await getUserById(req.params.id, options);
+        const user = await getUserById(req.params.userId, options);
 
         res.status(200).json(user);
         userControllerLogger.verbose('Response sent');
@@ -101,6 +101,42 @@ export async function getAllUsersController(req, res, next) {
         userControllerLogger.verbose('Response sent');
     } catch (error) {
         return next(error);
+    }
+}
+
+
+
+/**
+ * User's role update controller.
+ * Calls the right service.
+ * Sends a response with status 204 to the client if the request is successful, or calls the error handler middleware if an error occurs.
+ * @param {Express.Request} req - Express request object.
+ * @param {Express.Response} res - Express response object.
+ * @param next - Next middleware to execute.
+ */
+export async function updateUserRoleController(req, res, next) {
+    userControllerLogger.verbose('Update user\'s role middleware starting');
+    try {
+        const newData = {
+            roleId: req.body.roleId
+        };
+
+        await updateUser(req.params.userId, newData);
+
+        res.status(204).end();
+        userControllerLogger.verbose('Response sent');
+    } catch (error) {
+        let normalizedError;
+        if (error instanceof ForeignKeyConstraintError) {
+            normalizedError = new UserInputValidationError({
+                message: 'The roleId does not match with an existing role.',
+                title: 'The roleId doesn\'t exist.',
+                description: 'The roleId you want to give to the user does not exist yet. You may execute the request GET /api/v1/roles to get the list of all available roles.'
+            },
+            error
+            );
+        }
+        return next(normalizedError);
     }
 }
 
