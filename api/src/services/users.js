@@ -170,3 +170,32 @@ export async function getUserByEmail(email) {
     usersServicesLogger.debug('User fetched');
     return user;
 }
+
+
+
+/**
+ * Updates an existing user.
+ * @param {number} userId - Id of the user to update.
+ * @param {Object} userInfos - Object containing the new user informations.
+ * @param {string} [userInfos.email] - User's email.
+ * @param {string} [userInfos.password] - User's password.
+ * @param {string} [userInfos.roleId] - User's role, optionnal.
+ * @returns {Boolean} Returns true if the operation succeeds.
+ * @throws {NotFoundError} Throws a not found error if the user doesn't exist.
+ */
+export async function updateUser(userId, userInfos) {
+    usersServicesLogger.verbose('Update User service starting');
+
+    const updateResults = await db.models.User.update(userInfos, { where: { userId }});
+
+    if (updateResults[0] === 0) {
+        usersServicesLogger.debug('The user doesn\'t exist. Throwing an error');
+        throw new NotFoundError({
+            message: `No user has the id ${userId}.`,
+            title: 'The user can\'t be found.',
+            description: 'We can\'t find the user corresponding to the id you gave. Please, verify your input and try again.'
+        });
+    }
+
+    return true;
+}

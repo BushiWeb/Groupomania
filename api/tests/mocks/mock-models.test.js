@@ -71,6 +71,12 @@ const mockStaticDestroy = jest.fn(function () {
     });
 });
 
+const mockUpdate = jest.fn(function () {
+    return new Promise((resolve) => {
+        resolve(1);
+    });
+});
+
 const mockInstanceDestroy = jest.fn(function () {
     return new Promise((resolve) => {
         resolve();
@@ -102,6 +108,8 @@ class MockModel {
 
     static getAttributes = mockGetAttributes;
 
+    static update = mockUpdate;
+
 
     // Instance methods
     get (value) {
@@ -130,9 +138,10 @@ function clearMocks() {
     mockInstanceDestroy.mockClear();
     mockFindAll.mockClear();
     mockGetAttributes.mockClear();
+    mockUpdate.mockClear();
 }
 
-export { mockSave, mockValidate, mockCreate, mockBuild, MockModel, mockFindOne, mockStaticDestroy, mockFindByPk, mockInstanceDestroy, mockFindAll, mockGetAttributes, clearMocks };
+export { mockSave, mockValidate, mockCreate, mockBuild, MockModel, mockFindOne, mockStaticDestroy, mockFindByPk, mockInstanceDestroy, mockFindAll, mockGetAttributes, mockUpdate, clearMocks };
 export default MockModel;
 
 beforeEach(() => {
@@ -140,7 +149,7 @@ beforeEach(() => {
 });
 
 
-describe.skip('Model mock test suite', () => {
+/* describe.skip('Model mock test suite', () => {
     const testValues = {
         value1: 3,
         value2: 'test'
@@ -314,4 +323,4 @@ describe.skip('Model mock test suite', () => {
             });
         });
     });
-});
+}); */

@@ -1,4 +1,4 @@
-import { createUser, getUserByEmail, getUserById, getAllUsers } from '../../src/services/users.js';
+import { createUser, getUserByEmail, getUserById, getAllUsers, updateUser } from '../../src/services/users.js';
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
 import MockModel, * as mockModelMethods from '../mocks/mock-models.test.js';
@@ -48,6 +48,8 @@ describe('User services test suite', () => {
         });
     });
 
+
+
     describe('Get user by email service test suite', () => {
         it('should get the user informations', async () => {
             const returnedUserInfos = {
@@ -71,6 +73,8 @@ describe('User services test suite', () => {
             await expect(getUserByEmail(userInfos.email)).rejects.toBeInstanceOf(NotFoundError);
         });
     });
+
+
 
     describe('Get user by id service test suite', () => {
         it('should get the user informations', async () => {
@@ -128,6 +132,8 @@ describe('User services test suite', () => {
             await expect(getUserById(113)).rejects.toBeInstanceOf(NotFoundError);
         });
     });
+
+
 
     describe('Get all users service test suite', () => {
         const otherUser = {
@@ -319,6 +325,24 @@ describe('User services test suite', () => {
             expect(mockModelMethods.mockFindAll.mock.calls[0][0].include.attributes).toContain('name');
             expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('order');
             expect(mockModelMethods.mockFindAll.mock.calls[0][0].order).toContainEqual(['email', 'ASC']);
+        });
+    });
+
+
+
+    describe('Update user service test suite', () => {
+        it('should return true', async () => {
+            mockModelMethods.mockUpdate.mockResolvedValueOnce([1]);
+            const user = await updateUser(113, { email: userInfos.email });
+
+            expect(user).toBe(true);
+        });
+
+
+        it('should throw a NotFoundError if the user doesn\'t exist', async () => {
+            expect.assertions(1);
+            mockModelMethods.mockUpdate.mockResolvedValueOnce([0]);
+            await expect(updateUser(113, { email: userInfos.email })).rejects.toBeInstanceOf(NotFoundError);
         });
     });
 });
