@@ -91,9 +91,9 @@ export async function getAccessTokenController(req, res, next) {
         authControllerLogger.debug('Refresh token still valid');
         await invalidateRefreshToken(refreshTokenModel);
         authControllerLogger.debug('Refresh token invalidated');
-        const refreshToken = await createRefreshToken(currentRefreshToken.userId, currentRefreshToken.role, currentRefreshToken.exp);
+        const refreshToken = await createRefreshToken(currentRefreshToken.userId, currentRefreshToken.roleId, currentRefreshToken.exp);
         authControllerLogger.debug('New refresh token created');
-        const accessToken = await createAccessToken(currentRefreshToken.userId, currentRefreshToken.role);
+        const accessToken = await createAccessToken(currentRefreshToken.userId, currentRefreshToken.roleId);
         authControllerLogger.debug('New access token created');
 
         res.status(200).json({
