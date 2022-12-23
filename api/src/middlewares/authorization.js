@@ -1,4 +1,4 @@
-import { createLoggerNamespace } from '../logger/index';
+import { createLoggerNamespace } from '../logger/index.js';
 import accessControlRules from '../authorization/index.js';
 import interpret from '../authorization/condition-operators.js';
 import ForbiddenError from '../errors/ForbiddenError.js';
@@ -59,6 +59,7 @@ function getDataFromOrigin(req, res, { origin, field } = {}) {
  * Finds the base data for the user and the subject, calls the PIP and returns the proxies.
  * @param {Express.Request} req
  * @param {Express.Response} res
+ * @param {string} subject - Subject name, corresponding to the model name to user.
  *
  * @param {Object} [dataOrigin = {User: {}, Subject: {}}] - How to find the base data to create the proxies.
  *
@@ -72,13 +73,13 @@ function getDataFromOrigin(req, res, { origin, field } = {}) {
  *
  * @returns {{User: Proxy, Subject: Proxy}} Returns the object containing the User and Subject proxies, created with the found base data.
  */
-function getDataProxies(req, res, {User = {}, Subject = {}} = {User: {}, Subject: {}}) {
+function getDataProxies(req, res, subject, {User = {}, Subject = {}} = {User: {}, Subject: {}}) {
     const userData = getDataFromOrigin(req, res, User);
     const subjectData = getDataFromOrigin(req,res, Subject);
 
     return {
         User: accessControlRules.PIP('User', userData),
-        Subject: accessControlRules.PIP('Subject', subjectData)
+        Subject: accessControlRules.PIP(subject, subjectData)
     };
 }
 
@@ -131,7 +132,7 @@ export default function authorize(action, subject, dataOrigin, fields) {
         }
 
         // Getting the data
-        const data = getDataProxies(req, res, dataOrigin);
+        const data = getDataProxies(req, res, subject, dataOrigin);
         accessControlLogger.debug('Data access object created');
 
         // Testing the conditions
