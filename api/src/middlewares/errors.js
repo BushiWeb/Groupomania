@@ -4,10 +4,14 @@ import {
     NotFoundError,
     InternalServerError,
     UnauthorizedError,
-    MethodNotAllowedError
+    MethodNotAllowedError,
+    UserInputValidationError,
+    PayloadTooLargeError
 } from '../errors/index.js';
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
+import { MulterError } from 'multer';
+import config from '../config/config.js';
 
 const errorLogger = createLoggerNamespace('groupomania:api:error');
 
@@ -78,6 +82,44 @@ function normalizeJwtError(err) {
     }, err);
 }
 
+/**
+ * Handles Multer errors normalization.
+ * @param {MulterError} err - JWT error to normalize.
+ * @returns {HttpError} Returns the associated HttpError.
+ */
+function normalizeMulterError(err) {
+    errorLogger.debug('MulterError normalization');
+
+    if (err.code === 'LIMIT_FIELD_VALUE') {
+        return new PayloadTooLargeError({
+            message: err.message,
+            details: {
+                maxPayloadSize: `${config.get('payload.maxSize')} bytes`,
+            }
+        }, err);
+    }
+
+    if (err.code === 'LIMIT_FILE_SIZE') {
+        return new PayloadTooLargeError({
+            message: err.message,
+            title: 'The file is too large.',
+            description: 'We couldn\'t handle the request because of the file size. Please, reduce compress your file before trying again. The maximum file size is in the details.',
+            details: {
+                maxFileSize: `${config.get('payload.files.maxFileSize')} bytes`,
+            }
+        }, err);
+    }
+
+    return new UserInputValidationError({
+        message: err.message,
+        title: 'The request\'s body is invalid.',
+        description: 'We are having trouble processing the request\'s body. You will find more informations in the details. Please, fix the issue and try again.',
+        details: {
+            errorDetail: err.message
+        }
+    }, err);
+}
+
 
 /**
  * Normalizes errors.
@@ -101,6 +143,10 @@ export function errorNormalizer(err, req, res, next) {
 
     if (err instanceof jwt.JsonWebTokenError) {
         return next(normalizeJwtError(err).setRequestInformations(req.originalUrl, req.method));
+    }
+
+    if (err instanceof MulterError) {
+        return next(normalizeMulterError(err).setRequestInformations(req.originalUrl, req.method));
     }
 
     // Express' errors handling

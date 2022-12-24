@@ -6,6 +6,7 @@ import NotFoundError from './NotFoundError.js';
 import UnauthorizedError from './UnauthorizedError.js';
 import UnsupportedMediaTypeError from './UnsupportedMediaTypeError.js';
 import UserInputValidationError from './UserInputValidationError.js';
+import PayloadTooLargeError from './PayloadTooLargeError.js';
 
 export {
     HttpError,
@@ -15,5 +16,6 @@ export {
     NotFoundError,
     UnauthorizedError,
     UnsupportedMediaTypeError,
-    UserInputValidationError
+    UserInputValidationError,
+    PayloadTooLargeError
 };
