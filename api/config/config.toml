@@ -8,6 +8,7 @@ allowedHeaders = ["Origin", "X-Requested-With", "Accept", "Content-Type", "Autho
 
 # [payload]
 # maxSize = 10240
+# sanitization = ['<script', '<\\/script', '<!--', '-->', '\\]\\]>']
 # [payload.files]
 # maxFileSize = 5242880
 # saveFolder = "images"

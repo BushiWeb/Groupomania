@@ -6,6 +6,7 @@ import getAllUsersSchema from '../schemas/get-all-users.js';
 import updateUserSchema from '../schemas/update-user.js';
 import updateUserRoleSchema from '../schemas/update-user-role.js';
 import deleteUserSchema from '../schemas/delete-user.js';
+import createPostSchema from '../schemas/create-post.js';
 import { createLoggerNamespace } from '../logger/index.js';
 import { HttpError, UserInputValidationError, UnsupportedMediaTypeError } from '../errors/index.js';
 import config from '../config/config.js';
@@ -96,7 +97,7 @@ function fileValidation(required = false) {
         validationLogger.debug('File validation middleware execution');
 
         // Checking file filter
-        if (req.rejectedFile.length > 0) {
+        if (req.rejectedFile && req.rejectedFile.length > 0) {
             validationLogger.debug('Error while validating files, throwing an error');
 
             const uploadedFileFormats = [];
@@ -160,4 +161,15 @@ export default function validationMiddlewares(schema, files = false, requiredFil
     return middlewareList;
 }
 
-export { loginBodySchema, createUserBodySchema, getUserSchema, getAllUsersSchema, updateUserSchema, updateUserRoleSchema, deleteUserSchema, validationHandlingMiddleware, validationErrorFormatter };
+export {
+    loginBodySchema,
+    createUserBodySchema,
+    getUserSchema,
+    getAllUsersSchema,
+    updateUserSchema,
+    updateUserRoleSchema,
+    deleteUserSchema,
+    createPostSchema,
+    validationHandlingMiddleware,
+    validationErrorFormatter
+};

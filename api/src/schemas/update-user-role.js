@@ -2,9 +2,10 @@ import generateIdSchema from './atoms/id.js';
 import generateRoleSchema from './atoms/role.js';
 
 /**
- * Schema for the create user request's body.
- * Contains a required email.
- * Contains a required, strong password. Password strength can be changed in the configuration.
+ * Schema for the update user role request.
+ * Contains:
+ *      Required integer role id in the body
+ *      Required integer user id in the parameters
  */
 const updateUserRoleSchema = {
     roleId: generateRoleSchema({ required: true, allowString: false }, ['body']),

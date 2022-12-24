@@ -73,7 +73,7 @@ const storage = multer.diskStorage({
         cb(null, directory);
     },
     filename: function(req, file, cb) {
-        const filename = generateFileName(file.filename, file.mimetype);
+        const filename = generateFileName(file.originalname, file.mimetype);
         multerLogger.debug(`New file name: ${filename}`);
         cb(null, filename);
     }

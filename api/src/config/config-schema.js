@@ -113,6 +113,11 @@ const CONFIG_SCHEMA = {
         }
     },
     payload: {
+        sanitization: {
+            doc: 'Strings to remove from the sanitized values. Should follow the recommendations of the OWASP',
+            format: Array,
+            default: ['<script', '<\\/script', '<!--', '-->', '\\]\\]>']
+        },
         maxSize: {
             doc: 'Payload\'s max size in number of bytes',
             format : 'int',

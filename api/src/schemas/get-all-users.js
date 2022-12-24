@@ -4,9 +4,12 @@ import generateRoleSchema from './atoms/role.js';
 
 
 /**
- * Schema for the get user request's parameters.
- * Contains a required integer id path parameter.
- * Contains an optional boolean roleInfo query parameter.
+ * Schema for the get all users request's parameters.
+ * Contains:
+ *      Optionnal roleInfo as a boolean
+ *      Optionnal role, either an integer or a string
+ *      Optionnal positive integer limit
+ *      Optionnal positive interger page
  */
 const getAllUsersSchema = {
     roleInfo: generateMoreInfoSchema(),
