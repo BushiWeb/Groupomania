@@ -7,7 +7,8 @@ import updateUserSchema from '../schemas/update-user.js';
 import updateUserRoleSchema from '../schemas/update-user-role.js';
 import deleteUserSchema from '../schemas/delete-user.js';
 import { createLoggerNamespace } from '../logger/index.js';
-import { HttpError, UserInputValidationError } from '../errors/index.js';
+import { HttpError, UserInputValidationError, UnsupportedMediaTypeError } from '../errors/index.js';
+import config from '../config/config.js';
 
 const validationLogger = createLoggerNamespace('groupomania:api:validation');
 
@@ -83,13 +84,80 @@ function validationHandlingMiddleware(req, res, next) {
 }
 
 
+
+/**
+ * Function returning a middleware checking for files errors.
+ * @param {boolean} [required=false] - Checks wether the file is required or not.
+ * @returns {Function} Returns the middleware.
+ */
+function fileValidation(required = false) {
+    validationLogger.debug(`Creating the file validation middleware, ${required ? 'the file is required' : 'the file is optionnal'}`);
+    return function (req, res, next) {
+        validationLogger.debug('File validation middleware execution');
+
+        // Checking file filter
+        if (req.rejectedFile.length > 0) {
+            validationLogger.debug('Error while validating files, throwing an error');
+
+            const uploadedFileFormats = [];
+            for (const file of req.rejectedFile) {
+                if (!uploadedFileFormats.includes(file.mimetype)) {
+                    uploadedFileFormats.push(file.mimetype);
+                }
+            }
+
+            const fileValidationError = new UnsupportedMediaTypeError({
+                message: 'The uploaded file has the wrong type.',
+                title: 'We can\'t accept the uploaded file.',
+                description: 'We don\'t accept this type of file. Please, refer to the details to see which file type are allowed, and try again with an other file format.',
+                details: {
+                    uploadedFileFormats,
+                    allowedFileFormats: config.get('payload.files.allowedFileTypes')
+                }
+            });
+
+            return next(fileValidationError);
+        }
+
+        // Checking if files are required
+        if (
+            required &&
+            !req.file &&
+            (!req.files ||
+                (Array.isArray(req.files) && req.files.length === 0) ||
+                (typeof req.files === 'object' && Object.keys(req.files).length === 0))
+        ) {
+            validationLogger.debug('No files sent, throwing an error');
+            const fileValidationError = new UserInputValidationError({
+                message: 'Missing required file',
+                title: 'The file is mandatory for this request',
+                description: 'We can\'t find the file. This request needs a file to be processed. Please, try again with a file.'
+            });
+            return next(fileValidationError);
+        }
+
+        validationLogger.debug('No file validation error');
+        return next();
+    };
+}
+
+
+
 /**
  * Returns all the required middlewares to handle the validation.
  * @param {Object} schema - Validation schema to use.
+ * @param {boolean} [files=false] - Wether this request accepts files or not, thus if files have to be validated.
+ * @param {boolean} [requiredFiles=false] - If the request accepts files, wether those files are required of not.
  * @returns {Array} Returns an array containing the middleware in the order of execution.
  */
-export default function validationMiddlewares(schema) {
-    return [checkSchema(schema), validationHandlingMiddleware];
+export default function validationMiddlewares(schema, files = false, requiredFiles = false) {
+    let middlewareList = [checkSchema(schema), validationHandlingMiddleware];
+
+    if (files) {
+        middlewareList = middlewareList.concat(fileValidation(requiredFiles));
+    }
+
+    return middlewareList;
 }
 
 export { loginBodySchema, createUserBodySchema, getUserSchema, getAllUsersSchema, updateUserSchema, updateUserRoleSchema, deleteUserSchema, validationHandlingMiddleware, validationErrorFormatter };
