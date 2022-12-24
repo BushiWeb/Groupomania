@@ -6,7 +6,6 @@ const usersServicesLogger = createLoggerNamespace('groupomania:api:services:user
 
 /**
  * Creates a new user.
- * Starts by encrypting the password.
  * @param {Object} userInfos - Object containing the user informations.
  * @param {string} userInfos.email - User's email.
  * @param {string} userInfos.password - User's password. The password should be hashed using a secure cryptographic function.
