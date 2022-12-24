@@ -117,6 +117,29 @@ const CONFIG_SCHEMA = {
             doc: 'Payload\'s max size in number of bytes',
             format : 'int',
             default: 10240
+        },
+        files: {
+            maxFileSize: {
+                doc: 'Files max allowed size in bytes',
+                format: 'int',
+                default: 5242880
+            },
+            allowedFileTypes: {
+                doc: 'All files types that are accepted',
+                format: Object,
+                default: {
+                    'image/jpg': 'jpg',
+                    'image/jpeg': 'jpg',
+                    'image/png': 'png',
+                    'image/webp': 'webp',
+                    'image/avif': 'avif'
+                }
+            },
+            saveFolder: {
+                doc: 'Path to the folder containing the images. Relative to the root of the project',
+                format: String,
+                default: 'images'
+            }
         }
     },
     password: {

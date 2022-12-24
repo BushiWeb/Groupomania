@@ -8,6 +8,15 @@ allowedHeaders = ["Origin", "X-Requested-With", "Accept", "Content-Type", "Autho
 
 # [payload]
 # maxSize = 10240
+# [payload.files]
+# maxFileSize = 5242880
+# saveFolder = "images"
+# [payload.files.allowedFileTypes]
+# 'image/jpg' = 'jpg',
+# 'image/jpeg' = 'jpg',
+# 'image/png' = 'png',
+# 'image/webp' = 'webp',
+# 'image/avif' = 'avif'
 
 # [password]
 # minLength = 8
