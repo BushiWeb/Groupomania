@@ -70,10 +70,15 @@ export async function getAllUsers({ roleInfo = false, role, page, limit } = { ro
     // Adding role informations
     if (roleInfo) {
         usersServicesLogger.debug('Adding role informations to the results');
-        searchOptions.include = {
+        const newInclude = {
             association: 'role',
             attributes: ['roleId', 'name']
         };
+        if (searchOptions.include) {
+            searchOptions.include = [searchOptions.include, newInclude];
+        } else {
+            searchOptions.include = newInclude;
+        }
         searchOptions.attributes.pop();
     }
 

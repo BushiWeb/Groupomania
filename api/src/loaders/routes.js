@@ -4,6 +4,8 @@ import getRoutesRegexp from '../utils/get-routes.js';
 import AuthRouter from '../routes/auth-routes.js';
 import RoleRouter from '../routes/role-routes.js';
 import PostRouter from '../routes/post-routes.js';
+import express from 'express';
+import config from '../config/config.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:api:loader:routes');
 
@@ -13,6 +15,9 @@ const loaderLogger = createLoggerNamespace('groupomania:api:loader:routes');
  */
 export default function routeLoader (app) {
     loaderLogger.verbose('Loading users routes and middlewares');
+
+    app.use('/images', express.static(config.get('payload.files.saveFolder'), { fallthrough: false }));
+    loaderLogger.debug('Images route added');
 
     app.use('/api/v1/users', UserRouter);
     loaderLogger.debug('User router added');

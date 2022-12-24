@@ -43,8 +43,8 @@ export default function initModels(sequelize) {
     dbLogger.debug('One to many relation created between user and post');
 
     // user N->N post (for likes)
-    post.belongsToMany(user, { as: 'user_id_users', through: like, foreignKey: 'post_id', otherKey: 'user_id' });
-    user.belongsToMany(post, { as: 'post_id_posts', through: like, foreignKey: 'user_id', otherKey: 'post_id' });
+    post.belongsToMany(user, { as: 'users_liked', through: like, foreignKey: 'post_id', otherKey: 'user_id' });
+    user.belongsToMany(post, { as: 'posts_liked', through: like, foreignKey: 'user_id', otherKey: 'post_id' });
     like.belongsTo(post, { as: 'post', foreignKey: 'post_id'});
     post.hasMany(like, { as: 'likes', foreignKey: 'post_id'});
     like.belongsTo(user, { as: 'user', foreignKey: 'user_id'});

@@ -36,7 +36,7 @@ export async function getAllPosts({ userInfo = false, likeInfo = false, userId, 
     postsServicesLogger.verbose('Get all posts service starting');
 
     let searchOptions = {
-        attributes: ['postid', 'title', 'message', 'imageUrl', 'creationDate', 'lastUpdateDate', 'writerId'],
+        attributes: ['postId', 'title', 'message', 'imageUrl', 'creationDate', 'lastUpdateDate', 'writerId'],
         order: [['creationDate', 'DESC']]
     };
 
@@ -61,11 +61,22 @@ export async function getAllPosts({ userInfo = false, likeInfo = false, userId, 
     // Adding likes informations
     if (likeInfo) {
         postsServicesLogger.debug('Adding like informations to the results');
-        searchOptions.include = {
-            association: 'writer',
-            attributes: [['userId', 'writerId'], 'email', 'roleId']
+        const newInclude = {
+            association: 'users_liked',
+            attributes: [],
+            throught: {
+                attributes: []
+            }
         };
-        searchOptions.attributes.pop();
+
+        if (searchOptions.include) {
+            searchOptions.include = [searchOptions.include, newInclude];
+        } else {
+            searchOptions.include = newInclude;
+        }
+
+        searchOptions.attributes.push([db.OrmClass.fn('count', db.OrmClass.col('$users_liked.userId')), 'likes']);
+        searchOptions.attributes.push([db.OrmClass.fn('array_agg', db.OrmClass.col('$users_liked.userId')), 'usersLiked']);
     }
 
     // Adding pagination informations
@@ -79,8 +90,8 @@ export async function getAllPosts({ userInfo = false, likeInfo = false, userId, 
         searchOptions.offset = (page - 1) * limit;
     }
 
-    const users = await db.models.User.findAll(searchOptions);
+    const posts = await db.models.Post.findAll(searchOptions);
 
-    postsServicesLogger.debug('Users fetched');
-    return users;
+    postsServicesLogger.debug('Posts fetched');
+    return posts;
 }

@@ -1,7 +1,7 @@
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
 import MockModel, * as mockModelMethods from '../mocks/mock-models.js';
-import { createPost } from '../../src/services/posts.js';
+import { createPost, getAllPosts } from '../../src/services/posts.js';
 
 jest.spyOn(db, 'models', 'get').mockImplementation(
     () => new Proxy(
@@ -35,6 +35,261 @@ describe('Post services test suite', () => {
             expect(newUser).toHaveProperty('title', postInfos.title);
             expect(newUser).toHaveProperty('message', postInfos.message);
             expect(newUser).toHaveProperty('imageUrl', postInfos.imageUrl);
+        });
+    });
+
+
+
+    describe('Get all users service test suite', () => {
+        const otherPost = {
+            postId: 133,
+            title: 'Post title 2',
+            message: 'Post message',
+            imageUrl: null,
+            creationDate: '12-12-2022',
+            lastUpdateDate: null,
+            writerId: 8
+        };
+
+        it('should get all posts\' informations', async () => {
+            const returnedPostsInfos = [
+                postInfos,
+                otherPost
+            ];
+
+            mockModelMethods.mockFindAll.mockResolvedValueOnce(returnedPostsInfos.map((value) => new MockModel(value)));
+            const posts = await getAllPosts();
+
+            expect(Array.isArray(posts)).toBe(true);
+            expect(posts).toHaveLength(2);
+
+            for(const index in posts) {
+                expect(posts[index]).toHaveProperty('postId', returnedPostsInfos[index].postId);
+                expect(posts[index]).toHaveProperty('title', returnedPostsInfos[index].title);
+                expect(posts[index]).toHaveProperty('message', returnedPostsInfos[index].message);
+                expect(posts[index]).toHaveProperty('imageUrl', returnedPostsInfos[index].imageUrl);
+                expect(posts[index]).toHaveProperty('creationDate', returnedPostsInfos[index].creationDate);
+                expect(posts[index]).toHaveProperty('lastUpdateDate', returnedPostsInfos[index].lastUpdateDate);
+                expect(posts[index]).toHaveProperty('writerId', returnedPostsInfos[index].writerId);
+            }
+
+            expect(mockModelMethods.mockFindAll).toHaveBeenCalled();
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('attributes');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('postId');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('title');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('message');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('imageUrl');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('creationDate');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('lastUpdateDate');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('writerId');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('order');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].order).toContainEqual(['creationDate', 'DESC']);
+        });
+
+        it('should get all users\' informations if they match the userId', async () => {
+            const returnedPostsInfos = [
+                postInfos
+            ];
+
+            mockModelMethods.mockFindAll.mockResolvedValueOnce(returnedPostsInfos.map((value) => new MockModel(value)));
+            const posts = await getAllPosts({ userId: postInfos.writerId });
+
+            expect(Array.isArray(posts)).toBe(true);
+            expect(posts).toHaveLength(1);
+
+            for(const index in posts) {
+                expect(posts[index]).toHaveProperty('postId', returnedPostsInfos[index].postId);
+                expect(posts[index]).toHaveProperty('title', returnedPostsInfos[index].title);
+                expect(posts[index]).toHaveProperty('message', returnedPostsInfos[index].message);
+                expect(posts[index]).toHaveProperty('imageUrl', returnedPostsInfos[index].imageUrl);
+                expect(posts[index]).toHaveProperty('creationDate', returnedPostsInfos[index].creationDate);
+                expect(posts[index]).toHaveProperty('lastUpdateDate', returnedPostsInfos[index].lastUpdateDate);
+                expect(posts[index]).toHaveProperty('writerId', returnedPostsInfos[index].writerId);
+            }
+
+            expect(mockModelMethods.mockFindAll).toHaveBeenCalled();
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('attributes');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('postId');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('title');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('message');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('imageUrl');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('creationDate');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('lastUpdateDate');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('writerId');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('order');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].order).toContainEqual(['creationDate', 'DESC']);
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('where');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].where).toHaveProperty('writerId', postInfos.writerId);
+        });
+
+        it('should get all posts\' informations paginated', async () => {
+            const returnedPostsInfos = [
+                postInfos,
+                otherPost
+            ];
+
+            const limit = 1;
+            const page = 2;
+
+            mockModelMethods.mockFindAll.mockResolvedValueOnce([new MockModel(returnedPostsInfos[1])]);
+            const posts = await getAllPosts({ limit, page });
+
+            expect(Array.isArray(posts)).toBe(true);
+            expect(posts).toHaveLength(1);
+
+            expect(posts[0]).toHaveProperty('postId', returnedPostsInfos[1].postId);
+            expect(posts[0]).toHaveProperty('title', returnedPostsInfos[1].title);
+            expect(posts[0]).toHaveProperty('message', returnedPostsInfos[1].message);
+            expect(posts[0]).toHaveProperty('imageUrl', returnedPostsInfos[1].imageUrl);
+            expect(posts[0]).toHaveProperty('creationDate', returnedPostsInfos[1].creationDate);
+            expect(posts[0]).toHaveProperty('lastUpdateDate', returnedPostsInfos[1].lastUpdateDate);
+            expect(posts[0]).toHaveProperty('writerId', returnedPostsInfos[1].writerId);
+
+            expect(mockModelMethods.mockFindAll).toHaveBeenCalled();
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('attributes');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('postId');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('title');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('message');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('imageUrl');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('creationDate');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('lastUpdateDate');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('writerId');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('order');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].order).toContainEqual(['creationDate', 'DESC']);
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('offset', (page - 1) * limit);
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('limit', limit);
+
+        });
+
+        it('should get the post informations with more informations about the user', async () => {
+            const returnedPostsInfos = [
+                {
+                    postId: postInfos.postId,
+                    title: postInfos.title,
+                    message: postInfos.message,
+                    imageUrl: postInfos.imageUrl,
+                    creationDate: postInfos.creationDate,
+                    lastUpdateDate: postInfos.lastUpdateDate,
+                    writer: {
+                        writerId: postInfos.writerId,
+                        roleId: 2,
+                        email: 'john.doe@gmail.com'
+                    }
+                },
+                {
+                    postId: otherPost.postId,
+                    title: otherPost.title,
+                    message: otherPost.message,
+                    imageUrl: otherPost.imageUrl,
+                    creationDate: otherPost.creationDate,
+                    lastUpdateDate: otherPost.lastUpdateDate,
+                    writer: {
+                        writerId: otherPost.writerId,
+                        roleId: 1,
+                        email: 'jane.doe@gmail.com'
+                    }
+                }
+            ];
+
+            mockModelMethods.mockFindAll.mockResolvedValueOnce(returnedPostsInfos.map((value) => new MockModel(value)));
+            const posts = await getAllPosts({ userInfo: true });
+
+            expect(Array.isArray(posts)).toBe(true);
+            expect(posts).toHaveLength(2);
+
+            for(const index in posts) {
+                expect(posts[index]).toHaveProperty('postId', returnedPostsInfos[index].postId);
+                expect(posts[index]).toHaveProperty('title', returnedPostsInfos[index].title);
+                expect(posts[index]).toHaveProperty('message', returnedPostsInfos[index].message);
+                expect(posts[index]).toHaveProperty('imageUrl', returnedPostsInfos[index].imageUrl);
+                expect(posts[index]).toHaveProperty('creationDate', returnedPostsInfos[index].creationDate);
+                expect(posts[index]).toHaveProperty('lastUpdateDate', returnedPostsInfos[index].lastUpdateDate);
+                expect(posts[index]).not.toHaveProperty('writerId');
+                expect(posts[index]).toHaveProperty('writer');
+                expect(posts[index].writer).toHaveProperty('writerId', returnedPostsInfos[index].writer.writerId);
+                expect(posts[index].writer).toHaveProperty('roleId', returnedPostsInfos[index].writer.roleId);
+                expect(posts[index].writer).toHaveProperty('email', returnedPostsInfos[index].writer.email);
+            }
+
+            expect(mockModelMethods.mockFindAll).toHaveBeenCalled();
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('attributes');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('postId');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('title');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('message');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('imageUrl');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('creationDate');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('lastUpdateDate');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).not.toContain('writerId');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('order');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].order).toContainEqual(['creationDate', 'DESC']);
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('include');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include).toHaveProperty('association', 'writer');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include).toHaveProperty('attributes');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include.attributes).toContain('roleId');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include.attributes).toContain('email');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include.attributes).toContainEqual(['userId', 'writerId']);
+        });
+
+        it('should get the post informations with more informations about the likes', async () => {
+            const returnedPostsInfos = [
+                {
+                    postId: postInfos.postId,
+                    title: postInfos.title,
+                    message: postInfos.message,
+                    imageUrl: postInfos.imageUrl,
+                    creationDate: postInfos.creationDate,
+                    lastUpdateDate: postInfos.lastUpdateDate,
+                    writerId: postInfos.writerId,
+                    likes: 2,
+                    usersLiked: [52, 111]
+                },
+                {
+                    postId: otherPost.postId,
+                    title: otherPost.title,
+                    message: otherPost.message,
+                    imageUrl: otherPost.imageUrl,
+                    creationDate: otherPost.creationDate,
+                    lastUpdateDate: otherPost.lastUpdateDate,
+                    writerId: otherPost.writerId,
+                    likes: 1,
+                    usersLiked: [52]
+                }
+            ];
+
+            mockModelMethods.mockFindAll.mockResolvedValueOnce(returnedPostsInfos.map((value) => new MockModel(value)));
+            const posts = await getAllPosts({ likeInfo: true });
+
+            expect(Array.isArray(posts)).toBe(true);
+            expect(posts).toHaveLength(2);
+
+            for(const index in posts) {
+                expect(posts[index]).toHaveProperty('postId', returnedPostsInfos[index].postId);
+                expect(posts[index]).toHaveProperty('title', returnedPostsInfos[index].title);
+                expect(posts[index]).toHaveProperty('message', returnedPostsInfos[index].message);
+                expect(posts[index]).toHaveProperty('imageUrl', returnedPostsInfos[index].imageUrl);
+                expect(posts[index]).toHaveProperty('creationDate', returnedPostsInfos[index].creationDate);
+                expect(posts[index]).toHaveProperty('lastUpdateDate', returnedPostsInfos[index].lastUpdateDate);
+                expect(posts[index]).toHaveProperty('writerId', returnedPostsInfos[index].writerId);
+                expect(posts[index]).toHaveProperty('likes', returnedPostsInfos[index].likes);
+                expect(posts[index]).toHaveProperty('usersLiked', returnedPostsInfos[index].usersLiked);
+            }
+
+            expect(mockModelMethods.mockFindAll).toHaveBeenCalled();
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('attributes');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('postId');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('title');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('message');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('imageUrl');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('creationDate');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('lastUpdateDate');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('writerId');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('order');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].order).toContainEqual(['creationDate', 'DESC']);
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('include');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include).toHaveProperty('association', 'users_liked');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include).toHaveProperty('attributes', []);
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include).toHaveProperty('throught');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include.throught).toHaveProperty('attributes', []);
         });
     });
 });
