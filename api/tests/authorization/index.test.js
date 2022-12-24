@@ -1,7 +1,7 @@
 import accessControlRules from '../../src/authorization/index.js';
 import { Condition } from '@ucast/core';
 import db from '../../src/models/index.js';
-import MockModel, * as mockModelMethods from '../mocks/mock-models.test.js';
+import MockModel, * as mockModelMethods from '../mocks/mock-models.js';
 import { jest } from '@jest/globals';
 import NotFoundError from '../../src/errors/NotFoundError';
 import InternalServerError from '../../src/errors/InternalServerError';

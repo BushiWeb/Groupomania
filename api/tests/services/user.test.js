@@ -1,7 +1,7 @@
 import { createUser, getUserByEmail, getUserById, getAllUsers, updateUser, deleteUser } from '../../src/services/users.js';
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
-import MockModel, * as mockModelMethods from '../mocks/mock-models.test.js';
+import MockModel, * as mockModelMethods from '../mocks/mock-models.js';
 import bcrypt from 'bcrypt';
 import { NotFoundError } from '../../src/errors/index.js';
 

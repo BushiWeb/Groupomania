@@ -1,7 +1,7 @@
 import { getAllRoles } from '../../src/services/roles.js';
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
-import MockModel, * as mockModelMethods from '../mocks/mock-models.test.js';
+import MockModel, * as mockModelMethods from '../mocks/mock-models.js';
 
 jest.spyOn(db, 'models', 'get').mockImplementation(
     () => new Proxy(

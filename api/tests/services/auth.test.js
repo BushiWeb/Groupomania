@@ -1,7 +1,7 @@
 import { createRefreshToken, createAccessToken, validatePassword, validateRefreshToken, invalidateRefreshToken, hashPassword } from '../../src/services/auth.js';
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
-import MockModel, * as mockModelMethods from '../mocks/mock-models.test.js';
+import MockModel, * as mockModelMethods from '../mocks/mock-models.js';
 import bcrypt from 'bcrypt';
 import { InternalServerError, UnauthorizedError } from '../../src/errors/index.js';
 import jwt from 'jsonwebtoken';
