@@ -12,8 +12,54 @@ import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 import { MulterError } from 'multer';
 import config from '../config/config.js';
+import { unlink } from 'node:fs';
+import { join } from 'node:path';
 
 const errorLogger = createLoggerNamespace('groupomania:api:error');
+
+
+/**
+ * Deletes saved files if an error occurs before the request is completed.
+ * @param {HttpError} err - Error thrown by a middleware.
+ * @param {Express.Request} req - Express request object.
+ * @param {Express.Response} res - Express response object.
+ * @param next - Next middleware to execute.
+ */
+export async function deleteFilesOnError(err, req, res, next) {
+    errorLogger.verbose('File destroyer execution execution');
+
+    // Get the list of saved files
+    let files = [];
+    if (req.file) {
+        files.push(req.file);
+    }
+    if (req.files) {
+        if (Array.isArray(req.files)) {
+            files = files.concat(req.files);
+        } else {
+            for (const fieldName in req.files) {
+                files = files.concat(fieldName);
+            }
+        }
+    }
+    errorLogger.debug(`There are ${files.length} files to delete`);
+
+    // Deleting the files
+    for (const file of files) {
+        const imagePath = join('./images', file.filename);
+        unlink(imagePath, (error) => {
+            if (error) {
+                errorLogger.warn(error);
+            } else {
+                errorLogger.debug(`The file ${file.filename} has been deleted`);
+            }
+        });
+    }
+
+    return next(err);
+}
+
+
 
 /**
  * Handles express' http-error normalization.
