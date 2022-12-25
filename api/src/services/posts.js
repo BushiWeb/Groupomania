@@ -18,8 +18,7 @@ function getRequestOptionObject({ userInfo = false, likeInfo = false, userId, pa
     postsServicesLogger.verbose('Get request options object');
 
     let searchOptions = {
-        attributes: ['postId', 'title', 'message', 'imageUrl', 'creationDate', 'lastUpdateDate', 'writerId'],
-        order: [['creationDate', 'DESC']]
+        attributes: ['postId', 'title', 'message', 'imageUrl', 'creationDate', 'lastUpdateDate', 'writerId']
     };
 
     // Creating user filter
@@ -130,13 +129,13 @@ export async function createPost(postInfos) {
  * @param {string|number} [options.userId] - Filtering posts by userId.
  * @param {number} [option.page] - Which page to get, usefull for pagination. Requires the limit parameter.
  * @param {number} [option.limit] - Number of entry to return, usefull for pagination.
- * @returns {User} Returns the posts.
+ * @returns {Post} Returns the posts.
  */
 export async function getAllPosts(options = {}) {
     postsServicesLogger.verbose('Get all posts service starting');
 
     const searchOptions = getRequestOptionObject(options);
-    searchOptions.order = [['creationDate', 'DESC']];
+    searchOptions.order = [['creationDate', 'DESC'], ['postId', 'DESC']];
 
     const posts = await db.models.Post.findAll(searchOptions);
 
@@ -152,7 +151,7 @@ export async function getAllPosts(options = {}) {
  * @param {Object} options - Search options.
  * @param {boolean} [options.userInfo] - Whether to add the author informations to the post or just the writer id.
  * @param {boolean} [options.likeInfo] - Whether to add the likes informations to the user or not.
- * @returns {User} Returns the post.
+ * @returns {Post} Returns the post.
  * @throws {NotFoundError} Throws an error if the post doesn't exist.
  */
 export async function getPost(postId, options = {}) {
@@ -173,4 +172,33 @@ export async function getPost(postId, options = {}) {
 
     postsServicesLogger.debug('Post fetched');
     return post;
+}
+
+
+
+/**
+ * Updates an existing post.
+ * @param {number} postId - Id of the user to update.
+ * @param {Object} postInfos - Object containing the new user informations.
+ * @param {string} [userInfos.title] - New post's title.
+ * @param {string} [userInfos.message] - New post's message.
+ * @param {string} [userInfos.imageUrl] - New post's image, null to just delete the image.
+ * @returns {Post} Returns the updated post.
+ * @throws {NotFoundError} Throws a not found error if the post doesn't exist.
+ */
+export async function updatePost(postId, postInfos) {
+    postsServicesLogger.verbose('Update Post service starting');
+
+    const [resultNumber, results] = await db.models.Post.update(postInfos, { where: { postId }, returning: true});
+
+    if (resultNumber === 0) {
+        postsServicesLogger.debug('The post doesn\'t exist. Throwing an error');
+        throw new NotFoundError({
+            message: `No post has the id ${postId}.`,
+            title: 'The post can\'t be found.',
+            description: 'We can\'t find the post corresponding to the id you gave. Please, verify your input and try again.'
+        });
+    }
+
+    return results[0];
 }

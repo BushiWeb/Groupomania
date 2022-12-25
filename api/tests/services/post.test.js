@@ -1,7 +1,7 @@
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
 import MockModel, * as mockModelMethods from '../mocks/mock-models.js';
-import { createPost, getAllPosts, getPost } from '../../src/services/posts.js';
+import { createPost, getAllPosts, getPost, updatePost } from '../../src/services/posts.js';
 import { NotFoundError } from '../../src/errors/index.js';
 
 jest.spyOn(db, 'models', 'get').mockImplementation(
@@ -415,6 +415,24 @@ describe('Post services test suite', () => {
             expect.assertions(1);
             mockModelMethods.mockFindByPk.mockResolvedValueOnce(null);
             await expect(getPost(113)).rejects.toBeInstanceOf(NotFoundError);
+        });
+    });
+
+
+
+    describe('Update post service test suite', () => {
+        it('should return the updated service', async () => {
+            mockModelMethods.mockUpdate.mockResolvedValueOnce([1, [{...postInfos}]]);
+            const post = await updatePost(113, { title: postInfos.title });
+
+            expect(post).toEqual(postInfos);
+        });
+
+
+        it('should throw a NotFoundError if the post doesn\'t exist', async () => {
+            expect.assertions(1);
+            mockModelMethods.mockUpdate.mockResolvedValueOnce([0]);
+            await expect(updatePost(113, { title: postInfos.title })).rejects.toBeInstanceOf(NotFoundError);
         });
     });
 });
