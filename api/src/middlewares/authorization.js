@@ -53,7 +53,7 @@ function getDataFromOrigin(req, res, { origin, field } = {}) {
  *
  * @returns {{User: Proxy, Subject: Proxy}} Returns the object containing the User and Subject proxies, created with the found base data.
  */
-function getDataProxies(req, res, subject, {User = {}, Subject = {}} = {User: {}, Subject: {}}) {
+function getDataProxies(req, res, subject, {User = {}, Subject = {}} = {}) {
     const userData = getDataFromOrigin(req, res, User);
     const subjectData = getDataFromOrigin(req,res, Subject);
 

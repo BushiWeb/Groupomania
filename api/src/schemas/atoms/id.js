@@ -28,7 +28,7 @@ export default function generateIdSchema(
 
         ...(checkFormat && {
             isInt: {
-                errorMessage: 'The user id must be an integer.',
+                errorMessage: 'The id must be an integer.',
                 bail: true
             }
         }),

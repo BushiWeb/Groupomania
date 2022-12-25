@@ -112,7 +112,7 @@ const accessControlRules = {
                 if (targetEntry.length > 1) {
                     accessControlLogger.debug('Multiple entries returned, throwing an error');
                     throw new NotFoundError({
-                        message: 'There are multuple database entry corresponding to the proxy base objectthat have been found.',
+                        message: 'There are multiple database entry corresponding to the proxy base objectthat have been found.',
                         title: 'The ressource can\'t be found.',
                         description: 'We can\'t find the requested ressource. Please, make sure the informations you gave us are correct and try again. If the problem persist, you may contact us.',
                         logDetails: {
@@ -122,7 +122,7 @@ const accessControlRules = {
                     });
                 }
 
-                Object.assign(base, targetEntry[0]);
+                Object.assign(base, targetEntry[0].get());
                 return base[prop];
             }
         };

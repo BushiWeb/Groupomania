@@ -421,18 +421,13 @@ describe('Post services test suite', () => {
 
 
     describe('Update post service test suite', () => {
-        it('should return the updated service', async () => {
-            mockModelMethods.mockUpdate.mockResolvedValueOnce([1, [{...postInfos}]]);
-            const post = await updatePost(113, { title: postInfos.title });
+        it('should return the updated post', async () => {
+            const post = new MockModel(postInfos);
+            const newTitle = 'coucou';
+            const updatedPost = await updatePost(post, { title: newTitle });
 
-            expect(post).toEqual(postInfos);
-        });
-
-
-        it('should throw a NotFoundError if the post doesn\'t exist', async () => {
-            expect.assertions(1);
-            mockModelMethods.mockUpdate.mockResolvedValueOnce([0]);
-            await expect(updatePost(113, { title: postInfos.title })).rejects.toBeInstanceOf(NotFoundError);
+            expect(updatedPost.get()).toEqual(post.get());
+            expect(updatedPost.get('title')).toBe(newTitle);
         });
     });
 });

@@ -120,6 +120,12 @@ class MockModel {
         return this.dataValues;
     }
 
+    set (values) {
+        for (const value in values) {
+            this.dataValues[value] = values[value];
+        }
+    }
+
     save = mockSave;
 
     validate = mockValidate;

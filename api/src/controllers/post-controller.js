@@ -1,6 +1,6 @@
 import { createLoggerNamespace } from '../logger/index.js';
-import { createPost, getAllPosts, getPost } from '../services/posts.js';
-import { createImageUrl } from '../services/images.js';
+import { createPost, getAllPosts, getPost, updatePost } from '../services/posts.js';
+import { createImageUrl, deleteImage } from '../services/images.js';
 
 const postControllerLogger = createLoggerNamespace('groupomania:api:controllers:post');
 
@@ -86,5 +86,52 @@ export async function getPostController(req, res, next) {
         postControllerLogger.verbose('Response sent');
     } catch (error) {
         return next(error);
+    }
+}
+
+
+
+/**
+ * Post update controller.
+ * Generates the new image Url
+ * Calls the right service.
+ * Sends a response with status 200 and the new post data to the client if the request is successful, or calls the error handler middleware if an error occurs.
+ * @param {Express.Request} req - Express request object.
+ * @param {Express.Response} res - Express response object.
+ * @param next - Next middleware to execute.
+ */
+export async function updatePostController(req, res, next) {
+    postControllerLogger.verbose('Update post middleware starting');
+    let previousImageUrl;
+    try {
+        // Building the data
+        const newData = {
+            ...(req.body.title && { title: req.body.title }),
+            ...(req.body.message && { message: req.body.message }),
+            ...(
+                req.file ?
+                    { imageUrl: createImageUrl(req.file.filename, req.get('host'), req.protocol) } :
+                    req.body.deleteImage && { imageUrl: null}
+            )
+        };
+
+        // Getting the current data to get the image URL. Mark the image as to be deleted if the image url is updated
+        let post = await getPost(req.params.postId);
+        if (newData.imageUrl !== undefined) {
+            previousImageUrl = post.imageUrl;
+        }
+
+        // Update the post
+        post = await updatePost(post, newData);
+
+        res.status(200).json(post);
+        postControllerLogger.verbose('Response sent');
+    } catch (error) {
+        return next(error);
+    }
+
+    // Delete the image
+    if (previousImageUrl) {
+        deleteImage(previousImageUrl);
     }
 }

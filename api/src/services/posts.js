@@ -178,27 +178,18 @@ export async function getPost(postId, options = {}) {
 
 /**
  * Updates an existing post.
- * @param {number} postId - Id of the user to update.
+ * @param {Post} post - Instance de modèle de post.
  * @param {Object} postInfos - Object containing the new user informations.
  * @param {string} [userInfos.title] - New post's title.
  * @param {string} [userInfos.message] - New post's message.
  * @param {string} [userInfos.imageUrl] - New post's image, null to just delete the image.
  * @returns {Post} Returns the updated post.
- * @throws {NotFoundError} Throws a not found error if the post doesn't exist.
  */
-export async function updatePost(postId, postInfos) {
+export async function updatePost(post, postInfos) {
     postsServicesLogger.verbose('Update Post service starting');
 
-    const [resultNumber, results] = await db.models.Post.update(postInfos, { where: { postId }, returning: true});
+    post.set(postInfos);
+    await post.save();
 
-    if (resultNumber === 0) {
-        postsServicesLogger.debug('The post doesn\'t exist. Throwing an error');
-        throw new NotFoundError({
-            message: `No post has the id ${postId}.`,
-            title: 'The post can\'t be found.',
-            description: 'We can\'t find the post corresponding to the id you gave. Please, verify your input and try again.'
-        });
-    }
-
-    return results[0];
+    return post;
 }

@@ -42,4 +42,17 @@ export default [
             ]
         }
     },
+
+    // To update a post, the client must own the post or be an admin
+    {
+        actions: 'update',
+        subject: 'Post',
+        fields: ['title', 'message', 'imageUrl'],
+        conditions: {
+            $or: [
+                { 'User.roleId': config.get('adminUser.roleId') },
+                { 'User.userId': '{{Subject.writerId}}' }
+            ]
+        }
+    },
 ];

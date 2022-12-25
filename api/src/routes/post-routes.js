@@ -1,11 +1,23 @@
 import express from 'express';
 import { createLoggerNamespace } from '../logger/index.js';
 import config from '../config/config.js';
-import validationMiddlewares, { createPostSchema, getAllPostsSchema, getPostSchema } from '../middlewares/user-input-validation.js';
+import validationMiddlewares,
+{
+    createPostSchema,
+    getAllPostsSchema,
+    getPostSchema,
+    updatePostSchema
+} from '../middlewares/user-input-validation.js';
 import createBodyParser from '../middlewares/body-parsing.js';
 import authenticate from '../middlewares/authentication.js';
-import { createPostController, getAllPostsController, getPostController } from '../controllers/post-controller.js';
+import {
+    createPostController,
+    getAllPostsController,
+    getPostController,
+    updatePostController
+} from '../controllers/post-controller.js';
 import multer, { dataFormatter } from '../middlewares/multer.js';
+import authorize from '../middlewares/authorization.js';
 
 const postRoutesLogger = createLoggerNamespace('groupomania:api:routes:post');
 
@@ -69,5 +81,37 @@ router.get(
     getPostController
 );
 postRoutesLogger.debug('GET /:postId - get post route added');
+
+/**
+ * Post update route.
+ * Checks that there is a JSON or Form-data body.
+ * Validates and sanitizes request parameters and body.
+ * Authenticate the client with the access token.
+ * Checks if the user has the right to execute this action.
+ * Call the corresponding controller.
+ */
+router.put(
+    '/:postId',
+    createBodyParser({
+        'application/json': express.json(expressJsonOptions),
+        'multipart/form-data': {
+            parser: multer,
+            dataFormatter: dataFormatter('post', { required: false })
+        }
+    }, false),
+    validationMiddlewares(updatePostSchema, true),
+    authenticate(),
+    authorize('update', 'Post', {
+        User: {
+            origin: 'res',
+            field: 'auth'
+        },
+        Subject: {
+            origin: 'params'
+        }
+    }, ['title', 'message', 'imageUrl']),
+    updatePostController
+);
+postRoutesLogger.debug('PUT /:postId - update post route added');
 
 export default router;
