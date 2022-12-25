@@ -17,8 +17,7 @@ function getRequestOptionObject({ roleInfo = false, role, page, limit } = {}) {
     usersServicesLogger.debug('Get request option object');
 
     let searchOptions = {
-        attributes: ['userId', 'email', 'roleId'],
-        order: [['email', 'ASC']]
+        attributes: ['userId', 'email', 'roleId']
     };
 
     // Creating role filter
