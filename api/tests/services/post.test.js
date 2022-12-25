@@ -227,7 +227,7 @@ describe('Post services test suite', () => {
             expect(mockModelMethods.mockFindAll.mock.calls[0][0].include).toHaveProperty('attributes');
             expect(mockModelMethods.mockFindAll.mock.calls[0][0].include.attributes).toContain('roleId');
             expect(mockModelMethods.mockFindAll.mock.calls[0][0].include.attributes).toContain('email');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include.attributes).toContainEqual(['userId', 'writerId']);
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include.attributes).toContainEqual(['user_id', 'writerId']);
         });
 
         it('should get the post informations with more informations about the likes', async () => {
@@ -288,8 +288,8 @@ describe('Post services test suite', () => {
             expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('include');
             expect(mockModelMethods.mockFindAll.mock.calls[0][0].include).toHaveProperty('association', 'users_liked');
             expect(mockModelMethods.mockFindAll.mock.calls[0][0].include).toHaveProperty('attributes', []);
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include).toHaveProperty('throught');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include.throught).toHaveProperty('attributes', []);
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include).toHaveProperty('through');
+            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include.through).toHaveProperty('attributes', []);
         });
     });
 });

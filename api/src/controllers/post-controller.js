@@ -1,5 +1,5 @@
 import { createLoggerNamespace } from '../logger/index.js';
-import { createPost } from '../services/posts.js';
+import { createPost, getAllPosts } from '../services/posts.js';
 import { createImageUrl } from '../services/images.js';
 
 const postControllerLogger = createLoggerNamespace('groupomania:api:controllers:post');
@@ -25,6 +25,37 @@ export async function createPostController(req, res, next) {
         const newPost = await createPost(postInfos);
 
         res.status(201).json(newPost);
+        postControllerLogger.verbose('Response sent');
+    } catch (error) {
+        return next(error);
+    }
+}
+
+
+
+/**
+ * All posts fetching.
+ * Calls the right service.
+ * Sends a message to the client with status 200 containing the users informations, or calls the error handler middleware if an error occurs.
+ * If the client required more informations about the user or the likes, provide those informations.
+ * If the client wanted to filter or paginate the results, provide the informations to do so.
+ * @param {Express.Request} req - Express request object.
+ * @param {Express.Response} res - Express response object.
+ * @param next - Next middleware to execute.
+ */
+export async function getAllPostsController(req, res, next) {
+    postControllerLogger.verbose('Get all posts middleware starting');
+    try {
+        const options = {
+            ...(req.query.userInfo && { userInfo: req.query.userInfo }),
+            ...(req.query.likeInfo && { likeInfo: req.query.likeInfo }),
+            ...(req.query.userId && { userId: req.query.userId }),
+            ...(req.query.limit && { limit: req.query.limit }),
+            ...(req.query.page && { page: req.query.page })
+        };
+        const posts = await getAllPosts(options);
+
+        res.status(200).json(posts);
         postControllerLogger.verbose('Response sent');
     } catch (error) {
         return next(error);

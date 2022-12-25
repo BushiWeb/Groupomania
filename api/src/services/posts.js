@@ -53,18 +53,23 @@ export async function getAllPosts({ userInfo = false, likeInfo = false, userId, 
         postsServicesLogger.debug('Adding user informations to the results');
         searchOptions.include = {
             association: 'writer',
-            attributes: [['userId', 'writerId'], 'email', 'roleId']
+            attributes: [['user_id', 'writerId'], 'email', 'roleId']
         };
         searchOptions.attributes.pop();
     }
 
-    // Adding likes informations
+    /* Adding likes informations:
+        Joining the post table with the user table using the like table.
+        Use the count function to count the number of user_id, giving the number of likes. Cast the result to an integer.
+        Use the array_agg to get the list of all users that liked the post. To avoid getting an array containing the null value if no one liked the post, use nullif to get null if the array contains only a null value, and use coalesce to transform this null into an empty array.
+        Group by post_id, and users.user_id if we ask for the user informations.
+    */
     if (likeInfo) {
         postsServicesLogger.debug('Adding like informations to the results');
         const newInclude = {
             association: 'users_liked',
             attributes: [],
-            throught: {
+            through: {
                 attributes: []
             }
         };
@@ -75,8 +80,29 @@ export async function getAllPosts({ userInfo = false, likeInfo = false, userId, 
             searchOptions.include = newInclude;
         }
 
-        searchOptions.attributes.push([db.OrmClass.fn('count', db.OrmClass.col('$users_liked.userId')), 'likes']);
-        searchOptions.attributes.push([db.OrmClass.fn('array_agg', db.OrmClass.col('$users_liked.userId')), 'usersLiked']);
+        searchOptions.group = ['postId'];
+        if (userInfo) {
+            searchOptions.group.push('writer.user_id');
+        }
+
+        const { fn, col, cast } = db.OrmClass;
+        // To count the number of likes
+        searchOptions.attributes.push([
+            cast(
+                fn('count', col('users_liked.user_id')),
+                'integer'
+            ),
+            'likes'
+        ]);
+        // To aggregate the users that liked
+        searchOptions.attributes.push([
+            fn('coalesce', fn(
+                'nullif',
+                fn('array_agg', col('users_liked.user_id')),
+                cast('{NULL}', 'integer[]')
+            ), cast('{}', 'integer[]')),
+            'usersLiked'
+        ]);
     }
 
     // Adding pagination informations

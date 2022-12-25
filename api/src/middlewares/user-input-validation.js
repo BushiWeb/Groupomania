@@ -7,6 +7,7 @@ import updateUserSchema from '../schemas/update-user.js';
 import updateUserRoleSchema from '../schemas/update-user-role.js';
 import deleteUserSchema from '../schemas/delete-user.js';
 import createPostSchema from '../schemas/create-post.js';
+import getAllPostsSchema from '../schemas/get-all-posts.js';
 import { createLoggerNamespace } from '../logger/index.js';
 import { HttpError, UserInputValidationError, UnsupportedMediaTypeError } from '../errors/index.js';
 import config from '../config/config.js';
@@ -170,6 +171,7 @@ export {
     updateUserRoleSchema,
     deleteUserSchema,
     createPostSchema,
+    getAllPostsSchema,
     validationHandlingMiddleware,
     validationErrorFormatter
 };
