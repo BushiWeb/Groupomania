@@ -5,44 +5,16 @@ import { NotFoundError } from '../errors/index.js';
 const usersServicesLogger = createLoggerNamespace('groupomania:api:services:users');
 
 /**
- * Creates a new user.
- * @param {Object} userInfos - Object containing the user informations.
- * @param {string} userInfos.email - User's email.
- * @param {string} userInfos.password - User's password. The password should be hashed using a secure cryptographic function.
- * @param {string} [userInfos.roleId] - User's role, optionnal.
- * @returns {User} Returns the newly created user.
- */
-export async function createUser({email, password, roleId}) {
-    usersServicesLogger.verbose('Create User service starting');
-
-    let userInfos = {
-        email,
-        password
-    };
-
-    if (roleId) {
-        userInfos.roleId = roleId;
-    }
-
-    const newUser = await db.models.User.create(userInfos);
-    usersServicesLogger.debug('User created');
-
-    return newUser;
-}
-
-
-
-/**
- * Fetch all users, ordered by email.
+ * Create the option object for request.
  * @param {Object} options - Search options.
  * @param {boolean} [options.roleInfo=false] - Whether to add the role informations to the user or just the role id.
  * @param {string|number} [options.role] - Filtering user by role, either role name or role id.
  * @param {number} [option.page] - Which page to get, usefull for pagination. Requires the limit parameter.
  * @param {number} [option.limit] - Number of entry to return, usefull for pagination.
- * @returns {User} Returns the user.
+ * @returns {Object} Returns the option object.
  */
-export async function getAllUsers({ roleInfo = false, role, page, limit } = { roleInfo: false }) {
-    usersServicesLogger.verbose('Get all users service starting');
+function getRequestOptionObject({ roleInfo = false, role, page, limit } = {}) {
+    usersServicesLogger.debug('Get request option object');
 
     let searchOptions = {
         attributes: ['userId', 'email', 'roleId'],
@@ -93,6 +65,54 @@ export async function getAllUsers({ roleInfo = false, role, page, limit } = { ro
         searchOptions.offset = (page - 1) * limit;
     }
 
+    return searchOptions;
+}
+
+
+
+/**
+ * Creates a new user.
+ * @param {Object} userInfos - Object containing the user informations.
+ * @param {string} userInfos.email - User's email.
+ * @param {string} userInfos.password - User's password. The password should be hashed using a secure cryptographic function.
+ * @param {string} [userInfos.roleId] - User's role, optionnal.
+ * @returns {User} Returns the newly created user.
+ */
+export async function createUser({email, password, roleId}) {
+    usersServicesLogger.verbose('Create User service starting');
+
+    let userInfos = {
+        email,
+        password
+    };
+
+    if (roleId) {
+        userInfos.roleId = roleId;
+    }
+
+    const newUser = await db.models.User.create(userInfos);
+    usersServicesLogger.debug('User created');
+
+    return newUser;
+}
+
+
+
+/**
+ * Fetch all users, ordered by email.
+ * @param {Object} options - Search options.
+ * @param {boolean} [options.roleInfo] - Whether to add the role informations to the user or just the role id.
+ * @param {string|number} [options.role] - Filtering user by role, either role name or role id.
+ * @param {number} [option.page] - Which page to get, usefull for pagination. Requires the limit parameter.
+ * @param {number} [option.limit] - Number of entry to return, usefull for pagination.
+ * @returns {User} Returns the user.
+ */
+export async function getAllUsers(options = {}) {
+    usersServicesLogger.verbose('Get all users service starting');
+
+    const searchOptions = getRequestOptionObject(options);
+    searchOptions.order = [['email', 'ASC']];
+
     const users = await db.models.User.findAll(searchOptions);
 
     usersServicesLogger.debug('Users fetched');
@@ -105,25 +125,14 @@ export async function getAllUsers({ roleInfo = false, role, page, limit } = { ro
  * Fetch the user corresponding to the given id
  * @param {number} userId - User id.
  * @param {Object} options - Search options.
- * @param {boolean} [options.roleInfo=false] - Whether to add the role informations to the user or just the role id.
+ * @param {boolean} [options.roleInfo] - Whether to add the role informations to the user or just the role id.
  * @returns {User} Returns the user.
  * @throws {NotFoundError} Throws an error if the user doesn't exist.
  */
-export async function getUserById(userId, { roleInfo = false } = { roleInfo: false }) {
+export async function getUserById(userId, options = {}) {
     usersServicesLogger.verbose('Get user by id service starting');
 
-    let searchOptions = {
-        attributes: ['userId', 'email', 'roleId']
-    };
-
-    if (roleInfo) {
-        usersServicesLogger.debug('Adding role informations to the result');
-        searchOptions.include = {
-            association: 'role',
-            attributes: ['roleId', 'name']
-        };
-        searchOptions.attributes.pop();
-    }
+    let searchOptions = getRequestOptionObject(options);
 
     const user = await db.models.User.findByPk(userId, searchOptions);
 
