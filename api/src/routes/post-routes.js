@@ -1,10 +1,10 @@
 import express from 'express';
 import { createLoggerNamespace } from '../logger/index.js';
 import config from '../config/config.js';
-import validationMiddlewares, { createPostSchema, getAllPostsSchema } from '../middlewares/user-input-validation.js';
+import validationMiddlewares, { createPostSchema, getAllPostsSchema, getPostSchema } from '../middlewares/user-input-validation.js';
 import createBodyParser from '../middlewares/body-parsing.js';
 import authenticate from '../middlewares/authentication.js';
-import { createPostController, getAllPostsController } from '../controllers/post-controller.js';
+import { createPostController, getAllPostsController, getPostController } from '../controllers/post-controller.js';
 import multer, { dataFormatter } from '../middlewares/multer.js';
 
 const postRoutesLogger = createLoggerNamespace('groupomania:api:routes:post');
@@ -53,5 +53,21 @@ router.get(
     getAllPostsController
 );
 postRoutesLogger.debug('GET / - get all posts route added');
+
+/**
+ * Post fetching route.
+ * Checks that there is no body
+ * Validates and sanitizes request parameters.
+ * Authenticate the client with the access token.
+ * Call the corresponding controller.
+ */
+router.get(
+    '/:postId',
+    createBodyParser({}),
+    validationMiddlewares(getPostSchema),
+    authenticate(),
+    getPostController
+);
+postRoutesLogger.debug('GET /:postId - get post route added');
 
 export default router;
