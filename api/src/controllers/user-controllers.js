@@ -3,6 +3,8 @@ import { ConflictError, UserInputValidationError } from '../errors/index.js';
 import { createLoggerNamespace } from '../logger/index.js';
 import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from '../services/users.js';
 import { hashPassword, invalidateRefreshToken } from '../services/auth.js';
+import { getAllPosts } from '../services/posts.js';
+import { deleteImage } from '../services/images.js';
 
 const userControllerLogger = createLoggerNamespace('groupomania:api:controllers:user');
 
@@ -183,6 +185,7 @@ export async function updateUserController(req, res, next) {
 /**
  * User deletion controller.
  * Calls the right service.
+ * Deletes posts by cascade, deletes posts images too.
  * Sends a response with status 204 to the client if the request is successful, or calls the error handler middleware if an error occurs.
  * @param {Express.Request} req - Express request object.
  * @param {Express.Response} res - Express response object.
@@ -190,7 +193,11 @@ export async function updateUserController(req, res, next) {
  */
 export async function deleteUserController(req, res, next) {
     userControllerLogger.verbose('Delete user middleware starting');
+    let userPosts;
     try {
+        // Get the user's posts to have access to their images
+        userPosts = await getAllPosts({ userId: req.params.userId });
+
         await deleteUser(req.params.userId);
         userControllerLogger.debug('User deleted');
 
@@ -202,4 +209,13 @@ export async function deleteUserController(req, res, next) {
     } catch (error) {
         return next(error);
     }
+
+    // Delete the images
+    const imageUrls = [];
+    for (const post of userPosts) {
+        if (post.imageUrl !== null) {
+            imageUrls.push(post.imageUrl);
+        }
+    }
+    deleteImage(imageUrls);
 }
