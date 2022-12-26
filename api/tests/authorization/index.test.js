@@ -195,7 +195,7 @@ describe('Access control object test suite', () => {
 
         it('should fetch the property form the datase and save it if the property is not in the object', async () => {
             mockModelMethods.mockGetAttributes.mockReturnValueOnce(dbEntry);
-            mockModelMethods.mockFindAll.mockResolvedValueOnce([dbEntry]);
+            mockModelMethods.mockFindAll.mockResolvedValueOnce([new MockModel(dbEntry)]);
 
             const proxy = accessControlRules.PIP(modelName, base);
             const ageValue = await proxy.age;

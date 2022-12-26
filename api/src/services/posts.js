@@ -1,6 +1,7 @@
 import { createLoggerNamespace } from '../logger/index.js';
 import db from '../models/index.js';
 import { NotFoundError } from '../errors/index.js';
+import { UniqueConstraintError } from 'sequelize';
 
 const postsServicesLogger = createLoggerNamespace('groupomania:api:services:posts');
 
@@ -172,6 +173,49 @@ export async function getPost(postId, options = {}) {
 
     postsServicesLogger.debug('Post fetched');
     return post;
+}
+
+
+
+/**
+ * Like an existing post.
+ * @param {number} postId - Id of the post to like.
+ * @param {number} userId - Id of the user that likes.
+ * @param {boolean} like - Value of the like: true for a like, false for a dislike.
+ * @returns {boolean} Returns true if the action was successful, and false if not.
+ */
+export async function likePost(postId, userId, like) {
+    postsServicesLogger.verbose('Like Post service starting');
+
+    const notFoundError = new NotFoundError({
+        message: `No post has the id ${postId}.`,
+        title: 'The post can\'t be found.',
+        description: 'We can\'t find the post corresponding to the id you gave. Please, verify your input and try again.'
+    });
+
+    // Attempt to like
+    try {
+        if (like) {
+            await db.models.Like.create({userId, postId});
+            return true;
+        }
+    } catch (error) {
+        if (error instanceof UniqueConstraintError) {
+            return false;
+        }
+        throw notFoundError;
+    }
+
+    // Attempt to remove the like
+    const [affectedRowsNumber] = await db.models.Like.destroy({ where: { userId, postId }});
+    if (affectedRowsNumber === 0) {
+        const checkPostExists = (await db.models.Post.findByPk(postId)) !== null;
+        if (checkPostExists) {
+            return false;
+        }
+        throw notFoundError;
+    }
+    return true;
 }
 
 

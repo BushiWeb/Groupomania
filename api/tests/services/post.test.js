@@ -1,8 +1,9 @@
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
 import MockModel, * as mockModelMethods from '../mocks/mock-models.js';
-import { createPost, getAllPosts, getPost, updatePost } from '../../src/services/posts.js';
+import { createPost, getAllPosts, getPost, likePost, updatePost } from '../../src/services/posts.js';
 import { NotFoundError } from '../../src/errors/index.js';
+import { ForeignKeyConstraintError, UniqueConstraintError } from 'sequelize';
 
 jest.spyOn(db, 'models', 'get').mockImplementation(
     () => new Proxy(
@@ -428,6 +429,48 @@ describe('Post services test suite', () => {
 
             expect(updatedPost.get()).toEqual(post.get());
             expect(updatedPost.get('title')).toBe(newTitle);
+        });
+    });
+
+
+
+    describe('Like post service test suite', () => {
+        const postId = 3;
+        const userId = 6;
+
+        it('should return 1 if the publication is liked', async () => {
+            const like = await likePost(postId, userId, 1);
+            expect(like).toBe(true);
+        });
+
+        it('should return 1 if the publication is disliked', async () => {
+            mockModelMethods.mockStaticDestroy.mockResolvedValue([1]);
+            const like = await likePost(postId, userId, 0);
+            expect(like).toBe(true);
+        });
+
+        it('should return 0 if the publication is liked but was already liked', async () => {
+            mockModelMethods.mockCreate.mockRejectedValueOnce(new UniqueConstraintError());
+            const like = await likePost(postId, userId, 1);
+            expect(like).toBe(false);
+        });
+
+        it('should return 0 if the publication is disliked but was already disliked', async () => {
+            mockModelMethods.mockStaticDestroy.mockResolvedValue([0]);
+            mockModelMethods.mockFindByPk.mockResolvedValue(new MockModel(postInfos));
+            const like = await likePost(postId, userId, 0);
+            expect(like).toBe(false);
+        });
+
+        it('should throw a NotFoundError if we try to like a non existing post', async () => {
+            mockModelMethods.mockCreate.mockRejectedValueOnce(new ForeignKeyConstraintError());
+            await expect(likePost(postId, userId, 1)).rejects.toBeInstanceOf(NotFoundError);
+        });
+
+        it('should throw a NotFoundError if we try to dislike a non existing post', async () => {
+            mockModelMethods.mockStaticDestroy.mockResolvedValue([0]);
+            mockModelMethods.mockFindByPk.mockResolvedValue(null);
+            await expect(likePost(postId, userId, 0)).rejects.toBeInstanceOf(NotFoundError);
         });
     });
 });
