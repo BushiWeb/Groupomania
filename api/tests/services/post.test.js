@@ -1,7 +1,7 @@
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
 import MockModel, * as mockModelMethods from '../mocks/mock-models.js';
-import { createPost, getAllPosts, getPost, likePost, updatePost } from '../../src/services/posts.js';
+import { createPost, deletePost, getAllPosts, getPost, likePost, updatePost } from '../../src/services/posts.js';
 import { NotFoundError } from '../../src/errors/index.js';
 import { ForeignKeyConstraintError, UniqueConstraintError } from 'sequelize';
 
@@ -471,6 +471,20 @@ describe('Post services test suite', () => {
             mockModelMethods.mockStaticDestroy.mockResolvedValue(0);
             mockModelMethods.mockFindByPk.mockResolvedValue(null);
             await expect(likePost(postId, userId, 0)).rejects.toBeInstanceOf(NotFoundError);
+        });
+    });
+
+
+
+    describe('Delet post service test suite', () => {
+        it('should return true if the operation succeeds', async () => {
+            mockModelMethods.mockStaticDestroy.mockResolvedValueOnce(1);
+            expect(await deletePost(113)).toBe(true);
+        });
+
+        it('should throw a NotFoundError if the post doesn\'t exist', async () => {
+            mockModelMethods.mockStaticDestroy.mockResolvedValueOnce(0);
+            await expect(deletePost(114)).rejects.toBeInstanceOf(NotFoundError);
         });
     });
 });
