@@ -478,13 +478,8 @@ describe('Post services test suite', () => {
 
     describe('Delet post service test suite', () => {
         it('should return true if the operation succeeds', async () => {
-            mockModelMethods.mockStaticDestroy.mockResolvedValueOnce(1);
-            expect(await deletePost(113)).toBe(true);
-        });
-
-        it('should throw a NotFoundError if the post doesn\'t exist', async () => {
-            mockModelMethods.mockStaticDestroy.mockResolvedValueOnce(0);
-            await expect(deletePost(114)).rejects.toBeInstanceOf(NotFoundError);
+            mockModelMethods.mockInstanceDestroy.mockResolvedValueOnce();
+            expect(await deletePost(new MockModel(postInfos))).toBe(true);
         });
     });
 });

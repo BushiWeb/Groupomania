@@ -4,6 +4,7 @@ import config from '../config/config.js';
 import validationMiddlewares,
 {
     createPostSchema,
+    deletePostSchema,
     getAllPostsSchema,
     getPostSchema,
     likePostSchema,
@@ -13,6 +14,7 @@ import createBodyParser from '../middlewares/body-parsing.js';
 import authenticate from '../middlewares/authentication.js';
 import {
     createPostController,
+    deletePostController,
     getAllPostsController,
     getPostController,
     likePostController,
@@ -132,5 +134,30 @@ router.post(
     likePostController
 );
 postRoutesLogger.debug('POST /:postId/like - like post route added');
+
+/**
+ * Post deletion route.
+ * Checks that there is no body.
+ * Validates and sanitizes request parameters and body.
+ * Authenticate the client with the access token.
+ * Call the corresponding controller.
+ */
+router.delete(
+    '/:postId',
+    createBodyParser({}),
+    validationMiddlewares(deletePostSchema),
+    authenticate(),
+    authorize('delete', 'Post', {
+        User: {
+            origin: 'res',
+            field: 'auth'
+        },
+        Subject: {
+            origin: 'params'
+        }
+    }),
+    deletePostController
+);
+postRoutesLogger.debug('DELETE /:postId - delete post route added');
 
 export default router;

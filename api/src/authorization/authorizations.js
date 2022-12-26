@@ -55,4 +55,16 @@ export default [
             ]
         }
     },
+
+    // To delete a post, the client must own the post or be an admin
+    {
+        actions: 'delete',
+        subject: 'Post',
+        conditions: {
+            $or: [
+                { 'User.roleId': config.get('adminUser.roleId') },
+                { 'User.userId': '{{Subject.writerId}}' }
+            ]
+        }
+    },
 ];

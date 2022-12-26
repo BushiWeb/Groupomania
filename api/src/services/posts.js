@@ -242,22 +242,11 @@ export async function updatePost(post, postInfos) {
 
 /**
  * Deletes an existing post.
- * @param {Post} postId - Id of the post to delete.
+ * @param {Post} post - Post model instanc to delete.
  * @returns {boolean} Returns true if the operation succeeds.
- * @throws {NotFoundError} Throws a NotFoundError if the post doesn't exists.
  */
-export async function deletePost(postId) {
+export async function deletePost(post) {
     postsServicesLogger.verbose('Delete Post service starting');
-
-    const numberOfDeletedPosts = await db.models.Post.destroy({ where: { postId }});
-
-    if (numberOfDeletedPosts === 0) {
-        throw new NotFoundError({
-            message: `No post has the id ${postId}.`,
-            title: 'The post can\'t be found.',
-            description: 'We can\'t find the post corresponding to the id you gave. Please, verify your input and try again.'
-        });
-    }
-
+    await post.destroy();
     return true;
 }

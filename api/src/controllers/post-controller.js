@@ -1,5 +1,5 @@
 import { createLoggerNamespace } from '../logger/index.js';
-import { createPost, getAllPosts, getPost, likePost, updatePost } from '../services/posts.js';
+import { createPost, deletePost, getAllPosts, getPost, likePost, updatePost } from '../services/posts.js';
 import { createImageUrl, deleteImage } from '../services/images.js';
 
 const postControllerLogger = createLoggerNamespace('groupomania:api:controllers:post');
@@ -95,6 +95,7 @@ export async function getPostController(req, res, next) {
  * Post update controller.
  * Generates the new image Url
  * Calls the right service.
+ * Deletes the previous image if there is one.
  * Sends a response with status 200 and the new post data to the client if the request is successful, or calls the error handler middleware if an error occurs.
  * @param {Express.Request} req - Express request object.
  * @param {Express.Response} res - Express response object.
@@ -131,6 +132,36 @@ export async function updatePostController(req, res, next) {
     }
 
     // Delete the image
+    if (previousImageUrl) {
+        deleteImage(previousImageUrl);
+    }
+}
+
+
+
+/**
+ * Post deletion controller.
+ * Calls the delete service.
+ * Sends a 204 response with a message or calls the next error middleware.
+ * @param {Express.Request} req - Express request object.
+ * @param {Express.Response} res - Express response object.
+ * @param next - Next middleware to execute.
+ */
+export async function deletePostController(req, res, next) {
+    postControllerLogger.verbose('Delete post middleware starting');
+    let previousImageUrl;
+    try {
+        const postToDelete = await getPost(req.params.postId);
+        previousImageUrl = postToDelete.imageUrl;
+
+        await deletePost(postToDelete);
+
+        res.status(204).end();
+        postControllerLogger.verbose('Response sent');
+    } catch (error) {
+        return next(error);
+    }
+
     if (previousImageUrl) {
         deleteImage(previousImageUrl);
     }
