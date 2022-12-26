@@ -1,0 +1,35 @@
+title: PublicUserInfos
+type: object
+description: User informations.
+properties:
+    userId:
+        type: integer
+        description: The user's id
+    email:
+        type: string
+        format: email
+        description: User's email
+    roleId:
+        type: integer
+        description: The user's role id
+    role:
+        type: object
+        required:
+            - name
+            - roleId
+        properties:
+            name:
+                type: string
+                description: The user's role
+            roleId:
+                type: integer
+                description: the id of the user's role
+required:
+    - userId
+    - email
+examples:
+    - userId: 1
+      email: john.doe@example.com
+      role:
+          name: admin
+          roleId: 1

@@ -1,0 +1,183 @@
+get:
+    summary: Fetch all the posts
+    tags:
+        - post
+    responses:
+        '200':
+            description: Array containing all the post's data.
+            content:
+                application/json:
+                    schema:
+                        title: PostList
+                        type: array
+                        items:
+                            $ref: ..\components\schemas\Post.yaml
+                    examples:
+                        No informations asked:
+                            value:
+                                - postId: 3
+                                  title: The most exalting post
+                                  message: >-
+                                      This is the story of a litle man, so litle that evan I can't
+                                      see him. The end.
+                                  imageUrl: http://groupomania.com/images/small_man31022002.png
+                                  writerId: 1
+                                  creationDate: '2019-08-24T14:15:22Z'
+                                  lastUpdateDate: null
+                                - postId: 3
+                                  title: The most boring post
+                                  message: >-
+                                      This is the story of a normal child in a normal house,
+                                      wearing normal clothes.
+                                  imageUrl: null
+                                  writerId: 3
+                                  creationDate: '2019-08-24T14:15:22Z'
+                                  lastUpdateDate: '2020-09-18T03:12:13Z'
+                        More author informations:
+                            value:
+                                - postId: 3
+                                  title: The most exalting post
+                                  message: >-
+                                      This is the story of a litle man, so litle that evan I can't
+                                      see him. The end.
+                                  imageUrl: http://groupomania.com/images/small_man31022002.png
+                                  writer:
+                                      writerId: 1
+                                      email: jane.foster@groupomania.com
+                                  creationDate: '2019-08-24T14:15:22Z'
+                                  lastUpdateDate: null
+                                - postId: 3
+                                  title: The most boring post
+                                  message: >-
+                                      This is the story of a normal child in a normal house,
+                                      wearing normal clothes.
+                                  imageUrl: null
+                                  writer:
+                                      writerId: 3
+                                      email: john.doe@groupomania.com
+                                  creationDate: '2019-08-24T14:15:22Z'
+                                  lastUpdateDate: '2020-09-18T03:12:13Z'
+                        More like informations:
+                            value:
+                                - postId: 3
+                                  title: The most exalting post
+                                  message: >-
+                                      This is the story of a litle man, so litle that evan I can't
+                                      see him. The end.
+                                  imageUrl: http://groupomania.com/images/small_man31022002.png
+                                  likes: 3
+                                  writerId: 1
+                                  usersLiked:
+                                      - 1
+                                      - 2
+                                      - 3
+                                  creationDate: '2019-08-24T14:15:22Z'
+                                  lastUpdateDate: null
+                                - postId: 3
+                                  title: The most boring post
+                                  message: >-
+                                      This is the story of a normal child in a normal house,
+                                      wearing normal clothes.
+                                  imageUrl: null
+                                  writerId: 3
+                                  likes: 0
+                                  usersLiked: []
+                                  creationDate: '2019-08-24T14:15:22Z'
+                                  lastUpdateDate: '2020-09-18T03:12:13Z'
+        '400':
+            $ref: ..\components\responses\BadRequestQueryResponse.yaml
+        '401':
+            $ref: ..\components\responses\UnauthorizedAccessTokenResponse.yaml
+    operationId: GetAllPosts
+    description: |-
+        Fetches the list off all posts.
+
+        The user may use parameters to filter or paginate the response.
+    parameters:
+        - $ref: ..\components\parameters\UserFilter.yaml
+        - $ref: ..\components\parameters\LimitFilter.yaml
+        - $ref: ..\components\parameters\OffsetFilter.yaml
+        - $ref: ..\components\parameters\UserInfo.yaml
+        - $ref: ..\components\parameters\LikeInfo.yaml
+post:
+    summary: Create a new post
+    operationId: CreatePost
+    responses:
+        '201':
+            description: The post is created, returns the post's data.
+            content:
+                application/json:
+                    schema:
+                        $ref: ..\components\schemas\Post.yaml
+                    examples:
+                        New post:
+                            value:
+                                postId: 3
+                                title: The most exalting post
+                                message: >-
+                                    This is the story of a litle man, so litle that evan I can't
+                                    see him. The end.
+                                imageUrl: http://groupomania.com/images/small_man31022002.png
+                                writerId: 3
+                                creationDate: '2019-08-24T14:15:22Z'
+                                lastUpdateDate: null
+        '400':
+            $ref: ..\components\responses\BadRequestBodyQueryResponse.yaml
+        '401':
+            $ref: ..\components\responses\UnauthorizedAccessTokenResponse.yaml
+    description: Creates a new post.
+    requestBody:
+        content:
+            application/json:
+                schema:
+                    title: NewPostInfos
+                    type: object
+                    properties:
+                        title:
+                            type: string
+                            description: Post's title
+                        message:
+                            type: string
+                            description: Post's message
+                    required:
+                        - title
+                        - message
+                examples:
+                    New Post:
+                        value:
+                            title: My new fantastic post
+                            message: This message is so great you will never forget it!
+            multipart/form-data:
+                schema:
+                    title: NewPostInfosWithImage
+                    type: object
+                    properties:
+                        post:
+                            type: string
+                            description: Contains a JSON string representing the sauce data.
+                            example: >-
+                                "{"title": "The post's title", "message": "You will find
+                                something to write"}"
+                        image:
+                            type: string
+                            format: binary
+                            description: Contains the image to send.
+                    required:
+                        - post
+                examples:
+                    New post with image:
+                        value:
+                            post: '{"title": "The title", "message": "And the message"}'
+                            image: image binary
+        description: >-
+            The body contains the new post's data. Two format can be used, depending
+            on the content:
+
+            - Use JSON if the post doesn't contain any image. All the post's data are
+            within this object.
+
+            - Use form-data to send an image. The post data will be in the `post`
+            property as a JSON string, and the `image` property will contain the
+            image.
+    tags:
+        - post

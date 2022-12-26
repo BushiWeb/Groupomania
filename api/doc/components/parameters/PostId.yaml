@@ -1,0 +1,6 @@
+name: postId
+in: path
+required: true
+schema:
+  type: integer
+description: Post's id.

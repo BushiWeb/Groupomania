@@ -1,0 +1,96 @@
+post:
+    summary: Login
+    operationId: Login
+    responses:
+        '200':
+            description: Returns both the access token and the refresh token.
+            content:
+                application/json:
+                    schema:
+                        title: AuthenticationInformations
+                        type: object
+                        properties:
+                            accessToken:
+                                type: string
+                                description: |-
+                                    Token used to authenticate the user in most of the requests.
+
+                                    This token is short-lived and needs to be safely stored.
+                            refreshToken:
+                                type: string
+                                description: >-
+                                    Token used to get a new access token once the previous one
+                                    expires. It's also used to log the user out.
+
+
+                                    This token has a longer life span than the access token. It
+                                    should be safely stored and can be used only once.
+                            userId:
+                                type: integer
+                                description: User's unique identifier.
+                        required:
+                            - accessToken
+                            - refreshToken
+                            - userId
+                    examples:
+                        Authentication informations:
+                            value:
+                                accessToken: >-
+                                    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcklkIjozMiwicm9sZUlkIjozLCJpYXQiOjE1MTYyMzkwMjJ9.fN0yO6oUJT4exdM8aGdzFQGEa98_Qzk3192YrxiVgQc
+                                refreshToken: >-
+                                    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcklkIjozMSwicm9sZSI6MiwiaWF0IjoxNTE2MjM5MDIyfQ.7aHJpRLIfGiovWnTM9MbeS-Dnn7nQBIGokCr7GGs7A4
+                                userId: 0
+        '400':
+            $ref: ..\components\responses\BadRequestBodyResponse.yaml
+        '401':
+            $ref: ..\components\responses\UnauthorizedCredentials.yaml
+        '403':
+            $ref: ..\components\responses\LockedAccountResponse.yaml
+    tags:
+        - auth
+    description: >-
+        Creates new authentication tokens using the user's credentials.
+
+
+        The API is using two types of token for authentication:
+
+        - The **access token** is used to authenticate the user in most requests. It
+        is short-lived and should be stored in an ephemeral and secure location,
+        like a closure. No informations about this token is kept on the API, so it
+        can't be revoked. To revoke this token, simply delete it.
+
+        - The **refresh token** is used to get a new access token when it expires,
+        without having to send the user's credentials again. It is longer lived and
+        can be stored in a permanent but secure location. We recommand storing it on
+        a server to avoid Cross Site Scripting attacks (chekout the Backend For
+        Frontend pattern). This token can only be used once. Using it multiple times
+        will result in all the user's refresh tokens being revoked.
+
+
+        This request will generate a new access token for the user authentication,
+        and a new refresh token that may be used to get a new access token with the
+        `POST /auth/accessToken` endpoint.
+    requestBody:
+        content:
+            application/json:
+                schema:
+                    title: UserCredentials
+                    type: object
+                    properties:
+                        email:
+                            type: string
+                            format: email
+                            description: User's email
+                        password:
+                            type: string
+                            description: User's password
+                    required:
+                        - email
+                        - password
+                examples:
+                    Credentials:
+                        value:
+                            email: john.doe@example.com
+                            password: P@55word
+        description: The body contains the users credentials, to prove the user's identity.
+    security: []

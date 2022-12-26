@@ -1,0 +1,8 @@
+name: page
+in: query
+required: false
+schema:
+    type: integer
+    minimum: 1
+description: >-
+    Choose which result page to get. It must be used with limit, otherwise it won't have any effect.

@@ -1,0 +1,6 @@
+name: userId
+in: query
+required: false
+schema:
+  type: integer
+description: Filter the ressources by user, given the user's id.

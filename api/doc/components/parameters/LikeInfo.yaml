@@ -1,0 +1,6 @@
+name: likeInfo
+in: query
+required: false
+schema:
+    type: boolean
+description: Allows to add more informations about the post's likes.

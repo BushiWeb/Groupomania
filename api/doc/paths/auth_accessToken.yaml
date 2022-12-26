@@ -1,0 +1,64 @@
+post:
+    summary: Get a new access token
+    operationId: GetAccessToken
+    responses:
+        '200':
+            description: Returns both the access token and the refresh token.
+            content:
+                application/json:
+                    schema:
+                        title: AuthenticationInformations
+                        type: object
+                        description: Contains all the informations to authenticate the user.
+                        properties:
+                            accessToken:
+                                type: string
+                                description: |-
+                                    Token used to authenticate the user in most of the requests.
+
+                                    This token is short-lived and needs to be safely stored.
+                            refreshToken:
+                                type: string
+                                description: >-
+                                    Token used to get a new access token once the previous one
+                                    expires. It's also used to log the user out.
+
+
+                                    This token has a longer life span than the access token. It
+                                    should be safely stored and can be used only once.
+                            userId:
+                                type: integer
+                                description: User's unique identifier.
+                        required:
+                            - accessToken
+                            - refreshToken
+                            - userId
+                    examples:
+                        New tokens:
+                            value:
+                                accessToken: >-
+                                    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcklkIjozMiwicm9sZUlkIjozLCJpYXQiOjE1MTYyMzkwMjJ9.fN0yO6oUJT4exdM8aGdzFQGEa98_Qzk3192YrxiVgQc
+                                refreshToken: >-
+                                    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcklkIjozMSwicm9sZSI6MiwiaWF0IjoxNTE2MjM5MDIyfQ.7aHJpRLIfGiovWnTM9MbeS-Dnn7nQBIGokCr7GGs7A4
+                                userId: 0
+        '401':
+            $ref: ..\components\responses\UnauthorizedRefreshTokenResponse.yaml
+    tags:
+        - auth
+    description: >-
+        Creates new authentication tokens using the refresh token. Use this endpoint
+        if your access token has expired but your refresh token is still valid.
+
+
+        For more informations about the different types of tokens, checkout the
+        `POST /auth/login` endpoint's documentation.
+
+
+        This request will generate a new access token for the user authentication.
+        The refresh token will be revoked and a new one generated.
+
+
+        *The authentication for this endpoint is different. You should check the
+        details in the security section.*
+    security:
+        - RefreshToken: []

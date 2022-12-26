@@ -1,0 +1,82 @@
+parameters:
+    - $ref: ..\components\parameters\PostId.yaml
+post:
+    summary: Like a post
+    tags:
+        - post
+    responses:
+        '200':
+            description: >-
+                The request is successful.
+
+
+                The request succeding doesn't mean the action succeding. The message
+                gives the user more informations on the result of that action. It can be
+                successful (e.g., the like is accepted, the like is removed), or fail
+                (e.g., the user has already liked, the user has nothing to reset).
+            content:
+                application/json:
+                    schema:
+                        title: Message
+                        type: object
+                        description: Generic message.
+                        properties:
+                            message:
+                                type: string
+                                description: Message to send.
+                        required:
+                            - message
+                    examples:
+                        The post is liked:
+                            value:
+                                message: Your like has been applied.
+                        The like is removed:
+                            value:
+                                message: Your previous like has been removed.
+                        The user already liked:
+                            value:
+                                message: Your like couldn't be applied, you already liked this post.
+                        The user already removed the like:
+                            value:
+                                message: We couldn't remove you like, you didn't like this post before.
+        '400':
+            $ref: ..\components\responses\BadRequestBodyQueryResponse.yaml
+        '401':
+            $ref: ..\components\responses\UnauthorizedAccessTokenResponse.yaml
+        '404':
+            $ref: ..\components\responses\PostNotFoundResponse.yaml
+    operationId: LikePost
+    description: |-
+        Performs some kinf of like action.
+
+        Each user can only like a post once.
+
+        Depending on the desired action, the like value will be different:
+        - true will attempt to like the post
+        - false will attempt to remove the like
+    requestBody:
+        content:
+            application/json:
+                schema:
+                    title: Like
+                    type: object
+                    properties:
+                        like:
+                            type: boolean
+                            description: |-
+                                Boolean representing the action to take:
+                                - true means a like
+                                - false means to reset the like
+                    required:
+                        - like
+                examples:
+                    Like:
+                        value:
+                            like: true
+                    Reset like:
+                        value:
+                            like: false
+        description: |-
+            The body contains the action to execute:
+            - true to like
+            - false to reset the like

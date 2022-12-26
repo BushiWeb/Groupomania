@@ -10,7 +10,8 @@
         "start": "node -r dotenv/config ./src/server.js --env production",
         "dev": "nodemon -r dotenv/config ./src/server.js",
         "buildDoc": "redoc-cli build doc/groupomania_openapi.yaml -o doc/groupomania_doc.html --title \"Groupomania API\"",
-        "watchDoc": "redocly preview-docs Groupomania --config=.redocly.yaml --port=8080"
+        "watchDoc": "redocly preview-docs ./doc/openapi.yaml --config=.redocly.yaml --port=8080",
+        "bundleDoc": "redocly bundle ./doc/openapi.yaml --config=.redocly.yaml -o ./doc/groupomania_openapi.yaml"
     },
     "author": "Emeric Francisod",
     "license": "MIT",

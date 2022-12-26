@@ -1,0 +1,100 @@
+parameters:
+    - $ref: ..\components\parameters\UserId.yaml
+put:
+    summary: Update a user (password or email)
+    operationId: UpdateUser
+    responses:
+        '204':
+            description: The user is updated.
+        '400':
+            $ref: ..\components\responses\BadRequestBodyQueryResponse.yaml
+        '401':
+            $ref: ..\components\responses\UnauthorizedAccessTokenResponse.yaml
+        '403':
+            $ref: ..\components\responses\ForbiddenResponse.yaml
+        '404':
+            $ref: ..\components\responses\UserNotFoundResponse.yaml
+        '409':
+            $ref: ..\components\responses\ConflictEmailResponse.yaml
+    tags:
+        - user
+    description: |-
+        Updates the user's email or password.
+
+        To execute this action, you must:
+        - Be the owner of the account
+    requestBody:
+        content:
+            application/json:
+                schema:
+                    title: NewUserInfos
+                    type: object
+                    properties:
+                        email:
+                            type: string
+                            format: email
+                            description: New email
+                        password:
+                            type: string
+                            description: New password
+                examples:
+                    New email:
+                        value:
+                            email: new.john.doe@example.com
+                            password: newP@55w0rd
+        description: The body contains the new user's email.
+delete:
+    summary: Delete one user
+    operationId: DeleteUser
+    responses:
+        '204':
+            description: The user is deleted.
+        '400':
+            $ref: ..\components\responses\BadRequestQueryResponse.yaml
+        '401':
+            $ref: ..\components\responses\UnauthorizedAccessTokenResponse.yaml
+        '403':
+            $ref: ..\components\responses\ForbiddenResponse.yaml
+        '404':
+            $ref: ..\components\responses\UserNotFoundResponse.yaml
+    description: |-
+        Deletes one user. Also deletes the likes, posts and images owned by the user.
+
+        To execute this action, you must:
+        - Be an admin user
+        OR
+        - Be the user itself
+    tags:
+        - user
+get:
+    summary: Fetch one user
+    operationId: GetUser
+    responses:
+        '200':
+            description: Returns the selected post.
+            content:
+                application/json:
+                    schema:
+                        $ref: ..\components\schemas\User.yaml
+                    examples:
+                        Selected user:
+                            value:
+                                userId: 1
+                                email: john.doe@example.com
+                                roleId: 2
+                        More role informations:
+                            value:
+                                userId: 1
+                                email: john.doe@example.com
+                                role:
+                                    name: user
+                                    roleId: 2
+        '400':
+            $ref: ..\components\responses\BadRequestQueryResponse.yaml
+        '401':
+            $ref: ..\components\responses\UnauthorizedAccessTokenResponse.yaml
+        '404':
+            $ref: ..\components\responses\UserNotFoundResponse.yaml
+    tags:
+        - user
+    description: Fetches specific user data depending on the id given in the path.

@@ -1,0 +1,6 @@
+description: The access token is invalid or absent.
+headers:
+  WWW-Authenticate:
+    schema:
+      type: string
+    description: Describes the authentication method to use

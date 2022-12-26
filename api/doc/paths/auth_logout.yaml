@@ -1,0 +1,28 @@
+post:
+    summary: Logout
+    operationId: Logout
+    responses:
+        '204':
+            description: >-
+                The refresh token sent with the request is now invalid. When the access
+                token expires or is deleted, the user will have to user it's credentials
+                to log back in.
+        '401':
+            $ref: ..\components\responses\UnauthorizedRefreshTokenResponse.yaml
+    description: >-
+        Logs the user out. Revoke the refresh token for the current user-agent.
+
+
+        Since the access token has a very short life span, we made the choice to not
+        store it in the database or the API. Thus, it can't be revoked. The client
+        has the responsability to delete it on manual logout. The token should also
+        be deleted when the browser window is closed, or when the user navigates to
+        another website.
+
+
+        *The authentication for this endpoint is different. You should check the
+        details in the security section.*
+    security:
+        - RefreshToken: []
+    tags:
+        - auth

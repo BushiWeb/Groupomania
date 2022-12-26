@@ -1,0 +1,69 @@
+openapi: 3.1.0
+info:
+    title: Groupomania
+    description: >-
+        This social network enables the user to share messages and pictures, and to
+        react to other's posts.
+
+        Mediation is handled by administrator users.
+    version: 1.0.0
+    contact:
+        name: Emeric Francisod
+        email: emeric.francisod@gmail.com
+    summary: MVP for the Groupomania's social network's API.
+    license:
+        name: MIT
+        url: >-
+            https://github.com/emeric-francisod/P7_Creez_un_reseau_social_d_entreprise_Francisod_Emeric/blob/development/LICENSE
+servers:
+    - url: http://{domain}:{port}/api/v1
+      description: Development server
+      variables:
+          domain:
+              default: localhost
+          port:
+              default: '3000'
+tags:
+    - name: user
+      description: Users operations
+    - name: auth
+      description: Authentication operations
+    - name: post
+      description: Posts operations
+    - name: role
+      description: Roles operations
+components:
+    securitySchemes:
+        AccessToken:
+            type: http
+            description: Authentication using an access token.
+            scheme: bearer
+        RefreshToken:
+            type: http
+            scheme: bearer
+            description: >-
+                Exceptionnal authentication using a refresh token. Used for a few
+                selected endpoints.
+security:
+    - AccessToken: []
+paths:
+    /auth/login:
+        $ref: paths/auth_login.yaml
+    /auth/accessToken:
+        $ref: paths/auth_accessToken.yaml
+    /auth/logout:
+        $ref: paths/auth_logout.yaml
+    /users:
+        $ref: paths/users.yaml
+    /users/{userId}:
+        $ref: paths/users_{userId}.yaml
+    /users/{userId}/role:
+        $ref: paths/users_{userId}_role.yaml
+    /posts:
+        $ref: paths/posts.yaml
+    /posts/{postId}:
+        $ref: paths/posts_{postId}.yaml
+    /posts/{postId}/like:
+        $ref: paths/posts_{postId}_like.yaml
+    /roles:
+        $ref: paths/roles.yaml

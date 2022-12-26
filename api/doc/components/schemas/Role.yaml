@@ -1,0 +1,16 @@
+title: Role
+type: object
+description: Available user roles.
+properties:
+    roleId:
+        type: integer
+        description: Role's id
+    name:
+        type: string
+        description: Role's name
+required:
+    - roleId
+    - name
+examples:
+    - roled: 1
+      name: admin

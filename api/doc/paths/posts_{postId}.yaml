@@ -1,0 +1,185 @@
+parameters:
+    - $ref: ..\components\parameters\PostId.yaml
+get:
+    summary: Fetch a post
+    tags:
+        - post
+    responses:
+        '200':
+            description: Returns the selected post.
+            content:
+                application/json:
+                    schema:
+                        $ref: ..\components\schemas\Post.yaml
+                    examples:
+                        Base informations:
+                            value:
+                                postId: 3
+                                title: The most exalting post
+                                message: >-
+                                    This is the story of a litle man, so litle that evan I can't
+                                    see him. The end.
+                                imageUrl: http://groupomania.com/images/small_man31022002.png
+                                writerId: 3
+                                creationDate: '2019-08-24T14:15:22Z'
+                                lastUpdateDate: null
+                        Add likes informations:
+                            value:
+                                postId: 3
+                                title: The most exalting post
+                                message: >-
+                                    This is the story of a litle man, so litle that evan I can't
+                                    see him. The end.
+                                imageUrl: http://groupomania.com/images/small_man31022002.png
+                                writerId: 3
+                                likes: 3
+                                usersLiked:
+                                    - 1
+                                    - 2
+                                    - 3
+                                creationDate: '2019-08-24T14:15:22Z'
+                                lastUpdateDate: null
+                        Add author informations:
+                            value:
+                                postId: 3
+                                title: The most exalting post
+                                message: >-
+                                    This is the story of a litle man, so litle that evan I can't
+                                    see him. The end.
+                                imageUrl: http://groupomania.com/images/small_man31022002.png
+                                writer:
+                                    writerId: 3
+                                    email: john.doe@groupomania.com
+                                creationDate: '2019-08-24T14:15:22Z'
+                                lastUpdateDate: null
+        '400':
+            $ref: ..\components\responses\BadRequestQueryResponse.yaml
+        '401':
+            $ref: ..\components\responses\UnauthorizedAccessTokenResponse.yaml
+        '404':
+            $ref: ..\components\responses\PostNotFoundResponse.yaml
+    operationId: GetPost
+    description: Fetches a specific post depending on the id given in the path.
+    parameters:
+        - $ref: ..\components\parameters\UserInfo.yaml
+        - $ref: ..\components\parameters\LikeInfo.yaml
+put:
+    summary: Update a post
+    operationId: UpdatePost
+    responses:
+        '200':
+            description: The post is updated. Returns the post's new data.
+            content:
+                application/json:
+                    schema:
+                        $ref: ..\components\schemas\Post.yaml
+                    examples:
+                        Updated data:
+                            value:
+                                postId: 3
+                                title: The most exalting post with an update
+                                message: >-
+                                    This is the story of a litle man, so litle that evan I can't
+                                    see him. The end.
+                                imageUrl: http://groupomania.com/images/new_small_man31022002.png
+                                writerId: 3
+                                creationDate: '2019-08-24T14:15:22Z'
+                                lastUpdateDate: '2022-10-08T08:34:45Z'
+        '400':
+            $ref: ..\components\responses\BadRequestBodyQueryResponse.yaml
+        '401':
+            $ref: ..\components\responses\UnauthorizedAccessTokenResponse.yaml
+        '403':
+            $ref: ..\components\responses\ForbiddenResponse.yaml
+        '404':
+            $ref: ..\components\responses\PostNotFoundResponse.yaml
+    description: |-
+        Updates a post.
+
+        To execute this action, you must:
+        - Be the owner of the post
+        OR
+        - Be an admin user
+    requestBody:
+        content:
+            application/json:
+                schema:
+                    title: PostInfosUpdate
+                    type: object
+                    properties:
+                        title:
+                            type: string
+                            description: Post's new title
+                        message:
+                            type: string
+                            description: Post's new message
+                        deleteImage:
+                            type: boolean
+                            default: false
+                            description: Specifies whether to remove the image from the post
+                examples:
+                    Update post, delete the image:
+                        value:
+                            title: The new title
+                            message: And a litle update for the message
+                            deleteImage: true
+                    Update post, keep the image:
+                        value:
+                            title: The new title
+                            message: And a litle update for the message
+            multipart/form-data:
+                schema:
+                    title: PostInfosUpdateWithImage
+                    type: object
+                    properties:
+                        post:
+                            type: string
+                            description: Contains a JSON string representing the sauce data.
+                            example: >-
+                                "{"title": "The post's title", "message": "You will find
+                                something to write"}"
+                        image:
+                            type: string
+                            format: binary
+                            description: Contains the image to send.
+                examples:
+                    Post update with image:
+                        value:
+                            post: '{"title": "The title", "message": "And the message"}'
+                            image: image binary
+        description: >-
+            The body contains the updated post's data. Two format can be used,
+            depending on the content:
+
+            - Use JSON if the image is not modified. All the post's data are within
+            this object. If you wish to delete the image, set the `deleteImage`
+            property to `true`.
+
+            - Use Form-data to update the image. The post data will be in the `post`
+            property as a JSON string, and the `image` property will contain the
+            image.
+    tags:
+        - post
+delete:
+    summary: Delete a post
+    operationId: DeletePost
+    responses:
+        '204':
+            description: The post is deleted.
+        '400':
+            $ref: ..\components\responses\BadRequestQueryResponse.yaml
+        '401':
+            $ref: ..\components\responses\UnauthorizedAccessTokenResponse.yaml
+        '403':
+            $ref: ..\components\responses\ForbiddenResponse.yaml
+        '404':
+            $ref: ..\components\responses\PostNotFoundResponse.yaml
+    description: |-
+        Deletes a post. Also deletes the associated likes and images.
+
+        To execute this action, you must:
+        - Be the owner of the post
+        OR
+        - Be an admin user
+    tags:
+        - post

@@ -1,0 +1,83 @@
+title: Post
+type: object
+description: Post data.
+examples:
+    - postId: 3
+      title: The most exalting post
+      message: >-
+          This is the story of a litle man, so litle that evan I can't see him. The
+          end.
+      imageUrl: http://groupomania.com/images/small_man31022002.png
+      writer:
+          writerId: 3
+          email: john.doe@groupomania.com
+      likes: 2
+      usersLiked:
+          - 3
+          - 5
+      creationDate: '2019-08-24T14:15:22Z'
+      lastUpdateDate: null
+properties:
+    postId:
+        type: integer
+        description: Post's id
+    title:
+        type: string
+        description: Post's title
+    message:
+        type: string
+        description: Post's message
+    imageUrl:
+        type:
+            - string
+            - 'null'
+        description: Post's image's URL. Since the image is optionnal, it's value may be null.
+        format: uri
+    writerId:
+        type: integer
+        description: The author's id
+    writer:
+        type: object
+        description: The writer's informations
+        required:
+            - writerId
+            - email
+            - roleId
+        properties:
+            email:
+                type: string
+                description: The writer's email
+                format: email
+            writerId:
+                type: integer
+                description: The writer's id
+            roleId:
+                type: integer
+                description: The author's role id
+    likes:
+        type: integer
+        description: Number of likes
+    usersLiked:
+        type: array
+        items:
+            type: integer
+        description: Users who liked the post
+    creationDate:
+        type: string
+        format: date-time
+        description: Date of creation
+    lastUpdateDate:
+        type:
+            - string
+            - 'null'
+        format: date-time
+        description: >-
+            Date of the most recent update. When the post is created, this value will
+            be null.
+required:
+    - postId
+    - title
+    - message
+    - imageUrl
+    - creationDate
+    - lastUpdateDate

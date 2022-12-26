@@ -1,0 +1,6 @@
+name: role
+in: query
+required: false
+schema:
+  type: string
+description: Filter the results by user role.
