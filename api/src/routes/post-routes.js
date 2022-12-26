@@ -6,6 +6,7 @@ import validationMiddlewares,
     createPostSchema,
     getAllPostsSchema,
     getPostSchema,
+    likePostSchema,
     updatePostSchema
 } from '../middlewares/user-input-validation.js';
 import createBodyParser from '../middlewares/body-parsing.js';
@@ -14,6 +15,7 @@ import {
     createPostController,
     getAllPostsController,
     getPostController,
+    likePostController,
     updatePostController
 } from '../controllers/post-controller.js';
 import multer, { dataFormatter } from '../middlewares/multer.js';
@@ -112,6 +114,23 @@ router.put(
     }, ['title', 'message', 'imageUrl']),
     updatePostController
 );
-postRoutesLogger.debug('PUT /:postId - update post route added');
+
+/**
+ * Post like route.
+ * Checks that there is a JSON body.
+ * Validates and sanitizes request parameters and body.
+ * Authenticate the client with the access token.
+ * Call the corresponding controller.
+ */
+router.post(
+    '/:postId/like',
+    createBodyParser({
+        'application/json': express.json(expressJsonOptions),
+    }, false),
+    validationMiddlewares(likePostSchema),
+    authenticate(),
+    likePostController
+);
+postRoutesLogger.debug('POST /:postId/like - like post route added');
 
 export default router;

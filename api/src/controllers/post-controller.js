@@ -1,5 +1,5 @@
 import { createLoggerNamespace } from '../logger/index.js';
-import { createPost, getAllPosts, getPost, updatePost } from '../services/posts.js';
+import { createPost, getAllPosts, getPost, likePost, updatePost } from '../services/posts.js';
 import { createImageUrl, deleteImage } from '../services/images.js';
 
 const postControllerLogger = createLoggerNamespace('groupomania:api:controllers:post');
@@ -133,5 +133,40 @@ export async function updatePostController(req, res, next) {
     // Delete the image
     if (previousImageUrl) {
         deleteImage(previousImageUrl);
+    }
+}
+
+
+
+/**
+ * Post like controller.
+ * Calls the like service.
+ * Sends a 200 response with a message or calls the next error middleware.
+ * The message's content depends on the action and the result.
+ * @param {Express.Request} req - Express request object.
+ * @param {Express.Response} res - Express response object.
+ * @param next - Next middleware to execute.
+ */
+export async function likePostController(req, res, next) {
+    postControllerLogger.verbose('Like post middleware starting');
+    try {
+        const likeResult = await likePost(req.params.postId, res.locals.auth.userId, req.body.like);
+
+        // Message generation
+        let message = '';
+        if (likeResult && req.body.like) {
+            message = 'Your like has been applied.';
+        } else if (likeResult) {
+            message = 'Your previous like has been removed.';
+        } else if (req.body.like) {
+            message = 'Your like couldn\'t be applied, you already liked this post';
+        } else {
+            message = 'We couldn\'t remove your like, you didn\'t like this post before.';
+        }
+
+        res.status(200).json({ message });
+        postControllerLogger.verbose('Response sent');
+    } catch (error) {
+        return next(error);
     }
 }

@@ -2,19 +2,19 @@
  * Returns schema description for query parameters asking for more informations.
  * @param {Object} [options] - Options to generate the schema.
  * @param {boolean} [options.required=false] - Weither to add the required option or not.
- * @param {boolean} [options.checkFormat=true] - Weither to check if the parameter has the right format or not.
- * @param {Array} [location=['query']] - Where the email is located.
+ * @param {boolean} [options.checkFormat=true] - Weither to check if the value has the right format or not.
+ * @param {Array} [location=['body']] - Where the email is located.
  */
-export default function generateMoreInfoSchema(
-    { required=false, checkFormat=true } = { required: false, checkFormat: true },
-    location = ['query']
+export default function generateBooleanSchema(
+    { required=false, checkFormat=true } = {},
+    location = ['body']
 ) {
     return {
         in: location,
 
         ...(required ? {
             exists: {
-                errorMessage: 'The parameter is required.',
+                errorMessage: 'The value is required.',
                 options: {
                     checkNull: true
                 },
@@ -28,7 +28,7 @@ export default function generateMoreInfoSchema(
 
         ...(checkFormat && {
             isBoolean: {
-                errorMessage: 'The parameter must be a boolean. Accepted values are true, yes, false, no, 0 and 1.',
+                errorMessage: 'The value must be a boolean. Accepted values are true, yes, false, no, 0 and 1.',
                 loose: true,
                 bail: true
             }

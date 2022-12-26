@@ -456,7 +456,7 @@ describe('Post services test suite', () => {
         });
 
         it('should return 0 if the publication is disliked but was already disliked', async () => {
-            mockModelMethods.mockStaticDestroy.mockResolvedValue([0]);
+            mockModelMethods.mockStaticDestroy.mockResolvedValue(0);
             mockModelMethods.mockFindByPk.mockResolvedValue(new MockModel(postInfos));
             const like = await likePost(postId, userId, 0);
             expect(like).toBe(false);
@@ -468,7 +468,7 @@ describe('Post services test suite', () => {
         });
 
         it('should throw a NotFoundError if we try to dislike a non existing post', async () => {
-            mockModelMethods.mockStaticDestroy.mockResolvedValue([0]);
+            mockModelMethods.mockStaticDestroy.mockResolvedValue(0);
             mockModelMethods.mockFindByPk.mockResolvedValue(null);
             await expect(likePost(postId, userId, 0)).rejects.toBeInstanceOf(NotFoundError);
         });

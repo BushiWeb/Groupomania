@@ -207,7 +207,7 @@ export async function likePost(postId, userId, like) {
     }
 
     // Attempt to remove the like
-    const [affectedRowsNumber] = await db.models.Like.destroy({ where: { userId, postId }});
+    const affectedRowsNumber = await db.models.Like.destroy({ where: { userId, postId }});
     if (affectedRowsNumber === 0) {
         const checkPostExists = (await db.models.Post.findByPk(postId)) !== null;
         if (checkPostExists) {
