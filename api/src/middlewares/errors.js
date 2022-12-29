@@ -6,7 +6,7 @@ import {
     UnauthorizedError,
     MethodNotAllowedError,
     UserInputValidationError,
-    PayloadTooLargeError
+    PayloadTooLargeError,
 } from '../errors/index.js';
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
@@ -68,15 +68,19 @@ export async function deleteFilesOnError(err, req, res, next) {
  */
 function normalizeExpressError(err) {
     errorLogger.debug('Express error normalization');
-    // Assemble error details. These details will be sent to the user if the status is amongst the 400 errors, and only logged otherwise.
+
+    /*
+     * Assemble error details.
+     * These details will be sent to the user if the status is amongst the 400 errors, and only logged otherwise.
+     */
     const details = {
-        ...(err.type && { type: err.type }),
-        ...(err.body && { body: err.body }),
-        ...(err.charset && { charset: err.charset }),
-        ...(err.received && { bytesReceivedNb: err.received }),
-        ...(err.expected && { bytesExpectedNb: err.expected }),
-        ...(err.limit && { maxSize: err.limit }),
-        ...(err.length && { bodySize: err.length }),
+        ...err.type && { type: err.type },
+        ...err.body && { body: err.body },
+        ...err.charset && { charset: err.charset },
+        ...err.received && { bytesReceivedNb: err.received },
+        ...err.expected && { bytesExpectedNb: err.expected },
+        ...err.limit && { maxSize: err.limit },
+        ...err.length && { bodySize: err.length },
     };
 
     return new HttpError({
@@ -84,7 +88,7 @@ function normalizeExpressError(err) {
         name: err.name,
         title: err.expose ? err.message : 'We had a problem while processing your request. You may try again. If the problem persists, don\'t hesitate to contact us.',
         statusCode: err.statusCode,
-        ...(err.statusCode < 500 ? { details } : { logData: details }),
+        ...err.statusCode < 500 ? { details } : { logData: details },
     }, err, err.headers);
 }
 
@@ -101,8 +105,8 @@ function normalizeJwtError(err) {
             title: 'The token has expired',
             description: 'We can\'t validate your authentication token because it has expired. You may ask for a new one and try again.',
             details: {
-                expirationDate: err.expiredAt
-            }
+                expirationDate: err.expiredAt,
+            },
         }, err);
 
     }
@@ -114,8 +118,8 @@ function normalizeJwtError(err) {
             title: 'The token is not yet active',
             description: 'We can\'t validate your authentication token because it is not active yet. You should wait until it activeates before trying again.',
             details: {
-                activationDate: err.date
-            }
+                activationDate: err.date,
+            },
         }, err);
 
     }
@@ -124,7 +128,7 @@ function normalizeJwtError(err) {
     return new UnauthorizedError({
         message: err.message,
         title: 'There is a problem with the authentication token',
-        description: 'We can\'t process the authentication token you provided. Please, check that this token is the right one and try again.'
+        description: 'We can\'t process the authentication token you provided. Please, check that this token is the right one and try again.',
     }, err);
 }
 
@@ -141,7 +145,7 @@ function normalizeMulterError(err) {
             message: err.message,
             details: {
                 maxPayloadSize: `${config.get('payload.maxSize')} bytes`,
-            }
+            },
         }, err);
     }
 
@@ -152,7 +156,7 @@ function normalizeMulterError(err) {
             description: 'We couldn\'t handle the request because of the file size. Please, reduce compress your file before trying again. The maximum file size is in the details.',
             details: {
                 maxFileSize: `${config.get('payload.files.maxFileSize')} bytes`,
-            }
+            },
         }, err);
     }
 
@@ -161,8 +165,8 @@ function normalizeMulterError(err) {
         title: 'The request\'s body is invalid.',
         description: 'We are having trouble processing the request\'s body. You will find more informations in the details. Please, fix the issue and try again.',
         details: {
-            errorDetail: err.message
-        }
+            errorDetail: err.message,
+        },
     }, err);
 }
 
@@ -206,7 +210,7 @@ export function errorNormalizer(err, req, res, next) {
         message: err.message,
         path: req.originalUrl,
         method: req.method,
-        originalName: err.name
+        originalName: err.name,
     }, err));
 
 }
@@ -232,7 +236,7 @@ export function errorHandler(err, req, res, next) {
             message: err.message,
             path: req.originalUrl,
             method: req.method,
-            originalName: err.name
+            originalName: err.name,
         }, err);
         res.status(500).json(error.getErrorResponse());
         errorLogger.error(error.getErrorLogInformations());
@@ -243,13 +247,14 @@ export function errorHandler(err, req, res, next) {
 /**
  * Middleware:
  * Analyses unhandled request and decides if the request was unknown or the method was wrong.
- * If the method is wrong, calls the next error middleware with a 405 error. Otherwise, calls the next error middleware with a 404 error.
+ * If the method is wrong, calls the next error middleware with a 405 error. Otherwise, calls the next error middleware
+ *  with a 404 error.
  * @param {HttpError} err - Error thrown by a middleware.
  * @param {Express.Request} req - Express request object.
  * @param {Express.Response} res - Express response object.
  * @param next - Next middleware to execute.
  */
-export function unHandledRequestHandler (req, res, next) {
+export function unHandledRequestHandler(req, res, next) {
     errorLogger.verbose('Unhandled request');
 
     // Remove query parameters from the original url
@@ -267,13 +272,13 @@ export function unHandledRequestHandler (req, res, next) {
         error = new NotFoundError({
             message: 'The request path isn\'t defined in the API.',
             title: 'The request you sent can\'t be processed.',
-            description: 'We have a problem understanding your request. You may check the documentation to see which path we understand, and try again.'
+            description: 'We have a problem understanding your request. You may check the documentation to see which path we understand, and try again.',
         });
 
     } else {
         errorLogger.debug(`The method ${req.method} is not accepted with the route ${req.originalUrl}`);
         error = new MethodNotAllowedError({
-            message: `The method ${req.method} can't be used on the path ${req.originalUrl}`
+            message: `The method ${req.method} can't be used on the path ${req.originalUrl}`,
         });
     }
     error.setRequestInformations(req.originalUrl, req.method);

@@ -9,7 +9,7 @@ import generateRoleSchema from './atoms/role.js';
  */
 const updateUserRoleSchema = {
     roleId: generateRoleSchema({ required: true, allowString: false }, ['body']),
-    userId: generateIdSchema()
+    userId: generateIdSchema(),
 };
 
 export default updateUserRoleSchema;

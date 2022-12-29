@@ -20,9 +20,9 @@ try {
     const deletedTokensNumber = await RefreshToken.destroy({
         where: {
             expiration: {
-                [Op.lt]: Sequelize.fn('current_timestamp', 0)
-            }
-        }
+                [Op.lt]: Sequelize.fn('current_timestamp', 0),
+            },
+        },
     });
 
     const message = `Refresh tokens deleted: ${deletedTokensNumber}`;

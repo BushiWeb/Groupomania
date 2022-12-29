@@ -1,4 +1,4 @@
-import {DataTypes} from 'sequelize';
+import { DataTypes } from 'sequelize';
 import { createLoggerNamespace } from '../logger/index.js';
 
 const dbLogger = createLoggerNamespace('groupomania:api:database');
@@ -10,33 +10,37 @@ const dbLogger = createLoggerNamespace('groupomania:api:database');
  */
 export default function createLikeModel(sequelize) {
     dbLogger.debug('Like model creation');
-    return sequelize.define('Like', {
-        userId: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            field: 'user_id',
-            references: {
-                model: 'users',
-                key: 'user_id'
+    return sequelize.define(
+        'Like',
+        {
+            userId: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                field: 'user_id',
+                references: {
+                    model: 'users',
+                    key: 'user_id',
+                },
+                onUpdate: 'CASCADE',
+                onDelete: 'CASCADE',
             },
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE'
+            postId: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                field: 'post_id',
+                references: {
+                    model: 'posts',
+                    key: 'post_id',
+                },
+                onUpdate: 'CASCADE',
+                onDelete: 'CASCADE',
+            },
         },
-        postId: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            field: 'post_id',
-            references: {
-                model: 'posts',
-                key: 'post_id'
-            },
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE'
+        {
+            tableName: 'likes',
+            schema: 'posts',
+            timestamps: false,
+            underscored: true,
         }
-    }, {
-        tableName: 'likes',
-        schema: 'posts',
-        timestamps: false,
-        underscored: true
-    });
+    );
 }

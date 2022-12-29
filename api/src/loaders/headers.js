@@ -9,7 +9,7 @@ const loaderLogger = createLoggerNamespace('groupomania:api:loader:headers');
  * Add all middleware adding headers.
  * @param {Express.Application} app - Express application
  */
-export default function headersLoader (app) {
+export default function headersLoader(app) {
     loaderLogger.verbose('Loading global headers');
 
     // Remove X-Powered-By
@@ -18,7 +18,7 @@ export default function headersLoader (app) {
     // Add CORS headers
     let corsOptions = {};
     const corsConfiguration = config.get('cors');
-    for(const parameter in corsConfiguration) {
+    for (const parameter in corsConfiguration) {
         if (corsConfiguration[parameter]) {
             corsOptions[parameter] = corsConfiguration[parameter];
         }
@@ -31,7 +31,7 @@ export default function headersLoader (app) {
     app.use(
         helmet.noSniff(),
         helmet.frameguard({ action: 'deny' }),
-        helmet.contentSecurityPolicy({ directives: { 'frame-ancestors': 'none' } })
+        helmet.contentSecurityPolicy({ directives: { 'frame-ancestors': 'none' }})
     );
     loaderLogger.verbose('Security header middlewares added');
     loaderLogger.debug('Use helmet.noSniff to set the X-Content-Type-Options to nosniff');

@@ -15,7 +15,8 @@ const accessControlLogger = createLoggerNamespace('groupomania:api:authorization
  * @param {Object} [dataOrigin={}] - How to find the base data.
  * @param {string} [dataOrigin.origin]
  * @param {string} [dataOrigin.field]
- * @returns {Object} Returns the data object. If no data are found, or if the data object is empty, return an empty object.
+ * @returns {Object} Returns the data object. If no data are found, or if the data object is empty, return an empty
+ *  object.
  */
 function getDataFromOrigin(req, res, { origin, field } = {}) {
     if (!origin) {
@@ -51,15 +52,16 @@ function getDataFromOrigin(req, res, { origin, field } = {}) {
  * @param {string} [dataOrigin.Subject.origin]
  * @param {string} [dataOrigin.Subject.field]
  *
- * @returns {{User: Proxy, Subject: Proxy}} Returns the object containing the User and Subject proxies, created with the found base data.
+ * @returns {{User: Proxy, Subject: Proxy}} Returns the object containing the User and Subject proxies, created with
+ *  the found base data.
  */
-function getDataProxies(req, res, subject, {User = {}, Subject = {}} = {}) {
+function getDataProxies(req, res, subject, { User = {}, Subject = {}} = {}) {
     const userData = getDataFromOrigin(req, res, User);
-    const subjectData = getDataFromOrigin(req,res, Subject);
+    const subjectData = getDataFromOrigin(req, res, Subject);
 
     return {
         User: accessControlRules.PIP('User', userData),
-        Subject: accessControlRules.PIP(subject, subjectData)
+        Subject: accessControlRules.PIP(subject, subjectData),
     };
 }
 
@@ -70,7 +72,11 @@ function getDataProxies(req, res, subject, {User = {}, Subject = {}} = {}) {
  * Gets all the conditions related to the request and returns the PDP middleware.
  * @param {string} action - Action the user wishes to execute.
  * @param {string} subject - Target of the action.
- * @param {{User: {origin: string, field: string}, Subject: {origin: string, field: string}}} [dataOrigin] - How to find the base data for the User and the Subject. The origin can be 'res' (to look into res.locals), 'body' (to look into the body), 'params' (to look into the path parameters) and 'query' (to look into the query parameters). The field is the path to the data. It supports dot notation. For example, {origin: 'res', field: 'auth.user'} will get the data from res.locals.auth.user.
+ * @param {{User: {origin: string, field: string}, Subject: {origin: string, field: string}}} [dataOrigin] - How to
+ *  find the base data for the User and the Subject. The origin can be 'res' (to look into res.locals), 'body' (to look
+ *  into the body), 'params' (to look into the path parameters) and 'query' (to look into the query parameters). The
+ *  field is the path to the data. It supports dot notation. For example, {origin: 'res', field: 'auth.user'} will get
+ *  the data from res.locals.auth.user.
  * @param {string|string[]} [fields] - Fields of the subject targeted by the action.
  * @return Returns the configured authentication middleware.
  */
@@ -81,7 +87,8 @@ export default function authorize(action, subject, dataOrigin, fields) {
 
     /**
      * Middleware checking if the user has the right to execute the request.
-     * Get the data for the user and the subject and verifies the conditions. If the conditions are met, calls the next middleware, otherwise calls the next error middlware with a ForbiddenError.
+     * Get the data for the user and the subject and verifies the conditions. If the conditions are met, calls the next
+     *  middleware, otherwise calls the next error middlware with a ForbiddenError.
      * @param {Express.Request} req - Express request object.
      * @param {Express.Response} res - Express response object.
      * @param next - Next middleware to execute.
@@ -96,8 +103,8 @@ export default function authorize(action, subject, dataOrigin, fields) {
             details: {
                 action,
                 subject,
-                fields
-            }
+                fields,
+            },
         });
 
         // Handling edge cases: no rules or no conditions

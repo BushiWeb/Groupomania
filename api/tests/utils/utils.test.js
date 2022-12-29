@@ -1,4 +1,9 @@
-import { deleteValueFromPath, getEnvironment, getValueFromPath, setValueFromPath } from '../../src/utils/utils.js';
+import {
+    deleteValueFromPath,
+    getEnvironment,
+    getValueFromPath,
+    setValueFromPath,
+} from '../../src/utils/utils.js';
 import { jest } from '@jest/globals';
 
 describe('Utils functions test suite', () => {
@@ -42,9 +47,9 @@ describe('Utils functions test suite', () => {
             p2: {
                 p2p1: 3,
                 p2p2: {
-                    p2p2p1: 'final'
-                }
-            }
+                    p2p2p1: 'final',
+                },
+            },
         };
         it('should return the object if the path is empty', () => {
             expect(getValueFromPath(object)).toBe(object);
@@ -68,9 +73,9 @@ describe('Utils functions test suite', () => {
                 p2: {
                     p2p1: 3,
                     p2p2: {
-                        p2p2p1: 'final'
-                    }
-                }
+                        p2p2p1: 'final',
+                    },
+                },
             };
         });
 
@@ -99,9 +104,9 @@ describe('Utils functions test suite', () => {
                 p2: {
                     p2p1: 3,
                     p2p2: {
-                        p2p2p1: 'final'
-                    }
-                }
+                        p2p2p1: 'final',
+                    },
+                },
             };
         });
 

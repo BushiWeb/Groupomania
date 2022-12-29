@@ -10,31 +10,33 @@ const passwordConfiguration = config.get('password');
  * @param {Array} [location=['body']] - Where the email is located.
  */
 export default function generatePasswordSchema(
-    { required=true, checkStrength=true } = { required: true, checkStrength: true },
+    { required = true, checkStrength = true } = {},
     location = ['body']
 ) {
     return {
         in: location,
 
-        ...(required ? {
-            exists: {
-                errorMessage: 'The password is required.',
-                options: {
-                    checkNull: true
+        ...required ?
+            {
+                exists: {
+                    errorMessage: 'The password is required.',
+                    options: {
+                        checkNull: true,
+                    },
+                    bail: true,
                 },
-                bail: true
-            }
-        } : {
-            optional: {
-                options: { nullable: true }
-            }
-        }),
+            } :
+            {
+                optional: {
+                    options: { nullable: true },
+                },
+            },
 
-        ...(checkStrength && {
+        ...checkStrength && {
             isStrongPassword: {
                 errorMessage: `The password must be stronger. It has to contain at least ${passwordConfiguration.minLength} characters, including at least ${passwordConfiguration.minLowercase} lowercase letters, ${passwordConfiguration.minUppercase} uppercase letters, ${passwordConfiguration.minNumbers} numbers and ${passwordConfiguration.minSymbols} symbols.`,
-                options: passwordConfiguration
-            }
-        })
+                options: passwordConfiguration,
+            },
+        },
     };
 }

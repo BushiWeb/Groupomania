@@ -1,4 +1,3 @@
-//import { createJsInterpreter, eq, ne, lt, lte, gt, gte, all, regex, or, nor, not, and, exists, size, mod, where, elemMatch, nin, within } as operators from '@ucast/js';
 import { createJsInterpreter } from '@ucast/js';
 
 /**
@@ -8,7 +7,7 @@ import { createJsInterpreter } from '@ucast/js';
  * @returns {Boolean}
  */
 async function asyncSome(array, fct) {
-    for(const index in array) {
+    for (const index in array) {
         if (await fct(array[index], index, array)) {
             return true;
         }
@@ -50,7 +49,7 @@ export async function get(object, path) {
  * @returns {Promise} Returns a promise resolved with the value, or rejected with an error.
  */
 export async function getValue(condition, object) {
-    // If the string represents the property of either the user or the subject, parse it and return the value of the property
+    // If the string represents the property of either the user or the subject, return the value of the property
     const objectPath = /^\{\{((?:User|Subject)\..+?)\}\}$/.exec(condition.value);
     if (objectPath !== null && objectPath[0] !== null) {
         return get(object, objectPath[1]);
@@ -99,7 +98,7 @@ export async function eq(condition, object, { compare }) {
     const conditionValue = await getValue(condition, object);
     const objectValue = await get(object, condition.field);
 
-    if(Array.isArray(objectValue) && !Array.isArray(conditionValue)) {
+    if (Array.isArray(objectValue) && !Array.isArray(conditionValue)) {
         return includes(objectValue, conditionValue, compare);
     }
 

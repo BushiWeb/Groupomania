@@ -1,5 +1,5 @@
 import { Logger, createLoggerNamespace } from '../../src/logger/index.js';
-import {jest} from '@jest/globals';
+import { jest } from '@jest/globals';
 import winstonOptions from '../../src/logger/logger-config.js';
 
 const mockWinstonLog = jest.spyOn(Logger, 'log').mockImplementation(() => {});
@@ -12,10 +12,10 @@ describe('createLoggerNamespace returned function test suite', () => {
     const namespace = 'testLabel';
     const logLevel = 'info';
     const defaultMessage = 'Test message';
-    const splatArray = ['string', 3, {prop: 'string'}];
+    const splatArray = ['string', 3, { prop: 'string' }];
 
     describe('Function test suite', () => {
-        it('should call the winston log method with the right level', () =>{
+        it('should call the winston log method with the right level', () => {
             const loggerNamespace = createLoggerNamespace(namespace);
             loggerNamespace(logLevel, defaultMessage);
 
@@ -23,63 +23,65 @@ describe('createLoggerNamespace returned function test suite', () => {
             expect(mockWinstonLog.mock.calls[0][0]).toMatch(logLevel);
         });
 
-        it('should call the winston log method with an object containing the info properties plus the new label', () =>{
+        it('should call the winston log method with an object containing the info properties plus the new label', () => {
             const loggerNamespace = createLoggerNamespace(namespace);
             const info = {
-                message: defaultMessage
+                message: defaultMessage,
             };
             loggerNamespace(logLevel, info);
 
-            expect(mockWinstonLog.mock.calls[0][1]).toEqual({...info, label: namespace});
+            expect(mockWinstonLog.mock.calls[0][1]).toEqual({ ...info, label: namespace });
         });
 
-        it('should call the winston log method with an object containing the info properties, including its label', () =>{
+        it('should call the winston log method with an object containing the info properties, including its label', () => {
             const loggerNamespace = createLoggerNamespace(namespace);
             const objectLabel = `specific${namespace}`;
             const info = {
                 message: defaultMessage,
-                label: objectLabel
+                label: objectLabel,
             };
             loggerNamespace(logLevel, info);
 
-            expect(mockWinstonLog.mock.calls[0][1]).toEqual({...info});
+            expect(mockWinstonLog.mock.calls[0][1]).toEqual({ ...info });
         });
 
-        it('should call the winston log method with an object containing the new label and the info object as a message', () =>{
+        it('should call the winston log method with an object containing the new label and the info object as a message', () => {
             const loggerNamespace = createLoggerNamespace(namespace);
             const info = {
                 notMessage: 'random string',
-                notLabel: 'random string'
+                notLabel: 'random string',
             };
             loggerNamespace(logLevel, info);
 
-            expect(mockWinstonLog.mock.calls[0][1]).toEqual({message: info, label: namespace});
+            expect(mockWinstonLog.mock.calls[0][1]).toEqual({ message: info, label: namespace });
         });
 
-        it('should call the winston log method with an object containing the info value as a message and the new label', () =>{
+        it('should call the winston log method with an object containing the info value as a message and the new label', () => {
             const loggerNamespace = createLoggerNamespace(namespace);
             loggerNamespace(logLevel, defaultMessage);
 
-            expect(mockWinstonLog.mock.calls[0][1]).toEqual({message: defaultMessage, label: namespace});
+            expect(mockWinstonLog.mock.calls[0][1]).toEqual({ message: defaultMessage, label: namespace });
         });
 
-        it('should call the winston log method with an object containing the new info message, label and the string interpolation array', () =>{
+        it('should call the winston log method with an object containing the new info message, label and the string interpolation array', () => {
             const loggerNamespace = createLoggerNamespace(namespace);
             loggerNamespace(logLevel, defaultMessage, ...splatArray);
 
-            expect(mockWinstonLog.mock.calls[0][1]).toEqual({message: defaultMessage, label: namespace, splat: splatArray});
+            expect(mockWinstonLog.mock.calls[0][1]).toEqual({
+                message: defaultMessage, label: namespace, splat: splatArray,
+            });
         });
 
-        it('should call the winston log method with an object containing the new info message, label and its original string interpolation array', () =>{
+        it('should call the winston log method with an object containing the new info message, label and its original string interpolation array', () => {
             const loggerNamespace = createLoggerNamespace(namespace);
             const objectSplat = [...splatArray].reverse();
             const info = {
                 message: defaultMessage,
-                splat: objectSplat
+                splat: objectSplat,
             };
             loggerNamespace(logLevel, info, ...splatArray);
 
-            expect(mockWinstonLog.mock.calls[0][1]).toEqual({...info, label: namespace});
+            expect(mockWinstonLog.mock.calls[0][1]).toEqual({ ...info, label: namespace });
         });
 
         it('should call the winston log methode with an object containing the error object as a message and the new label', () => {
@@ -87,7 +89,7 @@ describe('createLoggerNamespace returned function test suite', () => {
             const error = new Error(defaultMessage);
             loggerNamespace(logLevel, error);
 
-            expect(mockWinstonLog.mock.calls[0][1]).toEqual({message: error, label: namespace});
+            expect(mockWinstonLog.mock.calls[0][1]).toEqual({ message: error, label: namespace });
         });
 
     });
@@ -105,7 +107,12 @@ describe('createLoggerNamespace returned function test suite', () => {
             for (const level in winstonOptions.levels) {
                 loggerNamespace[level](defaultMessage, ...splatArray);
                 expect(mockWinstonLog).toHaveBeenCalled();
-                expect(mockWinstonLog).toHaveBeenCalledWith(level, {message: defaultMessage, label: namespace, splat: splatArray});
+                expect(mockWinstonLog).toHaveBeenCalledWith(
+                    level,
+                    {
+                        message: defaultMessage, label: namespace, splat: splatArray,
+                    }
+                );
             }
         });
     });

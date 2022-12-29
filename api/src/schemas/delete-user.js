@@ -6,7 +6,7 @@ import generateIdSchema from './atoms/id.js';
  * Contains a required integer id path parameter.
  */
 const deleteUserSchema = {
-    userId: generateIdSchema()
+    userId: generateIdSchema(),
 };
 
 export default deleteUserSchema;

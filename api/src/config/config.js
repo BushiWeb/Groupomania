@@ -8,11 +8,11 @@ const confLogger = createLoggerNamespace('groupomania:api:config');
 
 
 // Add TOML parser to Convict
-convict.addParser({extension: 'toml', parse: (source) => toml.parse(source, {joiner: '\n', bigint: false})});
+convict.addParser({ extension: 'toml', parse: (source) => toml.parse(source, { joiner: '\n', bigint: false }) });
 
 // Define configuration schema
 const environment = getEnvironment();
-const {default: CONFIG_SCHEMA} = await (environment === 'test' ? import('./test-config-schema.js') : import('./config-schema.js'));
+const { default: CONFIG_SCHEMA } = await (environment === 'test' ? import('./test-config-schema.js') : import('./config-schema.js'));
 let config = convict(CONFIG_SCHEMA);
 confLogger.debug(`Configuration schema created for environment ${environment}`);
 
@@ -33,7 +33,7 @@ try {
 confLogger.verbose('Configuration files loaded');
 
 // Validate configuration
-config.validate({allowed: 'strict', output: confLogger.warn});
+config.validate({ allowed: 'strict', output: confLogger.warn });
 confLogger.verbose('Configuration validated');
 
 export default config;

@@ -5,7 +5,7 @@ describe('Multer dataformatter test suite', () => {
     const jsonObject = {
         city: 'Annecy',
         street: 'Rue Carnot',
-        zipCode: '74000'
+        zipCode: '74000',
     };
     let object;
     let baseObject;
@@ -16,7 +16,7 @@ describe('Multer dataformatter test suite', () => {
             firstName: 'Jane',
             address: JSON.stringify(jsonObject),
             hobbies: ['drawing', 'karate'],
-            invalid: '"lastName": "Doe", "firstName": "john"'
+            invalid: '"lastName": "Doe", "firstName": "john"',
         };
         baseObject = JSON.parse(JSON.stringify(object));
     });
@@ -29,7 +29,7 @@ describe('Multer dataformatter test suite', () => {
     });
 
     it('should return the object if the origin doesn\'t exist but the value is not requires', () => {
-        const formatFunction = dataFormatter('work', {required: false});
+        const formatFunction = dataFormatter('work', { required: false });
         const objectCopy = formatFunction(object);
 
         expect(objectCopy).toEqual(object);
@@ -52,14 +52,14 @@ describe('Multer dataformatter test suite', () => {
     });
 
     it('should return the object with a totaly new value, without the need to parse', () => {
-        const formatFunction = dataFormatter('hobbies', {parse: false});
+        const formatFunction = dataFormatter('hobbies', { parse: false });
         const objectCopy = formatFunction(object);
 
         expect(objectCopy).toEqual(baseObject.hobbies);
     });
 
     it('should return the object with the value in the destination and the origin deleted', () => {
-        const formatFunction = dataFormatter('address', {destination: 'addressCopy'});
+        const formatFunction = dataFormatter('address', { destination: 'addressCopy' });
         const objectCopy = formatFunction(object);
 
         expect(objectCopy).toHaveProperty('addressCopy', jsonObject);

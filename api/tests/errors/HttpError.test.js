@@ -9,33 +9,33 @@ describe('HttpError test suite', () => {
         details: [
             {
                 info: 'Details object',
-                error: 'Invalid'
+                error: 'Invalid',
             },
             {
                 info: 'Details object',
-                error: 'Invalid'
-            }
+                error: 'Invalid',
+            },
         ],
         logDetails: [
             {
                 info: 'Details object for log',
-                error: 'Invalid'
+                error: 'Invalid',
             },
             {
                 info: 'Details object for log',
-                error: 'Invalid'
-            }
+                error: 'Invalid',
+            },
         ],
         statusCode: 555,
         path: 'api/error',
         method: 'GET',
         moreData1: 'Supplement',
-        moreData2: 'Second supplement'
+        moreData2: 'Second supplement',
     };
     const origin = new Error('Error message');
     const headers = {
         'header1': 'value',
-        'header2': 'value'
+        'header2': 'value',
     };
 
     describe('Constructor test suite', () => {
@@ -61,7 +61,7 @@ describe('HttpError test suite', () => {
 
         it('should create an instance with the default informations', () => {
             const lessErrorInformations = {
-                message: errorInformations.message
+                message: errorInformations.message,
             };
             const error = new HttpError(lessErrorInformations);
 
@@ -90,7 +90,7 @@ describe('HttpError test suite', () => {
         it('should create an instance with details that is not an array', () => {
             const lessErrorInformations = {
                 message: errorInformations.message,
-                details: errorInformations.details[0]
+                details: errorInformations.details[0],
             };
             const error = new HttpError(lessErrorInformations);
 
@@ -118,7 +118,7 @@ describe('HttpError test suite', () => {
         it('should create an instance with logDetails that is not an array', () => {
             const lessErrorInformations = {
                 message: errorInformations.message,
-                logDetails: errorInformations.logDetails[0]
+                logDetails: errorInformations.logDetails[0],
             };
             const error = new HttpError(lessErrorInformations);
 
@@ -164,7 +164,7 @@ describe('HttpError test suite', () => {
 
         it('should return an object with no optionnal informations', () => {
             const lessErrorInformations = {
-                message: errorInformations.message
+                message: errorInformations.message,
             };
             const error = new HttpError(lessErrorInformations);
             const errorResponse = error.getErrorResponse();
@@ -203,7 +203,7 @@ describe('HttpError test suite', () => {
 
         it('should return an object with no optionnal informations', () => {
             const lessErrorInformations = {
-                message: errorInformations.message
+                message: errorInformations.message,
             };
             const error = new HttpError(lessErrorInformations);
             const errorResponse = error.getErrorLogInformations();
@@ -222,7 +222,7 @@ describe('HttpError test suite', () => {
         it('should return an object with the public details if log details are not available but public details are', () => {
             const lessErrorInformations = {
                 message: errorInformations.message,
-                details: errorInformations.details
+                details: errorInformations.details,
             };
             const error = new HttpError(lessErrorInformations);
             const errorResponse = error.getErrorLogInformations();
@@ -244,7 +244,7 @@ describe('HttpError test suite', () => {
     describe('setRequestInformations test suite', () => {
         it('should update the path and the method and return the instance', () => {
             const lessErrorInformations = {
-                message: errorInformations.message
+                message: errorInformations.message,
             };
             const error = new HttpError(lessErrorInformations);
 
@@ -261,7 +261,7 @@ describe('HttpError test suite', () => {
     describe('setPublicMessages test suite', () => {
         it('should update the title and the description and return the instance', () => {
             const lessErrorInformations = {
-                message: errorInformations.message
+                message: errorInformations.message,
             };
             const error = new HttpError(lessErrorInformations);
 

@@ -6,7 +6,7 @@ import {
     errorHandler,
 } from './utils/server-utils.js';
 import config from './config/config.js';
-import {createLoggerNamespace} from './logger/index.js';
+import { createLoggerNamespace } from './logger/index.js';
 
 const serverLogger = createLoggerNamespace('groupomania:api:server');
 

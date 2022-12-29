@@ -1,6 +1,6 @@
 import CONFIG_SCHEMA from './config-schema.js';
 
-const TEST_CONFIG_SCHEMA = {...CONFIG_SCHEMA};
+const TEST_CONFIG_SCHEMA = { ...CONFIG_SCHEMA };
 
 delete TEST_CONFIG_SCHEMA.env.arg;
 TEST_CONFIG_SCHEMA.env.default = 'test';

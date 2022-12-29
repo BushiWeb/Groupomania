@@ -13,7 +13,7 @@ import generateMoreInfoSchema from './atoms/moreInfo.js';
 const getPostSchema = {
     userInfo: generateMoreInfoSchema(),
     likeInfo: generateMoreInfoSchema(),
-    postId: generateIdSchema()
+    postId: generateIdSchema(),
 };
 
 export default getPostSchema;

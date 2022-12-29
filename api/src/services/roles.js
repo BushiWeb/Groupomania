@@ -11,7 +11,7 @@ export async function getAllRoles() {
     rolesServicesLogger.verbose('Get all roles service starting');
 
     let searchOptions = {
-        order: [['roleId', 'ASC']]
+        order: [['roleId', 'ASC']],
     };
 
     const roles = await db.models.Role.findAll(searchOptions);

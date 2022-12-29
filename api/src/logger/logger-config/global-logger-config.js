@@ -8,7 +8,7 @@ const LOGGER_CONFIG = {
         info: 3,
         http: 4,
         verbose: 5,
-        debug: 6
+        debug: 6,
     },
     level: 'info',
     colors: {
@@ -18,11 +18,11 @@ const LOGGER_CONFIG = {
         info: 'green',
         http: 'cyan',
         verbose: 'white',
-        debug: 'gray'
+        debug: 'gray',
     },
     exitOnError: true,
     format: winston.format.simple(),
-    transports: [new winston.transports.Console()]
+    transports: [new winston.transports.Console()],
 };
 
 export default LOGGER_CONFIG;

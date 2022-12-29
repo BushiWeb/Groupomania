@@ -2,7 +2,8 @@ import parser from 'yargs-parser';
 
 /**
  * Returns the current environment.
- * The environment is either in the env command line argument, in the NODE_ENV environment variable or development by default.
+ * The environment is either in the env command line argument, in the NODE_ENV environment variable or development by
+ *  default.
  * @returns Returns the name of the current environment in lowercase.
  */
 export function getEnvironment() {
@@ -16,7 +17,8 @@ export function getEnvironment() {
 
 
 /**
- * Set the value of the targeted property of an object, given the property as a string representing the path throught the object.
+ * Set the value of the targeted property of an object, given the property as a string representing the path throught
+ *  the object.
  * @param {Object} object - Object to look into.
  * @param value - Value of the targeted property
  * @param {string} [path] - Dot notation path to the property. If absent, the object is going to be overriden.
@@ -37,7 +39,7 @@ export function setValueFromPath(object, value, path) {
             break;
         }
 
-        if(currentProperty[properties[i]] === undefined) {
+        if (currentProperty[properties[i]] === undefined) {
             currentProperty[properties[i]] = {};
         }
         currentProperty = currentProperty[properties[i]];
@@ -69,7 +71,7 @@ export function deleteValueFromPath(object, path) {
         }
 
         currentProperty = currentProperty[properties[i]];
-        if(currentProperty === undefined) {
+        if (currentProperty === undefined) {
             return object;
         }
     }
@@ -95,7 +97,7 @@ export function getValueFromPath(object, path = '') {
 
     for (const property of properties) {
         currentValue = currentValue[property];
-        if(currentValue === undefined) {
+        if (currentValue === undefined) {
             return currentValue;
         }
     }

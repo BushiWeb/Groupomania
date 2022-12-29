@@ -1,5 +1,10 @@
 import { createLoggerNamespace } from '../logger/index.js';
-import { unHandledRequestHandler, errorHandler, errorNormalizer, deleteFilesOnError } from '../middlewares/errors.js';
+import {
+    unHandledRequestHandler,
+    errorHandler,
+    errorNormalizer,
+    deleteFilesOnError,
+} from '../middlewares/errors.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:api:loader:errors');
 
@@ -7,7 +12,7 @@ const loaderLogger = createLoggerNamespace('groupomania:api:loader:errors');
  * Add all error related middlewares.
  * @param {Express.Application} app - Express application
  */
-export default function errorsLoader (app) {
+export default function errorsLoader(app) {
     loaderLogger.verbose('Loading error middlewares');
 
     // Intercept Express 404 errors, sent when the method or the URL isn't defined

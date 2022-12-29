@@ -12,10 +12,10 @@ function jsonReplacer(key, value) {
 const PRODUCTION_LOGGER_CONFIG = {
     level: 'info',
     format: winston.format.combine(
-        winston.format.timestamp({format: 'YYYY-MM-DD HH:mm:ss.SSS'}),
-        winston.format.errors({stack: true}),
+        winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
+        winston.format.errors({ stack: true }),
         winston.format.splat(),
-        winston.format.json({replacer: jsonReplacer})
+        winston.format.json({ replacer: jsonReplacer })
     ),
     transports: [
         new winston.transports.DailyRotateFile({
@@ -24,8 +24,9 @@ const PRODUCTION_LOGGER_CONFIG = {
             datePattern: 'YYYY-MM-DD',
             maxSize: '20m',
             dirname: './logs',
-            zippedArchive: true
-        })]
+            zippedArchive: true,
+        }),
+    ],
 };
 
 export default PRODUCTION_LOGGER_CONFIG;

@@ -17,5 +17,5 @@ export {
     UnauthorizedError,
     UnsupportedMediaTypeError,
     UserInputValidationError,
-    PayloadTooLargeError
+    PayloadTooLargeError,
 };

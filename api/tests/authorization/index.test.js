@@ -18,56 +18,56 @@ describe('Access control object test suite', () => {
                 actions: ['action'],
                 subject: 'subject',
                 fields: ['field1', 'field2'],
-                conditions: 'condition_action_subject_[field1,field2]'
+                conditions: 'condition_action_subject_[field1,field2]',
             },
             {
                 actions: ['nfAction'],
                 subject: 'subject',
                 fields: ['field1', 'field2'],
-                conditions: 'condition_nfAction_subject_[field1,field2]'
+                conditions: 'condition_nfAction_subject_[field1,field2]',
             },
             {
                 actions: ['nfAction'],
                 subject: 'subject',
                 fields: [],
-                conditions: 'condition_nfAction_subject'
+                conditions: 'condition_nfAction_subject',
             },
             {
                 actions: ['sfAction'],
                 subject: 'subject',
                 fields: ['field1', 'field2'],
-                conditions: 'condition_sfAction_subject_[field1,field2]'
+                conditions: 'condition_sfAction_subject_[field1,field2]',
             },
             {
                 actions: ['sfAction'],
                 subject: 'subject',
                 fields: [],
-                conditions: 'condition_sfAction_subject'
+                conditions: 'condition_sfAction_subject',
             },
             {
                 actions: ['afAction'],
                 subject: 'subject',
                 fields: ['field1', 'field2', 'field3'],
-                conditions: 'condition_afAction_subject_[field1,field2,field3]'
+                conditions: 'condition_afAction_subject_[field1,field2,field3]',
             },
             {
                 actions: ['afAction'],
                 subject: 'subject',
                 fields: [],
-                conditions: 'condition_afAction_subject'
+                conditions: 'condition_afAction_subject',
             },
             {
                 actions: ['eafAction'],
                 subject: 'subject',
                 fields: ['field1', 'field2', 'field3'],
-                conditions: 'condition_eafAction_subject_[field1,field2,field3]'
+                conditions: 'condition_eafAction_subject_[field1,field2,field3]',
             },
             {
                 actions: ['eafAction'],
                 subject: 'subject',
                 fields: [],
-                conditions: 'condition_eafAction_subject'
-            }
+                conditions: 'condition_eafAction_subject',
+            },
         ];
 
         accessControlRules.parsedRules = mockParsedRules;
@@ -157,9 +157,9 @@ describe('Access control object test suite', () => {
     describe('PIP test suite', () => {
         jest.spyOn(db, 'models', 'get').mockImplementation(
             () => new Proxy(
-                {Model: MockModel},
+                { Model: MockModel },
                 {
-                    get: (target) => target.Model
+                    get: (target) => target.Model,
                 }
             )
         );
@@ -168,7 +168,7 @@ describe('Access control object test suite', () => {
             id: 36,
             email: 'test@email.com',
             roleId: 1,
-            age: 13
+            age: 13,
         };
 
         let base;
@@ -179,7 +179,7 @@ describe('Access control object test suite', () => {
             mockModelMethods.clearMocks();
             base = {
                 id: dbEntry.id,
-                email: dbEntry.email
+                email: dbEntry.email,
             };
         });
 

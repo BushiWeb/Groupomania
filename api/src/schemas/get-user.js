@@ -9,7 +9,7 @@ import generateMoreInfoSchema from './atoms/moreInfo.js';
  */
 const getUserSchema = {
     userId: generateIdSchema(),
-    roleInfo: generateMoreInfoSchema()
+    roleInfo: generateMoreInfoSchema(),
 };
 
 export default getUserSchema;

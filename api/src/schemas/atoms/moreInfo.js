@@ -6,34 +6,36 @@
  * @param {Array} [location=['query']] - Where the email is located.
  */
 export default function generateMoreInfoSchema(
-    { required=false, checkFormat=true } = { required: false, checkFormat: true },
+    { required = false, checkFormat = true } = {},
     location = ['query']
 ) {
     return {
         in: location,
 
-        ...(required ? {
-            exists: {
-                errorMessage: 'The parameter is required.',
-                options: {
-                    checkNull: true
+        ...required ?
+            {
+                exists: {
+                    errorMessage: 'The parameter is required.',
+                    options: {
+                        checkNull: true,
+                    },
+                    bail: true,
                 },
-                bail: true
-            }
-        } : {
-            optional: {
-                options: { nullable: true }
-            }
-        }),
+            } :
+            {
+                optional: {
+                    options: { nullable: true },
+                },
+            },
 
-        ...(checkFormat && {
+        ...checkFormat && {
             isBoolean: {
                 errorMessage: 'The parameter must be a boolean. Accepted values are true, yes, false, no, 0 and 1.',
                 loose: true,
-                bail: true
-            }
-        }),
+                bail: true,
+            },
+        },
 
-        toBoolean: true
+        toBoolean: true,
     };
 }

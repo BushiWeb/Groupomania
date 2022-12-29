@@ -11,7 +11,7 @@ const updatePostSchema = {
     postId: generateIdSchema(),
     title: generateTextSchema(),
     message: generateTextSchema(),
-    deleteImage: generateBooleanSchema()
+    deleteImage: generateBooleanSchema(),
 };
 
 export default updatePostSchema;

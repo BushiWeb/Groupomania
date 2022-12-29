@@ -1,6 +1,6 @@
 import getRoutesRegexp from '../../src/utils/get-routes.js';
 
-const createRouteMock = ({regexp, noRoute = false}) => {
+const createRouteMock = ({ regexp, noRoute = false }) => {
     if (noRoute) {
         return { regexp };
     }
@@ -8,16 +8,22 @@ const createRouteMock = ({regexp, noRoute = false}) => {
     return {
         route: {
             path: 'path',
-            methods: { get: true }
+            methods: { get: true },
         },
-        regexp
+        regexp,
     };
 };
 
-const createRouterMock = ({regexp, routes, name = 'router', noHandle = false, noStack = false}) => {
+const createRouterMock = ({
+    regexp,
+    routes,
+    name = 'router',
+    noHandle = false,
+    noStack = false,
+}) => {
     const routerMock = {
         name,
-        regexp
+        regexp,
     };
 
     if (noHandle) {
@@ -49,7 +55,7 @@ const createAppMock = (regexps, noRouter = false, noStack = false) => {
     }
 
     const mockApp = {
-        _router: {}
+        _router: {},
     };
 
     if (noStack) {
@@ -70,43 +76,37 @@ const createAppMock = (regexps, noRouter = false, noStack = false) => {
 };
 
 const regexps = [
-    { regexp: /^\/?$/i, noRoute: true},
+    { regexp: /^\/?$/i, noRoute: true },
     { regexp: /^\/auth\/?$/i },
     {
         regexp: /^\/user\/?(?=\/|$)/i,
         routes: [
-            { regexp: /^\/?$/i},
+            { regexp: /^\/?$/i },
             { regexp: /^\/(?:([^/]+?))\/?$/i },
             {
                 regexp: /^\/followers\/?(?=\/|$)/i,
                 routes: [
-                    { regexp: /^\/?$/i},
+                    { regexp: /^\/?$/i },
                     { regexp: /^\/(?:([^/]+?))\/?$/i },
-                ]
-            }
-        ]
+                ],
+            },
+        ],
     },
     {
         regexp: /^\/user\/?(?=\/|$)/i,
-        routes: [
-            { regexp: /^\/?$/i}
-        ],
-        name: 'expressInit'
+        routes: [{ regexp: /^\/?$/i }],
+        name: 'expressInit',
     },
     {
         regexp: /^\/user\/?(?=\/|$)/i,
-        routes: [
-            { regexp: /^\/?$/i}
-        ],
-        noHandle: true
+        routes: [{ regexp: /^\/?$/i }],
+        noHandle: true,
     },
     {
         regexp: /^\/user\/?(?=\/|$)/i,
-        routes: [
-            { regexp: /^\/?$/i}
-        ],
-        noStack: true
-    }
+        routes: [{ regexp: /^\/?$/i }],
+        noStack: true,
+    },
 ];
 
 
@@ -194,7 +194,7 @@ describe('getRoutesRegexp test suite', () => {
     });
 
     it('should return the complete regexp of all the routes in the application but only once per regexp', () => {
-        const repeatRegexps = [ regexps[1], regexps[1] ];
+        const repeatRegexps = [regexps[1], regexps[1]];
         const app = createAppMock(repeatRegexps);
         const routeRegexps = getRoutesRegexp(app);
 

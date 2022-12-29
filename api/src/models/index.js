@@ -22,7 +22,7 @@ const db = {
      */
     get models() {
         return this.ormInstance.models;
-    }
+    },
 };
 
 export default db;

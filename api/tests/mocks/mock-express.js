@@ -1,14 +1,14 @@
-import {jest} from '@jest/globals';
+import { jest } from '@jest/globals';
 
-export const mockRequest = (body = {}, {contentType, authorization} = {}) => {
+export const mockRequest = (body = {}, { contentType, authorization } = {}) => {
     const req = {
         body,
         headers: {
-            ...(contentType && {'content-type': contentType}),
-            ...(authorization && {'authorization': authorization})
+            ...contentType && { 'content-type': contentType },
+            ...authorization && { 'authorization': authorization },
         },
         query: {},
-        params: {}
+        params: {},
     };
     req.get = jest.fn().mockImplementation((parameter) => {
         return req.headers[parameter.toLowerCase()];

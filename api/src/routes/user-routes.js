@@ -1,8 +1,22 @@
 import express from 'express';
 import { createLoggerNamespace } from '../logger/index.js';
-import { createUserController, deleteUserController, getAllUsersController, getuserByIdController, updateUserController, updateUserRoleController } from '../controllers/user-controllers.js';
+import {
+    createUserController,
+    deleteUserController,
+    getAllUsersController,
+    getuserByIdController,
+    updateUserController,
+    updateUserRoleController,
+} from '../controllers/user-controllers.js';
 import config from '../config/config.js';
-import validationMiddlewares, { createUserBodySchema, deleteUserSchema, getAllUsersSchema, getUserSchema, updateUserRoleSchema, updateUserSchema } from '../middlewares/user-input-validation.js';
+import validationMiddlewares, {
+    createUserBodySchema,
+    deleteUserSchema,
+    getAllUsersSchema,
+    getUserSchema,
+    updateUserRoleSchema,
+    updateUserSchema,
+} from '../middlewares/user-input-validation.js';
 import createBodyParser from '../middlewares/body-parsing.js';
 import authenticate from '../middlewares/authentication.js';
 import authorise from '../middlewares/authorization.js';
@@ -13,7 +27,7 @@ const router = express.Router();
 userRoutesLogger.verbose('User router initialisation');
 
 const expressJsonOptions = {
-    limit: config.get('payload.maxSize')
+    limit: config.get('payload.maxSize'),
 };
 
 /**
@@ -25,7 +39,7 @@ const expressJsonOptions = {
 router.post(
     '/',
     createBodyParser({
-        'application/json': express.json(expressJsonOptions)
+        'application/json': express.json(expressJsonOptions),
     }, false),
     validationMiddlewares(createUserBodySchema),
     createUserController
@@ -75,18 +89,18 @@ userRoutesLogger.debug('GET / - get all users route added');
 router.put(
     '/:userId',
     createBodyParser({
-        'application/json': express.json(expressJsonOptions)
+        'application/json': express.json(expressJsonOptions),
     }, false),
     validationMiddlewares(updateUserSchema),
     authenticate(),
     authorise('update', 'User', {
         User: {
             origin: 'res',
-            field: 'auth'
+            field: 'auth',
         },
         Subject: {
-            origin: 'params'
-        }
+            origin: 'params',
+        },
     }, ['email', 'password']),
     updateUserController
 );
@@ -103,18 +117,18 @@ userRoutesLogger.debug('PUT /:userId - update user route added');
 router.put(
     '/:userId/role',
     createBodyParser({
-        'application/json': express.json(expressJsonOptions)
+        'application/json': express.json(expressJsonOptions),
     }, false),
     validationMiddlewares(updateUserRoleSchema),
     authenticate(),
     authorise('update', 'User', {
         User: {
             origin: 'res',
-            field: 'auth'
+            field: 'auth',
         },
         Subject: {
-            origin: 'params'
-        }
+            origin: 'params',
+        },
     }, 'roleId'),
     updateUserRoleController
 );
@@ -136,11 +150,11 @@ router.delete(
     authorise('delete', 'User', {
         User: {
             origin: 'res',
-            field: 'auth'
+            field: 'auth',
         },
         Subject: {
-            origin: 'params'
-        }
+            origin: 'params',
+        },
     }),
     deleteUserController
 );

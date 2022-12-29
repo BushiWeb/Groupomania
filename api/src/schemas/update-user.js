@@ -12,7 +12,7 @@ import generateIdSchema from './atoms/id.js';
 const updateUserSchema = {
     email: generateEmailSchema({ required: false }),
     password: generatePasswordSchema({ required: false }),
-    userId: generateIdSchema()
+    userId: generateIdSchema(),
 };
 
 export default updateUserSchema;

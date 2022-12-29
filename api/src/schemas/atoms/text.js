@@ -8,27 +8,29 @@ import config from '../../config/config.js';
  * @param {Array} [location=['body']] - Where the email is located.
  */
 export default function generateTextSchema(
-    { required=false, sanitize=true } = {},
+    { required = false, sanitize = true } = {},
     location = ['body']
 ) {
     return {
         in: location,
 
-        ...(required ? {
-            exists: {
-                errorMessage: 'The text is required.',
-                options: {
-                    checkNull: true
+        ...required ?
+            {
+                exists: {
+                    errorMessage: 'The text is required.',
+                    options: {
+                        checkNull: true,
+                    },
+                    bail: true,
                 },
-                bail: true
-            }
-        } : {
-            optional: {
-                options: { nullable: true }
-            }
-        }),
+            } :
+            {
+                optional: {
+                    options: { nullable: true },
+                },
+            },
 
-        ...(sanitize && {
+        ...sanitize && {
             customSanitizer: {
                 options: (value) => {
                     let newValue = value;
@@ -36,8 +38,8 @@ export default function generateTextSchema(
                         newValue = newValue.replace(new RegExp(blackListed), '');
                     }
                     return newValue;
-                }
-            }
-        })
+                },
+            },
+        },
     };
 }

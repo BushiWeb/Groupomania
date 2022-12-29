@@ -6,7 +6,7 @@ import generateIdSchema from './atoms/id.js';
  * Contains a required integer id path parameter.
  */
 const deletePostSchema = {
-    postId: generateIdSchema()
+    postId: generateIdSchema(),
 };
 
 export default deletePostSchema;

@@ -12,7 +12,7 @@ const router = express.Router();
 authRoutesLogger.verbose('Authentication router initialisation');
 
 const expressJsonOptions = {
-    limit: config.get('payload.maxSize')
+    limit: config.get('payload.maxSize'),
 };
 
 /**
@@ -24,7 +24,7 @@ const expressJsonOptions = {
 router.post(
     '/login',
     createBodyParser({
-        'application/json': express.json(expressJsonOptions)
+        'application/json': express.json(expressJsonOptions),
     }, false),
     validationMiddlewares(loginBodySchema),
     loginController

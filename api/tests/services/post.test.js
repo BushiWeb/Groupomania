@@ -1,15 +1,22 @@
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
 import MockModel, * as mockModelMethods from '../mocks/mock-models.js';
-import { createPost, deletePost, getAllPosts, getPost, likePost, updatePost } from '../../src/services/posts.js';
+import {
+    createPost,
+    deletePost,
+    getAllPosts,
+    getPost,
+    likePost,
+    updatePost,
+} from '../../src/services/posts.js';
 import { NotFoundError } from '../../src/errors/index.js';
 import { ForeignKeyConstraintError, UniqueConstraintError } from 'sequelize';
 
 jest.spyOn(db, 'models', 'get').mockImplementation(
     () => new Proxy(
-        {Model: MockModel},
+        { Model: MockModel },
         {
-            get: (target) => target.Model
+            get: (target) => target.Model,
         }
     )
 );
@@ -26,13 +33,17 @@ describe('Post services test suite', () => {
         imageUrl: 'image/pic.com',
         creationDate: '12-10-2022',
         lastUpdateDate: '26-11-2022',
-        writerId: 6
+        writerId: 6,
     };
 
 
     describe('Create user service test suite', () => {
         it('should create a user with the default role id and return the user', async () => {
-            const newUser = await createPost({ title: postInfos.title, message: postInfos.message, imageUrl: postInfos.imageUrl });
+            const newUser = await createPost({
+                title: postInfos.title,
+                message: postInfos.message,
+                imageUrl: postInfos.imageUrl,
+            });
 
             expect(newUser).toHaveProperty('title', postInfos.title);
             expect(newUser).toHaveProperty('message', postInfos.message);
@@ -50,13 +61,13 @@ describe('Post services test suite', () => {
             imageUrl: null,
             creationDate: '12-12-2022',
             lastUpdateDate: null,
-            writerId: 8
+            writerId: 8,
         };
 
         it('should get all posts\' informations', async () => {
             const returnedPostsInfos = [
                 postInfos,
-                otherPost
+                otherPost,
             ];
 
             mockModelMethods.mockFindAll.mockResolvedValueOnce(returnedPostsInfos.map((value) => new MockModel(value)));
@@ -65,7 +76,7 @@ describe('Post services test suite', () => {
             expect(Array.isArray(posts)).toBe(true);
             expect(posts).toHaveLength(2);
 
-            for(const index in posts) {
+            for (const index in posts) {
                 expect(posts[index]).toHaveProperty('postId', returnedPostsInfos[index].postId);
                 expect(posts[index]).toHaveProperty('title', returnedPostsInfos[index].title);
                 expect(posts[index]).toHaveProperty('message', returnedPostsInfos[index].message);
@@ -89,9 +100,7 @@ describe('Post services test suite', () => {
         });
 
         it('should get all users\' informations if they match the userId', async () => {
-            const returnedPostsInfos = [
-                postInfos
-            ];
+            const returnedPostsInfos = [postInfos];
 
             mockModelMethods.mockFindAll.mockResolvedValueOnce(returnedPostsInfos.map((value) => new MockModel(value)));
             const posts = await getAllPosts({ userId: postInfos.writerId });
@@ -99,7 +108,7 @@ describe('Post services test suite', () => {
             expect(Array.isArray(posts)).toBe(true);
             expect(posts).toHaveLength(1);
 
-            for(const index in posts) {
+            for (const index in posts) {
                 expect(posts[index]).toHaveProperty('postId', returnedPostsInfos[index].postId);
                 expect(posts[index]).toHaveProperty('title', returnedPostsInfos[index].title);
                 expect(posts[index]).toHaveProperty('message', returnedPostsInfos[index].message);
@@ -127,7 +136,7 @@ describe('Post services test suite', () => {
         it('should get all posts\' informations paginated', async () => {
             const returnedPostsInfos = [
                 postInfos,
-                otherPost
+                otherPost,
             ];
 
             const limit = 1;
@@ -175,8 +184,8 @@ describe('Post services test suite', () => {
                     writer: {
                         writerId: postInfos.writerId,
                         roleId: 2,
-                        email: 'john.doe@gmail.com'
-                    }
+                        email: 'john.doe@gmail.com',
+                    },
                 },
                 {
                     postId: otherPost.postId,
@@ -188,9 +197,9 @@ describe('Post services test suite', () => {
                     writer: {
                         writerId: otherPost.writerId,
                         roleId: 1,
-                        email: 'jane.doe@gmail.com'
-                    }
-                }
+                        email: 'jane.doe@gmail.com',
+                    },
+                },
             ];
 
             mockModelMethods.mockFindAll.mockResolvedValueOnce(returnedPostsInfos.map((value) => new MockModel(value)));
@@ -199,7 +208,7 @@ describe('Post services test suite', () => {
             expect(Array.isArray(posts)).toBe(true);
             expect(posts).toHaveLength(2);
 
-            for(const index in posts) {
+            for (const index in posts) {
                 expect(posts[index]).toHaveProperty('postId', returnedPostsInfos[index].postId);
                 expect(posts[index]).toHaveProperty('title', returnedPostsInfos[index].title);
                 expect(posts[index]).toHaveProperty('message', returnedPostsInfos[index].message);
@@ -243,7 +252,7 @@ describe('Post services test suite', () => {
                     lastUpdateDate: postInfos.lastUpdateDate,
                     writerId: postInfos.writerId,
                     likes: 2,
-                    usersLiked: [52, 111]
+                    usersLiked: [52, 111],
                 },
                 {
                     postId: otherPost.postId,
@@ -254,8 +263,8 @@ describe('Post services test suite', () => {
                     lastUpdateDate: otherPost.lastUpdateDate,
                     writerId: otherPost.writerId,
                     likes: 1,
-                    usersLiked: [52]
-                }
+                    usersLiked: [52],
+                },
             ];
 
             mockModelMethods.mockFindAll.mockResolvedValueOnce(returnedPostsInfos.map((value) => new MockModel(value)));
@@ -264,7 +273,7 @@ describe('Post services test suite', () => {
             expect(Array.isArray(posts)).toBe(true);
             expect(posts).toHaveLength(2);
 
-            for(const index in posts) {
+            for (const index in posts) {
                 expect(posts[index]).toHaveProperty('postId', returnedPostsInfos[index].postId);
                 expect(posts[index]).toHaveProperty('title', returnedPostsInfos[index].title);
                 expect(posts[index]).toHaveProperty('message', returnedPostsInfos[index].message);
@@ -300,7 +309,7 @@ describe('Post services test suite', () => {
     describe('Get post service test suite', () => {
         it('should get the post informations', async () => {
             const returnedPostInfos = {
-                ...postInfos
+                ...postInfos,
             };
             mockModelMethods.mockFindByPk.mockResolvedValueOnce(new MockModel(returnedPostInfos));
             const post = await getPost(returnedPostInfos.userId);
@@ -335,8 +344,8 @@ describe('Post services test suite', () => {
                 writer: {
                     writerId: postInfos.writerId,
                     roleId: 2,
-                    email: 'john.doe@gmail.com'
-                }
+                    email: 'john.doe@gmail.com',
+                },
             };
             mockModelMethods.mockFindByPk.mockResolvedValueOnce(new MockModel(returnedPostInfos));
             const post = await getPost(returnedPostInfos.email, { userInfo: true });
@@ -380,7 +389,7 @@ describe('Post services test suite', () => {
                 lastUpdateDate: postInfos.lastUpdateDate,
                 writerId: postInfos.writerId,
                 likes: 2,
-                usersLiked: [52, 111]
+                usersLiked: [52, 111],
             };
             mockModelMethods.mockFindByPk.mockResolvedValueOnce(new MockModel(returnedPostInfos));
             const post = await getPost(returnedPostInfos.email, { likeInfo: true });

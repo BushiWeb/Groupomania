@@ -15,18 +15,24 @@ const postsServicesLogger = createLoggerNamespace('groupomania:api:services:post
  * @param {number} [option.limit] - Number of entry to return, usefull for pagination.
  * @returns {Object} Returns the option object.
  */
-function getRequestOptionObject({ userInfo = false, likeInfo = false, userId, page, limit } = {}) {
+function getRequestOptionObject({
+    userInfo = false,
+    likeInfo = false,
+    userId,
+    page,
+    limit,
+} = {}) {
     postsServicesLogger.verbose('Get request options object');
 
     let searchOptions = {
-        attributes: ['postId', 'title', 'message', 'imageUrl', 'creationDate', 'lastUpdateDate', 'writerId']
+        attributes: ['postId', 'title', 'message', 'imageUrl', 'creationDate', 'lastUpdateDate', 'writerId'],
     };
 
     // Creating user filter
     if (userId !== undefined) {
         postsServicesLogger.debug('Filtering by user id');
         searchOptions.where = {
-            writerId: userId
+            writerId: userId,
         };
     }
 
@@ -35,15 +41,18 @@ function getRequestOptionObject({ userInfo = false, likeInfo = false, userId, pa
         postsServicesLogger.debug('Adding user informations to the results');
         searchOptions.include = {
             association: 'writer',
-            attributes: [['user_id', 'writerId'], 'email', 'roleId']
+            attributes: [['user_id', 'writerId'], 'email', 'roleId'],
         };
         searchOptions.attributes.pop();
     }
 
     /* Adding likes informations:
         Joining the post table with the user table using the like table.
-        Use the count function to count the number of user_id, giving the number of likes. Cast the result to an integer.
-        Use the array_agg to get the list of all users that liked the post. To avoid getting an array containing the null value if no one liked the post, use nullif to get null if the array contains only a null value, and use coalesce to transform this null into an empty array.
+        Use the count function to count the number of user_id, giving the number of likes. Cast the result to an
+            integer.
+        Use the array_agg to get the list of all users that liked the post. To avoid getting an array containing the
+            null value if no one liked the post, use nullif to get null if the array contains only a null value, and
+            use coalesce to transform this null into an empty array.
         Group by post_id, and users.user_id if we ask for the user informations.
     */
     if (likeInfo) {
@@ -52,8 +61,8 @@ function getRequestOptionObject({ userInfo = false, likeInfo = false, userId, pa
             association: 'users_liked',
             attributes: [],
             through: {
-                attributes: []
-            }
+                attributes: [],
+            },
         };
 
         if (searchOptions.include) {
@@ -74,7 +83,7 @@ function getRequestOptionObject({ userInfo = false, likeInfo = false, userId, pa
                 fn('count', col('users_liked.user_id')),
                 'integer'
             ),
-            'likes'
+            'likes',
         ]);
         // To aggregate the users that liked
         searchOptions.attributes.push([
@@ -83,7 +92,7 @@ function getRequestOptionObject({ userInfo = false, likeInfo = false, userId, pa
                 fn('array_agg', col('users_liked.user_id')),
                 cast('{NULL}', 'integer[]')
             ), cast('{}', 'integer[]')),
-            'usersLiked'
+            'usersLiked',
         ]);
     }
 
@@ -167,7 +176,7 @@ export async function getPost(postId, options = {}) {
         throw new NotFoundError({
             message: `No post has the id ${postId}.`,
             title: 'The post can\'t be found.',
-            description: 'We can\'t find the post corresponding to the id you gave. Please, verify your input and try again.'
+            description: 'We can\'t find the post corresponding to the id you gave. Please, verify your input and try again.',
         });
     }
 
@@ -190,13 +199,13 @@ export async function likePost(postId, userId, like) {
     const notFoundError = new NotFoundError({
         message: `No post has the id ${postId}.`,
         title: 'The post can\'t be found.',
-        description: 'We can\'t find the post corresponding to the id you gave. Please, verify your input and try again.'
+        description: 'We can\'t find the post with the id you gave. Please, check your input and try again.',
     });
 
     // Attempt to like
     try {
         if (like) {
-            await db.models.Like.create({userId, postId});
+            await db.models.Like.create({ userId, postId });
             return true;
         }
     } catch (error) {
@@ -209,7 +218,7 @@ export async function likePost(postId, userId, like) {
     // Attempt to remove the like
     const affectedRowsNumber = await db.models.Like.destroy({ where: { userId, postId }});
     if (affectedRowsNumber === 0) {
-        const checkPostExists = (await db.models.Post.findByPk(postId)) !== null;
+        const checkPostExists = await db.models.Post.findByPk(postId) !== null;
         if (checkPostExists) {
             return false;
         }

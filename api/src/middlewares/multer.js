@@ -30,7 +30,7 @@ function generateFileName(filename, mimeType) {
             continue;
         }
 
-        // Starting with a '.', it may be the extensions. Append the previous maybe extension to the file name and save the '.' to be the maybe extension
+        // Whats next may be the extension, and what was after the previous dot is not
         if (letter === '.') {
             newFilename += filenameSection;
             filenameSection = letter;
@@ -67,16 +67,16 @@ function generateFileName(filename, mimeType) {
  * Use the generateFileName() function to choose the new filename.
  */
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
+    destination: function (req, file, cb) {
         const directory = config.get('payload.files.saveFolder');
         multerLogger.debug(`File destination: ${directory}`);
         cb(null, directory);
     },
-    filename: function(req, file, cb) {
+    filename: function (req, file, cb) {
         const filename = generateFileName(file.originalname, file.mimetype);
         multerLogger.debug(`New file name: ${filename}`);
         cb(null, filename);
-    }
+    },
 });
 
 
@@ -113,24 +113,30 @@ export default multer({
     fileFilter,
     limits: {
         fieldSize: config.get('payload.maxSize'),
-        fileSize: config.get('payload.files.maxFileSize')
-    }
+        fileSize: config.get('payload.files.maxFileSize'),
+    },
 }).single('image');
 
 
 
 /**
  * Data formatter function.
- * This function returns a function to format the body content. It allows to extract some properties content and to parse them.
- * @param {string} origin - Name of the property containing the data to extract, can be a dotted notation path if the property is several layers deep in the body.
+ * This function returns a function to format the body content. It allows to extract some properties content and to
+ *  parse them.
+ * @param {string} origin - Name of the property containing the data to extract, can be a dotted notation path if the
+ *  property is several layers deep in the body.
  * @param {Object} [options]
- * @param {boolean} [options.parse=true] - Wether the data are a JSON string or not. If true, the data will be parsed to JavaScript object before extraction.
- * @param {boolean} [options.required = true] - Wether the data is required or not. If required, it will throw an error if the data is undefined.
- * @param {string} [options.destination] - Where to put the extracted data. By default, the deta will be stored at the root of the request's body.
- * @returns {Function} Returns a data formatting function. Takes the request body as a parameter and returns it once it is modified.
+ * @param {boolean} [options.parse=true] - Wether the data are a JSON string or not. If true, the data will be parsed
+ *  to JavaScript object before extraction.
+ * @param {boolean} [options.required = true] - Wether the data is required or not. If required, it will throw an error
+ *  if the data is undefined.
+ * @param {string} [options.destination] - Where to put the extracted data. By default, the deta will be stored at the
+ *  root of the request's body.
+ * @returns {Function} Returns a data formatting function. Takes the request body as a parameter and returns it once it
+ *  is modified.
  * @throws Throws if the body is required but absent.
  */
-export function dataFormatter(origin, {parse = true, required = true, destination} = {}) {
+export function dataFormatter(origin, { parse = true, required = true, destination } = {}) {
     return (body) => {
         let data = getValueFromPath(body, origin);
 
@@ -143,7 +149,7 @@ export function dataFormatter(origin, {parse = true, required = true, destinatio
             throw new UserInputValidationError({
                 message: 'Missing required data.',
                 title: 'The request\'s body is invalid.',
-                description: `We can't proceed with the request because we are missing some required data. If you want to try again, make sure to give us the data we need in the ${origin} property.`
+                description: `We can't proceed with the request because we are missing some required data. If you want to try again, make sure to give us the data we need in the ${origin} property.`,
             });
         }
 
@@ -155,7 +161,7 @@ export function dataFormatter(origin, {parse = true, required = true, destinatio
                 throw new UserInputValidationError({
                     message: 'JSON data malformed.',
                     title: 'The request\'s body is invalid',
-                    description: `We can't proceed with the request because the ${origin} can't be read. If you want to try again, check that the data's syntax is correct.`
+                    description: `We can't proceed with the request because the ${origin} can't be read. If you want to try again, check that the data's syntax is correct.`,
                 }, error);
             }
         }

@@ -8,7 +8,7 @@ import ForbiddenError from '../../src/errors/ForbiddenError.js';
 const error = new Error('error');
 
 const proxyHandler = {
-    get: function(target, prop) {
+    get: function (target, prop) {
         return new Promise((resolve, reject) => {
             if (!target[prop]) {
                 reject(error);
@@ -16,7 +16,7 @@ const proxyHandler = {
                 resolve(target[prop]);
             }
         });
-    }
+    },
 };
 
 const mockPEP = jest.spyOn(accessControlRules, 'PEP');
@@ -26,15 +26,15 @@ const baseUser = {
     userId: 113,
     role: {
         roleId: 1,
-        name: 'user'
+        name: 'user',
     },
-    subjects: [56]
+    subjects: [56],
 };
 const baseSubject = {
     id: 12,
     title: 'title',
     message: 'message',
-    users: [baseUser.userId, 54]
+    users: [baseUser.userId, 54],
 };
 baseUser.subjects.push(baseSubject.id);
 
@@ -62,12 +62,12 @@ describe('authorize middleware test suite', () => {
         const dataOrigin = {
             User: {
                 origin: 'body',
-                field: 'User'
+                field: 'User',
             },
             Subject: {
                 origin: 'body',
-                field: 'Subject'
-            }
+                field: 'Subject',
+            },
         };
 
         const PDP = authorize('action', 'subject', dataOrigin);
@@ -91,12 +91,12 @@ describe('authorize middleware test suite', () => {
         const dataOrigin = {
             User: {
                 origin: 'body',
-                field: 'User'
+                field: 'User',
             },
             Subject: {
                 origin: 'body',
-                field: 'Subject'
-            }
+                field: 'Subject',
+            },
         };
 
         const PDP = authorize('action', 'subject', dataOrigin);
@@ -120,12 +120,12 @@ describe('authorize middleware test suite', () => {
         const dataOrigin = {
             User: {
                 origin: 'body',
-                field: 'User'
+                field: 'User',
             },
             Subject: {
                 origin: 'body',
-                field: 'Subject'
-            }
+                field: 'Subject',
+            },
         };
 
         const PDP = authorize('action', 'subject', dataOrigin);
@@ -144,12 +144,12 @@ describe('authorize middleware test suite', () => {
         const dataOrigin = {
             User: {
                 origin: 'body',
-                field: 'User'
+                field: 'User',
             },
             Subject: {
                 origin: 'body',
-                field: 'Subject'
-            }
+                field: 'Subject',
+            },
         };
 
         const PDP = authorize('action', 'subject', dataOrigin);
@@ -168,12 +168,12 @@ describe('authorize middleware test suite', () => {
         const dataOrigin = {
             User: {
                 origin: 'body',
-                field: 'User'
+                field: 'User',
             },
             Subject: {
                 origin: 'body',
-                field: 'Subject'
-            }
+                field: 'Subject',
+            },
         };
 
         const PDP = authorize('action', 'subject', dataOrigin);
@@ -197,12 +197,12 @@ describe('authorize middleware test suite', () => {
         const dataOrigin = {
             User: {
                 origin: 'res',
-                field: 'User'
+                field: 'User',
             },
             Subject: {
                 origin: 'res',
-                field: 'Subject'
-            }
+                field: 'Subject',
+            },
         };
 
         const PDP = authorize('action', 'subject', dataOrigin);
@@ -226,12 +226,12 @@ describe('authorize middleware test suite', () => {
         const dataOrigin = {
             User: {
                 origin: 'query',
-                field: 'User'
+                field: 'User',
             },
             Subject: {
                 origin: 'query',
-                field: 'Subject'
-            }
+                field: 'Subject',
+            },
         };
 
         const PDP = authorize('action', 'subject', dataOrigin);
@@ -255,12 +255,12 @@ describe('authorize middleware test suite', () => {
         const dataOrigin = {
             User: {
                 origin: 'params',
-                field: 'User'
+                field: 'User',
             },
             Subject: {
                 origin: 'params',
-                field: 'Subject'
-            }
+                field: 'Subject',
+            },
         };
 
         const PDP = authorize('action', 'subject', dataOrigin);

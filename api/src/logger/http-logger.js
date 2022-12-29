@@ -5,11 +5,11 @@ import createLoggerNamespace from './logger-namespace.js';
 const httpLogger = createLoggerNamespace('groupomania:api:http');
 
 const stream = {
-    write: (message) => httpLogger.http(message)
+    write: (message) => httpLogger.http(message),
 };
 
 const logFormat = ':remote-addr - :remote-user [:date[web]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time ms';
 
-const morganMiddleware = morgan(logFormat, {stream});
+const morganMiddleware = morgan(logFormat, { stream });
 
 export default morganMiddleware;

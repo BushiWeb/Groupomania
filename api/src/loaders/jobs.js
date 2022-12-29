@@ -8,7 +8,7 @@ const breeLogger = createLoggerNamespace('groupomania:api:bree');
 /**
  * Create and lauch all jobs.
  */
-export default async function jobsLoader () {
+export default async function jobsLoader() {
     loaderLogger.verbose('Loading jobs');
 
     const bree = new Bree({
@@ -22,12 +22,12 @@ export default async function jobsLoader () {
         workerMessageHandler: (message) => {
             const logMessage = `Worker "${message.name}" sent the following message: "${message.message}"`;
             breeLogger.verbose({ message: logMessage, workerInformations: message.worker });
-        }
+        },
     });
 
     // Handling graceful shutdowns
     const graceful = new Graceful({
-        brees: [bree]
+        brees: [bree],
     });
     graceful.listen();
     loaderLogger.debug('Handling graceful shutdowns for Bree');

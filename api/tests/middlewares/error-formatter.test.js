@@ -5,7 +5,7 @@ describe('validationErrorFormatter test suite', () => {
         location: 'body',
         param: 'param',
         msg: 'error message',
-        value: 'value'
+        value: 'value',
     };
 
     const objectWithNestedErrors = {
@@ -18,7 +18,7 @@ describe('validationErrorFormatter test suite', () => {
                 location: 'body',
                 param: 'param',
                 msg: 'error message',
-                value: 'value'
+                value: 'value',
             },
             {
                 location: 'body',
@@ -30,11 +30,11 @@ describe('validationErrorFormatter test suite', () => {
                         location: 'body',
                         param: 'param',
                         msg: 'error message',
-                        value: 'value'
-                    }
-                ]
-            }
-        ]
+                        value: 'value',
+                    },
+                ],
+            },
+        ],
     };
 
     it('should return an object containing all informations except the value', () => {

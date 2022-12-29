@@ -9,38 +9,42 @@ const mockParserAlone = jest.fn((res, req, next) => next());
 const mockParserWithDataFormating = jest.fn((res, req, next) => next());
 const mockParserDirect = jest.fn((res, req, next) => next());
 const mockParserNextError = jest.fn((res, req, next) => next(defaultError));
-const mockParserThrowError = jest.fn(() => { throw defaultError; });
-const mockDataFormating = jest.fn((body) => ({...body}));
-const mockDataFormatingThrowError = jest.fn(() => { throw defaultError; });
+const mockParserThrowError = jest.fn(() => {
+    throw defaultError;
+});
+const mockDataFormating = jest.fn((body) => ({ ...body }));
+const mockDataFormatingThrowError = jest.fn(() => {
+    throw defaultError;
+});
 
 const parserOptionsAllowEmpty = {
     'parser/alone': {
-        parser: mockParserAlone
+        parser: mockParserAlone,
     },
     'parser/withDataFormatting': {
         parser: mockParserWithDataFormating,
-        dataFormatter: mockDataFormating
+        dataFormatter: mockDataFormating,
     },
-    'parser/noObject': mockParserDirect
+    'parser/noObject': mockParserDirect,
 };
 
 const parserOptionsForbidEmpty = {
     'text/plain': {
-        parser: mockParserAlone
-    }
+        parser: mockParserAlone,
+    },
 };
 
 const parserOptionsErrors = {
     'next/error': {
-        parser: mockParserNextError
+        parser: mockParserNextError,
     },
     'throw/error': {
-        parser: mockParserThrowError
+        parser: mockParserThrowError,
     },
     'dataFormatting/throw': {
         parser: mockParserWithDataFormating,
-        dataFormatter: mockDataFormatingThrowError
-    }
+        dataFormatter: mockDataFormatingThrowError,
+    },
 };
 
 const parserMiddleware = createBodyParser(parserOptionsAllowEmpty);

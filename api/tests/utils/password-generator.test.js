@@ -1,4 +1,10 @@
-import { lerp, invLerp, clamp, range, generatePassword } from '../../src/utils/password-generator.js';
+import {
+    lerp,
+    invLerp,
+    clamp,
+    range,
+    generatePassword,
+} from '../../src/utils/password-generator.js';
 
 describe('Password generator test suite', () => {
     describe('lerp test suite', () => {
@@ -42,7 +48,7 @@ describe('Password generator test suite', () => {
             uppercases: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
             lowercases: 'abcdefghijklmnopqrstuvwxyz',
             numbers: '0123456789',
-            symbols: '&~"#\'{([-|`_\\^@)]+=}$*,?;.:/!<>'
+            symbols: '&~"#\'{([-|`_\\^@)]+=}$*,?;.:/!<>',
         };
 
         it('should return a password with the right length', () => {
@@ -52,34 +58,30 @@ describe('Password generator test suite', () => {
         it('should return have 1 of each character type at least', () => {
             let password = generatePassword();
             expect(password).toHaveLength(8);
-            expect(characterSet.uppercases
-                .split('')
-                .reduce(
+            expect(characterSet.uppercases.
+                split('').
+                reduce(
                     (accumulator, value) => password.includes(value) ? accumulator + 1 : accumulator,
                     0
-                )
-            ).toBeGreaterThanOrEqual(1);
-            expect(characterSet.lowercases
-                .split('')
-                .reduce(
+                )).toBeGreaterThanOrEqual(1);
+            expect(characterSet.lowercases.
+                split('').
+                reduce(
                     (accumulator, value) => password.includes(value) ? accumulator + 1 : accumulator,
                     0
-                )
-            ).toBeGreaterThanOrEqual(1);
-            expect(characterSet.numbers
-                .split('')
-                .reduce(
+                )).toBeGreaterThanOrEqual(1);
+            expect(characterSet.numbers.
+                split('').
+                reduce(
                     (accumulator, value) => password.includes(value) ? accumulator + 1 : accumulator,
                     0
-                )
-            ).toBeGreaterThanOrEqual(1);
-            expect(characterSet.symbols
-                .split('')
-                .reduce(
+                )).toBeGreaterThanOrEqual(1);
+            expect(characterSet.symbols.
+                split('').
+                reduce(
                     (accumulator, value) => password.includes(value) ? accumulator + 1 : accumulator,
                     0
-                )
-            ).toBeGreaterThanOrEqual(1);
+                )).toBeGreaterThanOrEqual(1);
         });
 
         it('should return have the right number of each character type at least', () => {
@@ -88,7 +90,7 @@ describe('Password generator test suite', () => {
                 minUppercase: 2,
                 minLowercase: 3,
                 minNumbers: 4,
-                minSymbols: 5
+                minSymbols: 5,
             };
             let password = generatePassword(options);
 
@@ -113,7 +115,7 @@ describe('Password generator test suite', () => {
                     uppercase: 0,
                     lowercase: 0,
                     numbers: 0,
-                    symbols: 0
+                    symbols: 0,
                 }
             );
 

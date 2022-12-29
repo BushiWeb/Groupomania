@@ -15,8 +15,9 @@ const ruleParserLogger = createLoggerNamespace('groupomania:api:authorization');
  * @throws Throws an error if the property is not valid.
  */
 function validateProperty(
-    obj, propName,
-    { required = false, type = 'string', multiple = false } = { required: false, type: 'string', multiple: false}
+    obj,
+    propName,
+    { required = false, type = 'string', multiple = false } = {}
 ) {
     if (required && !obj[propName]) {
         throw `The ${propName} property is required`;
@@ -33,7 +34,7 @@ function validateProperty(
             !Array.isArray(obj[propName]) &&
             typeof obj[propName] !== type ||
             Array.isArray(obj[propName]) &&
-            obj[propName].some(value => typeof value !==  type)
+            obj[propName].some(value => typeof value !== type)
         )
     ) {
         throw `The ${propName} property must either be a ${type} or an array of ${type}`;

@@ -28,7 +28,7 @@ const mockCreate = jest.fn(async function (values) {
 const mockBuild = jest.fn(function (values) {
     if (Array.isArray(values)) {
         const modelInstances = [];
-        for(const value of values) {
+        for (const value of values) {
             modelInstances.push(new MockModel(value));
         }
         return modelInstances;
@@ -88,7 +88,11 @@ class MockModel {
         this.dataValues = values;
 
         for (const value in this.dataValues) {
-            Object.defineProperty(this, value, {get: function() { return this.dataValues[value]; }});
+            Object.defineProperty(this, value, {
+                get: function () {
+                    return this.dataValues[value];
+                },
+            });
         }
     }
 
@@ -112,7 +116,7 @@ class MockModel {
 
 
     // Instance methods
-    get (value) {
+    get(value) {
         if (value) {
             return this.dataValues[value];
         }
@@ -120,7 +124,7 @@ class MockModel {
         return this.dataValues;
     }
 
-    set (values) {
+    set(values) {
         for (const value in values) {
             this.dataValues[value] = values[value];
         }
@@ -147,7 +151,21 @@ function clearMocks() {
     mockUpdate.mockClear();
 }
 
-export { mockSave, mockValidate, mockCreate, mockBuild, MockModel, mockFindOne, mockStaticDestroy, mockFindByPk, mockInstanceDestroy, mockFindAll, mockGetAttributes, mockUpdate, clearMocks };
+export {
+    mockSave,
+    mockValidate,
+    mockCreate,
+    mockBuild,
+    MockModel,
+    mockFindOne,
+    mockStaticDestroy,
+    mockFindByPk,
+    mockInstanceDestroy,
+    mockFindAll,
+    mockGetAttributes,
+    mockUpdate,
+    clearMocks,
+};
 export default MockModel;
 
 beforeEach(() => {

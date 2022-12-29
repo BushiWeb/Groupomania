@@ -6,35 +6,37 @@
  * @param {Array} [location=['query']] - Where the email is located.
  */
 export default function generatePaginationSchema(
-    { required=false, checkFormat=true } = { required: false, checkFormat: true },
+    { required = false, checkFormat = true } = {},
     location = ['query']
 ) {
     return {
         in: location,
 
-        ...(required ? {
-            exists: {
-                errorMessage: 'The parameter is required.',
-                options: {
-                    checkNull: true
+        ...required ?
+            {
+                exists: {
+                    errorMessage: 'The parameter is required.',
+                    options: {
+                        checkNull: true,
+                    },
+                    bail: true,
                 },
-                bail: true
-            }
-        } : {
-            optional: {
-                options: { nullable: true }
-            }
-        }),
+            } :
+            {
+                optional: {
+                    options: { nullable: true },
+                },
+            },
 
-        ...(checkFormat && {
+        ...checkFormat && {
             isInt: {
                 errorMessage: 'The parameter must be an integer greater or equal than 1.',
                 options: {
-                    min: 1
-                }
-            }
-        }),
+                    min: 1,
+                },
+            },
+        },
 
-        toInt: true
+        toInt: true,
     };
 }

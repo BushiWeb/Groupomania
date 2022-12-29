@@ -26,14 +26,25 @@ const validationLogger = createLoggerNamespace('groupomania:api:validation');
  * @param {string} [error.msg] - Error message.
  * @param {string} [error.location] - Location of the parameter (body, cookie, param, query, headers).
  * @param {string} [error.value] - Value of the parameter.
- * @param {{param: string, msg: string, location: string, value: string, nestedErrors: Array}[]} [error.nestedErrors] - Contains suberrors. These errors have the same structure as the error parameter.
+ * @param {{
+ *  param: string,
+ *  msg: string,
+ *  location: string,
+ *  value: string,
+ *  nestedErrors: Array
+ * }[]} [error.nestedErrors] - Contains suberrors. These errors have the same structure as the error parameter.
  * @returns Returns the formated error.
  */
-function validationErrorFormatter({ param, msg, location, nestedErrors }) {
+function validationErrorFormatter({
+    param,
+    msg,
+    location,
+    nestedErrors,
+}) {
     let errorObject = {
-        ...(param && { param }),
-        ...(msg && { message: msg }),
-        ...(location && { location }),
+        ...param && { param },
+        ...msg && { message: msg },
+        ...location && { location },
     };
 
     if (nestedErrors) {
@@ -74,7 +85,7 @@ function validationHandlingMiddleware(req, res, next) {
             message: 'Errors while validating user inputs.',
             title: 'The received data are invalid.',
             description: 'We are having trouble processing the data you provided. You may take a look at the details for more informations on how to solve this problem. You may solve the problems and try again.',
-            details: errors.array()
+            details: errors.array(),
         });
         return next(validationError);
     }
@@ -82,9 +93,9 @@ function validationHandlingMiddleware(req, res, next) {
     validationLogger.debug('Validation successful');
 
     // Remove unused properties, that haven't gone through validation
-    req.body = matchedData(req, {locations: ['body']});
-    req.params = matchedData(req, {locations: ['params']});
-    req.query = matchedData(req, {locations: ['query']});
+    req.body = matchedData(req, { locations: ['body']});
+    req.params = matchedData(req, { locations: ['params']});
+    req.query = matchedData(req, { locations: ['query']});
 
     next();
 }
@@ -118,8 +129,8 @@ function fileValidation(required = false) {
                 description: 'We don\'t accept this type of file. Please, refer to the details to see which file type are allowed, and try again with an other file format.',
                 details: {
                     uploadedFileFormats,
-                    allowedFileFormats: config.get('payload.files.allowedFileTypes')
-                }
+                    allowedFileFormats: config.get('payload.files.allowedFileTypes'),
+                },
             });
 
             return next(fileValidationError);
@@ -130,14 +141,14 @@ function fileValidation(required = false) {
             required &&
             !req.file &&
             (!req.files ||
-                (Array.isArray(req.files) && req.files.length === 0) ||
-                (typeof req.files === 'object' && Object.keys(req.files).length === 0))
+                Array.isArray(req.files) && req.files.length === 0 ||
+                typeof req.files === 'object' && Object.keys(req.files).length === 0)
         ) {
             validationLogger.debug('No files sent, throwing an error');
             const fileValidationError = new UserInputValidationError({
                 message: 'Missing required file',
                 title: 'The file is mandatory for this request',
-                description: 'We can\'t find the file. This request needs a file to be processed. Please, try again with a file.'
+                description: 'We can\'t find the file. This request needs a file to be processed. Please, try again with a file.',
             });
             return next(fileValidationError);
         }
@@ -181,5 +192,5 @@ export {
     likePostSchema,
     deletePostSchema,
     validationHandlingMiddleware,
-    validationErrorFormatter
+    validationErrorFormatter,
 };

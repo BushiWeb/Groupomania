@@ -1,4 +1,11 @@
-import { createUser, getUserByEmail, getUserById, getAllUsers, updateUser, deleteUser } from '../../src/services/users.js';
+import {
+    createUser,
+    getUserByEmail,
+    getUserById,
+    getAllUsers,
+    updateUser,
+    deleteUser,
+} from '../../src/services/users.js';
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
 import MockModel, * as mockModelMethods from '../mocks/mock-models.js';
@@ -7,9 +14,9 @@ import { NotFoundError } from '../../src/errors/index.js';
 
 jest.spyOn(db, 'models', 'get').mockImplementation(
     () => new Proxy(
-        {Model: MockModel},
+        { Model: MockModel },
         {
-            get: (target) => target.Model
+            get: (target) => target.Model,
         }
     )
 );
@@ -25,13 +32,13 @@ describe('User services test suite', () => {
     const userInfos = {
         email: 'test@example.com',
         password: 'password123',
-        roleId: 1
+        roleId: 1,
     };
 
 
     describe('Create user service test suite', () => {
         it('should create a user with the default role id and return the user', async () => {
-            const newUser = await createUser({email: userInfos.email, password: userInfos.password});
+            const newUser = await createUser({ email: userInfos.email, password: userInfos.password });
 
             expect(newUser).toHaveProperty('email', userInfos.email);
             expect(newUser).toHaveProperty('password', userInfos.password);
@@ -54,7 +61,7 @@ describe('User services test suite', () => {
                 email: userInfos.email,
                 password: 'mockedBcryptHash',
                 roleId: userInfos.roleId,
-                userId: 113
+                userId: 113,
             };
             mockModelMethods.mockFindOne.mockResolvedValueOnce(new MockModel(returnedUserInfos));
             const user = await getUserByEmail(returnedUserInfos.email);
@@ -79,7 +86,7 @@ describe('User services test suite', () => {
             const returnedUserInfos = {
                 email: userInfos.email,
                 roleId: userInfos.roleId,
-                userId: 113
+                userId: 113,
             };
             mockModelMethods.mockFindByPk.mockResolvedValueOnce(new MockModel(returnedUserInfos));
             const user = await getUserById(returnedUserInfos.userId);
@@ -99,9 +106,9 @@ describe('User services test suite', () => {
                 email: userInfos.email,
                 role: {
                     roleId: userInfos.roleId,
-                    name: 'role'
+                    name: 'role',
                 },
-                id: 113
+                id: 113,
             };
             mockModelMethods.mockFindByPk.mockResolvedValueOnce(new MockModel(returnedUserInfos));
             const user = await getUserById(returnedUserInfos.email, { roleInfo: true });
@@ -137,7 +144,7 @@ describe('User services test suite', () => {
         const otherUser = {
             email: 'other@email.com',
             roleId: 1,
-            userId: 114
+            userId: 114,
         };
 
         it('should get all users\' informations', async () => {
@@ -145,9 +152,9 @@ describe('User services test suite', () => {
                 {
                     email: userInfos.email,
                     roleId: userInfos.roleId,
-                    userId: 113
+                    userId: 113,
                 },
-                otherUser
+                otherUser,
             ];
 
             mockModelMethods.mockFindAll.mockResolvedValueOnce(returnedUserInfos.map((value) => new MockModel(value)));
@@ -156,7 +163,7 @@ describe('User services test suite', () => {
             expect(Array.isArray(users)).toBe(true);
             expect(users).toHaveLength(2);
 
-            for(const index in users) {
+            for (const index in users) {
                 expect(users[index]).toHaveProperty('email', returnedUserInfos[index].email);
                 expect(users[index]).toHaveProperty('roleId', returnedUserInfos[index].roleId);
                 expect(users[index]).toHaveProperty('userId', returnedUserInfos[index].userId);
@@ -176,8 +183,8 @@ describe('User services test suite', () => {
                 {
                     email: userInfos.email,
                     roleId: userInfos.roleId,
-                    userId: 113
-                }
+                    userId: 113,
+                },
             ];
 
             mockModelMethods.mockFindAll.mockResolvedValueOnce(returnedUserInfos.map((value) => new MockModel(value)));
@@ -186,7 +193,7 @@ describe('User services test suite', () => {
             expect(Array.isArray(users)).toBe(true);
             expect(users).toHaveLength(1);
 
-            for(const index in users) {
+            for (const index in users) {
                 expect(users[index]).toHaveProperty('email', returnedUserInfos[index].email);
                 expect(users[index]).toHaveProperty('roleId', returnedUserInfos[index].roleId);
                 expect(users[index]).toHaveProperty('userId', returnedUserInfos[index].userId);
@@ -208,8 +215,8 @@ describe('User services test suite', () => {
                 {
                     email: userInfos.email,
                     roleId: userInfos.roleId,
-                    userId: 113
-                }
+                    userId: 113,
+                },
             ];
 
             const roleName = 'admin';
@@ -220,7 +227,7 @@ describe('User services test suite', () => {
             expect(Array.isArray(users)).toBe(true);
             expect(users).toHaveLength(1);
 
-            for(const index in users) {
+            for (const index in users) {
                 expect(users[index]).toHaveProperty('email', returnedUserInfos[index].email);
                 expect(users[index]).toHaveProperty('roleId', returnedUserInfos[index].roleId);
                 expect(users[index]).toHaveProperty('userId', returnedUserInfos[index].userId);
@@ -245,9 +252,9 @@ describe('User services test suite', () => {
                 {
                     email: userInfos.email,
                     roleId: userInfos.roleId,
-                    userId: 113
+                    userId: 113,
                 },
-                otherUser
+                otherUser,
             ];
 
             const limit = 1;
@@ -282,18 +289,18 @@ describe('User services test suite', () => {
                     email: userInfos.email,
                     role: {
                         roleId: userInfos.roleId,
-                        name: 'role'
+                        name: 'role',
                     },
-                    id: 113
+                    id: 113,
                 },
                 {
                     email: otherUser.email,
                     role: {
                         roleId: otherUser.roleId,
-                        name: 'role'
+                        name: 'role',
                     },
-                    id: 113
-                }
+                    id: 113,
+                },
             ];
 
             mockModelMethods.mockFindAll.mockResolvedValueOnce(returnedUserInfos.map((value) => new MockModel(value)));
@@ -302,7 +309,7 @@ describe('User services test suite', () => {
             expect(Array.isArray(users)).toBe(true);
             expect(users).toHaveLength(2);
 
-            for(const index in users) {
+            for (const index in users) {
                 expect(users[index]).toHaveProperty('email', returnedUserInfos[index].email);
                 expect(users[index]).toHaveProperty('role');
                 expect(users[index].role).toHaveProperty('roleId', returnedUserInfos[index].role.roleId);

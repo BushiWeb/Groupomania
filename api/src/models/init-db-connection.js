@@ -24,7 +24,7 @@ export default async function initDatabaseConnection() {
         password: dbConfig.password,
         protocol: dbConfig.protocol,
         logging: msg => sequelizeLogger.debug(msg),
-        ssl: dbConfig.useSSL
+        ssl: dbConfig.useSSL,
     });
 
     // Connection testing

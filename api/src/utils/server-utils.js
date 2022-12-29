@@ -1,5 +1,5 @@
 import process from 'node:process';
-import {createLoggerNamespace} from '../logger/index.js';
+import { createLoggerNamespace } from '../logger/index.js';
 
 const serverLogger = createLoggerNamespace('groupomania:api:server');
 
@@ -35,11 +35,11 @@ export const normalizePort = (val) => {
 export const getConnectionInformations = (server, port) => {
     const address = server.address();
 
-    return address === null
-        ? `port: ${port}`
-        : typeof address === 'string'
-            ? `pipe ${address}`
-            : `port: ${address.port}, ${address.family} address: '${address.address}'`;
+    return address === null ?
+        `port: ${port}` :
+        typeof address === 'string' ?
+            `pipe ${address}` :
+            `port: ${address.port}, ${address.family} address: '${address.address}'`;
 };
 
 /**

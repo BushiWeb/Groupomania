@@ -40,7 +40,8 @@ function getContentType(req, isEmptyAllowed) {
  * Throws an error if there is no parser.
  * @param {string} contentType - Content-Type of the request.
  * @param {Object} parsers - Object containing the parsers associated to the Content-Type.
- * @returns {{parser: Function, dataFormatter: Function}} Returns the parser and the optionnal data formatter in an object.
+ * @returns {{parser: Function, dataFormatter: Function}} Returns the parser and the optionnal data formatter in an
+ *  object.
  * @throws {UnsupportedMediaTypeError} Throws an error if no parser is associated to the Content-Type.
  */
 function getParser(contentType, parsers) {
@@ -66,13 +67,18 @@ function getParser(contentType, parsers) {
 /**
  * Function returning a middleware validating the content type and parsin the request body.
  * The fonction configures the middleware with the accepted content-type and their related parsers.
- * @param {Object.<string, {parser: Function, dataFormatter: Function}|Function} parsers - Object representing the accepted content types. The keys are the MIME types of the accepted Content-Types. The values is either the middleware to parse the body (i.e. the result of express.json, multer.single(), ...); or an object containing that middleware and an optionnal function. This function is going to be executed after the parser, it takes the request's body as a parameter and sends it back. It can be used to change the structure of the body.
+ * @param {Object.<string, {parser: Function, dataFormatter: Function}|Function} parsers - Object representing the
+ *  accepted content types. The keys are the MIME types of the accepted Content-Types. The values is either the
+ *  middleware to parse the body (i.e. the result of express.json, multer.single(), ...); or an object containing that
+ *  middleware and an optionnal function. This function is going to be executed after the parser, it takes the
+ *  request's body as a parameter and sends it back. It can be used to change the structure of the body.
  * @param {boolean} [emptyAllowed=true] - Boolean indicating if an ampty body is allowed for the request.
  * @returns {Function} Returns the configured middleware.
  */
 export default function createBodyParser(parsers, emptyAllowed = true) {
     parsingLogger.verbose('Starting parsing middleware creation');
-    parsingLogger.debug(`This request accepts the following Content-Types : ${Object.keys(parsers)}${emptyAllowed ? ', as well as empty bodies': ''}`);
+    parsingLogger.debug(`This request accepts the following Content-Types : ${Object.keys(parsers)}${emptyAllowed ? ', as well as empty bodies' : ''}`);
+
     /**
      * Middleware validating the content-type and parsing the request body.
      * @param {Express.Request} req - Express request object.

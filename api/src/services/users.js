@@ -13,11 +13,16 @@ const usersServicesLogger = createLoggerNamespace('groupomania:api:services:user
  * @param {number} [option.limit] - Number of entry to return, usefull for pagination.
  * @returns {Object} Returns the option object.
  */
-function getRequestOptionObject({ roleInfo = false, role, page, limit } = {}) {
+function getRequestOptionObject({
+    roleInfo = false,
+    role,
+    page,
+    limit,
+} = {}) {
     usersServicesLogger.debug('Get request option object');
 
     let searchOptions = {
-        attributes: ['userId', 'email', 'roleId']
+        attributes: ['userId', 'email', 'roleId'],
     };
 
     // Creating role filter
@@ -25,16 +30,16 @@ function getRequestOptionObject({ roleInfo = false, role, page, limit } = {}) {
         usersServicesLogger.debug('Filtering by role name');
         searchOptions.include = {
             association: 'role',
-            attributes: []
+            attributes: [],
         };
         searchOptions.where = {
-            '$role.name$': role
+            '$role.name$': role,
         };
 
     } else if (role && typeof role === 'number') {
         usersServicesLogger.debug('Filtering by role id');
         searchOptions.where = {
-            roleId: role
+            roleId: role,
         };
     }
 
@@ -43,7 +48,7 @@ function getRequestOptionObject({ roleInfo = false, role, page, limit } = {}) {
         usersServicesLogger.debug('Adding role informations to the results');
         const newInclude = {
             association: 'role',
-            attributes: ['roleId', 'name']
+            attributes: ['roleId', 'name'],
         };
         if (searchOptions.include) {
             searchOptions.include = [searchOptions.include, newInclude];
@@ -73,16 +78,17 @@ function getRequestOptionObject({ roleInfo = false, role, page, limit } = {}) {
  * Creates a new user.
  * @param {Object} userInfos - Object containing the user informations.
  * @param {string} userInfos.email - User's email.
- * @param {string} userInfos.password - User's password. The password should be hashed using a secure cryptographic function.
+ * @param {string} userInfos.password - User's password. The password should be hashed using a secure cryptographic
+ *  function.
  * @param {string} [userInfos.roleId] - User's role, optionnal.
  * @returns {User} Returns the newly created user.
  */
-export async function createUser({email, password, roleId}) {
+export async function createUser({ email, password, roleId }) {
     usersServicesLogger.verbose('Create User service starting');
 
     let userInfos = {
         email,
-        password
+        password,
     };
 
     if (roleId) {
@@ -140,7 +146,7 @@ export async function getUserById(userId, options = {}) {
         throw new NotFoundError({
             message: `No user has the id ${userId}.`,
             title: 'The user can\'t be found.',
-            description: 'We can\'t find the user corresponding to the id you gave. Please, verify your input and try again.'
+            description: 'We can\'t find the user corresponding to the id you gave. Please, verify your input and try again.',
         });
     }
 
@@ -160,14 +166,14 @@ export async function getUserByEmail(email) {
     usersServicesLogger.verbose('Get user by email service starting');
 
     const user = await db.models.User.findOne({
-        where: { email }
+        where: { email },
     });
     if (user === null) {
         usersServicesLogger.debug('The email is invalid. Throwing an error');
         throw new NotFoundError({
             message: `No user has the email address ${email}.`,
             title: 'The user can\'t be found.',
-            description: 'We can\'t find the user corresponding to the email address. Please, verify your input and try again. If the user does not yet exist, you may create it.'
+            description: 'We can\'t find the user corresponding to the email address. Please, verify your input and try again. If the user does not yet exist, you may create it.',
         });
     }
 
@@ -186,14 +192,14 @@ export async function getUserByEmail(email) {
 export async function deleteUser(userId) {
     usersServicesLogger.verbose('Delete User service starting');
 
-    const deleteNumber = await db.models.User.destroy({where: { userId }});
+    const deleteNumber = await db.models.User.destroy({ where: { userId }});
 
     if (deleteNumber === 0) {
         usersServicesLogger.debug('The user doesn\'t exist. Throwing an error');
         throw new NotFoundError({
             message: `No user has the id ${userId}.`,
             title: 'The user can\'t be found.',
-            description: 'We can\'t find the user corresponding to the id you gave. Please, verify your input and try again.'
+            description: 'We can\'t find the user corresponding to the id you gave. Please, verify your input and try again.',
         });
     }
 
@@ -207,7 +213,8 @@ export async function deleteUser(userId) {
  * @param {number} userId - Id of the user to update.
  * @param {Object} userInfos - Object containing the new user informations.
  * @param {string} [userInfos.email] - User's email.
- * @param {string} [userInfos.password] - User's password. The password should be hashed with a secure cryptographic function.
+ * @param {string} [userInfos.password] - User's password. The password should be hashed with a secure cryptographic
+ *  function.
  * @param {string} [userInfos.roleId] - User's role, optionnal.
  * @returns {Boolean} Returns true if the operation succeeds.
  * @throws {NotFoundError} Throws a not found error if the user doesn't exist.
@@ -222,7 +229,7 @@ export async function updateUser(userId, userInfos) {
         throw new NotFoundError({
             message: `No user has the id ${userId}.`,
             title: 'The user can\'t be found.',
-            description: 'We can\'t find the user corresponding to the id you gave. Please, verify your input and try again.'
+            description: 'We can\'t find the user corresponding to the id you gave. Please, verify your input and try again.',
         });
     }
 

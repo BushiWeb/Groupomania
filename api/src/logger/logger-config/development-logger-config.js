@@ -1,6 +1,13 @@
 import winston from 'winston';
 
-function printfFormat({ level, message, timestamp, label, stack, ...metadata }) {
+function printfFormat({
+    level,
+    message,
+    timestamp,
+    label,
+    stack,
+    ...metadata
+}) {
     let formatedMessage = `${level}\t${timestamp}\t\t`;
 
     if (!stack) {
@@ -23,13 +30,13 @@ function printfFormat({ level, message, timestamp, label, stack, ...metadata }) 
 const DEVELOPMENT_LOGGER_CONFIG = {
     level: 'debug',
     format: winston.format.combine(
-        winston.format.timestamp({format: 'YYYY-MM-DD HH:mm:ss.SSS'}),
-        winston.format.errors({stack: true}),
+        winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
+        winston.format.errors({ stack: true }),
         winston.format.splat(),
         winston.format.printf(printfFormat),
-        winston.format.colorize({all: true})
+        winston.format.colorize({ all: true })
     ),
-    transports: [new winston.transports.Console()]
+    transports: [new winston.transports.Console()],
 };
 
 export default DEVELOPMENT_LOGGER_CONFIG;

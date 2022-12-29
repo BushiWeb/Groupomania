@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import config from '../config/config.js';
 import { InternalServerError, UnauthorizedError } from '../errors/index.js';
 import jwt from 'jsonwebtoken';
-import { v4 as UUIDv4} from 'uuid';
+import { v4 as UUIDv4 } from 'uuid';
 import db from '../models/index.js';
 
 const authServicesLogger = createLoggerNamespace('groupomania:api:services:auth');
@@ -12,7 +12,8 @@ const authServicesLogger = createLoggerNamespace('groupomania:api:services:auth'
  * Creates a refresh token an save it in the database.
  * @param {number} userId - Id of the user the token belongs to.
  * @param {number} role - Role id of the user the token belongs to.
- * @param {number} [expiration] - Timestamp representing the expiration date. Use second precision, not milliseconds. If undefined, the expiration date will be calculated.
+ * @param {number} [expiration] - Timestamp representing the expiration date. Use second precision, not milliseconds.
+ *  If undefined, the expiration date will be calculated.
  * @returns {string} Returns the token.
  */
 export async function createRefreshToken(userId, role, expiration) {
@@ -26,12 +27,12 @@ export async function createRefreshToken(userId, role, expiration) {
         {
             userId,
             role,
-            exp: expirationDate
+            exp: expirationDate,
         },
         config.get('refreshJwt.key'),
         {
             algorithm: config.get('refreshJwt.alg'),
-            jwtid: tokenId
+            jwtid: tokenId,
         }
     );
     authServicesLogger.debug('Refresh token created');
@@ -43,7 +44,7 @@ export async function createRefreshToken(userId, role, expiration) {
         tokenId,
         tokenValue,
         expiration: expirationDate * 1000,
-        userId
+        userId,
     });
     authServicesLogger.debug('Refresh token saved');
 
@@ -65,12 +66,12 @@ export async function createAccessToken(userId, role) {
     const accessToken = jwt.sign(
         {
             userId,
-            role
+            role,
         },
         config.get('jwt.key'),
         {
             algorithm: config.get('jwt.alg'),
-            expiresIn: config.get('jwt.exp')
+            expiresIn: config.get('jwt.exp'),
         }
     );
     authServicesLogger.debug('Access token created');
@@ -117,7 +118,8 @@ export async function hashPassword(password) {
 
 /**
  * Checks if the refresh token is valid, i.e. it hasn't been invalidated.
- * Validation regarding the expiration or the key for example should be done earlier, using the authentication middleware.
+ * Validation regarding the expiration or the key for example should be done earlier, using the authentication
+ *  middleware.
  * @param {string} tokenId - Id of the token to check. Should have the UUID format.
  * @returns {RefreshToken} Returns the corresponding refresh token model if the refresh token is valid.
  * @throws {UnauthorizedError} Throws if the refresh token is not valid anymore.
@@ -132,7 +134,7 @@ export async function validateRefreshToken(tokenId) {
         throw new UnauthorizedError({
             message: 'The refresh token is invalid.',
             title: 'The authentication token is invalid',
-            description: 'the token is not valid anymore. It may have invalidated following a logout or for safety reasons. You may try to log back in using your email and password.'
+            description: 'the token is not valid anymore. It may have invalidated following a logout or for safety reasons. You may try to log back in using your email and password.',
         }, null);
     }
 
@@ -148,7 +150,8 @@ export async function validateRefreshToken(tokenId) {
  *      - If the parameter is an instance of RefreshToken, then delete the entry corresponding to the instance.
  *      - If the parameter is a string representing a token id, then delete the token corresponding to the id.
  *      - If the parameter is a number representing a user id, delete all the tokens associated to the user.
- * @param {RefreshToken|number|string} identifier - Identifier of the token, either an instance of RefreshToken, a string representing a token id or a number representing a user id.
+ * @param {RefreshToken|number|string} identifier - Identifier of the token, either an instance of RefreshToken, a
+ *  string representing a token id or a number representing a user id.
  * @throws {InternalServerError} Throws if the identifier does not represent anything.
  */
 export async function invalidateRefreshToken(identifier) {
@@ -158,32 +161,32 @@ export async function invalidateRefreshToken(identifier) {
 
     if (identifier instanceof RefreshToken) {
         authServicesLogger.debug('Delete from an instance of RefreshToken');
-        return await identifier.destroy();
+        return identifier.destroy();
 
     }
 
     if (typeof identifier === 'string') {
         authServicesLogger.debug('Delete from a tokenId');
-        return await RefreshToken.destroy({
+        return RefreshToken.destroy({
             where: {
-                tokenId: identifier
-            }
+                tokenId: identifier,
+            },
         });
 
     }
 
     if (typeof identifier === 'number') {
         authServicesLogger.debug('Delete from a userId');
-        return await RefreshToken.destroy({
+        return RefreshToken.destroy({
             where: {
-                userId: identifier
-            }
+                userId: identifier,
+            },
         });
 
     }
 
     authServicesLogger.debug('The identifier can not be processed, throwing an error');
     throw new InternalServerError({
-        message: 'The identifier of the invalidateRefreshToken service is neither a number, neither a string nor an instance of RefreshToken.'
+        message: 'The identifier of the invalidateRefreshToken service is neither a number, neither a string nor an instance of RefreshToken.',
     });
 }

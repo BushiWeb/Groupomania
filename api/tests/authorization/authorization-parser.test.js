@@ -14,70 +14,70 @@ describe('Authorization parser test suite', () => {
             actions: 'update',
             subject: 'User',
             fields: ['email', 'password'],
-            conditions: { 'User.userId': '{{Subject.userId}}' }
+            conditions: { 'User.userId': '{{Subject.userId}}' },
         },
         {
             actions: 'update',
             subject: 'User',
             fields: ['roleId'],
-            conditions: { 'User.roleId': 1 }
+            conditions: { 'User.roleId': 1 },
         },
         {
             actions: ['update', 'create'],
             subject: 'User',
             fields: ['roleId'],
-            conditions: { 'User.roleId': 1 }
+            conditions: { 'User.roleId': 1 },
         },
         {
             actions: 'update',
             subject: 'User',
             fields: 'roleId',
-            conditions: { 'User.roleId': 1 }
+            conditions: { 'User.roleId': 1 },
         },
         {
             subject: 'User',
             fields: ['email', 'password'],
-            conditions: { 'User.roleId': 1 }
+            conditions: { 'User.roleId': 1 },
         },
         {
             actions: true,
             subject: 'User',
             fields: ['email', 'password'],
-            conditions: { 'User.roleId': 1 }
+            conditions: { 'User.roleId': 1 },
         },
         {
             actions: [true, 'string'],
             subject: 'User',
             fields: ['email', 'password'],
-            conditions: { 'User.roleId': 1 }
+            conditions: { 'User.roleId': 1 },
         },
         {
             actions: 'delete',
             fields: ['email', 'password'],
-            conditions: { 'User.roleId': 1 }
+            conditions: { 'User.roleId': 1 },
         },
         {
             actions: 'delete',
             subject: true,
             fields: ['email', 'password'],
-            conditions: { 'User.roleId': 1 }
+            conditions: { 'User.roleId': 1 },
         },
         {
             actions: 'delete',
             subject: 'User',
-            conditions: { 'User.roleId': 1 }
+            conditions: { 'User.roleId': 1 },
         },
         {
             actions: 'delete',
             subject: 'User',
             fields: true,
-            conditions: { 'User.roleId': 1 }
+            conditions: { 'User.roleId': 1 },
         },
         {
             actions: 'delete',
             subject: 'User',
             fields: [true, 'password'],
-            conditions: { 'User.roleId': 1 }
+            conditions: { 'User.roleId': 1 },
         },
         {
             actions: 'delete',
@@ -91,13 +91,13 @@ describe('Authorization parser test suite', () => {
         expect(parsedRules[0]).toMatchObject({
             actions: [rules[0].actions],
             subject: rules[0].subject,
-            fields: rules[0].fields
+            fields: rules[0].fields,
         });
         expect(parsedRules[0].conditions).toBeInstanceOf(Condition);
         expect(parsedRules[1]).toMatchObject({
             actions: [rules[1].actions],
             subject: rules[1].subject,
-            fields: rules[1].fields
+            fields: rules[1].fields,
         });
         expect(parsedRules[1].conditions).toBeInstanceOf(Condition);
     });
@@ -108,7 +108,7 @@ describe('Authorization parser test suite', () => {
         expect(parsedRules[0]).toMatchObject({
             actions: rules[2].actions,
             subject: rules[2].subject,
-            fields: rules[2].fields
+            fields: rules[2].fields,
         });
         expect(parsedRules[0].conditions).toBeInstanceOf(Condition);
     });
@@ -119,7 +119,7 @@ describe('Authorization parser test suite', () => {
         expect(parsedRules[0]).toMatchObject({
             actions: [rules[3].actions],
             subject: rules[3].subject,
-            fields: [rules[3].fields]
+            fields: [rules[3].fields],
         });
         expect(parsedRules[0].conditions).toBeInstanceOf(Condition);
     });
@@ -160,7 +160,7 @@ describe('Authorization parser test suite', () => {
         expect(parsedRules[0]).toMatchObject({
             actions: [rules[9].actions],
             subject: rules[9].subject,
-            fields: []
+            fields: [],
         });
         expect(parsedRules[0].conditions).toBeInstanceOf(Condition);
     });
@@ -183,7 +183,7 @@ describe('Authorization parser test suite', () => {
         expect(parsedRules[0]).toMatchObject({
             actions: [rules[12].actions],
             subject: rules[12].subject,
-            fields: rules[12].fields
+            fields: rules[12].fields,
         });
         expect(parsedRules[0]).not.toHaveProperty('conditions');
     });

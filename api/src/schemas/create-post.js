@@ -7,7 +7,7 @@ import generateTextSchema from './atoms/text.js';
  */
 const createPostSchema = {
     title: generateTextSchema({ required: true }),
-    message: generateTextSchema({ required: true })
+    message: generateTextSchema({ required: true }),
 };
 
 export default createPostSchema;

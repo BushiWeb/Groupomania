@@ -1,12 +1,12 @@
 import { createLoggerNamespace } from '../logger/index.js';
-import { db, initDatabaseConnection, initModels} from '../models/index.js';
+import { db, initDatabaseConnection, initModels } from '../models/index.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:api:loader:database');
 
 /**
  * Initialize connection to the database.
  */
-export default async function databaseLoader () {
+export default async function databaseLoader() {
     loaderLogger.verbose('Database loading');
 
     // Connecting to the database

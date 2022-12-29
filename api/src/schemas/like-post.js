@@ -8,7 +8,7 @@ import generateBooleanSchema from './atoms/boolean.js';
  */
 const likePostSchema = {
     postId: generateIdSchema(),
-    like: generateBooleanSchema({ required: true })
+    like: generateBooleanSchema({ required: true }),
 };
 
 export default likePostSchema;

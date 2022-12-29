@@ -21,7 +21,7 @@ function getAuthorizationHeader(req) {
         throw new UnauthorizedError({
             message: 'Missing authorization header',
             title: 'Can\'t find the authentication informations',
-            description: 'We are having trouble figuring who you are. Make sure you provided your authentication informations in the Authorization header as a bearer token before trying again.'
+            description: 'We are having trouble figuring who you are. Make sure you provided your authentication informations in the Authorization header as a bearer token before trying again.',
         });
     }
 
@@ -47,8 +47,8 @@ function getTokenFromAuthorization(authorizationHeader) {
             description: 'We are having trouble understanding your authentication informations. Make sure you provided your authentication informations in the Authorization header as a bearer token before trying again.',
             details: {
                 receivedScheme: scheme,
-                expectedSchemes: ['Bearer']
-            }
+                expectedSchemes: ['Bearer'],
+            },
         });
     }
 
@@ -58,13 +58,18 @@ function getTokenFromAuthorization(authorizationHeader) {
 /**
  * Checks the payload format.
  * @param {string} tokenPayload - Payload of the token.
- * @param {boolean} isRefreshToken - Boolean indicating if the payload corresponds to a refresh token payload (if true) or an access token payload (if false).
+ * @param {boolean} isRefreshToken - Boolean indicating if the payload corresponds to a refresh token payload (if true)
+ *  or an access token payload (if false).
  * @throws {UnauthorizedError} Throws if the payload is invalid.
  */
 function checkTokenPayload(tokenPayload, isRefreshToken) {
     authLogger.debug('Checking the payload format');
 
-    const missingProperty = !tokenPayload.userId && 'userId' || !tokenPayload.role && 'role' || !tokenPayload.jti && isRefreshToken && 'jti' || '';
+    const missingProperty =
+        !tokenPayload.userId && 'userId' ||
+        !tokenPayload.role && 'role' ||
+        !tokenPayload.jti && isRefreshToken && 'jti' ||
+        '';
 
     if (missingProperty) {
         authLogger.debug(`The payload doesn't contain the ${missingProperty}, throwing an error`);
@@ -73,8 +78,8 @@ function checkTokenPayload(tokenPayload, isRefreshToken) {
             title: 'Authentication informations incomplete',
             description: 'We are missing authentication informations. Please, verify you token and check it\'s origin. If the token doesn\'t come from us, do not use it. Otherwise, you may try again.',
             logDetails: {
-                missingProperty: missingProperty
-            }
+                missingProperty: missingProperty,
+            },
         });
     }
 }
@@ -83,7 +88,8 @@ function checkTokenPayload(tokenPayload, isRefreshToken) {
 /**
  * Function generating the authentication middleware.
  * Allows to either check an access token or a refresh token.
- * @param {boolean} [isRefreshToken=false] - Boolean indicating if the middleware should handle a refresh token (if true) or an access token (if false).
+ * @param {boolean} [isRefreshToken=false] - Boolean indicating if the middleware should handle a refresh token (if
+ *  true) or an access token (if false).
  * @return Returns the configured authentication middleware.
  */
 export default function authenticate(isRefreshToken = false) {
@@ -108,7 +114,7 @@ export default function authenticate(isRefreshToken = false) {
 
             const tokenKey = isRefreshToken ? config.get('refreshJwt.key') : config.get('jwt.key');
 
-            tokenPayload = jwt.verify(token, tokenKey, { algorithms: [config.get('jwt.alg')] });
+            tokenPayload = jwt.verify(token, tokenKey, { algorithms: [config.get('jwt.alg')]});
             authLogger.debug('Authentication payload valid');
 
             checkTokenPayload(tokenPayload, isRefreshToken);
@@ -120,7 +126,7 @@ export default function authenticate(isRefreshToken = false) {
         res.locals.auth = {
             userId: tokenPayload.userId,
             roleId: tokenPayload.role,
-            ...(tokenPayload.jti && { jti: tokenPayload.jti})
+            ...tokenPayload.jti && { jti: tokenPayload.jti },
         };
 
         authLogger.debug('Data saved, end of authentication middleware');

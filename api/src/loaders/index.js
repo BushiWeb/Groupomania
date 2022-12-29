@@ -14,7 +14,7 @@ const loaderLogger = createLoggerNamespace('groupomania:api:loader');
  * @param {Express.Application} app - Express application.
  * @async
  */
-export default async function loadApp (app) {
+export default async function loadApp(app) {
     loggingMiddelwareLoader(app);
     loaderLogger.verbose('Logging middleware initialized');
 

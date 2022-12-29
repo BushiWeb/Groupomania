@@ -7,30 +7,32 @@
  * @param {Array} [location=['query']] - Where the email is located.
  */
 export default function generateRoleSchema(
-    { required=false, checkFormat=true, allowString=true } = { required: false, checkFormat: true, allowString: true },
+    { required = false, checkFormat = true, allowString = true } = {},
     location = ['query']
 ) {
     return {
         in: location,
 
-        ...(required ? {
-            exists: {
-                errorMessage: 'The parameter is required.',
-                options: {
-                    checkNull: true
+        ...required ?
+            {
+                exists: {
+                    errorMessage: 'The parameter is required.',
+                    options: {
+                        checkNull: true,
+                    },
+                    bail: true,
                 },
-                bail: true
-            }
-        } : {
-            optional: {
-                options: { nullable: true }
-            }
-        }),
+            } :
+            {
+                optional: {
+                    options: { nullable: true },
+                },
+            },
 
-        ...(checkFormat && allowString && {
+        ...checkFormat && allowString && {
             isString: {
                 errorMessage: 'The parameter must either be a string or an integer.',
-                bail: true
+                bail: true,
             },
             customSanitizer: {
                 options: value => {
@@ -40,17 +42,17 @@ export default function generateRoleSchema(
                     }
 
                     return value;
-                }
-            }
-        }),
+                },
+            },
+        },
 
-        ...(checkFormat && !allowString && {
+        ...checkFormat && !allowString && {
             isInt: {
                 errorMessage: 'The role id must be an integer.',
-                bail: true
+                bail: true,
             },
 
             toInt: true,
-        })
+        },
     };
 }

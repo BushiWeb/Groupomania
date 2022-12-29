@@ -8,7 +8,7 @@ import generatePasswordSchema from './atoms/password.js';
  */
 const createUserBodySchema = {
     email: generateEmailSchema(),
-    password: generatePasswordSchema()
+    password: generatePasswordSchema(),
 };
 
 export default createUserBodySchema;

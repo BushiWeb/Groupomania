@@ -13,7 +13,7 @@ const loaderLogger = createLoggerNamespace('groupomania:api:loader:routes');
  * Add all users related routes and middlewares.
  * @param {Express.Application} app - Express application
  */
-export default function routeLoader (app) {
+export default function routeLoader(app) {
     loaderLogger.verbose('Loading users routes and middlewares');
 
     app.use('/images', express.static(config.get('payload.files.saveFolder'), { fallthrough: false }));

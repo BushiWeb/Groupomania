@@ -24,11 +24,11 @@ describe('authenticate middleware test suite', () => {
         request.headers.authorization = 'Bearer ghgsdqslkjfhqsldfkqsdqoiufhqkqnfqsdufhqso';
         const tokenPayload = {
             userId: 13,
-            role: 2
+            role: 2,
         };
         const savedPayload = {
             userId: tokenPayload.userId,
-            roleId: tokenPayload.role
+            roleId: tokenPayload.role,
         };
         mockJwtVerify.mockReturnValueOnce(tokenPayload);
         authenticate()(request, response, next);
@@ -44,12 +44,12 @@ describe('authenticate middleware test suite', () => {
         const tokenPayload = {
             userId: 13,
             jti: 'ffffff-ffffffff-fffffffffffffffff',
-            role: 2
+            role: 2,
         };
         const savedPayload = {
             userId: tokenPayload.userId,
             roleId: tokenPayload.role,
-            jti: tokenPayload.jti
+            jti: tokenPayload.jti,
         };
         mockJwtVerify.mockReturnValueOnce(tokenPayload);
         authenticate(true)(request, response, next);
@@ -64,12 +64,12 @@ describe('authenticate middleware test suite', () => {
         request.headers.authorization = 'bearer ghgsdqslkjfhqsldfkqsdqoiufhqkqnfqsdufhqso';
         const tokenPayload = {
             userId: 13,
-            role: 2
+            role: 2,
         };
         const savedPayload = {
             userId: tokenPayload.userId,
             roleId: tokenPayload.role,
-            jti: tokenPayload.jti
+            jti: tokenPayload.jti,
         };
         mockJwtVerify.mockReturnValueOnce(tokenPayload);
         authenticate()(request, response, next);
@@ -100,7 +100,9 @@ describe('authenticate middleware test suite', () => {
         const errorMessage = 'Error message';
         const errorExpirationDate = Date.now();
         const expirationError = new jwt.TokenExpiredError(errorMessage, errorExpirationDate);
-        mockJwtVerify.mockImplementation(() => { throw expirationError; });
+        mockJwtVerify.mockImplementation(() => {
+            throw expirationError;
+        });
 
         request.headers.authorization = 'Bearer ghgsdqslkjfhqsldfkqsdqoiufhqkqnfqsdufhqso';
         authenticate()(request, response, next);
@@ -113,7 +115,9 @@ describe('authenticate middleware test suite', () => {
         const errorMessage = 'Error message';
         const errorValidStartDate = Date.now();
         const notBeforeError = new jwt.NotBeforeError(errorMessage, errorValidStartDate);
-        mockJwtVerify.mockImplementation(() => { throw notBeforeError; });
+        mockJwtVerify.mockImplementation(() => {
+            throw notBeforeError;
+        });
 
         request.headers.authorization = 'Bearer ghgsdqslkjfhqsldfkqsdqoiufhqkqnfqsdufhqso';
         authenticate()(request, response, next);
@@ -125,7 +129,9 @@ describe('authenticate middleware test suite', () => {
     it('should call the next error middleware if the verification fails', () => {
         const errorMessage = 'Error message';
         const jwtError = new jwt.JsonWebTokenError(errorMessage);
-        mockJwtVerify.mockImplementation(() => { throw jwtError; });
+        mockJwtVerify.mockImplementation(() => {
+            throw jwtError;
+        });
 
         request.headers.authorization = 'Bearer ghgsdqslkjfhqsldfkqsdqoiufhqkqnfqsdufhqso';
         authenticate()(request, response, next);
@@ -137,7 +143,7 @@ describe('authenticate middleware test suite', () => {
     it('should call the next error middleware if the payload doesn\'t contain the userId', () => {
         request.headers.authorization = 'Bearer ghgsdqslkjfhqsldfkqsdqoiufhqkqnfqsdufhqso';
         const tokenPayload = {
-            role: 2
+            role: 2,
         };
         mockJwtVerify.mockReturnValueOnce(tokenPayload);
         authenticate()(request, response, next);
@@ -151,7 +157,7 @@ describe('authenticate middleware test suite', () => {
     it('should call the next error middleware if the payload doesn\'t contain the role', () => {
         request.headers.authorization = 'Bearer ghgsdqslkjfhqsldfkqsdqoiufhqkqnfqsdufhqso';
         const tokenPayload = {
-            userId: 2
+            userId: 2,
         };
         mockJwtVerify.mockReturnValueOnce(tokenPayload);
         authenticate()(request, response, next);
@@ -166,7 +172,7 @@ describe('authenticate middleware test suite', () => {
         request.headers.authorization = 'Bearer ghgsdqslkjfhqsldfkqsdqoiufhqkqnfqsdufhqso';
         const tokenPayload = {
             userId: 2,
-            role: 2
+            role: 2,
         };
         mockJwtVerify.mockReturnValueOnce(tokenPayload);
         authenticate(true)(request, response, next);

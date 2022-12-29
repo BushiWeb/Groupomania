@@ -1,4 +1,11 @@
-import { createRefreshToken, createAccessToken, validatePassword, validateRefreshToken, invalidateRefreshToken, hashPassword } from '../../src/services/auth.js';
+import {
+    createRefreshToken,
+    createAccessToken,
+    validatePassword,
+    validateRefreshToken,
+    invalidateRefreshToken,
+    hashPassword,
+} from '../../src/services/auth.js';
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
 import MockModel, * as mockModelMethods from '../mocks/mock-models.js';
@@ -8,9 +15,9 @@ import jwt from 'jsonwebtoken';
 
 jest.spyOn(db, 'models', 'get').mockImplementation(
     () => new Proxy(
-        {Model: MockModel},
+        { Model: MockModel },
         {
-            get: (target) => target.Model
+            get: (target) => target.Model,
         }
     )
 );
@@ -31,7 +38,7 @@ describe('Auth services test suite', () => {
         email: 'email@example.com',
         password: 'mockedBcryptHash',
         roleId: 2,
-        userId: 113
+        userId: 113,
     };
 
     describe('createRefreshToken service test suite', () => {
@@ -119,7 +126,7 @@ describe('Auth services test suite', () => {
             tokenId,
             expiration: 11111111111,
             tokenValue: 'hashed token value',
-            userId: 113
+            userId: 113,
         });
 
         it('should return true if the password is valid', async () => {
@@ -143,7 +150,7 @@ describe('Auth services test suite', () => {
             tokenId,
             expiration: 11111111111,
             tokenValue: 'hashed token value',
-            userId
+            userId,
         });
 
         it('should use the token id to choose the refresh token to delete', async () => {
@@ -151,8 +158,8 @@ describe('Auth services test suite', () => {
             expect(mockModelMethods.mockStaticDestroy).toHaveBeenCalled();
             expect(mockModelMethods.mockStaticDestroy).toHaveBeenCalledWith({
                 where: {
-                    tokenId
-                }
+                    tokenId,
+                },
             });
         });
 
@@ -162,8 +169,8 @@ describe('Auth services test suite', () => {
             expect(mockModelMethods.mockStaticDestroy).toHaveBeenCalled();
             expect(mockModelMethods.mockStaticDestroy).toHaveBeenCalledWith({
                 where: {
-                    userId
-                }
+                    userId,
+                },
             });
         });
 

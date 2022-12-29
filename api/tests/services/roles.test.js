@@ -5,9 +5,9 @@ import MockModel, * as mockModelMethods from '../mocks/mock-models.js';
 
 jest.spyOn(db, 'models', 'get').mockImplementation(
     () => new Proxy(
-        {Model: MockModel},
+        { Model: MockModel },
         {
-            get: (target) => target.Model
+            get: (target) => target.Model,
         }
     )
 );
@@ -21,12 +21,12 @@ describe('User services test suite', () => {
         const rolesData = [
             {
                 roleId: 1,
-                name: 'admin'
+                name: 'admin',
             },
             {
                 roleId: 1,
-                name: 'admin'
-            }
+                name: 'admin',
+            },
         ];
 
         it('should get all users\' informations', async () => {
@@ -36,7 +36,7 @@ describe('User services test suite', () => {
             expect(Array.isArray(roles)).toBe(true);
             expect(roles).toHaveLength(2);
 
-            for(const index in roles) {
+            for (const index in roles) {
                 expect(roles[index]).toHaveProperty('name', rolesData[index].name);
                 expect(roles[index]).toHaveProperty('roleId', rolesData[index].roleId);
             }

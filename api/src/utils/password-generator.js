@@ -16,7 +16,8 @@ export function lerp(low, up, decimal) {
  * @param value - Value to clamp.
  * @param [min=0] - Minimum.
  * @param [max=1] - Maximum.
- * @returns Returns the value if the value is between min and max, max if the value si greater than max and min if the value is lower than min.
+ * @returns Returns the value if the value is between min and max, max if the value si greater than max and min if the
+ *  value is lower than min.
  */
 export function clamp(value, min = 0, max = 1) {
     return Math.min(max, Math.max(value, min));
@@ -97,7 +98,7 @@ function getCharacterSet(count, sets) {
  */
 function updateCharacterCount(count, sets, newChar) {
     const newCount = {
-        total: count.total
+        total: count.total,
     };
     for (const category in sets) {
         newCount[category] = count[category];
@@ -119,14 +120,8 @@ export function generatePassword(
         minLowercase = 1,
         minUppercase = 1,
         minNumbers = 1,
-        minSymbols = 1
-    } = {
-        length: 8,
-        minLowercase: 1,
-        minUppercase: 1,
-        minNumbers: 1,
-        minSymbols: 1
-    }
+        minSymbols = 1,
+    } = {}
 ) {
     let password = '';
 
@@ -134,7 +129,7 @@ export function generatePassword(
         uppercases: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
         lowercases: 'abcdefghijklmnopqrstuvwxyz',
         numbers: '0123456789',
-        symbols: '&~"#\'{([-|`_\\^@)]+=}$*,?;.:/!<>'
+        symbols: '&~"#\'{([-|`_\\^@)]+=}$*,?;.:/!<>',
     };
 
     let count = {
@@ -142,7 +137,7 @@ export function generatePassword(
         lowercases: minLowercase,
         numbers: minNumbers,
         symbols: minSymbols,
-        total: minUppercase + minLowercase + minNumbers + minSymbols
+        total: minUppercase + minLowercase + minNumbers + minSymbols,
     };
 
 

@@ -8,7 +8,7 @@ import validationMiddlewares,
     getAllPostsSchema,
     getPostSchema,
     likePostSchema,
-    updatePostSchema
+    updatePostSchema,
 } from '../middlewares/user-input-validation.js';
 import createBodyParser from '../middlewares/body-parsing.js';
 import authenticate from '../middlewares/authentication.js';
@@ -18,7 +18,7 @@ import {
     getAllPostsController,
     getPostController,
     likePostController,
-    updatePostController
+    updatePostController,
 } from '../controllers/post-controller.js';
 import multer, { dataFormatter } from '../middlewares/multer.js';
 import authorize from '../middlewares/authorization.js';
@@ -29,7 +29,7 @@ const router = express.Router();
 postRoutesLogger.verbose('Post router initialisation');
 
 const expressJsonOptions = {
-    limit: config.get('payload.maxSize')
+    limit: config.get('payload.maxSize'),
 };
 
 /**
@@ -45,8 +45,8 @@ router.post(
         'application/json': express.json(expressJsonOptions),
         'multipart/form-data': {
             parser: multer,
-            dataFormatter: dataFormatter('post')
-        }
+            dataFormatter: dataFormatter('post'),
+        },
     }, false),
     validationMiddlewares(createPostSchema, true),
     authenticate(),
@@ -100,19 +100,19 @@ router.put(
         'application/json': express.json(expressJsonOptions),
         'multipart/form-data': {
             parser: multer,
-            dataFormatter: dataFormatter('post', { required: false })
-        }
+            dataFormatter: dataFormatter('post', { required: false }),
+        },
     }, false),
     validationMiddlewares(updatePostSchema, true),
     authenticate(),
     authorize('update', 'Post', {
         User: {
             origin: 'res',
-            field: 'auth'
+            field: 'auth',
         },
         Subject: {
-            origin: 'params'
-        }
+            origin: 'params',
+        },
     }, ['title', 'message', 'imageUrl']),
     updatePostController
 );
@@ -150,11 +150,11 @@ router.delete(
     authorize('delete', 'Post', {
         User: {
             origin: 'res',
-            field: 'auth'
+            field: 'auth',
         },
         Subject: {
-            origin: 'params'
-        }
+            origin: 'params',
+        },
     }),
     deletePostController
 );
