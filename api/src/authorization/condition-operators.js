@@ -8,6 +8,7 @@ import { createJsInterpreter } from '@ucast/js';
  */
 async function asyncSome(array, fct) {
     for (const index in array) {
+        // eslint-disable-next-line no-await-in-loop
         if (await fct(array[index], index, array)) {
             return true;
         }
@@ -31,6 +32,7 @@ export async function get(object, path) {
     for (const property of properties) {
         currentValue = currentValue[property];
         if (currentValue instanceof Promise) {
+            // eslint-disable-next-line no-await-in-loop
             currentValue = await currentValue;
         }
     }
