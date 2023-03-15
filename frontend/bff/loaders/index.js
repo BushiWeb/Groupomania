@@ -1,8 +1,8 @@
-import headersLoader from './headers.js';
 import { createLoggerNamespace } from '../logger/index.js';
 import errorsLoader from './errors.js';
-import routeLoader from './routes.js';
 import loggingMiddelwareLoader from './logger.js';
+import htmlPageLoader from './html-page.js';
+import staticLoader from './static.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:api:loader');
 
@@ -14,6 +14,12 @@ const loaderLogger = createLoggerNamespace('groupomania:api:loader');
 export default async function loadApp(app) {
     loggingMiddelwareLoader(app);
     loaderLogger.verbose('Logging middleware initialized');
+
+    staticLoader(app);
+    loaderLogger.verbose('Static routes initialized');
+
+    htmlPageLoader(app);
+    loaderLogger.verbose('HTML page fetching initialized');
 
     errorsLoader(app);
     loaderLogger.verbose('Error middlewares initialized');
