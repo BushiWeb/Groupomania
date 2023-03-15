@@ -12,6 +12,9 @@ const loaderLogger = createLoggerNamespace('groupomania:api:loader');
  * @async
  */
 export default async function loadApp(app) {
+    app.set('x-powered-by', false);
+    loaderLogger.debug('Remove X-Powered-By');
+
     loggingMiddelwareLoader(app);
     loaderLogger.verbose('Logging middleware initialized');
 
