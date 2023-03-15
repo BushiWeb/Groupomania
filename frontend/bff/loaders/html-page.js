@@ -52,7 +52,7 @@ export default function htmlPageLoader(app) {
     loaderLogger.debug(`Root folder found: ${root}`);
 
     // Add the middleware to serve the HTML file
-    app.use((req, res) => {
+    app.get('/', (req, res) => {
         res.sendFile('./build/index.html', {
             root,
         });
