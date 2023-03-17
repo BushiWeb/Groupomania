@@ -1,8 +1,6 @@
 import express from 'express';
 import { createLoggerNamespace } from '../logger/index.js';
 import helmet from 'helmet';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 
 const routeLogger = createLoggerNamespace('groupomania:api:route:html-page');
@@ -10,8 +8,7 @@ const routeLogger = createLoggerNamespace('groupomania:api:route:html-page');
 const router = express.Router();
 
 // Get the root directory
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const root = join(__dirname, '../..');
+const root = process.cwd();
 routeLogger.debug(`Root folder found: ${root}`);
 
 // Add security headers
