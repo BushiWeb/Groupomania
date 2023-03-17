@@ -1,4 +1,5 @@
 import { createLoggerNamespace } from '../logger/index.js';
+import renderEngineLoader from './engine.js';
 import errorsLoader from './errors.js';
 import loggingMiddelwareLoader from './logger.js';
 import routeLoader from './routes.js';
@@ -16,6 +17,9 @@ export default async function loadApp(app) {
 
     loggingMiddelwareLoader(app);
     loaderLogger.verbose('Logging middleware initialized');
+
+    renderEngineLoader(app);
+    loaderLogger.verbose('Render engine initialized');
 
     routeLoader(app);
     loaderLogger.verbose('Routes initialized');

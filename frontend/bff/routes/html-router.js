@@ -7,10 +7,6 @@ const routeLogger = createLoggerNamespace('groupomania:api:route:html-page');
 
 const router = express.Router();
 
-// Get the root directory
-const root = process.cwd();
-routeLogger.debug(`Root folder found: ${root}`);
-
 // Add security headers
 router.use(
     helmet.contentSecurityPolicy({
@@ -47,8 +43,8 @@ routeLogger.debug('Use helmet.permittedCrossDomainPolicies to set the Permitted-
 
 // Add the middleware to serve the HTML file
 router.get('/', (req, res) => {
-    res.sendFile('./build/index.html', {
-        root,
+    res.render('index.html', {
+        crsfToken: 123,
     });
 });
 routeLogger.debug('GET / - HTML pae serving route added');
