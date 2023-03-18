@@ -1,5 +1,5 @@
 import { webcrypto } from 'node:crypto';
-import { createLoggerNamespace } from '../logger/index.js';
+import { createLoggerNamespace } from '../../logger/index.js';
 
 const crsfControllerLogger = createLoggerNamespace('groupomania:bff:services:crsf');
 

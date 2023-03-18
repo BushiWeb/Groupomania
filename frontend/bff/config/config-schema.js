@@ -47,6 +47,13 @@ const CONFIG_SCHEMA = {
             default: 'connect.sid',
         },
     },
+    payload: {
+        maxSize: {
+            doc: 'Payload\'s max size in number of bytes',
+            format: 'int',
+            default: 10240,
+        },
+    },
 
     /* cors: {
         origin: {
@@ -97,47 +104,6 @@ const CONFIG_SCHEMA = {
             format: 'int',
             default: null,
             nullable: true,
-        },
-    },
-    payload: {
-        sanitization: {
-            doc: 'Strings to remove from the sanitized values. Should follow the recommendations of the OWASP',
-            format: Array,
-            default: [
-                '<script',
-                '<\\/script',
-                '<!--',
-                '-->',
-                '\\]\\]>',
-            ],
-        },
-        maxSize: {
-            doc: 'Payload\'s max size in number of bytes',
-            format: 'int',
-            default: 10240,
-        },
-        files: {
-            maxFileSize: {
-                doc: 'Files max allowed size in bytes',
-                format: 'int',
-                default: 5242880,
-            },
-            allowedFileTypes: {
-                doc: 'All files types that are accepted',
-                format: Object,
-                default: {
-                    'image/jpg': 'jpg',
-                    'image/jpeg': 'jpg',
-                    'image/png': 'png',
-                    'image/webp': 'webp',
-                    'image/avif': 'avif',
-                },
-            },
-            saveFolder: {
-                doc: 'Path to the folder containing the images. Relative to the root of the project',
-                format: String,
-                default: 'images',
-            },
         },
     },
     password: {
