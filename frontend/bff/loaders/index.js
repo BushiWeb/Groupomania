@@ -5,7 +5,7 @@ import loggingMiddelwareLoader from './logger.js';
 import routeLoader from './routes.js';
 import sessionLoader from './session.js';
 
-const loaderLogger = createLoggerNamespace('groupomania:api:loader');
+const loaderLogger = createLoggerNamespace('groupomania:bff:loader');
 
 /**
  * Calls all application's loaders.

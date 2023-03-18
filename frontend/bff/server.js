@@ -8,7 +8,7 @@ import {
 import config from './config/config.js';
 import { createLoggerNamespace } from './logger/index.js';
 
-const serverLogger = createLoggerNamespace('groupomania:api:server');
+const serverLogger = createLoggerNamespace('groupomania:bff:server');
 
 // Get the port
 let port;

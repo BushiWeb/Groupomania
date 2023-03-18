@@ -1,7 +1,7 @@
 import process from 'node:process';
 import { createLoggerNamespace } from '../logger/index.js';
 
-const serverLogger = createLoggerNamespace('groupomania:api:server');
+const serverLogger = createLoggerNamespace('groupomania:bff:server');
 
 /**
  * Return the port value as a number.

@@ -2,7 +2,7 @@ import morgan from 'morgan';
 import createLoggerNamespace from './logger-namespace.js';
 
 // Log Morgan messages using a custom logger
-const httpLogger = createLoggerNamespace('groupomania:api:http');
+const httpLogger = createLoggerNamespace('groupomania:bff:http');
 
 const stream = {
     write: (message) => httpLogger.http(message),

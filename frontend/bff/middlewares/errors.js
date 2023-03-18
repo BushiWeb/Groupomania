@@ -7,7 +7,7 @@ import {
 } from '../errors/index.js';
 import createError from 'http-errors';
 
-const errorLogger = createLoggerNamespace('groupomania:api:error');
+const errorLogger = createLoggerNamespace('groupomania:bff:error');
 
 
 /**

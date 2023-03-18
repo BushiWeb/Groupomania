@@ -1,6 +1,6 @@
 import { createLoggerNamespace, morganMiddleware } from '../logger/index.js';
 
-const loaderLogger = createLoggerNamespace('groupomania:api:loader:logger');
+const loaderLogger = createLoggerNamespace('groupomania:bff:loader:logger');
 
 /**
  * Add all logging middlewares.

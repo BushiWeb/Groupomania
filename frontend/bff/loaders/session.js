@@ -2,7 +2,7 @@ import { createLoggerNamespace } from '../logger/index.js';
 import session from 'express-session';
 import config from '../config/config.js';
 
-const loaderLogger = createLoggerNamespace('groupomania:api:loader:session');
+const loaderLogger = createLoggerNamespace('groupomania:bff:loader:session');
 
 /**
  * Setup the session middleware.

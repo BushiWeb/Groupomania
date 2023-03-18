@@ -2,7 +2,7 @@ import express from 'express';
 import { createLoggerNamespace } from './logger/index.js';
 import loadApp from './loaders/index.js';
 
-const appLogger = createLoggerNamespace('groupomania:api:app');
+const appLogger = createLoggerNamespace('groupomania:bff:app');
 
 const app = express();
 appLogger.verbose('App initialized');

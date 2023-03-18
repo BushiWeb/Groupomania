@@ -3,7 +3,7 @@ import getRoutesRegexp from '../utils/get-routes.js';
 import HTMLRouter from '../routes/html-router.js';
 import express from 'express';
 
-const loaderLogger = createLoggerNamespace('groupomania:api:loader:routes');
+const loaderLogger = createLoggerNamespace('groupomania:bff:loader:routes');
 
 /**
  * Add all users related routes and middlewares.

@@ -5,7 +5,7 @@ import {
     errorNormalizer,
 } from '../middlewares/errors.js';
 
-const loaderLogger = createLoggerNamespace('groupomania:api:loader:errors');
+const loaderLogger = createLoggerNamespace('groupomania:bff:loader:errors');
 
 /**
  * Add all error related middlewares.

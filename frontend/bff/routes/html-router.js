@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import { staticHTMLController } from '../controllers/static-html/index.js';
 
 
-const routeLogger = createLoggerNamespace('groupomania:api:route:html-page');
+const routeLogger = createLoggerNamespace('groupomania:bff:route:html-page');
 
 const router = express.Router();
 

@@ -2,7 +2,7 @@ import { createLoggerNamespace } from '../logger/index.js';
 import { Liquid } from 'liquidjs';
 import { join } from 'node:path';
 
-const loaderLogger = createLoggerNamespace('groupomania:api:loader:render-engine');
+const loaderLogger = createLoggerNamespace('groupomania:bff:loader:render-engine');
 
 /**
  * Setup the render engine.
