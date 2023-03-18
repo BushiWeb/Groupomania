@@ -13,6 +13,40 @@ const CONFIG_SCHEMA = {
         env: 'BFF_PORT',
         arg: 'port',
     },
+    session: {
+        cookieExp: {
+            doc: 'Number of milliseconds for before the cookie expires.',
+            format: 'int',
+            default: 86400000, // 1 day
+        },
+        sameSite: {
+            doc: 'SameSite cookie option value.',
+            format: 'sameSite',
+            default: 'lax',
+        },
+        secure: {
+            doc: 'Secure cookie option value.',
+            format: Boolean,
+            default: false,
+        },
+        httpOnly: {
+            doc: 'HTTP-Only cookie option value.',
+            format: Boolean,
+            default: true,
+        },
+        secret: {
+            doc: 'Secrets to use to sign the session id, and to verify it. It must be a space separated list. The first element of the list is used to sign, but all are considered when verifying the session id. Its value should be changed regularily. To change it without invalidating all sessions, append the new secret at the beginning of the list but keep the other ones.',
+            format: 'secretList',
+            nullable: false,
+            default: null,
+            env: 'SESSION_SECRET',
+        },
+        name: {
+            doc: 'Cookie name',
+            format: String,
+            default: 'connect.sid',
+        },
+    },
 
     /* cors: {
         origin: {
