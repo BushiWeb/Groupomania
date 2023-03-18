@@ -29,7 +29,8 @@
         "dev-start": "npm run build && npm run backend-start",
         "start": "npm run build && node -r dotenv/config ./bff/server.js --env production",
         "build": "react-scripts build",
-        "test": "react-scripts test",
+        "frontend-test": "react-scripts test",
+        "bff-test": "node --experimental-vm-modules node_modules/jest/bin/jest.js -- bff",
         "eject": "react-scripts eject",
         "format": "prettier --write --cache --cache-strategy metadata ./ && eslint --fix --cache --ext .js,.cjs ./"
     },
@@ -46,7 +47,9 @@
         ]
     },
     "devDependencies": {
+        "@types/jest": "^29.5.0",
         "eslint": "^8.35.0",
+        "jest": "^27.5.1",
         "nodemon": "^2.0.21",
         "prettier": "^2.8.4"
     }

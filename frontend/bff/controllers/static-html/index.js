@@ -1,3 +1,5 @@
+import { generateCRSFToken } from '../../services/session/generate-crsf-token.js';
+
 /**
  * Generates the static HTML page.
  * @param {Express.Request} req - Express request object.
@@ -5,7 +7,7 @@
  * @param next - Next middleware to execute.
  */
 export function staticHTMLController(req, res, next) {
-    const crsfToken = 123;
+    const crsfToken = generateCRSFToken();
 
     // Saves the CRSF token in the session
     req.session.crsfToken = crsfToken;
