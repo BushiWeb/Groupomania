@@ -54,6 +54,23 @@ const CONFIG_SCHEMA = {
             default: 10240,
         },
     },
+    api: {
+        baseUrl: {
+            doc: 'URL used to make requests to the API',
+            format: String,
+            default: 'localhost',
+        },
+        port: {
+            doc: 'Port used by the API',
+            format: 'port',
+            default: 3000,
+        },
+        baseRoutePath: {
+            doc: 'Common start of the path for all routes',
+            format: String,
+            default: '/api/v1',
+        },
+    },
 
     /* cors: {
         origin: {
