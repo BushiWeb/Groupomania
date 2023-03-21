@@ -1,4 +1,5 @@
 import { createLoggerNamespace } from '../logger/index.js';
+import axiosLoader from './axios.js';
 import renderEngineLoader from './engine.js';
 import errorsLoader from './errors.js';
 import loggingMiddelwareLoader from './logger.js';
@@ -15,6 +16,9 @@ const loaderLogger = createLoggerNamespace('groupomania:bff:loader');
 export default async function loadApp(app) {
     app.set('x-powered-by', false);
     loaderLogger.debug('Remove X-Powered-By');
+
+    axiosLoader();
+    loaderLogger.verbose('Default axios configuration initialized');
 
     loggingMiddelwareLoader(app);
     loaderLogger.verbose('Logging middleware initialized');

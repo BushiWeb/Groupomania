@@ -6,6 +6,7 @@ import {
     MethodNotAllowedError,
 } from '../errors/index.js';
 import createError from 'http-errors';
+import { AxiosError } from 'axios';
 
 const errorLogger = createLoggerNamespace('groupomania:bff:error');
 
@@ -42,6 +43,32 @@ function normalizeExpressError(err) {
 }
 
 /**
+ * Handles Axios errors.
+ * @param err - Express error to normalize.
+ * @returns {HttpError} Returns the associated HttpError.
+ */
+function normalizeAxiosErrors(err) {
+    errorLogger.debug('Axios error normalization');
+
+    if (err.response) {
+        const error = err.response.error;
+        return new HttpError({
+            message: error.title,
+            name: error.type,
+            title: error.title,
+            description: error.message,
+            details: error.details,
+            statusCode: error.statusCode,
+        }, err);
+    }
+
+    return new InternalServerError({
+        message: err.message,
+        originalName: err.name,
+    }, err);
+}
+
+/**
  * Normalizes errors.
  * After this middleware, all errors have the same structure and can be handled the same way.
  * JsonWebTokens are normalized here.
@@ -64,6 +91,11 @@ export function errorNormalizer(err, req, res, next) {
     // Express' errors handling
     if (createError.isHttpError(err)) {
         return next(normalizeExpressError(err).setRequestInformations(req.originalUrl, req.method));
+    }
+
+    // Axios' errors handling
+    if (err instanceof AxiosError) {
+        return next(normalizeAxiosErrors(err).setRequestInformations(req.originalUrl, req.method));
     }
 
     // Normalize other errors
