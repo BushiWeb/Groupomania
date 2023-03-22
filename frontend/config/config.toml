@@ -1,2 +1,5 @@
 [session]
 name = "groupomania.sid"
+
+[cors]
+origin = "http://localhost:8000"

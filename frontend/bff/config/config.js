@@ -4,7 +4,7 @@ import { access } from 'node:fs/promises';
 import { createLoggerNamespace } from '../logger/index.js';
 import { getEnvironment } from '../utils/utils.js';
 
-const confLogger = createLoggerNamespace('groupomania:api:config');
+const confLogger = createLoggerNamespace('groupomania:bff:config');
 
 
 // Add TOML parser to Convict

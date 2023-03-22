@@ -71,8 +71,7 @@ const CONFIG_SCHEMA = {
             default: '/api/v1',
         },
     },
-
-    /* cors: {
+    cors: {
         origin: {
             doc: 'Access-Control-Allow-Origin header value. Can be a string with one origin, an array with multiple origins, true to accept all origins and false to disable CORS.',
             format: '*',
@@ -123,33 +122,6 @@ const CONFIG_SCHEMA = {
             nullable: true,
         },
     },
-    password: {
-        minLength: {
-            doc: 'Minimum length for the password',
-            format: 'int',
-            default: 8,
-        },
-        minLowercase: {
-            doc: 'Minimum number of lowercase letters in the password',
-            format: 'int',
-            default: 1,
-        },
-        minUppercase: {
-            doc: 'Minimum number of uppercase letters in the password',
-            format: 'int',
-            default: 1,
-        },
-        minNumbers: {
-            doc: 'Minimum number of number characters in the password',
-            format: 'int',
-            default: 1,
-        },
-        minSymbols: {
-            doc: 'Minimum number of symbols in the password',
-            format: 'int',
-            default: 1,
-        },
-    }, */
 };
 
 export default CONFIG_SCHEMA;

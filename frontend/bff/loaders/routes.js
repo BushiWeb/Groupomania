@@ -1,6 +1,7 @@
 import { createLoggerNamespace } from '../logger/index.js';
 import getRoutesRegexp from '../utils/get-routes.js';
 import HTMLRouter from '../routes/html-router.js';
+import BFFRouter from '../routes/authentication-router.js';
 import express from 'express';
 
 const loaderLogger = createLoggerNamespace('groupomania:bff:loader:routes');
@@ -17,6 +18,10 @@ export default function routeLoader(app) {
         index: false,
     }));
     loaderLogger.debug('Build static route added');
+
+    // Add the BFF router
+    app.use('/bff/', BFFRouter);
+    loaderLogger.debug('BFF router added');
 
     // Add the route to serve the HTML page
     app.use('/', HTMLRouter);
