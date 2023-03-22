@@ -1,6 +1,7 @@
 import { createLoggerNamespace } from '../logger/index.js';
 import { UnauthorizedError, ForbiddenError } from '../errors/index.js';
 import { generateCRSFToken } from '../services/session/generate-crsf-token.js';
+import config from '../config/config.js';
 
 const authLogger = createLoggerNamespace('groupomania:bff:authentication');
 
@@ -72,6 +73,18 @@ function updateCRSFToken(req, res) {
 
 
 /**
+ * Extends session expiration.
+ * If the cookie expiration is closer than the minimal TTL of the cookie, then prolongate the cookie lifespan.
+ * @param {Express.Request} req
+ */
+function extendSessionTTL(req) {
+    if (req.session.cookie.maxAge < config.get('session.cookieExp')) {
+        req.session.cookie.maxAge = config.get('session.cookieExp');
+    }
+}
+
+
+/**
  * Function generating the authentication middleware.
  * @param {boolean} [checkAuthentication=true] - Boolean indicating if the middleware should check whether
  *  or not the user already have a session.
@@ -105,6 +118,7 @@ export default function authenticate(checkAuthentication = true) {
             return next(error);
         }
 
+        extendSessionTTL(req);
         updateCRSFToken(req, res);
         next();
     };

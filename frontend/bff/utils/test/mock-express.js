@@ -1,5 +1,11 @@
 import { jest } from '@jest/globals';
 
+function Session() {
+    this.cookie = {
+        maxAge: 24 * 60 * 60 * 1000,
+    };
+}
+
 export const mockRequest = (body = {}, { contentType, authorization, crsfToken } = {}) => {
     const req = {
         body,
@@ -10,7 +16,7 @@ export const mockRequest = (body = {}, { contentType, authorization, crsfToken }
         },
         query: {},
         params: {},
-        session: {},
+        session: new Session(),
     };
     req.get = jest.fn().mockImplementation((parameter) => {
         return req.headers[parameter.toLowerCase()];
@@ -25,7 +31,7 @@ export const mockRequest = (body = {}, { contentType, authorization, crsfToken }
         req.query = {};
         req.params = {};
         req.headers = {};
-        req.session = {};
+        req.session = new Session();
     };
     return req;
 };
