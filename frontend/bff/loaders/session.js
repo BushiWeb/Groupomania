@@ -1,6 +1,7 @@
 import { createLoggerNamespace } from '../logger/index.js';
 import session from 'express-session';
 import config from '../config/config.js';
+import memoryStore from 'memorystore';
 
 const loaderLogger = createLoggerNamespace('groupomania:bff:loader:session');
 
@@ -10,6 +11,8 @@ const loaderLogger = createLoggerNamespace('groupomania:bff:loader:session');
  */
 export default function sessionLoader(app) {
     loaderLogger.verbose('Loading session middleware');
+
+    const MemoryStore = memoryStore(session);
 
     app.use(session({
         cookie: {
@@ -23,6 +26,9 @@ export default function sessionLoader(app) {
         resave: false,
         saveUninitialized: false,
         unset: 'destroy',
+        store: new MemoryStore({
+            checkPeriod: config.get('session.cookieExp'),
+        }),
     }));
     loaderLogger.debug('Session middleware loaded');
 
