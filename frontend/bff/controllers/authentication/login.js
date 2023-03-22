@@ -2,6 +2,7 @@ import { createLoggerNamespace } from '../../logger/index.js';
 import getUserInfoRequest from '../../services/requests/getUserInfo.js';
 import loginRequest from '../../services/requests/login.js';
 import refreshRequest from '../../services/requests/refresh.js';
+import config from '../../config/config.js';
 
 const loginControllerLogger = createLoggerNamespace('groupomania:bff:controller:login');
 
@@ -24,19 +25,28 @@ export default async function loginController(req, res, next) {
         let loginInformations;
         let userInformations;
         if (req.body.email && req.body.password) {
+            loginControllerLogger.debug('Loging in with credentials');
             loginInformations = await loginRequest({ email: req.body.email, password: req.body.password });
             userInformations = await getUserInfoRequest(loginInformations.userId);
         } else {
+            loginControllerLogger.debug('Refreshing access token');
             loginInformations = await refreshRequest(req.session.user.refreshToken);
         }
 
-        // Get the user informations
+        // Extend the session lifespan if the user wants to be remembered
+        if (req.body.rememberMe) {
+            loginControllerLogger.debug('Extending session lifespan');
+            req.session.cookie.maxAge = config.get('session.extendedCookieExp');
+        }
 
         // Save the new data in the session
         req.session.regenerate((error) => {
             if (error) {
+                loginControllerLogger.debug('Error while regenerating the session');
                 return next(error);
             }
+
+            loginControllerLogger.debug('Session regenerated, saving data in the session');
 
             req.session.user = {
                 refreshToken: loginInformations.refreshToken,
@@ -47,8 +57,10 @@ export default async function loginController(req, res, next) {
             // Send the response
             req.session.save((error) => {
                 if (error) {
+                    loginControllerLogger.debug('Error while saving the session');
                     return next(error);
                 }
+                loginControllerLogger.debug('Session saved. Sending the response');
 
                 res.status(200).json({
                     accessToken: loginInformations.accessToken,
