@@ -4,6 +4,8 @@ import createBodyParser from '../../middlewares/body-parsing.js';
 import validationMiddlewares from '../../middlewares/user-input-validation.js';
 import authenticate from '../../middlewares/authentication.js';
 import loginBodySchema from '../../schemas/login.js';
+import signupController from '../../controllers/authentication/signup.js';
+import signupBodySchema from '../../schemas/signup.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:bff:bff-loader:routes');
 
@@ -22,4 +24,13 @@ export default function routeLoader(router) {
         loginController
     );
     loaderLogger.debug('POST /login - add route to login or refresh the access token');
+
+    router.post(
+        '/signup',
+        createBodyParser(),
+        validationMiddlewares(signupBodySchema),
+        authenticate(false),
+        signupController
+    );
+    loaderLogger.debug('POST /signup - add route to login or refresh the access token');
 }
