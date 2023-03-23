@@ -25,7 +25,7 @@ export default async function loginController(req, res, next) {
         let loginInformations;
         let userInformations;
         if (req.body.email && req.body.password) {
-            loginControllerLogger.debug('Loging in with credentials');
+            loginControllerLogger.debug('Logging in with credentials');
             loginInformations = await loginRequest({ email: req.body.email, password: req.body.password });
             userInformations = await getUserInfoRequest(loginInformations.userId);
         } else {

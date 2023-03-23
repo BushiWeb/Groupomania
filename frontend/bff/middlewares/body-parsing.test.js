@@ -82,7 +82,7 @@ describe('createBodyParser and its middleware test suite', () => {
     });
 
     it('should the the next middleware with an error if the body is forbidden but there is a content', () => {
-        request.headers['content-type'] = 'parser/noObject';
+        request.headers['content-type'] = 'application/json';
         createBodyParser(false)(request, response, next);
         expect(next).toHaveBeenCalled();
         expect(next.mock.calls[0]).toHaveLength(1);
