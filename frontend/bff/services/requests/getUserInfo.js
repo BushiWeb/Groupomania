@@ -18,10 +18,10 @@ const getUserInfoServiceLogger = createLoggerNamespace('groupomania:bff:service:
  * @throws {AxiosError} Throws an error if the response is not successfull.
  */
 export default async function getUserInfoRequest(userId, token) {
-    getUserInfoServiceLogger('Get user informations request service starting');
+    getUserInfoServiceLogger.debug('Get user informations request service starting');
 
     const requestUrl = `/users/${userId}?roleInfo=true`;
-    const { data } = await axios.post(requestUrl, {}, {
+    const { data } = await axios.get(requestUrl, {
         headers: {
             'Authorization': `Bearer ${token}`,
         },

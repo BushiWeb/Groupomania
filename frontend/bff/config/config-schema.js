@@ -60,6 +60,11 @@ const CONFIG_SCHEMA = {
         },
     },
     api: {
+        protocol: {
+            doc: 'Protocol to use to connect ot the API',
+            dormat: String,
+            default: 'http',
+        },
         baseUrl: {
             doc: 'URL used to make requests to the API',
             format: String,

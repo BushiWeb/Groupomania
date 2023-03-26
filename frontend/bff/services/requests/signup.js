@@ -12,9 +12,13 @@ const signupServiceLogger = createLoggerNamespace('groupomania:bff:service:reque
  * @throws {AxiosError} Throws an error if the response is not successfull.
  */
 export default async function signupRequest(requestData) {
-    signupServiceLogger('Signup request service starting');
+    signupServiceLogger.debug('Signup request service starting');
 
     const requestUrl = '/users';
-    const { data } = await axios.post(requestUrl, requestData);
+    const { data } = await axios.post(requestUrl, requestData, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
     return data;
 }

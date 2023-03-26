@@ -50,8 +50,8 @@ function normalizeExpressError(err) {
 function normalizeAxiosErrors(err) {
     errorLogger.debug('Axios error normalization');
 
-    if (err.response) {
-        const error = err.response.error;
+    if (err.response && [400, 401, 403, 404, 409].includes(err.response.data.error.statusCode)) {
+        const error = err.response.data.error;
         return new HttpError({
             message: error.title,
             name: error.type,
@@ -65,6 +65,7 @@ function normalizeAxiosErrors(err) {
     return new InternalServerError({
         message: err.message,
         originalName: err.name,
+        ...err.response && { originalError: err.response.data },
     }, err);
 }
 

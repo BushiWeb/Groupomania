@@ -18,7 +18,7 @@ export default function routeLoader(router) {
 
     router.post(
         '/login',
-        createBodyParser(false),
+        createBodyParser(true),
         validationMiddlewares(loginBodySchema),
         authenticate(false),
         loginController
@@ -27,7 +27,7 @@ export default function routeLoader(router) {
 
     router.post(
         '/signup',
-        createBodyParser(),
+        createBodyParser(true, false),
         validationMiddlewares(signupBodySchema),
         authenticate(false),
         signupController

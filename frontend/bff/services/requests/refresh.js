@@ -10,12 +10,16 @@ const refreshServiceLogger = createLoggerNamespace('groupomania:bff:service:requ
  * @throws {AxiosError} Throws an error if the response is not successfull.
  */
 export default async function refreshRequest(token) {
-    refreshServiceLogger('Refresh authentication request service starting');
+    refreshServiceLogger.debug('Refresh authentication request service starting');
 
     const requestUrl = '/auth/accessToken';
-    const { data } = await axios.post(requestUrl, {}, {
+    const { data } = await axios({
+        method: 'post',
+        url: requestUrl,
+        data: null,
         headers: {
             'Authorization': `Bearer ${token}`,
+            'Content-Type': null,
         },
     });
     return data;
