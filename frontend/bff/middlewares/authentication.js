@@ -1,6 +1,6 @@
 import { createLoggerNamespace } from '../logger/index.js';
 import { UnauthorizedError, ForbiddenError } from '../errors/index.js';
-import { generateCRSFToken } from '../services/session/generate-crsf-token.js';
+import { generateCRSFToken } from '../services/generateCRSFToken.js';
 import config from '../config/config.js';
 
 const authLogger = createLoggerNamespace('groupomania:bff:authentication');

@@ -1,7 +1,5 @@
 import { createLoggerNamespace } from '../../logger/index.js';
-import getUserInfoRequest from '../../services/requests/getUserInfo.js';
-import loginRequest from '../../services/requests/login.js';
-import refreshRequest from '../../services/requests/refresh.js';
+import apiRequest from '../../services/apiRequest.js';
 import config from '../../config/config.js';
 import { UnauthorizedError } from '../../errors/index.js';
 
@@ -26,10 +24,24 @@ export default async function loginController(req, res, next) {
         let loginInformations;
         let userInformations;
         const crsfToken = req.session.crsfToken;
+
         if (req.body.email && req.body.password) {
             loginControllerLogger.debug('Logging in with credentials');
-            loginInformations = await loginRequest({ email: req.body.email, password: req.body.password });
-            userInformations = await getUserInfoRequest(loginInformations.userId, loginInformations.accessToken);
+            loginInformations = await apiRequest({
+                path: '/auth/login',
+                method: 'post',
+                requestData: { email: req.body.email, password: req.body.password },
+
+            });
+            userInformations = await apiRequest({
+                path: `/users/${loginInformations.userId}?roleInfo=true`,
+                method: 'get',
+                authenticationTokens: {
+                    accessToken: loginInformations.accessToken,
+                    refreshToken: loginInformations.refreshToken,
+                },
+
+            });
         } else {
             loginControllerLogger.debug('Refreshing access token');
             if (!req.session.user) {
@@ -39,7 +51,13 @@ export default async function loginController(req, res, next) {
                     description: 'This request requires you to be authenticated, but we can\'t find your session. Please, login and try again.',
                 });
             }
-            loginInformations = await refreshRequest(req.session.user.refreshToken);
+            loginInformations = await apiRequest({
+                path: '/auth/accessToken',
+                method: 'post',
+                authenticationTokens: {
+                    refreshToken: req.session.user.refreshToken,
+                },
+            });
             userInformations = req.session.user.infos;
         }
 

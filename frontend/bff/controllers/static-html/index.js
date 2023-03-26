@@ -1,4 +1,4 @@
-import { generateCRSFToken } from '../../services/session/generate-crsf-token.js';
+import { generateCRSFToken } from '../../services/generateCRSFToken.js';
 import { createLoggerNamespace } from '../../logger/index.js';
 
 const htmlControllerLogger = createLoggerNamespace('groupomania:bff:controllers:html');
