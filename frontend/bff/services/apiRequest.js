@@ -12,13 +12,10 @@ const requestServiceLogger = createLoggerNamespace('groupomania:bff:service:requ
  * @param {Object} [requestMethod.requestData=null] - Data to join to the request.
  * @param {String} [requestMethod.contentType='application/json'] - Type of the content to join. Currently only JSON is
  *  supported. If the requestData is null, then the content will be automatically set to null.
- * @param {{
- *  accessToken: String,
- *  refreshToken: String
- * }} [authenticationTokens] - Provides the access token and the refresh token.
- *  The access token is used to authenticate the user for the request.
- *  If only the refresh token is provided, it will be used in place of the access token.
- *  If no tokens are provided, no authentication will be performed and the request won't be retried.
+ * @param {String} [accessToken] - The access token is used to authenticate the user for the request. If not provided,
+ *  the refresh token will be used in place. If there is no refresh token, the request won't be authenticated.
+ * @param {String} [refreshToken] -The refresh token is used in place of the access token for authentication if it
+ *  is not provided.
  * @returns {Object} Returns the configuration object.
  */
 function generateRequestConfiguration({
@@ -26,10 +23,8 @@ function generateRequestConfiguration({
     method,
     requestData = null,
     contentType = 'application/json',
-    authenticationTokens: {
-        accessToken,
-        refreshToken,
-    },
+    accessToken,
+    refreshToken,
 }) {
     requestServiceLogger.debug('Generating request configuration');
 
@@ -56,15 +51,15 @@ function generateRequestConfiguration({
 }
 
 
+
 /**
  * Sends a refresh request to the API.
  * @param {String} token
- * @returns {{accessToken: String, refreshToken: String}} Returns new tokens to use.
- * @throws {AxiosError} Throws if the request fails.
+ * @returns {Promise} Returns new tokens to use or the error/
  */
 async function reAuthenticate(token) {
     requestServiceLogger.debug('Refreshing the tokens');
-    const { accessToken, refreshToken } = await apiRequest({
+    return apiRequest({
         path: '/auth/accessToken',
         method: 'post',
         contentType: null,
@@ -72,9 +67,38 @@ async function reAuthenticate(token) {
             refreshToken: token,
         },
     });
-
-    return { accessToken, refreshToken };
 }
+
+
+
+/**
+ * Retry the request
+ * @param {String} refreshToken - Refresh token to use to refresh the tokens.
+ * @param {Object} requestConfiguration - Request configuration used for the first try.
+ * @returns {Promise} Returns a promise containing the data of the response or the error, as well as the new tokens.
+ */
+async function retryRequest(refreshToken, requestConfiguration) {
+    requestServiceLogger.debug('Trying again after reauthentication');
+
+    // Refresh the tokens
+    const refreshedTokens = await reAuthenticate(refreshToken);
+    if (refreshedTokens.error) {
+        requestServiceLogger.debug('Reauthentication unsuccessful');
+        return refreshedTokens;
+    }
+
+    // Try again
+    try {
+        requestServiceLogger.debug('Reauthentication successful, trying again');
+        const { data } = await axios(requestConfiguration);
+        return { data, refreshedTokens };
+    } catch (error) {
+        requestServiceLogger.debug('Error on second try');
+        return { error, refreshedTokens };
+    }
+}
+
+
 
 /**
  * Send a request to the API. If the authentication tokens are invalid, it will attempt to refresh them and try again
@@ -86,66 +110,35 @@ async function reAuthenticate(token) {
  * @param {Object} [requestMethod.requestData=null] - Data to join to the request.
  * @param {String} [requestMethod.contentType='application/json'] - Type of the content to join. Currently only JSON is
  *  supported. If the requestData is null, then the content will be automatically set to null.
- * @param {{
- *  accessToken: String,
- *  refreshToken: String
- * }} [authenticationTokens] - Provides the access token and the refresh token.
- *  The access token is used to authenticate the user for the request.
- *  The refresh token is used to try the request again in case of UnauthorizedError.
- *  If only the access token is provided, the request won't be retried.
- *  If only the refresh token is provided, it will be used in place of the access token, and the request won't
- *      be retried.
- *  If no tokens are provided, no authentication will be performed and the request won't be retried.
- *  This object may be updated by side effect if the tokens are refreshed. Make sure to keep the reference to this
- *      object to get the new values.
- * @returns {Promise} Returns a promise containing the data of the response.
- * @throws {AxiosError} Throws an error if the response is not successfull.
+ * @param {String} [accessToken] - The access token is used to authenticate the user for the request. If not provided,
+ *  the refresh token will be used in place. If there is no refresh token, the request won't be authenticated.
+ * @param {String} [refreshToken] -The refresh token is used to try the request again in case of UnauthorizedError, if
+ *  an acces token is provided. Otherwise, it is used in place of the access token for authentication.
+ * @returns {Promise} Returns a promise containing the data of the response or the error.
+ *  If the tokens are refreshed, also contains the tokens.
  */
-export default async function apiRequest({
-    path,
-    method,
-    requestData = null,
-    contentType = 'application/json',
-    authenticationTokens: {
-        accessToken,
-        refreshToken,
-    } = {},
-}) {
+export default async function apiRequest(requestParameters) {
     requestServiceLogger.debug('Request service starting');
 
-    const requestConfiguration = generateRequestConfiguration({
-        path,
-        method,
-        requestData,
-        contentType,
-        authenticationTokens: {
-            accessToken,
-            refreshToken,
-        },
-    });
+    const requestConfiguration = generateRequestConfiguration(requestParameters);
 
     try {
         requestServiceLogger.debug('Sending the request');
         const { data } = await axios(requestConfiguration);
         return data;
-
     } catch (error) {
+        let result = { error };
+
         // If the error is an UnauthorizedError and the user provided both tokens, retry once
-        if (accessToken && refreshToken && error.response && error.response.status === 401) {
-            requestServiceLogger.debug('Trying again after reauthentication');
-            // Refresh the tokens
-            const refreshedTokens = await reAuthenticate(refreshToken);
-            requestServiceLogger.debug('Reauthentication successful, trying again');
-
-            // Update the tokens value
-            accessToken = refreshedTokens.accessToken;
-            refreshToken = refreshedTokens.refreshToken;
-
-            // Try again
-            const { data } = await axios(requestConfiguration);
-            return data;
+        if (
+            requestParameters.accessToken &&
+            requestParameters.refreshToken &&
+            error.response &&
+            error.response.status === 401
+        ) {
+            result = retryRequest(requestParameters.refreshToken, requestConfiguration);
         }
 
-        throw error;
+        return result;
     }
 }
