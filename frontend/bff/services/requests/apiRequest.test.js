@@ -51,7 +51,7 @@ describe('apiRequest service test suite', () => {
             accessToken,
             refreshToken,
         });
-        expect(result).toEqual(returnedData.data);
+        expect(result).toEqual(returnedData);
         expect(axios).toHaveBeenCalledTimes(1);
         expect(axios).toHaveBeenCalledWith({
             url: path,
@@ -72,7 +72,7 @@ describe('apiRequest service test suite', () => {
             accessToken,
             refreshToken,
         });
-        expect(result).toEqual(returnedData.data);
+        expect(result).toEqual(returnedData);
         expect(axios).toHaveBeenCalledTimes(1);
         expect(axios).toHaveBeenCalledWith({
             url: path,
@@ -94,7 +94,7 @@ describe('apiRequest service test suite', () => {
             contentType,
             refreshToken,
         });
-        expect(result).toEqual(returnedData.data);
+        expect(result).toEqual(returnedData);
         expect(axios).toHaveBeenCalledTimes(1);
         expect(axios).toHaveBeenCalledWith({
             url: path,
@@ -115,7 +115,7 @@ describe('apiRequest service test suite', () => {
             requestData,
             contentType,
         });
-        expect(result).toEqual(returnedData.data);
+        expect(result).toEqual(returnedData);
         expect(axios).toHaveBeenCalledTimes(1);
         expect(axios).toHaveBeenCalledWith({
             url: path,

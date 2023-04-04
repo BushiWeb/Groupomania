@@ -1,5 +1,5 @@
 import { createLoggerNamespace } from '../../logger/index.js';
-import apiRequest from '../../services/apiRequest.js';
+import signupRequest from '../../services/requests/signup.js';
 import loginController from './login.js';
 
 const signupControllerLogger = createLoggerNamespace('groupomania:bff:controller:signup');
@@ -15,12 +15,7 @@ const signupControllerLogger = createLoggerNamespace('groupomania:bff:controller
 export default async function signupController(req, res, next) {
     signupControllerLogger.verbose('Signup controller starting');
     try {
-        await apiRequest({
-            path: '/users',
-            method: 'post',
-            requestData: { email: req.body.email, password: req.body.password },
-
-        });
+        await signupRequest(req.body.email, req.body.password);
         loginController(req, res, next);
     } catch (error) {
         next(error);

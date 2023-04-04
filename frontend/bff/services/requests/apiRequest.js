@@ -1,4 +1,4 @@
-import { createLoggerNamespace } from '../logger/index.js';
+import { createLoggerNamespace } from '../../logger/index.js';
 import axios from 'axios';
 
 const requestServiceLogger = createLoggerNamespace('groupomania:bff:service:requests');
@@ -81,15 +81,22 @@ async function retryRequest(refreshToken, requestConfiguration) {
     requestServiceLogger.debug('Trying again after reauthentication');
 
     // Refresh the tokens
-    const refreshedTokens = await reAuthenticate(refreshToken);
-    if (refreshedTokens.error) {
+    const response = await reAuthenticate(refreshToken);
+    if (response.error) {
         requestServiceLogger.debug('Reauthentication unsuccessful');
-        return refreshedTokens;
+        return response;
     }
+
+    const refreshedTokens = {
+        accessToken: response.data.accessToken,
+        refreshToken: response.data.refreshToken,
+    };
 
     // Try again
     try {
         requestServiceLogger.debug('Reauthentication successful, trying again');
+        requestConfiguration.accessToken = refreshedTokens.accessToken;
+        requestConfiguration.refreshToken = refreshedTokens.refreshToken;
         const { data } = await axios(requestConfiguration);
         return { data, refreshedTokens };
     } catch (error) {
@@ -125,7 +132,7 @@ export default async function apiRequest(requestParameters) {
     try {
         requestServiceLogger.debug('Sending the request');
         const { data } = await axios(requestConfiguration);
-        return data;
+        return { data };
     } catch (error) {
         let result = { error };
 
