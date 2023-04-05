@@ -114,10 +114,7 @@ export default async function loginController(req, res, next) {
                 }
 
                 loginControllerLogger.debug('Session saved. Sending the response');
-                res.status(200).json({
-                    accessToken: user.accessToken,
-                    ...user.infos,
-                });
+                res.status(200).json({ ...user.infos });
             });
         });
     } catch (error) {

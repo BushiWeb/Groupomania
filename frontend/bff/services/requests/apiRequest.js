@@ -6,16 +6,17 @@ const requestServiceLogger = createLoggerNamespace('groupomania:bff:service:requ
 /**
  * Creates the request configuration.
  * @param {Object} requestParameters
- * @param {String} requestMethod.path - URL path for the request. The protocol, domain, port and base path will
+ * @param {String} requestParameters.path - URL path for the request. The protocol, domain, port and base path will
  *  automatically be appended from the axios configuration (for example http://localhost:8000/api/v1).
- * @param {String} requestMethod.method - Method to use for the request.
- * @param {Object} [requestMethod.requestData=null] - Data to join to the request.
- * @param {String} [requestMethod.contentType='application/json'] - Type of the content to join. Currently only JSON is
- *  supported. If the requestData is null, then the content will be automatically set to null.
- * @param {String} [accessToken] - The access token is used to authenticate the user for the request. If not provided,
- *  the refresh token will be used in place. If there is no refresh token, the request won't be authenticated.
- * @param {String} [refreshToken] -The refresh token is used in place of the access token for authentication if it
- *  is not provided.
+ * @param {String} requestParameters.method - Method to use for the request.
+ * @param {Object} [requestParameters.requestData=null] - Data to join to the request.
+ * @param {String} [requestParameters.contentType='application/json'] - Type of the content to join.
+ *  Currently only JSON is supported. If the requestData is null, then the content will be automatically set to null.
+ * @param {String} [requestParameters.accessToken] - The access token is used to authenticate the user for the request.
+ *  If not provided, the refresh token will be used in place. If there is no refresh token, the request won't
+ *  be authenticated.
+ * @param {String} [requestParameters.refreshToken] -The refresh token is used in place of the access token for
+ *  authentication if it is not provided.
  * @returns {Object} Returns the configuration object.
  */
 function generateRequestConfiguration({
