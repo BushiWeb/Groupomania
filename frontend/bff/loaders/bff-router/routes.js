@@ -4,10 +4,12 @@ import createBodyParser from '../../middlewares/body-parsing.js';
 import validationMiddlewares from '../../middlewares/user-input-validation.js';
 import authenticate from '../../middlewares/authentication.js';
 import loginBodySchema from '../../schemas/login.js';
+import getUserSchema from '../../schemas/getUser.js';
 import signupController from '../../controllers/authentication/signup.js';
 import signupBodySchema from '../../schemas/signup.js';
 import updateUserSchema from '../../schemas/updateUser.js';
 import updateUserController from '../../controllers/users/updateUser.js';
+import getUserController from '../../controllers/users/getuser.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:bff:bff-loader:routes');
 
@@ -35,6 +37,15 @@ export default function routeLoader(router) {
         signupController
     );
     loaderLogger.debug('POST /signup - add route to login or refresh the access token');
+
+    router.get(
+        '/users/:userId',
+        createBodyParser(false),
+        validationMiddlewares(getUserSchema),
+        authenticate(true),
+        getUserController
+    );
+    loaderLogger.debug('GET /users/:userId - add route to get the user\'s informations');
 
     router.put(
         '/users/:userId',
