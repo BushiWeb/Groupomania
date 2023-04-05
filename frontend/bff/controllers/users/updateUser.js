@@ -26,7 +26,7 @@ export default async function updateUserController(req, res, next) {
             ...req.body.password && { password: req.body.password },
             ...req.body.email && { email: req.body.email },
         };
-        await updateUserRequest(newUserData, req.params.userId, req.session.user.accessToken);
+        await updateUserRequest(newUserData, req.params.userId, req.session.user);
 
         // Save the new user email if needed
         if (req.body.email) {
