@@ -132,6 +132,18 @@ const CONFIG_SCHEMA = {
             nullable: true,
         },
     },
+    pagination: {
+        users: {
+            doc: 'Number of users to display per page.',
+            format: 'nat',
+            default: 100,
+        },
+        posts: {
+            doc: 'Number of posts to display per page.',
+            format: 'nat',
+            default: 50,
+        },
+    },
 };
 
 export default CONFIG_SCHEMA;

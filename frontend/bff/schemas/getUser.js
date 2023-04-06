@@ -1,9 +1,8 @@
 import generateIdSchema from './atoms/id.js';
 
 /**
- * Schema for the login request's body.
- * Contains a required email.
- * Contains a required password.
+ * Schema for the get user.
+ * Contains the user id in the path.
  */
 const getUserSchema = {
     userId: generateIdSchema(),
