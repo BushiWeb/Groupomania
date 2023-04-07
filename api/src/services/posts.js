@@ -1,40 +1,26 @@
 import { createLoggerNamespace } from '../logger/index.js';
 import db from '../models/index.js';
 import { NotFoundError } from '../errors/index.js';
-import { UniqueConstraintError } from 'sequelize';
+import { QueryTypes, UniqueConstraintError } from 'sequelize';
 
 const postsServicesLogger = createLoggerNamespace('groupomania:api:services:posts');
 
 /**
- * Create the option object for request.
+ * Create the option object for requesting one post.
  * @param {Object} options - Search options.
  * @param {boolean} [options.userInfo=false] - Whether to add the user informations to the posts or just the author id.
  * @param {boolean} [options.likeInfo=false] - Whether to add the like informations to the posts.
- * @param {string|number} [options.userId] - Filtering posts by userId.
- * @param {number} [option.page] - Which page to get, usefull for pagination. Requires the limit parameter.
- * @param {number} [option.limit] - Number of entry to return, usefull for pagination.
  * @returns {Object} Returns the option object.
  */
-function getRequestOptionObject({
+function getOnePostRequestOptionObject({
     userInfo = false,
     likeInfo = false,
-    userId,
-    page,
-    limit,
 } = {}) {
     postsServicesLogger.verbose('Get request options object');
 
     let searchOptions = {
         attributes: ['postId', 'title', 'message', 'imageUrl', 'creationDate', 'lastUpdateDate', 'writerId'],
     };
-
-    // Creating user filter
-    if (userId !== undefined) {
-        postsServicesLogger.debug('Filtering by user id');
-        searchOptions.where = {
-            writerId: userId,
-        };
-    }
 
     // Adding user informations
     if (userInfo) {
@@ -96,18 +82,101 @@ function getRequestOptionObject({
         ]);
     }
 
-    // Adding pagination informations
-    if (limit) {
-        postsServicesLogger.debug(`Limiting the number of results to ${limit}`);
-        searchOptions.limit = limit;
-    }
-
-    if (limit && page) {
-        postsServicesLogger.debug(`Paginating the result, getting the page number ${page}`);
-        searchOptions.offset = (page - 1) * limit;
-    }
-
     return searchOptions;
+}
+
+/**
+ *
+ * Create the raw query to get all posts.
+ * @param {Object} options - Search options.
+ * @param {boolean} [options.userInfo=false] - Whether to add the user informations to the posts or just the author id.
+ * @param {boolean} [options.likeInfo=false] - Whether to add the like informations to the posts.
+ * @param {string|number} [options.userId] - Filtering posts by userId.
+ * @param {number} [option.page] - Which page to get, usefull for pagination. Requires the limit parameter.
+ * @param {number} [option.limit] - Number of entry to return, usefull for pagination.
+ * @returns {Object} Returns the option object.
+ */
+function getAllPostsRawQuery({
+    userInfo = false,
+    likeInfo = false,
+    userId,
+    page,
+    limit,
+} = {}) {
+    postsServicesLogger.verbose('Get raw request');
+
+    let request = `
+    SELECT
+        Post.post_id AS "postId",
+        Post.title AS "title",
+        Post.message AS "message",
+        Post.image_url AS "imageUrl",
+        Post.creation_date AS "creationDate",
+        Post.last_update_date AS "lastUpdateDate"
+
+        ${ userInfo ? //If the user info are wanted, add the writer informations, otherwise only add the writer id
+        `,
+        Writer.user_id AS "writer.writerId",
+        Writer.email AS "writer.email",
+        Writer.role_id AS "writer.roleId"
+        ` :
+        ', Post.writer_id AS "writerId"' }
+
+
+        ${ likeInfo ? //If the like info are wanted, count the number of likes and get the list of users who liked
+        `,
+        cast(
+            count(Users.user_id) AS INTEGER
+        ) AS "likes",
+        coalesce(
+            nullif(
+                array_agg(Users.user_id),
+                cast('{NULL}' AS INTEGER[])
+            ),
+            cast('{}' AS INTEGER[])
+        ) AS "usersLiked"
+        ` :
+        '' }
+
+
+    FROM posts.posts AS Post
+
+    ${ userInfo ? //Create the join to get the user informations
+        'LEFT OUTER JOIN users.users AS Writer ON Post.writer_id = Writer.user_id' :
+        '' }
+
+    ${ likeInfo ? //Create the join to get the like informations
+        `
+        LEFT OUTER JOIN posts.likes AS Likes USING(post_id)
+        LEFT OUTER JOIN users.users AS Users ON Likes.user_id = Users.user_id
+        ` :
+        '' }
+
+    ${ userId !== undefined ? //Filter by user
+        'WHERE Post.writer_id = $writerFilter' :
+        '' }
+
+    GROUP BY
+        "postId"
+        ${ userInfo ? //Add the writer user_id to the group if the user informations are wanted
+        ', Writer.user_id' :
+        '' }
+
+
+    ORDER BY
+        "creationDate" DESC,
+        "postId" DESC
+
+    ${ limit ?
+        'LIMIT $limit' :
+        '' }
+    ${ page && limit ?
+        'OFFSET $offset' :
+        '' }
+    ;
+    `;
+
+    return request;
 }
 
 
@@ -124,7 +193,7 @@ export async function createPost(postInfos) {
     postsServicesLogger.verbose('Create Post service starting');
 
     const newPost = await db.models.Post.create(postInfos);
-    postsServicesLogger.debug('User created');
+    postsServicesLogger.debug('Post created');
 
     return newPost;
 }
@@ -144,10 +213,19 @@ export async function createPost(postInfos) {
 export async function getAllPosts(options = {}) {
     postsServicesLogger.verbose('Get all posts service starting');
 
-    const searchOptions = getRequestOptionObject(options);
-    searchOptions.order = [['creationDate', 'DESC'], ['postId', 'DESC']];
+    const rawRequest = getAllPostsRawQuery(options);
 
-    const posts = await db.models.Post.findAll(searchOptions);
+    const posts = await db.ormInstance.query(rawRequest, {
+        nest: true,
+        type: QueryTypes.SELECT,
+        bind: {
+            limit: options.limit,
+            offset: (options.page - 1) * options.limit,
+            writerFilter: options.userId,
+        },
+    });
+
+    console.log(posts);
 
     postsServicesLogger.debug('Posts fetched');
     return posts;
@@ -167,7 +245,7 @@ export async function getAllPosts(options = {}) {
 export async function getPost(postId, options = {}) {
     postsServicesLogger.verbose('Get post service starting');
 
-    const searchOptions = getRequestOptionObject(options);
+    const searchOptions = getOnePostRequestOptionObject(options);
 
     const post = await db.models.Post.findByPk(postId, searchOptions);
 

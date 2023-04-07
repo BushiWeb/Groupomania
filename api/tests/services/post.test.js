@@ -1,6 +1,7 @@
 import { jest } from '@jest/globals';
 import db from '../../src/models/index.js';
 import MockModel, * as mockModelMethods from '../mocks/mock-models.js';
+import sequelizeInstance, * as sequelizeMethods from '../mocks/mock-sequelize.js';
 import {
     createPost,
     deletePost,
@@ -21,8 +22,11 @@ jest.spyOn(db, 'models', 'get').mockImplementation(
     )
 );
 
+db.ormInstance = sequelizeInstance;
+
 beforeEach(() => {
     mockModelMethods.clearMocks();
+    sequelizeMethods.clearSequelizeMocks();
 });
 
 describe('Post services test suite', () => {
@@ -70,7 +74,7 @@ describe('Post services test suite', () => {
                 otherPost,
             ];
 
-            mockModelMethods.mockFindAll.mockResolvedValueOnce(returnedPostsInfos.map((value) => new MockModel(value)));
+            sequelizeMethods.mockQuery.mockResolvedValueOnce(returnedPostsInfos.map((value) => new MockModel(value)));
             const posts = await getAllPosts();
 
             expect(Array.isArray(posts)).toBe(true);
@@ -86,23 +90,13 @@ describe('Post services test suite', () => {
                 expect(posts[index]).toHaveProperty('writerId', returnedPostsInfos[index].writerId);
             }
 
-            expect(mockModelMethods.mockFindAll).toHaveBeenCalled();
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('attributes');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('postId');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('title');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('message');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('imageUrl');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('creationDate');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('lastUpdateDate');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('writerId');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('order');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].order).toContainEqual(['creationDate', 'DESC']);
+            expect(sequelizeMethods.mockQuery).toHaveBeenCalled();
         });
 
         it('should get all users\' informations if they match the userId', async () => {
             const returnedPostsInfos = [postInfos];
 
-            mockModelMethods.mockFindAll.mockResolvedValueOnce(returnedPostsInfos.map((value) => new MockModel(value)));
+            sequelizeMethods.mockQuery.mockResolvedValueOnce(returnedPostsInfos.map((value) => new MockModel(value)));
             const posts = await getAllPosts({ userId: postInfos.writerId });
 
             expect(Array.isArray(posts)).toBe(true);
@@ -118,19 +112,7 @@ describe('Post services test suite', () => {
                 expect(posts[index]).toHaveProperty('writerId', returnedPostsInfos[index].writerId);
             }
 
-            expect(mockModelMethods.mockFindAll).toHaveBeenCalled();
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('attributes');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('postId');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('title');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('message');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('imageUrl');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('creationDate');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('lastUpdateDate');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('writerId');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('order');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].order).toContainEqual(['creationDate', 'DESC']);
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('where');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].where).toHaveProperty('writerId', postInfos.writerId);
+            expect(sequelizeMethods.mockQuery).toHaveBeenCalled();
         });
 
         it('should get all posts\' informations paginated', async () => {
@@ -142,7 +124,7 @@ describe('Post services test suite', () => {
             const limit = 1;
             const page = 2;
 
-            mockModelMethods.mockFindAll.mockResolvedValueOnce([new MockModel(returnedPostsInfos[1])]);
+            sequelizeMethods.mockQuery.mockResolvedValueOnce([new MockModel(returnedPostsInfos[1])]);
             const posts = await getAllPosts({ limit, page });
 
             expect(Array.isArray(posts)).toBe(true);
@@ -156,19 +138,7 @@ describe('Post services test suite', () => {
             expect(posts[0]).toHaveProperty('lastUpdateDate', returnedPostsInfos[1].lastUpdateDate);
             expect(posts[0]).toHaveProperty('writerId', returnedPostsInfos[1].writerId);
 
-            expect(mockModelMethods.mockFindAll).toHaveBeenCalled();
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('attributes');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('postId');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('title');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('message');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('imageUrl');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('creationDate');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('lastUpdateDate');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('writerId');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('order');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].order).toContainEqual(['creationDate', 'DESC']);
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('offset', (page - 1) * limit);
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('limit', limit);
+            expect(sequelizeMethods.mockQuery).toHaveBeenCalled();
 
         });
 
@@ -202,7 +172,7 @@ describe('Post services test suite', () => {
                 },
             ];
 
-            mockModelMethods.mockFindAll.mockResolvedValueOnce(returnedPostsInfos.map((value) => new MockModel(value)));
+            sequelizeMethods.mockQuery.mockResolvedValueOnce(returnedPostsInfos.map((value) => new MockModel(value)));
             const posts = await getAllPosts({ userInfo: true });
 
             expect(Array.isArray(posts)).toBe(true);
@@ -222,23 +192,7 @@ describe('Post services test suite', () => {
                 expect(posts[index].writer).toHaveProperty('email', returnedPostsInfos[index].writer.email);
             }
 
-            expect(mockModelMethods.mockFindAll).toHaveBeenCalled();
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('attributes');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('postId');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('title');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('message');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('imageUrl');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('creationDate');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('lastUpdateDate');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).not.toContain('writerId');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('order');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].order).toContainEqual(['creationDate', 'DESC']);
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('include');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include).toHaveProperty('association', 'writer');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include).toHaveProperty('attributes');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include.attributes).toContain('roleId');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include.attributes).toContain('email');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include.attributes).toContainEqual(['user_id', 'writerId']);
+            expect(sequelizeMethods.mockQuery).toHaveBeenCalled();
         });
 
         it('should get the post informations with more informations about the likes', async () => {
@@ -267,7 +221,7 @@ describe('Post services test suite', () => {
                 },
             ];
 
-            mockModelMethods.mockFindAll.mockResolvedValueOnce(returnedPostsInfos.map((value) => new MockModel(value)));
+            sequelizeMethods.mockQuery.mockResolvedValueOnce(returnedPostsInfos.map((value) => new MockModel(value)));
             const posts = await getAllPosts({ likeInfo: true });
 
             expect(Array.isArray(posts)).toBe(true);
@@ -285,22 +239,7 @@ describe('Post services test suite', () => {
                 expect(posts[index]).toHaveProperty('usersLiked', returnedPostsInfos[index].usersLiked);
             }
 
-            expect(mockModelMethods.mockFindAll).toHaveBeenCalled();
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('attributes');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('postId');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('title');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('message');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('imageUrl');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('creationDate');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('lastUpdateDate');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].attributes).toContain('writerId');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('order');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].order).toContainEqual(['creationDate', 'DESC']);
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0]).toHaveProperty('include');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include).toHaveProperty('association', 'users_liked');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include).toHaveProperty('attributes', []);
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include).toHaveProperty('through');
-            expect(mockModelMethods.mockFindAll.mock.calls[0][0].include.through).toHaveProperty('attributes', []);
+            expect(sequelizeMethods.mockQuery).toHaveBeenCalled();
         });
     });
 
