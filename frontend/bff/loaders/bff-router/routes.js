@@ -14,8 +14,14 @@ import getUsersController from '../../controllers/users/getUsers.js';
 import getUsersSchema from '../../schemas/getUsers.js';
 import getPostsController from '../../controllers/posts/getPosts.js';
 import getPostsSchema from '../../schemas/getPosts.js';
+import express from 'express';
+import config from '../../config/config.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:bff:bff-loader:routes');
+
+const expressJsonOptions = {
+    limit: config.get('payload.maxSize'),
+};
 
 /**
  * Add all routes.
@@ -26,7 +32,9 @@ export default function routeLoader(router) {
 
     router.post(
         '/login',
-        createBodyParser(true),
+        createBodyParser({
+            'application/json': express.json(expressJsonOptions),
+        }),
         validationMiddlewares(loginBodySchema),
         authenticate(false),
         loginController
@@ -35,7 +43,9 @@ export default function routeLoader(router) {
 
     router.post(
         '/signup',
-        createBodyParser(true, false),
+        createBodyParser({
+            'application/json': express.json(expressJsonOptions),
+        }, false),
         validationMiddlewares(signupBodySchema),
         authenticate(false),
         signupController
@@ -44,7 +54,7 @@ export default function routeLoader(router) {
 
     router.get(
         '/users',
-        createBodyParser(false),
+        createBodyParser({}),
         validationMiddlewares(getUsersSchema),
         authenticate(true),
         getUsersController
@@ -53,7 +63,7 @@ export default function routeLoader(router) {
 
     router.get(
         '/users/:userId',
-        createBodyParser(false),
+        createBodyParser({}),
         validationMiddlewares(getUserSchema),
         authenticate(true),
         getUserController
@@ -62,7 +72,9 @@ export default function routeLoader(router) {
 
     router.put(
         '/users/:userId',
-        createBodyParser(true, false),
+        createBodyParser({
+            'application/json': express.json(expressJsonOptions),
+        }, false),
         validationMiddlewares(updateUserSchema),
         authenticate(true),
         updateUserController
@@ -71,7 +83,7 @@ export default function routeLoader(router) {
 
     router.get(
         '/posts',
-        createBodyParser(false),
+        createBodyParser({}),
         validationMiddlewares(getPostsSchema),
         authenticate(true),
         getPostsController
