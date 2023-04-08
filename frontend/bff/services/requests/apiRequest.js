@@ -64,9 +64,7 @@ async function reAuthenticate(token) {
         path: '/auth/accessToken',
         method: 'post',
         contentType: null,
-        authenticationTokens: {
-            refreshToken: token,
-        },
+        refreshToken: token,
     });
 }
 
@@ -96,8 +94,7 @@ async function retryRequest(refreshToken, requestConfiguration) {
     // Try again
     try {
         requestServiceLogger.debug('Reauthentication successful, trying again');
-        requestConfiguration.accessToken = refreshedTokens.accessToken;
-        requestConfiguration.refreshToken = refreshedTokens.refreshToken;
+        requestConfiguration.headers['Authorization'] = `Bearer ${refreshedTokens.accessToken}`;
         const { data } = await axios(requestConfiguration);
         return { data, refreshedTokens };
     } catch (error) {

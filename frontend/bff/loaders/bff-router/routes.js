@@ -12,6 +12,8 @@ import updateUserController from '../../controllers/users/updateUser.js';
 import getUserController from '../../controllers/users/getuser.js';
 import getUsersController from '../../controllers/users/getUsers.js';
 import getUsersSchema from '../../schemas/getUsers.js';
+import getPostsController from '../../controllers/posts/getPosts.js';
+import getPostsSchema from '../../schemas/getPosts.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:bff:bff-loader:routes');
 
@@ -66,4 +68,13 @@ export default function routeLoader(router) {
         updateUserController
     );
     loaderLogger.debug('PUT /users/:userId - add route to update the user password and email');
+
+    router.get(
+        '/posts',
+        createBodyParser(false),
+        validationMiddlewares(getPostsSchema),
+        authenticate(true),
+        getPostsController
+    );
+    loaderLogger.debug('GET /posts - add route to get all the posts');
 }
