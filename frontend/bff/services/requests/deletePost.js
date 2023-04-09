@@ -4,7 +4,7 @@ import { createLoggerNamespace } from '../../logger/index.js';
 const requestServiceLogger = createLoggerNamespace('groupomania:bff:service:requests');
 
 /**
- * Creates an like post request to the API.
+ * Creates an delete post request to the API.
  * @param {number} postId - Id of the post to update.
  * @param {{accessToken: string, refreshToken: string}} sessionAuth - Session object containing the authentication
  *  tokens. Used to get the tokens.

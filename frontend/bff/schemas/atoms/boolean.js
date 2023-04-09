@@ -1,5 +1,5 @@
 /**
- * Returns schema description for query parameters asking for more informations.
+ * Returns schema description for a boolean value.
  * @param {Object} [options] - Options to generate the schema.
  * @param {boolean} [options.required=false] - Weither to add the required option or not.
  * @param {boolean} [options.checkFormat=true] - Weither to check if the value has the right format or not.

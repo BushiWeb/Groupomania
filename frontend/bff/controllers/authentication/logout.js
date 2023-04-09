@@ -7,8 +7,6 @@ const logoutControllerLogger = createLoggerNamespace('groupomania:bff:controller
  * Logout controller.
  * Send a logout request.
  * Deletes the current session, but keeps the CSRF token.
- * Send the user information and the access token to the user, as well as the CRSF token
- *  in a custom header (done in authorization middleware).
  * @param {Express.Request} req - Express request object.
  * @param {Express.Response} res - Express response object.
  * @param next - Next middleware to execute.

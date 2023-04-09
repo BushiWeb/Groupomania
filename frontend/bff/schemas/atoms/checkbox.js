@@ -1,5 +1,5 @@
 /**
- * Returns schema description a checkbox.
+ * Returns schema description for a checkbox.
  * @param {Object} [options] - Options to generate the schema.
  * @param {boolean} [options.required=true] - Weither to add the required option or not.
  * @param {boolean} [options.checkFormat=true] - Weither to check if the parameter has the right format or not.

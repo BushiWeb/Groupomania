@@ -7,10 +7,7 @@ const updateUserControllerLogger = createLoggerNamespace('groupomania:bff:contro
 /**
  * Update user controller.
  * Check the password.
- * Send the update request to the API.
  * Update the user informations in the session if needed.
- * Send the user information and the access token to the user, as well as the CRSF token
- *  in a custom header (done in authorization middleware).
  * @param {Express.Request} req - Express request object.
  * @param {Express.Response} res - Express response object.
  * @param next - Next middleware to execute.

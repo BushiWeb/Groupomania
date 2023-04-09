@@ -8,10 +8,7 @@ const deleteUserControllerLogger = createLoggerNamespace('groupomania:bff:contro
 /**
  * Delete user controller.
  * Check the password.
- * Send the update request to the API.
- * Log the user out if the deleted user is the current user
- * Send the user information and the access token to the user, as well as the CRSF token
- *  in a custom header (done in authorization middleware).
+ * Log the user out if the deleted user is the current user.
  * @param {Express.Request} req - Express request object.
  * @param {Express.Response} res - Express response object.
  * @param next - Next middleware to execute.

@@ -5,8 +5,6 @@ const DeletePostControllerLogger = createLoggerNamespace('groupomania:bff:contro
 
 /**
  * Delete post controller.
- * Send the request to the API.
- * Send the post information, as well as the CRSF token in a custom header (done in authorization middleware).
  * @param {Express.Request} req - Express request object.
  * @param {Express.Response} res - Express response object.
  * @param next - Next middleware to execute.

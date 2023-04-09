@@ -1,35 +1,38 @@
+import express from 'express';
+import config from '../../config/config.js';
 import { createLoggerNamespace } from '../../logger/index.js';
-import loginController from '../../controllers/authentication/login.js';
+
 import createBodyParser from '../../middlewares/body-parsing.js';
 import validationMiddlewares from '../../middlewares/user-input-validation.js';
 import authenticate from '../../middlewares/authentication.js';
-import loginBodySchema from '../../schemas/login.js';
-import getUserSchema from '../../schemas/get-user.js';
-import signupController from '../../controllers/authentication/signup.js';
-import signupBodySchema from '../../schemas/signup.js';
-import updateUserSchema from '../../schemas/update-user.js';
-import updateUserController from '../../controllers/users/updateUser.js';
-import getUserController from '../../controllers/users/getuser.js';
-import getUsersController from '../../controllers/users/getUsers.js';
-import getUsersSchema from '../../schemas/get-users.js';
-import getPostsController from '../../controllers/posts/getPosts.js';
-import getPostsSchema from '../../schemas/get-post.js';
-import express from 'express';
-import config from '../../config/config.js';
 import multer from '../../middlewares/multer.js';
-import createPostSchema from '../../schemas/create-post.js';
+
+import loginController from '../../controllers/authentication/login.js';
+import signupController from '../../controllers/authentication/signup.js';
+import updateUserController from '../../controllers/users/updateUser.js';
+import getUserController from '../../controllers/users/getUser.js';
+import getUsersController from '../../controllers/users/getUsers.js';
 import createPostController from '../../controllers/posts/createPost.js';
-import updatePostSchema from '../../schemas/update-post.js';
 import updatePostController from '../../controllers/posts/updatePost.js';
-import likePostSchema from '../../schemas/like-post.js';
+import getPostsController from '../../controllers/posts/getPosts.js';
 import likePostController from '../../controllers/posts/likePost.js';
-import deletePostSchema from '../../schemas/delete-post.js';
 import deletePostController from '../../controllers/posts/deletePost.js';
-import updateUserRoleSchema from '../../schemas/update-user-role.js';
 import updateUserRoleController from '../../controllers/users/updateUserRole.js';
-import deleteUserSchema from '../../schemas/delete-user.js';
 import deleteUserController from '../../controllers/users/deleteUser.js';
 import logoutController from '../../controllers/authentication/logout.js';
+
+import loginBodySchema from '../../schemas/login.js';
+import getUserSchema from '../../schemas/get-user.js';
+import signupBodySchema from '../../schemas/signup.js';
+import updateUserSchema from '../../schemas/update-user.js';
+import getUsersSchema from '../../schemas/get-users.js';
+import getPostsSchema from '../../schemas/get-post.js';
+import createPostSchema from '../../schemas/create-post.js';
+import updatePostSchema from '../../schemas/update-post.js';
+import likePostSchema from '../../schemas/like-post.js';
+import deletePostSchema from '../../schemas/delete-post.js';
+import updateUserRoleSchema from '../../schemas/update-user-role.js';
+import deleteUserSchema from '../../schemas/delete-user.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:bff:bff-loader:routes');
 

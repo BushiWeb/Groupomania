@@ -1,5 +1,5 @@
 /**
- * Returns an role schema description.
+ * Returns an page parameter schema description.
  * @param {Object} [options] - Options to generate the schema.
  * @param {boolean} [options.required=false] - Weither to add the required option or not.
  * @param {boolean} [options.checkFormat=true] - Weither to check if the email has the right format or not.
