@@ -4,9 +4,13 @@ import {
     NotFoundError,
     InternalServerError,
     MethodNotAllowedError,
+    PayloadTooLargeError,
+    UserInputValidationError,
 } from '../errors/index.js';
 import createError from 'http-errors';
 import { AxiosError } from 'axios';
+import config from '../config/config.js';
+import { MulterError } from 'multer';
 
 const errorLogger = createLoggerNamespace('groupomania:bff:error');
 
@@ -40,6 +44,45 @@ function normalizeExpressError(err) {
         statusCode: err.statusCode,
         ...err.statusCode < 500 ? { details } : { logData: details },
     }, err, err.headers);
+}
+
+
+/**
+ * Handles Multer errors normalization.
+ * @param {MulterError} err - JWT error to normalize.
+ * @returns {HttpError} Returns the associated HttpError.
+ */
+function normalizeMulterError(err) {
+    errorLogger.debug('MulterError normalization');
+
+    if (err.code === 'LIMIT_FIELD_VALUE') {
+        return new PayloadTooLargeError({
+            message: err.message,
+            details: {
+                maxPayloadSize: `${config.get('payload.maxSize')} bytes`,
+            },
+        }, err);
+    }
+
+    if (err.code === 'LIMIT_FILE_SIZE') {
+        return new PayloadTooLargeError({
+            message: err.message,
+            title: 'The file is too large.',
+            description: 'We couldn\'t handle the request because of the file size. Please, reduce compress your file before trying again. The maximum file size is in the details.',
+            details: {
+                maxFileSize: `${config.get('payload.files.maxFileSize')} bytes`,
+            },
+        }, err);
+    }
+
+    return new UserInputValidationError({
+        message: err.message,
+        title: 'The request\'s body is invalid.',
+        description: 'We are having trouble processing the request\'s body. You will find more informations in the details. Please, fix the issue and try again.',
+        details: {
+            errorDetail: err.message,
+        },
+    }, err);
 }
 
 /**
@@ -97,6 +140,11 @@ export function errorNormalizer(err, req, res, next) {
     // Axios' errors handling
     if (err instanceof AxiosError) {
         return next(normalizeAxiosErrors(err).setRequestInformations(req.originalUrl, req.method));
+    }
+
+    // Multer's errors handling
+    if (err instanceof MulterError) {
+        return next(normalizeMulterError(err).setRequestInformations(req.originalUrl, req.method));
     }
 
     // Normalize other errors

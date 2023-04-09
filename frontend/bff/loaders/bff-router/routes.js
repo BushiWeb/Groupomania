@@ -16,6 +16,9 @@ import getPostsController from '../../controllers/posts/getPosts.js';
 import getPostsSchema from '../../schemas/getPosts.js';
 import express from 'express';
 import config from '../../config/config.js';
+import multer from '../../middlewares/multer.js';
+import createPostSchema from '../../schemas/create-post.js';
+import createPostController from '../../controllers/posts/createPost.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:bff:bff-loader:routes');
 
@@ -89,4 +92,16 @@ export default function routeLoader(router) {
         getPostsController
     );
     loaderLogger.debug('GET /posts - add route to get all the posts');
+
+    router.post(
+        '/posts',
+        createBodyParser({
+            'application/json': express.json(expressJsonOptions),
+            'multipart/form-data': multer,
+        }, false),
+        validationMiddlewares(createPostSchema, true),
+        authenticate(true),
+        createPostController
+    );
+    loaderLogger.debug('POST /posts - add route to create a post');
 }

@@ -78,7 +78,7 @@ const CONFIG_SCHEMA = {
             saveFolder: {
                 doc: 'Path to the folder containing the images. Relative to the root of the project',
                 format: String,
-                default: 'images',
+                default: 'bff/temp',
             },
         },
     },

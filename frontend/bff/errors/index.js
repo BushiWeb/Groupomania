@@ -6,6 +6,7 @@ import UnauthorizedError from './UnauthorizedError.js';
 import UnsupportedMediaTypeError from './UnsupportedMediaTypeError.js';
 import UserInputValidationError from './UserInputValidationError.js';
 import ForbiddenError from './ForbiddenError.js';
+import PayloadTooLargeError from './PayloadTooLargeError.js';
 
 export {
     HttpError,
@@ -16,4 +17,5 @@ export {
     UnsupportedMediaTypeError,
     UserInputValidationError,
     ForbiddenError,
+    PayloadTooLargeError,
 };
