@@ -23,6 +23,10 @@ import updatePostSchema from '../../schemas/update-post.js';
 import updatePostController from '../../controllers/posts/updatePost.js';
 import likePostSchema from '../../schemas/like-post.js';
 import likePostController from '../../controllers/posts/likePost.js';
+import deletePostSchema from '../../schemas/delete-post.js';
+import deletePostController from '../../controllers/posts/deletePost.js';
+import updateUserRoleSchema from '../../schemas/update-user-role.js';
+import updateUserRoleController from '../../controllers/users/updateUserRole.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:bff:bff-loader:routes');
 
@@ -88,6 +92,17 @@ export default function routeLoader(router) {
     );
     loaderLogger.debug('PUT /users/:userId - add route to update the user password and email');
 
+    router.put(
+        '/users/:userId/role',
+        createBodyParser({
+            'application/json': express.json(expressJsonOptions),
+        }, false),
+        validationMiddlewares(updateUserRoleSchema),
+        authenticate(true),
+        updateUserRoleController
+    );
+    loaderLogger.debug('PUT /users/:userId/role - add route to update the user role');
+
     router.get(
         '/posts',
         createBodyParser({}),
@@ -131,4 +146,13 @@ export default function routeLoader(router) {
         likePostController
     );
     loaderLogger.debug('POST /posts/:postId/like - add route to like a post');
+
+    router.delete(
+        '/posts/:postId',
+        createBodyParser({}),
+        validationMiddlewares(deletePostSchema),
+        authenticate(true),
+        deletePostController
+    );
+    loaderLogger.debug('DELETE /posts/:postId - add route to delete a post');
 }
