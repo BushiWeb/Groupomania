@@ -1,6 +1,5 @@
 import { createLoggerNamespace } from '../../logger/index.js';
 import createPostRequest from '../../services/requests/createPost.js';
-import { createReadStream } from 'node:fs';
 
 const createPostControllerLogger = createLoggerNamespace('groupomania:bff:controller:create-posts');
 
@@ -21,14 +20,17 @@ export default async function createPostController(req, res, next) {
             contentType = 'multipart/form-data';
             postData = new FormData();
             postData.set('post', req.body.post);
-            postData.set(
-                'image',
-                new Blob(
-                    [req.file.buffer.buffer.slice(req.file.buffer.byteOffset, req.file.buffer.length)],
-                    { type: req.file.mimetype }
-                ),
-                req.file.originalname
-            );
+
+            if (req.file) {
+                postData.set(
+                    'image',
+                    new Blob(
+                        [req.file.buffer.buffer.slice(req.file.buffer.byteOffset, req.file.buffer.length)],
+                        { type: req.file.mimetype }
+                    ),
+                    req.file.originalname
+                );
+            }
         } else {
             createPostControllerLogger.debug('JSON request');
             contentType = 'application/json';

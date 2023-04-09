@@ -19,6 +19,8 @@ import config from '../../config/config.js';
 import multer from '../../middlewares/multer.js';
 import createPostSchema from '../../schemas/create-post.js';
 import createPostController from '../../controllers/posts/createPost.js';
+import updatePostSchema from '../../schemas/update-post.js';
+import updatePostController from '../../controllers/posts/updatePost.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:bff:bff-loader:routes');
 
@@ -104,4 +106,27 @@ export default function routeLoader(router) {
         createPostController
     );
     loaderLogger.debug('POST /posts - add route to create a post');
+
+    router.put(
+        '/posts/:postId',
+        createBodyParser({
+            'application/json': express.json(expressJsonOptions),
+            'multipart/form-data': multer,
+        }, false),
+        validationMiddlewares(updatePostSchema, true),
+        authenticate(true),
+        updatePostController
+    );
+    loaderLogger.debug('PUT /posts/:postId - add route to update a post');
+
+    router.post(
+        '/posts/:postId/like',
+        createBodyParser({
+            'application/json': express.json(expressJsonOptions),
+        }, false),
+        validationMiddlewares(updatePostSchema),
+        authenticate(true),
+        updatePostController
+    );
+    loaderLogger.debug('POST /posts/:postId/like - add route to like a post');
 }
