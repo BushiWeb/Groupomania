@@ -4,16 +4,16 @@ import createBodyParser from '../../middlewares/body-parsing.js';
 import validationMiddlewares from '../../middlewares/user-input-validation.js';
 import authenticate from '../../middlewares/authentication.js';
 import loginBodySchema from '../../schemas/login.js';
-import getUserSchema from '../../schemas/getUser.js';
+import getUserSchema from '../../schemas/get-user.js';
 import signupController from '../../controllers/authentication/signup.js';
 import signupBodySchema from '../../schemas/signup.js';
-import updateUserSchema from '../../schemas/updateUser.js';
+import updateUserSchema from '../../schemas/update-user.js';
 import updateUserController from '../../controllers/users/updateUser.js';
 import getUserController from '../../controllers/users/getuser.js';
 import getUsersController from '../../controllers/users/getUsers.js';
-import getUsersSchema from '../../schemas/getUsers.js';
+import getUsersSchema from '../../schemas/get-users.js';
 import getPostsController from '../../controllers/posts/getPosts.js';
-import getPostsSchema from '../../schemas/getPosts.js';
+import getPostsSchema from '../../schemas/get-post.js';
 import express from 'express';
 import config from '../../config/config.js';
 import multer from '../../middlewares/multer.js';
@@ -27,6 +27,9 @@ import deletePostSchema from '../../schemas/delete-post.js';
 import deletePostController from '../../controllers/posts/deletePost.js';
 import updateUserRoleSchema from '../../schemas/update-user-role.js';
 import updateUserRoleController from '../../controllers/users/updateUserRole.js';
+import deleteUserSchema from '../../schemas/delete-user.js';
+import deleteUserController from '../../controllers/users/deleteUser.js';
+import logoutController from '../../controllers/authentication/logout.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:bff:bff-loader:routes');
 
@@ -51,6 +54,14 @@ export default function routeLoader(router) {
         loginController
     );
     loaderLogger.debug('POST /login - add route to login or refresh the access token');
+
+    router.post(
+        '/logout',
+        createBodyParser({}),
+        authenticate(true),
+        logoutController
+    );
+    loaderLogger.debug('POST /logout - add route to logout');
 
     router.post(
         '/signup',
@@ -102,6 +113,17 @@ export default function routeLoader(router) {
         updateUserRoleController
     );
     loaderLogger.debug('PUT /users/:userId/role - add route to update the user role');
+
+    router.delete(
+        '/users/:userId',
+        createBodyParser({
+            'application/json': express.json(expressJsonOptions),
+        }, false),
+        validationMiddlewares(deleteUserSchema),
+        authenticate(true),
+        deleteUserController
+    );
+    loaderLogger.debug('DELETE /users/:userId - add route to delete the user');
 
     router.get(
         '/posts',
