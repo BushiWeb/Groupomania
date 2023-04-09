@@ -38,8 +38,8 @@ export default async function createPostController(req, res, next) {
             };
         }
 
-        await createPostRequest(postData, contentType, req.session.user);
-        res.status(204).end();
+        const newPost = await createPostRequest(postData, contentType, req.session.user);
+        res.status(201).json(newPost);
     } catch (error) {
         next(error);
     }

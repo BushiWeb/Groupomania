@@ -11,7 +11,7 @@ const requestServiceLogger = createLoggerNamespace('groupomania:bff:service:requ
  * @param {{accessToken: string, refreshToken: string}} sessionAuth - Session object containing the authentication
  *  tokens. Used to get the tokens.
  *  It may be modified by side effects if the tokens are refreshed.
- * @returns {Promise} Returns a promise resolved with true.
+ * @returns {Promise} Returns a promise resolved with the new post data.
  * @throws Throws if the request returns an error.
  */
 export default async function createPostRequest(postData, contentType, sessionAuth) {
@@ -35,7 +35,5 @@ export default async function createPostRequest(postData, contentType, sessionAu
         throw response.error;
     }
 
-    requestServiceLogger.info('%O', response);
-
-    return true;
+    return response.data;
 }
