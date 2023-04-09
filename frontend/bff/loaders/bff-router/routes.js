@@ -21,6 +21,8 @@ import createPostSchema from '../../schemas/create-post.js';
 import createPostController from '../../controllers/posts/createPost.js';
 import updatePostSchema from '../../schemas/update-post.js';
 import updatePostController from '../../controllers/posts/updatePost.js';
+import likePostSchema from '../../schemas/like-post.js';
+import likePostController from '../../controllers/posts/likePost.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:bff:bff-loader:routes');
 
@@ -124,9 +126,9 @@ export default function routeLoader(router) {
         createBodyParser({
             'application/json': express.json(expressJsonOptions),
         }, false),
-        validationMiddlewares(updatePostSchema),
+        validationMiddlewares(likePostSchema),
         authenticate(true),
-        updatePostController
+        likePostController
     );
     loaderLogger.debug('POST /posts/:postId/like - add route to like a post');
 }
