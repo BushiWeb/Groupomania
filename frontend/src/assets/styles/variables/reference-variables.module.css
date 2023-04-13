@@ -1,0 +1,242 @@
+@font-face {
+    font-family: Lato;
+    src: url('../../fonts/Lato/WOFF2/Lato-Regular.woff2') format('woff2'),
+        url('../../fonts/Lato/WOFF/Lato-Regular.woff') format('woff'),
+        url('../../fonts/Lato/TTF/Lato-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: Lato;
+    src: url('../../fonts/Lato/WOFF2/Lato-Bold.woff2') format('woff2'),
+        url('../../fonts/Lato/WOFF/Lato-Bold.woff') format('woff'),
+        url('../../fonts/Lato/TTF/Lato-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: Lato;
+    src: url('../../fonts/Lato/WOFF2/Lato-Italic.woff2') format('woff2'),
+        url('../../fonts/Lato/WOFF/Lato-Italic.woff') format('woff'),
+        url('../../fonts/Lato/TTF/Lato-Italic.ttf') format('truetype');
+    font-weight: 400;
+    font-style: italic;
+}
+
+:root {
+    /*
+        typography reference tokens
+    */
+    --ref-typography-base-font-size: 16px;
+    --ref-typography-font: Lato, sans-serif;
+    --ref-typography-weight-regular: 400;
+    --ref-typography-weight-medium: 700;
+
+    /*
+        Spacing reference tokens
+    */
+    /* Padding reference tokens */
+    --ref-spacing-padding-increment: 0.25rem;
+
+    /* Margin reference tokens */
+    --ref-spacing-margin-small: 1rem;
+    --ref-spacing-margin-large: 1.5rem;
+
+    /*
+        Opacity reference tokens
+    */
+    --ref-opacity-extra-high: 0.38;
+    --ref-opacity-high: 0.16;
+    --ref-opacity-medium: 0.12;
+    --ref-opacity-low: 0.08;
+
+    /*
+        Color reference tokens
+        The values are a triplet of number representing the RGB coordinates.
+    */
+    /* Key color reference tokens */
+    --ref-color-key-primary: 253 45 1;
+    --ref-color-key-secondary: 255 215 215;
+    --ref-color-key-tertiary: 129 63 191;
+    --ref-color-key-error: 179 38 31;
+    --ref-color-key-neutral: 78 81 102;
+    --ref-color-key-neutral-variant: 97 97 101;
+    --ref-color-key-black: 0 0 0;
+    --ref-color-key-white: 255 255 255;
+
+    /* Primary color palette reference tokens */
+    --ref-color-palette-primary0: 0 0 0;
+    --ref-color-palette-primary4: 38 2 0;
+    --ref-color-palette-primary5: 43 2 0;
+    --ref-color-palette-primary6: 47 3 0;
+    --ref-color-palette-primary10: 62 4 0;
+    --ref-color-palette-primary12: 70 5 0;
+    --ref-color-palette-primary17: 89 9 0;
+    --ref-color-palette-primary20: 101 11 0;
+    --ref-color-palette-primary22: 109 13 0;
+    --ref-color-palette-primary24: 117 15 0;
+    --ref-color-palette-primary25: 121 16 0;
+    --ref-color-palette-primary30: 142 20 0;
+    --ref-color-palette-primary35: 163 25 0;
+    --ref-color-palette-primary40: 185 30 0;
+    --ref-color-palette-primary50: 231 40 0;
+    --ref-color-palette-primary60: 255 86 54;
+    --ref-color-palette-primary70: 255 138 114;
+    --ref-color-palette-primary80: 255 180 165;
+    --ref-color-palette-primary87: 255 207 197;
+    --ref-color-palette-primary90: 255 218 211;
+    --ref-color-palette-primary92: 255 226 220;
+    --ref-color-palette-primary94: 255 233 229;
+    --ref-color-palette-primary95: 255 237 233;
+    --ref-color-palette-primary96: 255 240 238;
+    --ref-color-palette-primary98: 255 248 246;
+    --ref-color-palette-primary99: 255 251 255;
+    --ref-color-palette-primary100: 255 255 255;
+
+    /* Secondary color palette reference tokens */
+    --ref-color-palette-secondary0: 0 0 0;
+    --ref-color-palette-secondary4: 39 0 4;
+    --ref-color-palette-secondary5: 44 0 5;
+    --ref-color-palette-secondary6: 49 0 6;
+    --ref-color-palette-secondary10: 64 0 11;
+    --ref-color-palette-secondary12: 72 1 13;
+    --ref-color-palette-secondary17: 86 11 23;
+    --ref-color-palette-secondary20: 95 18 29;
+    --ref-color-palette-secondary22: 101 23 33;
+    --ref-color-palette-secondary24: 107 28 37;
+    --ref-color-palette-secondary25: 110 30 39;
+    --ref-color-palette-secondary30: 126 41 49;
+    --ref-color-palette-secondary35: 141 53 60;
+    --ref-color-palette-secondary40: 156 65 71;
+    --ref-color-palette-secondary50: 187 88 94;
+    --ref-color-palette-secondary60: 219 113 118;
+    --ref-color-palette-secondary70: 250 139 144;
+    --ref-color-palette-secondary80: 255 179 180;
+    --ref-color-palette-secondary87: 255 206 207;
+    --ref-color-palette-secondary90: 255 218 218;
+    --ref-color-palette-secondary92: 255 225 225;
+    --ref-color-palette-secondary94: 255 233 232;
+    --ref-color-palette-secondary95: 255 237 236;
+    --ref-color-palette-secondary96: 255 240 240;
+    --ref-color-palette-secondary98: 255 248 247;
+    --ref-color-palette-secondary99: 255 251 255;
+    --ref-color-palette-secondary100: 255 255 255;
+
+    /* Tertiary color palette reference tokens */
+    --ref-color-palette-tertiary0: 0 0 0;
+    --ref-color-palette-tertiary4: 25 0 50;
+    --ref-color-palette-tertiary5: 29 0 56;
+    --ref-color-palette-tertiary6: 33 0 62;
+    --ref-color-palette-tertiary10: 44 0 80;
+    --ref-color-palette-tertiary12: 50 0 90;
+    --ref-color-palette-tertiary17: 64 0 113;
+    --ref-color-palette-tertiary20: 73 0 128;
+    --ref-color-palette-tertiary22: 80 0 138;
+    --ref-color-palette-tertiary24: 86 0 148;
+    --ref-color-palette-tertiary25: 88 6 150;
+    --ref-color-palette-tertiary30: 100 29 162;
+    --ref-color-palette-tertiary35: 113 45 175;
+    --ref-color-palette-tertiary40: 126 60 188;
+    --ref-color-palette-tertiary50: 152 87 215;
+    --ref-color-palette-tertiary60: 180 114 243;
+    --ref-color-palette-tertiary70: 202 147 255;
+    --ref-color-palette-tertiary80: 221 183 255;
+    --ref-color-palette-tertiary87: 235 208 255;
+    --ref-color-palette-tertiary90: 240 219 255;
+    --ref-color-palette-tertiary92: 244 226 255;
+    --ref-color-palette-tertiary94: 248 233 255;
+    --ref-color-palette-tertiary95: 250 236 255;
+    --ref-color-palette-tertiary96: 252 240 255;
+    --ref-color-palette-tertiary98: 255 247 254;
+    --ref-color-palette-tertiary99: 255 251 255;
+    --ref-color-palette-tertiary100: 255 255 255;
+
+    /* Neutral color palette reference tokens */
+    --ref-color-palette-neutral0: 0 0 0;
+    --ref-color-palette-neutral4: 14 14 17;
+    --ref-color-palette-neutral5: 16 17 20;
+    --ref-color-palette-neutral6: 19 19 22;
+    --ref-color-palette-neutral10: 27 27 31;
+    --ref-color-palette-neutral12: 31 31 35;
+    --ref-color-palette-neutral17: 42 42 45;
+    --ref-color-palette-neutral20: 48 48 52;
+    --ref-color-palette-neutral22: 53 52 56;
+    --ref-color-palette-neutral24: 57 57 60;
+    --ref-color-palette-neutral25: 59 59 63;
+    --ref-color-palette-neutral30: 71 70 74;
+    --ref-color-palette-neutral35: 83 82 86;
+    --ref-color-palette-neutral40: 95 94 98;
+    --ref-color-palette-neutral50: 120 118 122;
+    --ref-color-palette-neutral60: 145 144 148;
+    --ref-color-palette-neutral70: 172 170 175;
+    --ref-color-palette-neutral80: 200 197 202;
+    --ref-color-palette-neutral87: 220 217 222;
+    --ref-color-palette-neutral90: 228 225 230;
+    --ref-color-palette-neutral92: 234 231 236;
+    --ref-color-palette-neutral94: 240 237 241;
+    --ref-color-palette-neutral95: 244 240 245;
+    --ref-color-palette-neutral96: 246 242 247;
+    --ref-color-palette-neutral98: 251 248 253;
+    --ref-color-palette-neutral99: 254 251 255;
+    --ref-color-palette-neutral100: 255 255 255;
+
+    /* Neutral variant color palette reference tokens */
+    --ref-color-palette-neutral-variant0: 0 0 0;
+    --ref-color-palette-neutral-variant4: 12 14 21;
+    --ref-color-palette-neutral-variant5: 13 16 23;
+    --ref-color-palette-neutral-variant6: 17 19 26;
+    --ref-color-palette-neutral-variant10: 25 27 35;
+    --ref-color-palette-neutral-variant12: 29 31 39;
+    --ref-color-palette-neutral-variant17: 39 42 49;
+    --ref-color-palette-neutral-variant20: 46 48 56;
+    --ref-color-palette-neutral-variant22: 50 53 60;
+    --ref-color-palette-neutral-variant24: 55 57 65;
+    --ref-color-palette-neutral-variant25: 57 59 67;
+    --ref-color-palette-neutral-variant30: 68 70 79;
+    --ref-color-palette-neutral-variant35: 80 82 90;
+    --ref-color-palette-neutral-variant40: 92 94 103;
+    --ref-color-palette-neutral-variant50: 117 119 128;
+    --ref-color-palette-neutral-variant60: 143 144 153;
+    --ref-color-palette-neutral-variant70: 169 171 180;
+    --ref-color-palette-neutral-variant80: 197 198 208;
+    --ref-color-palette-neutral-variant87: 217 217 227;
+    --ref-color-palette-neutral-variant90: 225 226 236;
+    --ref-color-palette-neutral-variant92: 231 231 242;
+    --ref-color-palette-neutral-variant94: 237 237 247;
+    --ref-color-palette-neutral-variant95: 239 240 250;
+    --ref-color-palette-neutral-variant96: 242 243 253;
+    --ref-color-palette-neutral-variant98: 250 248 255;
+    --ref-color-palette-neutral-variant99: 254 251 255;
+    --ref-color-palette-neutral-variant100: 255 255 255;
+
+    /* Error color palette reference tokens */
+    --ref-color-palette-error0: 0 0 0;
+    --ref-color-palette-error4: 40 0 0;
+    --ref-color-palette-error5: 45 0 0;
+    --ref-color-palette-error6: 48 0 1;
+    --ref-color-palette-error10: 65 0 1;
+    --ref-color-palette-error12: 73 0 1;
+    --ref-color-palette-error17: 92 0 2;
+    --ref-color-palette-error20: 105 0 3;
+    --ref-color-palette-error22: 113 0 3;
+    --ref-color-palette-error24: 121 0 4;
+    --ref-color-palette-error25: 126 0 4;
+    --ref-color-palette-error30: 145 8 9;
+    --ref-color-palette-error35: 163 25 20;
+    --ref-color-palette-error40: 180 39 31;
+    --ref-color-palette-error50: 215 64 52;
+    --ref-color-palette-error60: 250 90 74;
+    --ref-color-palette-error70: 255 138 123;
+    --ref-color-palette-error80: 255 180 170;
+    --ref-color-palette-error87: 255 207 200;
+    --ref-color-palette-error90: 255 218 213;
+    --ref-color-palette-error92: 255 226 221;
+    --ref-color-palette-error94: 255 233 230;
+    --ref-color-palette-error95: 255 237 234;
+    --ref-color-palette-error96: 255 240 238;
+    --ref-color-palette-error98: 255 248 247;
+    --ref-color-palette-error99: 255 251 255;
+    --ref-color-palette-error100: 255 255 255;
+}

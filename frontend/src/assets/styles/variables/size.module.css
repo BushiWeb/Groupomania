@@ -1,0 +1,35 @@
+/*
+    Defines all size related variables
+*/
+@value medium as bp-medium from "./breakpoints.module.css";
+
+:root {
+    /* Padding sizes */
+    --padding-1: var(--ref-spacing-padding-increment);
+    --padding-2: calc(var(--ref-spacing-padding-increment) * 2);
+    --padding-3: calc(var(--ref-spacing-padding-increment) * 3);
+    --padding-4: calc(var(--ref-spacing-padding-increment) * 4);
+    --padding-5: calc(var(--ref-spacing-padding-increment) * 5);
+    --padding-6: calc(var(--ref-spacing-padding-increment) * 6);
+
+    /* Margin sizes */
+    --margin: var(--ref-spacing-margin-small);
+
+    /* Sizes */
+    --size-000: -0.5rem;
+    --size-00: -0.25rem;
+    --size-1: 0.25rem;
+    --size-2: 0.5rem;
+    --size-3: 1rem;
+    --size-4: 1.25rem;
+    --size-5: 1.5rem;
+    --size-6: 1.75rem;
+    --size-7: 2rem;
+    --size-8: 2.5rem;
+}
+
+@media bp-medium {
+    :root {
+        --margin: var(--ref-spacing-margin-large);
+    }
+}
