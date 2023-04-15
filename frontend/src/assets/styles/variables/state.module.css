@@ -1,0 +1,11 @@
+/*
+    Defines state related tokens
+*/
+:root {
+    --state-focused-opacity: var(--ref-opacity-medium);
+    --state-hovered-opacity: var(--ref-opacity-low);
+    --state-pressed-opacity: var(--ref-opacity-medium);
+    --state-dragged-opacity: var(--ref-opacity-high);
+    --state-disabled-bg-opacity: var(--ref-opacity-medium);
+    --state-disabled-text-opacity: var(--ref-opacity-extra-high);
+}

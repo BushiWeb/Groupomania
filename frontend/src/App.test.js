@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render } from './utils/test-wrapper.js';
 import App from './App.js';
 
 describe('App test suite', () => {

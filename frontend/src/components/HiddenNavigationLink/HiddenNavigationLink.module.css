@@ -1,0 +1,100 @@
+@keyframes enter-within-bounds-left {
+    from {
+        transform-origin: center left;
+        scale: 0 1;
+        translate: -10% 0;
+        opacity: 0;
+    }
+
+    to {
+        transform-origin: center left;
+        scale: 1 1;
+        translate: 0 0;
+        opacity: 1;
+    }
+}
+
+@keyframes exit-within-bounds-left {
+    from {
+        transform-origin: center left;
+        scale: 1 1;
+        translate: 0 0;
+        opacity: 1;
+    }
+
+    to {
+        transform-origin: center left;
+        scale: 0 1;
+        translate: -10% 0;
+        opacity: 0;
+    }
+}
+
+.hiddenLink {
+    composes: label-large from '../../assets/styles/mixins/typography.module.css';
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    position: fixed;
+    top: var(--margin);
+    left: var(--margin);
+
+    min-height: var(--size-8);
+    padding-inline: var(--padding-6);
+    border-radius: var(--border-radius-4);
+
+    opacity: 0;
+    transform-origin: center left;
+    scale: 0 1;
+
+    background-color: rgb(var(--color-tertiary));
+    color: rgb(var(--color-on-tertiary));
+}
+
+.blured {
+    animation-name: exit-within-bounds-left;
+    animation-duration: var(--motion-duration-2);
+    animation-timing-function: var(--motion-easing-emphasized-accelerate);
+    animation-fill-mode: both;
+}
+
+.focused {
+    animation-name: enter-within-bounds-left;
+    animation-duration: var(--motion-duration-6);
+    animation-timing-function: var(--motion-easing-emphasized-decelerate);
+    animation-fill-mode: both;
+}
+
+.hiddenLink:focus {
+    background: radial-gradient(
+            circle at center,
+            rgb(var(--color-on-tertiary) / var(--state-focused-opacity)),
+            rgb(var(--color-on-tertiary) / var(--state-focused-opacity))
+        ),
+        rgb(var(--color-tertiary));
+}
+
+.hiddenLink:hover {
+    background: radial-gradient(
+            circle at center,
+            rgb(var(--color-on-tertiary) / var(--state-hovered-opacity)),
+            rgb(var(--color-on-tertiary) / var(--state-hovered-opacity))
+        ),
+        rgb(var(--color-tertiary));
+}
+
+.hiddenLink:active {
+    background: radial-gradient(
+            circle at center,
+            rgb(var(--color-on-tertiary) / var(--state-pressed-opacity)),
+            rgb(var(--color-on-tertiary) / var(--state-pressed-opacity))
+        ),
+        rgb(var(--color-tertiary));
+}
+
+.hiddenLink:focus-visible {
+    outline: none;
+}
