@@ -1,6 +1,5 @@
 import HiddenNavigationLink from './HiddenNavigationLink';
 import { screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { render } from '../../utils/test-wrapper';
 import '@testing-library/jest-dom';
 
