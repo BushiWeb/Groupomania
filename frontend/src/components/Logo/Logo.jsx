@@ -8,10 +8,21 @@ import { Link } from 'react-router-dom';
  * Displays the logo.
  * The logo can be placed within a link.
  * It can be either in color or monochrome. The monochrome value will depend on the theme.
+ * Only giving one of the dimension will scale the image proportionnaly.
  */
 export default function Logo({
     target, color, width, height, label,
 }) {
+    const initialWidth = 136, initialHeight = 25;
+    if (!width && !height) {
+        width = initialWidth;
+        height = initialHeight;
+    } else if (width && !height) {
+        height = width * initialHeight / initialWidth;
+    } else if (height && !width) {
+        width = height * initialWidth / initialHeight;
+    }
+
     const monochromeLogo = blackLogo;
     const logoElement = <img
         src={color ? colorLogo : monochromeLogo}
@@ -34,8 +45,8 @@ Logo.defaultProps = {
     target: undefined,
     label: undefined,
     color: false,
-    width: 136,
-    height: 25,
+    width: undefined,
+    height: undefined,
 };
 
 Logo.propTypes = {

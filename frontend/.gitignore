@@ -24,3 +24,4 @@ yarn-error.log*
 
 frontend.code-workspace
 .env
+logs
