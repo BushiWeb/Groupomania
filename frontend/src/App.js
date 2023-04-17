@@ -1,4 +1,5 @@
 import HiddenNavigationLink from './components/HiddenNavigationLink/HiddenNavigationLink.jsx';
+import Icon from './components/Icon/Icon.jsx';
 import Logo from './components/Logo/Logo.jsx';
 
 export default function App() {
@@ -6,6 +7,7 @@ export default function App() {
         <div>
             <HiddenNavigationLink label="Skip to main content" target="/"/>
             <Logo/>
+            <Icon name='search'/>
         </div>
     );
 }
