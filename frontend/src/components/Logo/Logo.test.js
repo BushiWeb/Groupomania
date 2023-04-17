@@ -2,6 +2,8 @@ import Logo from './Logo';
 import { screen } from '@testing-library/react';
 import { render } from '../../utils/test-wrapper';
 import '@testing-library/jest-dom';
+import { themeToggle } from '../../features/theme/theme.slice.js';
+import { act } from 'react-dom/test-utils';
 
 describe('HiddenNavigationLink component test suite', () => {
     const label = 'Skip navigation';
@@ -54,5 +56,15 @@ describe('HiddenNavigationLink component test suite', () => {
         const logo = screen.getByRole('img');
         expect(logo.height).toBe(100);
         expect(logo.width).toBe(544);
+    });
+
+    it('should render the right monochrome logo depending on the theme', () => {
+        const { store } = render(<Logo/>);
+        const logo = screen.getByRole('img');
+        expect(logo.src).toMatch(/black/);
+        act(() => {
+            store.dispatch(themeToggle());
+        });
+        expect(logo.src).toMatch(/white/);
     });
 });

@@ -3,6 +3,9 @@ import colorLogo from '../../assets/images/groupomania-logo.svg';
 import whiteLogo from '../../assets/images/groupomania-logo-white.svg';
 import blackLogo from '../../assets/images/groupomania-logo-black.svg';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectTheme } from '../../utils/selectors.js';
+import { THEMES_NAMES } from '../../features/theme/theme.slice.js';
 
 /**
  * Displays the logo.
@@ -13,6 +16,7 @@ import { Link } from 'react-router-dom';
 export default function Logo({
     target, color, width, height, label,
 }) {
+    // Calculating the size of the image
     const initialWidth = 136, initialHeight = 25;
     if (!width && !height) {
         width = initialWidth;
@@ -23,7 +27,9 @@ export default function Logo({
         width = Math.round(height * initialWidth / initialHeight);
     }
 
-    const monochromeLogo = blackLogo;
+    // Choosing the logo
+    const theme = useSelector(selectTheme);
+    const monochromeLogo = theme === THEMES_NAMES.light ? blackLogo : whiteLogo;
     const logoElement = <img
         src={color ? colorLogo : monochromeLogo}
         alt={`Groupomania${label ? ` ${label}` : ''}`}
@@ -32,6 +38,7 @@ export default function Logo({
         height={height}
     />;
 
+    // The structure depends weither or not the logo is a link
     if (target) {
         return (
             <Link to={target}>{logoElement}</Link>
