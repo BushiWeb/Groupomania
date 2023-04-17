@@ -18,9 +18,9 @@ export default function Logo({
         width = initialWidth;
         height = initialHeight;
     } else if (width && !height) {
-        height = width * initialHeight / initialWidth;
+        height = Math.round(width * initialHeight / initialWidth);
     } else if (height && !width) {
-        width = height * initialWidth / initialHeight;
+        width = Math.round(height * initialWidth / initialHeight);
     }
 
     const monochromeLogo = blackLogo;

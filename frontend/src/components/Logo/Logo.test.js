@@ -27,4 +27,32 @@ describe('HiddenNavigationLink component test suite', () => {
         const logo = screen.getByRole('img');
         expect(logo.src).toMatch(/(black|white)/);
     });
+
+    it('should render the image with the default dimensions', () => {
+        render(<Logo/>);
+        const logo = screen.getByRole('img');
+        expect(logo.width).toBe(136);
+        expect(logo.height).toBe(25);
+    });
+
+    it('should render the image with the given dimensions', () => {
+        render(<Logo width={100} height={100}/>);
+        const logo = screen.getByRole('img');
+        expect(logo.width).toBe(100);
+        expect(logo.height).toBe(100);
+    });
+
+    it('should render the image with the given width and the right proportions', () => {
+        render(<Logo width={100}/>);
+        const logo = screen.getByRole('img');
+        expect(logo.width).toBe(100);
+        expect(logo.height).toBe(18);
+    });
+
+    it('should render the image with the given width and the right proportions', () => {
+        render(<Logo height={100}/>);
+        const logo = screen.getByRole('img');
+        expect(logo.height).toBe(100);
+        expect(logo.width).toBe(544);
+    });
 });
