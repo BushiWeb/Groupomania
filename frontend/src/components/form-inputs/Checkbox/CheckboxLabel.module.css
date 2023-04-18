@@ -1,0 +1,16 @@
+.label {
+    composes: label-large from '../../../assets/styles/mixins/typography.module.css';
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: var(--padding-9);
+    color: rgb(var(--color-on-surface));
+}
+
+.disabled {
+    composes: label;
+
+    color: rgb(var(--color-on-surface) / var(--state-disabled-text-opacity));
+}
