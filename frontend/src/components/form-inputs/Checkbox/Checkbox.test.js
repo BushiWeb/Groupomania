@@ -27,6 +27,11 @@ describe('Checkbox component test suite', () => {
 
         expect(checkbox).toBeChecked();
         expect(inputHandle).toHaveBeenCalled();
+
+        await user.click(checkbox);
+
+        expect(checkbox).not.toBeChecked();
+        expect(inputHandle).toHaveBeenCalled();
     });
 
     it('should has the initial focus', () => {
