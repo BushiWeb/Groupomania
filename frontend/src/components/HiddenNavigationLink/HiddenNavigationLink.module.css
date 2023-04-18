@@ -42,9 +42,9 @@
     top: var(--margin);
     left: var(--margin);
 
-    min-height: var(--size-8);
+    min-height: var(--size-10);
     padding-inline: var(--padding-6);
-    border-radius: var(--border-radius-4);
+    border-radius: var(--border-radius-5);
 
     opacity: 0;
     transform-origin: center left;

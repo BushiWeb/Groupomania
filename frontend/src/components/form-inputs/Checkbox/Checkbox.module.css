@@ -1,0 +1,111 @@
+.checkbox {
+    --checkbox-size: var(--size-5);
+
+    appearance: none;
+    margin: 0;
+    background-color: transparent;
+    vertical-align: middle;
+
+    width: var(--size-target);
+    height: var(--size-target);
+
+    position: relative;
+}
+
+.checkbox::before,
+.checkbox::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+}
+
+/* Checkbox */
+.checkbox::after {
+    content: 'done';
+    font-family: 'Material Symbols Rounded';
+    font-style: normal;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+    font-weight: 700;
+    font-size: 0;
+    color: rgb(var(--color-on-primary));
+
+    display: grid;
+    place-content: center;
+
+    width: var(--checkbox-size);
+    height: var(--checkbox-size);
+
+    border-radius: var(--border-radius-1);
+    border: var(--size-border) solid rgb(var(--color-on-surface));
+
+    transition: font-size, background-color;
+    transition-duration: var(--motion-duration-1);
+    transition-timing-function: var(--motion-easing-standard-accelerate);
+}
+
+.checkbox:checked::after {
+    border: none;
+    background-color: rgb(var(--color-primary));
+
+    font-size: var(--checkbox-size);
+
+    transition: font-size, background-color;
+    transition-duration: var(--motion-duration-3);
+    transition-timing-function: var(--motion-easing-standard-decelerate);
+}
+
+.checkbox:disabled::after {
+    opacity: var(--state-disabled-text-opacity);
+}
+
+.checkbox:disabled:checked::after {
+    background-color: rgb(var(--color-on-surface));
+    color: rgb(var(--color-surface));
+}
+
+/* Move the focus marker to the after pseudo-element */
+.checkbox:focus-visible {
+    outline: none;
+}
+
+.checkbox:focus-visible::after {
+    outline: rgb(var(--color-outline-focus)) var(--size-border) solid;
+    outline-offset: var(--size-outline-offset);
+}
+
+/* State layer */
+.checkbox::before {
+    content: '';
+    width: var(--size-state-layer);
+    height: var(--size-state-layer);
+    clip-path: circle(farthest-side);
+}
+
+.checkbox:hover:not(:disabled)::before,
+.checkbox:focus:not(:disabled)::before,
+.checkbox:active:not(:disabled)::before {
+    background-color: rgb(var(--color-on-surface));
+}
+
+.checkbox:hover:checked:not(:disabled)::before,
+.checkbox:focus:checked:not(:disabled)::before,
+.checkbox:active:checked:not(:disabled)::before {
+    background-color: rgb(var(--color-primary));
+}
+
+.checkbox:hover::before {
+    opacity: var(--state-hovered-opacity);
+}
+
+.checkbox:focus::before {
+    opacity: var(--state-focused-opacity);
+}
+
+.checkbox:active::before {
+    opacity: var(--state-pressed-opacity);
+}

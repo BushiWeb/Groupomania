@@ -64,4 +64,5 @@
     /* Other */
     --color-scrim: var(--ref-color-key-black);
     --color-shadow: var(--ref-color-key-black);
+    --color-outline-focus: var(--ref-color-key-black);
 }

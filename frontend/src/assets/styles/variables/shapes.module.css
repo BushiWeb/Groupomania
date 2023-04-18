@@ -4,10 +4,11 @@
 :root {
     /* Border radius */
     --border-radius-0: 0;
-    --border-radius-1: 0.25rem;
-    --border-radius-2: 0.5rem;
-    --border-radius-3: 0.75rem;
-    --border-radius-4: 1rem;
-    --border-radius-5: 1.75rem;
-    --border-radius-6: 50%;
+    --border-radius-1: 0.125rem;
+    --border-radius-2: 0.25rem;
+    --border-radius-3: 0.5rem;
+    --border-radius-4: 0.75rem;
+    --border-radius-5: 1rem;
+    --border-radius-6: 1.75rem;
+    --border-radius-7: 50%;
 }
