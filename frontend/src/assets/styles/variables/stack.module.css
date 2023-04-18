@@ -1,0 +1,13 @@
+/*
+    Defines all z-indexes
+*/
+:root {
+    --layer-lowest: -9999;
+    --layer-000: -2;
+    --layer-00: -1;
+    --layer-2: 2;
+    --layer-3: 3;
+    --layer-4: 4;
+    --layer-5: 5;
+    --layer-highest: 9999;
+}

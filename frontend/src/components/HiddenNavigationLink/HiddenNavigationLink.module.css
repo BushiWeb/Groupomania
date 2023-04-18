@@ -32,19 +32,19 @@
 
 .hiddenLink {
     composes: label-large from '../../assets/styles/mixins/typography.module.css';
+    --link-border-radius: var(--border-radius-5);
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    place-content: center;
 
     position: fixed;
     top: var(--margin);
     left: var(--margin);
+    z-index: var(--layer-5);
 
     min-height: var(--size-10);
     padding-inline: var(--padding-6);
-    border-radius: var(--border-radius-5);
+    border-radius: var(--link-border-radius);
 
     opacity: 0;
     transform-origin: center left;
@@ -54,6 +54,7 @@
     color: rgb(var(--color-on-tertiary));
 }
 
+/* Animating entry and exit */
 .blured {
     animation-name: exit-within-bounds-left;
     animation-duration: var(--motion-duration-2);
@@ -68,31 +69,23 @@
     animation-fill-mode: both;
 }
 
-.hiddenLink:focus {
-    background: radial-gradient(
-            circle at center,
-            rgb(var(--color-on-tertiary) / var(--state-focused-opacity)),
-            rgb(var(--color-on-tertiary) / var(--state-focused-opacity))
-        ),
-        rgb(var(--color-tertiary));
+/* State layer */
+.hiddenLink::before {
+    content: '';
+    background-color: rgb(var(--color-on-tertiary));
+    opacity: 0;
+    position: absolute;
+    inset: 0;
+    border-radius: var(--link-border-radius);
+    z-index: var(--layer-00);
 }
 
-.hiddenLink:hover {
-    background: radial-gradient(
-            circle at center,
-            rgb(var(--color-on-tertiary) / var(--state-hovered-opacity)),
-            rgb(var(--color-on-tertiary) / var(--state-hovered-opacity))
-        ),
-        rgb(var(--color-tertiary));
+.hiddenLink:hover::before {
+    opacity: var(--state-hovered-opacity);
 }
 
-.hiddenLink:active {
-    background: radial-gradient(
-            circle at center,
-            rgb(var(--color-on-tertiary) / var(--state-pressed-opacity)),
-            rgb(var(--color-on-tertiary) / var(--state-pressed-opacity))
-        ),
-        rgb(var(--color-tertiary));
+.hiddenLink:active::before {
+    opacity: var(--state-pressed-opacity);
 }
 
 .hiddenLink:focus-visible {
