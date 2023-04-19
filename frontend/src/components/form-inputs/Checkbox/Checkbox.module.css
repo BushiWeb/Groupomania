@@ -80,32 +80,67 @@
 
 /* State layer */
 .checkbox::before {
+    --state-layer-opacity: 0;
+    --state-layer-color: 255 255 255;
+
     content: '';
     width: var(--size-state-layer);
     height: var(--size-state-layer);
     clip-path: circle(farthest-side);
+    background-color: rgb(
+        var(--state-layer-color) / var(--state-layer-opacity)
+    );
 }
 
 .checkbox:hover:not(:disabled)::before,
 .checkbox:focus:not(:disabled)::before,
 .checkbox:active:not(:disabled)::before {
-    background-color: rgb(var(--color-on-surface));
+    --state-layer-color: var(--color-on-surface);
 }
 
 .checkbox:hover:checked:not(:disabled)::before,
 .checkbox:focus:checked:not(:disabled)::before,
 .checkbox:active:checked:not(:disabled)::before {
-    background-color: rgb(var(--color-primary));
+    --state-layer-color: var(--color-primary);
 }
 
-.checkbox:hover::before {
-    opacity: var(--state-hovered-opacity);
+.checkbox:hover:not(:disabled)::before {
+    --state-layer-opacity: var(--state-hovered-opacity);
 }
 
-.checkbox:focus::before {
-    opacity: var(--state-focused-opacity);
+.checkbox:focus:not(:disabled)::before {
+    --state-layer-opacity: var(--state-focused-opacity);
 }
 
-.checkbox:active::before {
-    opacity: var(--state-pressed-opacity);
+.checkbox:active:not(:disabled)::before {
+    --state-layer-opacity: var(--state-pressed-opacity);
+}
+
+/* Ripple animation */
+.checkbox:global(.ripple):not(:disabled)::before {
+    background-image: radial-gradient(
+        circle farthest-side at center,
+        rgb(var(--state-layer-color) / var(--state-pressed-opacity)),
+        rgb(var(--state-layer-color) / var(--state-pressed-opacity)) 50%,
+        transparent 50%,
+        transparent
+    );
+    background-repeat: no-repeat;
+    animation: var(--animation-duration, --motion-duration-5)
+        var(--motion-easing-standard) 0s 1 normal forwards ripple;
+}
+
+@keyframes ripple {
+    from {
+        background-size: 0 0;
+        background-position: var(--origin-x) var(--origin-y);
+        opacity: 1;
+    }
+
+    to {
+        background-size: calc(var(--width) * 2) calc(var(--width) * 2);
+        background-position: calc(var(--origin-x) - var(--width))
+            calc(var(--origin-y) - var(--width));
+        opacity: 0.5319;
+    }
 }
