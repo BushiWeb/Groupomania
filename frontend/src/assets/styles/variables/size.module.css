@@ -21,22 +21,21 @@
     /* Sizes */
     --size-000: -0.5rem;
     --size-00: -0.25rem;
-    --size-1: 0.125rem;
-    --size-2: 0.25rem;
-    --size-3: 0.5rem;
-    --size-4: 1rem;
-    --size-5: 1.125rem;
-    --size-6: 1.25rem;
-    --size-7: 1.5rem;
-    --size-8: 1.75rem;
-    --size-9: 2rem;
-    --size-10: 2.5rem;
-    --size-11: 3rem;
+    --size-1: 0.0625rem;
+    --size-2: 0.125rem;
+    --size-3: 0.25rem;
+    --size-4: 0.5rem;
+    --size-5: 1rem;
+    --size-6: 1.125rem;
+    --size-7: 1.25rem;
+    --size-8: 1.5rem;
+    --size-9: 1.75rem;
+    --size-10: 2rem;
+    --size-11: 2.5rem;
+    --size-12: 3rem;
 
-    --size-target: var(--size-11);
-    --size-state-layer: var(--size-10);
-    --size-border: var(--size-1);
-    --size-outline-offset: 0.0625rem;
+    --size-target: var(--size-12);
+    --size-state-layer: var(--size-11);
 }
 
 @media bp-medium {

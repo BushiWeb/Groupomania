@@ -1,0 +1,128 @@
+/* Button styling */
+.button {
+    composes: label-large from '../../../assets/styles/mixins/typography.module.css';
+
+    /* Custom properties */
+    --height: var(--button-height, var(--size-11));
+
+    --border-radius: var(--button-border-radius, var(--height));
+    --border-color: var(--button-border-color, var(--color-outline));
+    --border-opacity: var(--button-border-opacity, 1);
+    --border-width: var(--button-border-width, var(--size-1));
+
+    --padding-start: var(--button-padding-start, var(--padding-6));
+    --padding-end: var(--button-padding-end, var(--padding-6));
+
+    --text-align: var(--button-text-align, center);
+    --text-color: var(--button-text-color, var(--color-on-primary));
+    --text-opacity: var(--button-text-opacity, 1);
+
+    --background-color: var(--button-background-color, var(--color-primary));
+    --background-opacity: var(--button-background-opacity, 1);
+
+    --shadow: var(--button-shadow, none);
+
+    --state-layer-opacity: 0;
+    --state-layer-color: var(--text-color);
+
+    /* Button properties */
+    height: var(--height);
+    padding-inline-start: var(--padding-start);
+    padding-inline-end: var(--padding-end);
+
+    text-align: var(--text-align);
+    color: rgb(var(--text-color) / var(--text-opacity));
+
+    border-radius: var(--border-radius);
+    border-style: solid;
+    border-color: rgb(var(--border-color) / var(--border-opacity));
+    border-width: var(--border-width);
+
+    background-color: rgb(var(--background-color) / var(--background-opacity));
+
+    box-shadow: none;
+
+    position: relative;
+    isolation: isolate;
+}
+
+.button:focus-visible {
+    outline: rgb(var(--color-outline-focus)) var(--size-2) solid;
+    outline-offset: var(--size-1);
+}
+
+/* Target layer */
+.button::after {
+    content: '';
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+
+    min-height: var(--size-target);
+    min-width: var(--size-target);
+    width: calc(100% + var(--border-width) * 2);
+
+    opacity: 0;
+}
+
+/* State layer */
+.button::before {
+    content: '';
+
+    position: absolute;
+    inset: 0;
+    z-index: var(--layer-00);
+
+    border-radius: var(--border-radius);
+
+    background-color: rgb(
+        var(--state-layer-color) / var(--state-layer-opacity)
+    );
+
+    transition: background-color var(--motion-duration-1)
+        var(--motion-easing-standard);
+}
+
+/* States */
+.button:hover:not(:disabled) {
+    --state-layer-opacity: var(--state-hovered-opacity);
+}
+
+.button:focus:not(:disabled) {
+    --state-layer-opacity: var(--state-focused-opacity);
+}
+
+.button:active:not(:disabled) {
+    --state-layer-opacity: var(--state-pressed-opacity);
+}
+
+/* Ripple animation */
+.button:global(.ripple):not(:disabled)::before {
+    background-image: radial-gradient(
+        circle farthest-side at center,
+        rgb(var(--state-layer-color) / var(--state-pressed-opacity)),
+        rgb(var(--state-layer-color) / var(--state-pressed-opacity)) 50%,
+        transparent 50%,
+        transparent
+    );
+    background-repeat: no-repeat;
+    animation: var(--animation-duration, --motion-duration-5)
+        var(--motion-easing-standard) 0s 1 normal forwards ripple;
+}
+
+@keyframes ripple {
+    from {
+        background-size: 0 0;
+        background-position: var(--origin-x) var(--origin-y);
+        opacity: 1;
+    }
+
+    to {
+        background-size: calc(var(--width) * 2) calc(var(--width) * 2);
+        background-position: calc(var(--origin-x) - var(--width))
+            calc(var(--origin-y) - var(--width));
+        opacity: 0.5319;
+    }
+}

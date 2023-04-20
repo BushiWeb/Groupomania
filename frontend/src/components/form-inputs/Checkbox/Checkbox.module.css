@@ -1,5 +1,5 @@
 .checkbox {
-    --checkbox-size: var(--size-5);
+    --checkbox-size: var(--size-6);
 
     appearance: none;
     margin: 0;
@@ -41,7 +41,7 @@
     height: var(--checkbox-size);
 
     border-radius: var(--border-radius-1);
-    border: var(--size-border) solid rgb(var(--color-on-surface));
+    border: var(--size-2) solid rgb(var(--color-on-surface));
 
     transition: font-size, background-color;
     transition-duration: var(--motion-duration-1);
@@ -74,8 +74,8 @@
 }
 
 .checkbox:focus-visible::after {
-    outline: rgb(var(--color-outline-focus)) var(--size-border) solid;
-    outline-offset: var(--size-outline-offset);
+    outline: rgb(var(--color-outline-focus)) var(--size-2) solid;
+    outline-offset: var(--size-1);
 }
 
 /* State layer */

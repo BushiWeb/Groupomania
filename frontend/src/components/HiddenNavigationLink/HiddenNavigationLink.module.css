@@ -42,7 +42,7 @@
     left: var(--margin);
     z-index: var(--layer-5);
 
-    min-height: var(--size-10);
+    min-height: var(--size-11);
     padding-inline: var(--padding-6);
     border-radius: var(--link-border-radius);
 
