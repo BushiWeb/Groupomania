@@ -38,8 +38,6 @@ export default function Button({
         const radius = Math.sqrt((furthestCornerX - clickX) ** 2 + (furthestCornerY - clickY) ** 2);
         e.target.style.setProperty('--width', `${radius * 2}px`);
 
-        console.log(clickX, clickY, furthestCornerX, furthestCornerY, radius);
-
         // Start the animation
         e.target.classList.add('ripple');
         timeoutId.current = setTimeout(() => {
