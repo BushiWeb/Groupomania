@@ -32,26 +32,46 @@
 
 .hiddenLink {
     composes: label-large from '../../assets/styles/mixins/typography.module.css';
-    --link-border-radius: var(--border-radius-5);
 
+    /* Custom properties */
+    --height: var(--size-11);
+    --width: var(--size-target);
+
+    --border-radius: var(--border-radius-5);
+
+    --padding-inline: var(--padding-6);
+    --page-margin: var(--page-margin);
+    --margin-bloc: max((var(--size-target) - var(--height)) / 2, 0px);
+    --margin-inline: max((var(--size-target) - var(--width)) / 2, 0px);
+    --stack-layer: var(--layer-5);
+
+    --text-color: var(--color-on-tertiary);
+
+    --background-color: var(--color-tertiary);
+
+    --state-layer-opacity: 0;
+    --state-layer-color: var(--text-color);
+
+    /* Hidden link properties */
     display: grid;
     place-content: center;
 
     position: fixed;
-    top: var(--margin);
-    left: var(--margin);
-    z-index: var(--layer-5);
+    top: var(--page-margin);
+    left: var(--page-margin);
+    z-index: var(--stack-layer);
 
-    min-height: var(--size-11);
-    padding-inline: var(--padding-6);
-    border-radius: var(--link-border-radius);
+    min-height: var(--height);
+    padding-inline: var(--padding-inline);
+    margin-block: var(--margin-bloc);
+    margin-inline: var(--margin-inline);
 
-    opacity: 0;
-    transform-origin: center left;
-    scale: 0 1;
+    border-radius: var(--border-radius);
 
-    background-color: rgb(var(--color-tertiary));
-    color: rgb(var(--color-on-tertiary));
+    background-color: rgb(var(--background-color));
+    color: rgb(var(--text-color));
+
+    isolation: isolate;
 }
 
 /* Animating entry and exit */
@@ -59,35 +79,59 @@
     animation-name: exit-within-bounds-left;
     animation-duration: var(--motion-duration-2);
     animation-timing-function: var(--motion-easing-emphasized-accelerate);
-    animation-fill-mode: both;
 }
 
 .focused {
     animation-name: enter-within-bounds-left;
     animation-duration: var(--motion-duration-6);
     animation-timing-function: var(--motion-easing-emphasized-decelerate);
-    animation-fill-mode: both;
+}
+
+/* Target layer */
+.hiddenLink::after {
+    content: '';
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+
+    min-height: var(--size-target);
+    min-width: var(--size-target);
+    width: 100%;
+    height: 100%;
+
+    opacity: 0;
 }
 
 /* State layer */
 .hiddenLink::before {
     content: '';
-    background-color: rgb(var(--color-on-tertiary));
-    opacity: 0;
+
     position: absolute;
     inset: 0;
-    border-radius: var(--link-border-radius);
     z-index: var(--layer-00);
+
+    border-radius: var(--link-border-radius);
+
+    background-color: rgb(
+        var(--state-layer-color) / var(--state-layer-opacity)
+    );
+
+    transition: background-color var(--motion-duration-2)
+        var(--motion-easing-standard);
 }
 
-.hiddenLink:hover::before {
-    opacity: var(--state-hovered-opacity);
+/* States */
+.hiddenLink:hover {
+    --state-layer-opacity: var(--state-hovered-opacity);
 }
 
-.hiddenLink:active::before {
-    opacity: var(--state-pressed-opacity);
+.hiddenLink:active {
+    --state-layer-opacity: var(--state-pressed-opacity);
 }
 
 .hiddenLink:focus-visible {
-    outline: none;
+    outline: rgb(var(--color-outline-focus)) var(--size-2) solid;
+    outline-offset: var(--size-1);
 }

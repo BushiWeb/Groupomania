@@ -9,7 +9,7 @@ export default function Checkbox({
     isChecked, onChange, isDisabled, hasInitialFocus,
 }) {
     const timeoutId = useRef(null);
-    const animationDuration = 500;
+    const animationDuration = 250;
 
     // Handles the ripple animation
     function handlePointerDown(e) {
@@ -38,7 +38,7 @@ export default function Checkbox({
         const radius = stateLayerWidth / 2 + Math.sqrt(
             (stateLayerWidth / 2 - clickX) ** 2 + (stateLayerWidth / 2 - clickY) ** 2
         );
-        e.target.style.setProperty('--width', `${radius * 2}px`);
+        e.target.style.setProperty('--ripple-width', `${radius * 2}px`);
 
         // Start the animation
         e.target.classList.add('ripple');

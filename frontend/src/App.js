@@ -6,7 +6,13 @@ import CheckboxLabel from './components/form-inputs/Checkbox/CheckboxLabel.jsx';
 
 export default function App() {
     return (
-        <div>
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2rem',
+            padding: '2rem',
+            alignItems: 'start',
+        }}>
             <HiddenNavigationLink label="Skip to main content" target="/"/>
             <Logo/>
             <Icon name='search'/>

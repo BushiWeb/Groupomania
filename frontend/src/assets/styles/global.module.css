@@ -2,6 +2,8 @@
 
 @import './vendor/normalize.css';
 
+@import './mixins/index.module.css';
+
 @import './base/box-sizing.module.css';
 @import './base/font.module.css';
 @import './base/alignement.module.css';

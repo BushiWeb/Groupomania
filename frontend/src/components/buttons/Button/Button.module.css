@@ -4,6 +4,7 @@
 
     /* Custom properties */
     --height: var(--button-height, var(--size-11));
+    --width: var(--size-target);
 
     --border-radius: var(--button-border-radius, var(--height));
     --border-color: var(--button-border-color, var(--color-outline));
@@ -12,6 +13,8 @@
 
     --padding-start: var(--button-padding-start, var(--padding-6));
     --padding-end: var(--button-padding-end, var(--padding-6));
+    --margin-bloc: max((var(--size-target) - var(--height)) / 2, 0px);
+    --margin-inline: max((var(--size-target) - var(--width)) / 2, 0px);
 
     --text-align: var(--button-text-align, center);
     --text-color: var(--button-text-color, var(--color-on-primary));
@@ -26,9 +29,12 @@
     --state-layer-color: var(--text-color);
 
     /* Button properties */
-    height: var(--height);
+    min-height: var(--height);
+    min-width: var(--width);
     padding-inline-start: var(--padding-start);
     padding-inline-end: var(--padding-end);
+    margin-block: var(--margin-bloc);
+    margin-inline: var(--margin-inline);
 
     text-align: var(--text-align);
     color: rgb(var(--text-color) / var(--text-opacity));
@@ -40,15 +46,10 @@
 
     background-color: rgb(var(--background-color) / var(--background-opacity));
 
-    box-shadow: none;
+    box-shadow: var(--shadow);
 
     position: relative;
     isolation: isolate;
-}
-
-.button:focus-visible {
-    outline: rgb(var(--color-outline-focus)) var(--size-2) solid;
-    outline-offset: var(--size-1);
 }
 
 /* Target layer */
@@ -63,6 +64,7 @@
     min-height: var(--size-target);
     min-width: var(--size-target);
     width: calc(100% + var(--border-width) * 2);
+    height: calc(100% + var(--border-width) * 2);
 
     opacity: 0;
 }
@@ -81,7 +83,7 @@
         var(--state-layer-color) / var(--state-layer-opacity)
     );
 
-    transition: background-color var(--motion-duration-1)
+    transition: background-color var(--motion-duration-2)
         var(--motion-easing-standard);
 }
 
@@ -92,6 +94,11 @@
 
 .button:focus:not(:disabled) {
     --state-layer-opacity: var(--state-focused-opacity);
+}
+
+.button:focus-visible {
+    outline: rgb(var(--color-outline-focus)) var(--size-2) solid;
+    outline-offset: var(--size-1);
 }
 
 .button:active:not(:disabled) {
@@ -120,9 +127,10 @@
     }
 
     to {
-        background-size: calc(var(--width) * 2) calc(var(--width) * 2);
-        background-position: calc(var(--origin-x) - var(--width))
-            calc(var(--origin-y) - var(--width));
+        background-size: calc(var(--ripple-width) * 2)
+            calc(var(--ripple-width) * 2);
+        background-position: calc(var(--origin-x) - var(--ripple-width))
+            calc(var(--origin-y) - var(--ripple-width));
         opacity: 0.5319;
     }
 }

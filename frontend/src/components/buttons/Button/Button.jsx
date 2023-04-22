@@ -9,7 +9,7 @@ export default function Button({
     isDisabled, hasInitialFocus, action, label, classNames, children,
 }) {
     const timeoutId = useRef(null);
-    const animationDuration = 500;
+    const animationDuration = 350;
 
     // Handles the ripple animation
     function handlePointerDown(e) {
@@ -36,7 +36,7 @@ export default function Button({
         const furthestCornerX = clickX > box.width / 2 ? 0 : box.width,
             furthestCornerY = clickY > box.height / 2 ? 0 : box.height;
         const radius = Math.sqrt((furthestCornerX - clickX) ** 2 + (furthestCornerY - clickY) ** 2);
-        e.target.style.setProperty('--width', `${radius * 2}px`);
+        e.target.style.setProperty('--ripple-width', `${radius * 2}px`);
 
         // Start the animation
         e.target.classList.add('ripple');

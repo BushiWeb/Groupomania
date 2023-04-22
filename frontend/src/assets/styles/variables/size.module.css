@@ -16,7 +16,7 @@
     --padding-9: calc(var(--ref-spacing-padding-increment) * 9);
 
     /* Margin sizes */
-    --margin: var(--ref-spacing-margin-small);
+    --page-margin: var(--ref-spacing-margin-small);
 
     /* Sizes */
     --size-000: -0.5rem;
@@ -40,6 +40,6 @@
 
 @media bp-medium {
     :root {
-        --margin: var(--ref-spacing-margin-large);
+        --page-margin: var(--ref-spacing-margin-large);
     }
 }

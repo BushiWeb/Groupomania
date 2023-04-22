@@ -1,26 +1,52 @@
+/* Checkbox styling */
 .checkbox {
-    --checkbox-size: var(--size-6);
+    /* Custom properties */
+    --size: var(--size-6);
+    --margin: calc((var(--size-target) - var(--size)) / 2);
 
+    --border-radius: var(--border-radius-1);
+    --border-color: var(--color-on-surface);
+    --border-opacity: 1;
+    --border-width: var(--size-2);
+
+    --text-color: var(--color-on-primary);
+    --text-opacity: 1;
+    --font-size: 0;
+
+    --background-color: var(--color-primary);
+    --background-opacity: 0;
+
+    --state-layer-opacity: 0;
+    --state-layer-color: var(--color-on-surface);
+
+    /* chekbox properties */
     appearance: none;
-    margin: 0;
-    background-color: transparent;
     vertical-align: middle;
 
-    width: var(--size-target);
-    height: var(--size-target);
+    width: var(--size);
+    height: var(--size);
+    margin: var(--margin);
+
+    border-radius: var(--border-radius);
+    border-style: solid;
+    border-color: rgb(var(--border-color) / var(--border-opacity));
+    border-width: var(--border-width);
+
+    background-color: rgb(var(--background-color) / var(--background-opacity));
+
+    color: rgb(var(--text-color) / var(--text-opacity));
+    font-size: var(--font-size);
 
     position: relative;
+    isolation: isolate;
+
+    transition-property: background-color, border-width;
+    transition-duration: var(--motion-duration-2);
+    transition-timing-function: var(--motion-easing-standard-decelerate),
+        var(--motion-easing-standard-accelerate);
 }
 
-.checkbox::before,
-.checkbox::after {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
-}
-
-/* Checkbox */
+/* Target layer */
 .checkbox::after {
     content: 'done';
     font-family: 'Material Symbols Rounded';
@@ -31,89 +57,80 @@
     white-space: nowrap;
     direction: ltr;
     font-weight: 700;
-    font-size: 0;
-    color: rgb(var(--color-on-primary));
 
     display: grid;
     place-content: center;
 
-    width: var(--checkbox-size);
-    height: var(--checkbox-size);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
 
-    border-radius: var(--border-radius-1);
-    border: var(--size-2) solid rgb(var(--color-on-surface));
+    min-height: var(--size-target);
+    min-width: var(--size-target);
+    width: calc(100% + var(--border-width) * 2);
+    height: calc(100% + var(--border-width) * 2);
 
-    transition: font-size, background-color;
-    transition-duration: var(--motion-duration-1);
-    transition-timing-function: var(--motion-easing-standard-accelerate);
-}
+    background-color: transparent;
 
-.checkbox:checked::after {
-    border: none;
-    background-color: rgb(var(--color-primary));
-
-    font-size: var(--checkbox-size);
-
-    transition: font-size, background-color;
-    transition-duration: var(--motion-duration-3);
-    transition-timing-function: var(--motion-easing-standard-decelerate);
-}
-
-.checkbox:disabled::after {
-    opacity: var(--state-disabled-text-opacity);
-}
-
-.checkbox:disabled:checked::after {
-    background-color: rgb(var(--color-on-surface));
-    color: rgb(var(--color-surface));
-}
-
-/* Move the focus marker to the after pseudo-element */
-.checkbox:focus-visible {
-    outline: none;
-}
-
-.checkbox:focus-visible::after {
-    outline: rgb(var(--color-outline-focus)) var(--size-2) solid;
-    outline-offset: var(--size-1);
+    transition: font-size var(--motion-duration-2) var(--motion-easing-standard);
 }
 
 /* State layer */
 .checkbox::before {
-    --state-layer-opacity: 0;
-    --state-layer-color: 255 255 255;
-
     content: '';
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    z-index: var(--layer-00);
     width: var(--size-state-layer);
     height: var(--size-state-layer);
-    clip-path: circle(farthest-side);
+
+    border-radius: var(--border-radius-7);
+
     background-color: rgb(
         var(--state-layer-color) / var(--state-layer-opacity)
     );
+
+    transition: background-color var(--motion-duration-2)
+        var(--motion-easing-standard);
 }
 
-.checkbox:hover:not(:disabled)::before,
-.checkbox:focus:not(:disabled)::before,
-.checkbox:active:not(:disabled)::before {
-    --state-layer-color: var(--color-on-surface);
-}
-
-.checkbox:hover:checked:not(:disabled)::before,
-.checkbox:focus:checked:not(:disabled)::before,
-.checkbox:active:checked:not(:disabled)::before {
+/* States */
+.checkbox:checked {
+    --background-opacity: 1;
     --state-layer-color: var(--color-primary);
+    --border-width: 0;
+    --font-size: var(--size);
 }
 
-.checkbox:hover:not(:disabled)::before {
+.checkbox:hover:not(:disabled) {
     --state-layer-opacity: var(--state-hovered-opacity);
 }
 
-.checkbox:focus:not(:disabled)::before {
+.checkbox:focus:not(:disabled) {
     --state-layer-opacity: var(--state-focused-opacity);
 }
 
-.checkbox:active:not(:disabled)::before {
+.checkbox:focus-visible {
+    outline: rgb(var(--color-outline-focus)) var(--size-2) solid;
+    outline-offset: var(--size-1);
+}
+
+.checkbox:active:not(:disabled) {
     --state-layer-opacity: var(--state-pressed-opacity);
+}
+
+.checkbox:disabled {
+    --border-opacity: var(--state-disabled-text-opacity);
+}
+
+.checkbox:disabled:checked {
+    --background-opacity: var(--state-disabled-text-opacity);
+    --background-color: var(--color-on-surface);
+    --text-color: var(--color-surface);
 }
 
 /* Ripple animation */
@@ -138,9 +155,10 @@
     }
 
     to {
-        background-size: calc(var(--width) * 2) calc(var(--width) * 2);
-        background-position: calc(var(--origin-x) - var(--width))
-            calc(var(--origin-y) - var(--width));
+        background-size: calc(var(--ripple-width) * 2)
+            calc(var(--ripple-width) * 2);
+        background-position: calc(var(--origin-x) - var(--ripple-width))
+            calc(var(--origin-y) - var(--ripple-width));
         opacity: 0.5319;
     }
 }
