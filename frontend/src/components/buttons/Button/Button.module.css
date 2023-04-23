@@ -13,8 +13,6 @@
 
     --padding-start: var(--button-padding-start, var(--padding-6));
     --padding-end: var(--button-padding-end, var(--padding-6));
-    --margin-bloc: max((var(--size-target) - var(--height)) / 2, 0px);
-    --margin-inline: max((var(--size-target) - var(--width)) / 2, 0px);
 
     --text-align: var(--button-text-align, center);
     --text-color: var(--button-text-color, var(--color-on-primary));
@@ -33,8 +31,6 @@
     min-width: var(--width);
     padding-inline-start: var(--padding-start);
     padding-inline-end: var(--padding-end);
-    margin-block: var(--margin-bloc);
-    margin-inline: var(--margin-inline);
 
     text-align: var(--text-align);
     color: rgb(var(--text-color) / var(--text-opacity));

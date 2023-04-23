@@ -2,7 +2,8 @@
 .checkbox {
     /* Custom properties */
     --size: var(--size-6);
-    --margin: calc((var(--size-target) - var(--size)) / 2);
+    --height: var(--size);
+    --width: var(--size);
 
     --border-radius: var(--border-radius-1);
     --border-color: var(--color-on-surface);
@@ -25,9 +26,8 @@
     appearance: none;
     vertical-align: middle;
 
-    width: var(--size);
-    height: var(--size);
-    margin: var(--margin);
+    width: var(--width);
+    height: var(--height);
 
     border-radius: var(--border-radius);
     border-style: solid;
@@ -45,7 +45,7 @@
         var(--motion-easing-standard-accelerate);
 }
 
-/* Target layer */
+/* Check mark */
 .checkbox::after {
     content: 'done';
     font-family: 'Material Symbols Rounded';

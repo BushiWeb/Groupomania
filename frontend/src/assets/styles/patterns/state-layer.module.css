@@ -1,3 +1,10 @@
+/**
+    The state layer is an overlay between the background and the content of the element.
+    It can change its opacity depending on the state of the element, to modify the look
+        of the element.
+*/
+
+/* Component */
 :global(.state-layer) {
     --state-layer-opacity: 0;
 
@@ -5,6 +12,7 @@
     isolation: isolate;
 }
 
+/* Layer */
 :global(.state-layer)::before {
     content: '';
 
@@ -27,6 +35,7 @@
         var(--motion-easing-standard);
 }
 
+/* States */
 :global(.state-layer)[data-states~='hovered']:hover:not(:disabled) {
     --state-layer-opacity: var(--state-hovered-opacity);
 }
