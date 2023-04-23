@@ -50,7 +50,7 @@ export default function Button({
     return (
         <button
             type="button"
-            className={`state-layer ${style.button} ${classNames}`}
+            className={`state-layer target-layer ${style.button} ${classNames}`}
             disabled={isDisabled}
             autoFocus={!isDisabled && hasInitialFocus}
             onClick={action}

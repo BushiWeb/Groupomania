@@ -49,23 +49,6 @@
     box-shadow: var(--shadow);
 }
 
-/* Target layer */
-.button::after {
-    content: '';
-
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
-
-    min-height: var(--size-target);
-    min-width: var(--size-target);
-    width: calc(100% + var(--border-width) * 2);
-    height: calc(100% + var(--border-width) * 2);
-
-    opacity: 0;
-}
-
 /* States */
 .button:focus-visible {
     outline: rgb(var(--color-outline-focus)) var(--size-2) solid;

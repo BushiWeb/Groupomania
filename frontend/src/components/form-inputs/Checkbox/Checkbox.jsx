@@ -52,7 +52,7 @@ export default function Checkbox({
     return (
         <input
             type="checkbox"
-            className={`state-layer ${style.checkbox}`}
+            className={`state-layer target-layer ${style.checkbox}`}
             defaultChecked={isChecked}
             disabled={isDisabled}
             autoFocus={!isDisabled && hasInitialFocus}

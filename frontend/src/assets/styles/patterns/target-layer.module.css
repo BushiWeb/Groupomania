@@ -1,0 +1,19 @@
+:global(.target-layer) {
+    position: relative;
+}
+
+:global(.target-layer)::after {
+    content: '';
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+
+    min-height: var(--size-target);
+    min-width: var(--size-target);
+    width: calc(100% + var(--border-width, 0) * 2);
+    height: calc(100% + var(--border-width, 0) * 2);
+
+    background-color: transparent;
+}
