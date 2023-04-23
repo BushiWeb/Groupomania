@@ -1,6 +1,6 @@
 /* Button styling */
 .button {
-    composes: label-large from '../../../assets/styles/mixins/typography.module.css';
+    composes: label-large from '../../../assets/styles/patterns/typography.module.css';
 
     /* Custom properties */
     --height: var(--button-height, var(--size-11));
@@ -25,8 +25,8 @@
 
     --shadow: var(--button-shadow, none);
 
-    --state-layer-opacity: 0;
     --state-layer-color: var(--text-color);
+    --state-layer-border-radius: var(--border-radius);
 
     /* Button properties */
     min-height: var(--height);
@@ -47,9 +47,6 @@
     background-color: rgb(var(--background-color) / var(--background-opacity));
 
     box-shadow: var(--shadow);
-
-    position: relative;
-    isolation: isolate;
 }
 
 /* Target layer */
@@ -69,40 +66,10 @@
     opacity: 0;
 }
 
-/* State layer */
-.button::before {
-    content: '';
-
-    position: absolute;
-    inset: 0;
-    z-index: var(--layer-00);
-
-    border-radius: var(--border-radius);
-
-    background-color: rgb(
-        var(--state-layer-color) / var(--state-layer-opacity)
-    );
-
-    transition: background-color var(--motion-duration-2)
-        var(--motion-easing-standard);
-}
-
 /* States */
-.button:hover:not(:disabled) {
-    --state-layer-opacity: var(--state-hovered-opacity);
-}
-
-.button:focus:not(:disabled) {
-    --state-layer-opacity: var(--state-focused-opacity);
-}
-
 .button:focus-visible {
     outline: rgb(var(--color-outline-focus)) var(--size-2) solid;
     outline-offset: var(--size-1);
-}
-
-.button:active:not(:disabled) {
-    --state-layer-opacity: var(--state-pressed-opacity);
 }
 
 /* Ripple animation */

@@ -1,10 +1,15 @@
-@import './variables/index.module.css';
+@layer reset, defaults, themes, patters, layouts, components, utilities, overrides;
+@layer reset.normalize;
+@layer themes.dark;
 
-@import './vendor/normalize.css';
+@import './vendor/normalize.css' layer(reset.normalize);
 
-@import './mixins/index.module.css';
+@import './variables/index.module.css' layer(defaults);
 
-@import './base/box-sizing.module.css';
-@import './base/font.module.css';
-@import './base/alignement.module.css';
-@import './base/color.module.css';
+@import './base/index.module.css' layer(defaults);
+
+@import './theme//dark.module.css' layer(themes.dark);
+
+@import './patterns/index.module.css' layer(patterns);
+
+@import './utils/index.module.css' layer(utilities);

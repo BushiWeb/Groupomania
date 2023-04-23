@@ -16,8 +16,10 @@
     --background-color: var(--color-primary);
     --background-opacity: 0;
 
-    --state-layer-opacity: 0;
     --state-layer-color: var(--color-on-surface);
+    --state-layer-width: var(--size-state-layer);
+    --state-layer-height: var(--size-state-layer);
+    --state-layer-border-radius: var(--border-radius-7);
 
     /* chekbox properties */
     appearance: none;
@@ -36,9 +38,6 @@
 
     color: rgb(var(--text-color) / var(--text-opacity));
     font-size: var(--font-size);
-
-    position: relative;
-    isolation: isolate;
 
     transition-property: background-color, border-width;
     transition-duration: var(--motion-duration-2);
@@ -76,28 +75,6 @@
     transition: font-size var(--motion-duration-2) var(--motion-easing-standard);
 }
 
-/* State layer */
-.checkbox::before {
-    content: '';
-
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
-    z-index: var(--layer-00);
-    width: var(--size-state-layer);
-    height: var(--size-state-layer);
-
-    border-radius: var(--border-radius-7);
-
-    background-color: rgb(
-        var(--state-layer-color) / var(--state-layer-opacity)
-    );
-
-    transition: background-color var(--motion-duration-2)
-        var(--motion-easing-standard);
-}
-
 /* States */
 .checkbox:checked {
     --background-opacity: 1;
@@ -106,21 +83,9 @@
     --font-size: var(--size);
 }
 
-.checkbox:hover:not(:disabled) {
-    --state-layer-opacity: var(--state-hovered-opacity);
-}
-
-.checkbox:focus:not(:disabled) {
-    --state-layer-opacity: var(--state-focused-opacity);
-}
-
 .checkbox:focus-visible {
     outline: rgb(var(--color-outline-focus)) var(--size-2) solid;
     outline-offset: var(--size-1);
-}
-
-.checkbox:active:not(:disabled) {
-    --state-layer-opacity: var(--state-pressed-opacity);
 }
 
 .checkbox:disabled {

@@ -31,7 +31,7 @@
 }
 
 .hiddenLink {
-    composes: label-large from '../../assets/styles/mixins/typography.module.css';
+    composes: label-large from '../../assets/styles/patterns/typography.module.css';
 
     /* Custom properties */
     --height: var(--size-11);
@@ -49,8 +49,8 @@
 
     --background-color: var(--color-tertiary);
 
-    --state-layer-opacity: 0;
     --state-layer-color: var(--text-color);
+    --state-layer-border-radius: var(--border-radius);
 
     /* Hidden link properties */
     display: grid;
@@ -62,6 +62,7 @@
     z-index: var(--stack-layer);
 
     min-height: var(--height);
+    min-width: var(--width);
     padding-inline: var(--padding-inline);
     margin-block: var(--margin-bloc);
     margin-inline: var(--margin-inline);
@@ -70,8 +71,6 @@
 
     background-color: rgb(var(--background-color));
     color: rgb(var(--text-color));
-
-    isolation: isolate;
 }
 
 /* Animating entry and exit */
@@ -104,33 +103,7 @@
     opacity: 0;
 }
 
-/* State layer */
-.hiddenLink::before {
-    content: '';
-
-    position: absolute;
-    inset: 0;
-    z-index: var(--layer-00);
-
-    border-radius: var(--link-border-radius);
-
-    background-color: rgb(
-        var(--state-layer-color) / var(--state-layer-opacity)
-    );
-
-    transition: background-color var(--motion-duration-2)
-        var(--motion-easing-standard);
-}
-
 /* States */
-.hiddenLink:hover {
-    --state-layer-opacity: var(--state-hovered-opacity);
-}
-
-.hiddenLink:active {
-    --state-layer-opacity: var(--state-pressed-opacity);
-}
-
 .hiddenLink:focus-visible {
     outline: rgb(var(--color-outline-focus)) var(--size-2) solid;
     outline-offset: var(--size-1);

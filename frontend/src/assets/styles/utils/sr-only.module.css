@@ -1,6 +1,8 @@
 :global(.sr-only):not(:focus):not(:active) {
     position: absolute;
     width: 1px;
+    min-width: unset;
+    min-height: unset;
     height: 1px;
     padding: 0;
     margin: -1px;

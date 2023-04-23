@@ -1,5 +1,5 @@
 .label {
-    composes: label-large from '../../../assets/styles/mixins/typography.module.css';
+    composes: label-large from '../../../assets/styles/patterns/typography.module.css';
 
     display: flex;
     flex-direction: row;

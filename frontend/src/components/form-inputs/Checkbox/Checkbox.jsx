@@ -52,12 +52,13 @@ export default function Checkbox({
     return (
         <input
             type="checkbox"
-            className={`${style.checkbox}`}
+            className={`state-layer ${style.checkbox}`}
             defaultChecked={isChecked}
             disabled={isDisabled}
             autoFocus={!isDisabled && hasInitialFocus}
             onChange={onChange}
             onPointerDown={handlePointerDown}
+            data-states="hovered focused pressed"
         />
     );
 }

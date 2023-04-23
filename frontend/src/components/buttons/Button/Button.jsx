@@ -50,12 +50,13 @@ export default function Button({
     return (
         <button
             type="button"
-            className={`${style.button} ${classNames}`}
+            className={`state-layer ${style.button} ${classNames}`}
             disabled={isDisabled}
             autoFocus={!isDisabled && hasInitialFocus}
             onClick={action}
             onPointerDown={handlePointerDown}
             aria-label={children && label}
+            data-states="hovered focused pressed"
         >
             {children || label}
         </button>

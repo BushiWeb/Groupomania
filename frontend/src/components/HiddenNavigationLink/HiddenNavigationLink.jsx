@@ -30,9 +30,10 @@ export default function HiddenNavigationLink({ label, target }) {
 
     return <Link
         to={target}
-        className={`sr-only ${style.hiddenLink}`}
+        className={`state-layer sr-only ${style.hiddenLink}`}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        data-states="hovered pressed"
     >
         {label}
     </Link>;
