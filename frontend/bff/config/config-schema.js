@@ -22,7 +22,7 @@ const CONFIG_SCHEMA = {
         extendedCookieExp: {
             doc: 'Number of milliseconds for before the cookie expires.',
             format: 'int',
-            default: 2_592_000_000, // 30 day
+            default: 2_592_000_000, // 30 days
         },
         sameSite: {
             doc: 'SameSite cookie option value.',
