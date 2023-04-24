@@ -1,117 +1,92 @@
-/* Checkbox styling */
-.checkbox {
-    /* Custom properties */
-    --size: var(--size-6);
-    --height: var(--size);
-    --width: var(--size);
+@layer components {
+    /* Checkbox styling */
+    .checkbox {
+        /* Custom properties */
+        --size: var(--size-6);
+        --height: var(--size);
+        --width: var(--size);
 
-    --border-radius: var(--border-radius-1);
-    --border-color: var(--color-on-surface);
-    --border-opacity: 1;
-    --border-width: var(--size-2);
+        --border-radius: var(--border-radius-1);
+        --border-color: var(--color-on-surface);
+        --border-opacity: 1;
+        --border-width: var(--size-2);
 
-    --text-color: var(--color-on-primary);
-    --text-opacity: 1;
-    --font-size: 0;
+        --text-color: var(--color-on-primary);
+        --text-opacity: 1;
+        --font-size: 0;
 
-    --background-color: var(--color-primary);
-    --background-opacity: 0;
+        --background-color: var(--color-primary);
+        --background-opacity: 0;
 
-    --state-layer-color: var(--color-on-surface);
-    --state-layer-width: var(--size-state-layer);
-    --state-layer-height: var(--size-state-layer);
-    --state-layer-border-radius: var(--border-radius-7);
+        --state-layer-color: var(--color-on-surface);
+        --state-layer-width: var(--size-state-layer);
+        --state-layer-height: var(--size-state-layer);
+        --state-layer-border-radius: var(--border-radius-7);
 
-    /* chekbox properties */
-    appearance: none;
-    vertical-align: middle;
+        /* chekbox properties */
+        appearance: none;
+        vertical-align: middle;
 
-    width: var(--width);
-    height: var(--height);
+        width: var(--width);
+        height: var(--height);
 
-    border-radius: var(--border-radius);
-    border-style: solid;
-    border-color: rgb(var(--border-color) / var(--border-opacity));
-    border-width: var(--border-width);
+        border-radius: var(--border-radius);
+        border-style: solid;
+        border-color: rgb(var(--border-color) / var(--border-opacity));
+        border-width: var(--border-width);
 
-    background-color: rgb(var(--background-color) / var(--background-opacity));
+        background-color: rgb(
+            var(--background-color) / var(--background-opacity)
+        );
 
-    color: rgb(var(--text-color) / var(--text-opacity));
-    font-size: var(--font-size);
+        color: rgb(var(--text-color) / var(--text-opacity));
+        font-size: var(--font-size);
 
-    transition-property: background-color, border-width;
-    transition-duration: var(--motion-duration-2);
-    transition-timing-function: var(--motion-easing-standard-decelerate),
-        var(--motion-easing-standard-accelerate);
-}
-
-/* Check mark */
-.checkbox::after {
-    content: 'done';
-    font-family: 'Material Symbols Rounded';
-    font-style: normal;
-    text-transform: none;
-    letter-spacing: normal;
-    word-wrap: normal;
-    white-space: nowrap;
-    direction: ltr;
-    font-weight: 700;
-
-    display: grid;
-    place-content: center;
-
-    transition: font-size var(--motion-duration-2) var(--motion-easing-standard);
-}
-
-/* States */
-.checkbox:checked {
-    --background-opacity: 1;
-    --state-layer-color: var(--color-primary);
-    --border-width: 0;
-    --font-size: var(--size);
-}
-
-.checkbox:focus-visible {
-    outline: rgb(var(--color-outline-focus)) var(--size-2) solid;
-    outline-offset: var(--size-1);
-}
-
-.checkbox:disabled {
-    --border-opacity: var(--state-disabled-text-opacity);
-}
-
-.checkbox:disabled:checked {
-    --background-opacity: var(--state-disabled-text-opacity);
-    --background-color: var(--color-on-surface);
-    --text-color: var(--color-surface);
-}
-
-/* Ripple animation */
-.checkbox:global(.ripple):not(:disabled)::before {
-    background-image: radial-gradient(
-        circle farthest-side at center,
-        rgb(var(--state-layer-color) / var(--state-pressed-opacity)),
-        rgb(var(--state-layer-color) / var(--state-pressed-opacity)) 50%,
-        transparent 50%,
-        transparent
-    );
-    background-repeat: no-repeat;
-    animation: var(--animation-duration, --motion-duration-5)
-        var(--motion-easing-standard) 0s 1 normal forwards ripple;
-}
-
-@keyframes ripple {
-    from {
-        background-size: 0 0;
-        background-position: var(--origin-x) var(--origin-y);
-        opacity: 1;
+        transition-property: background-color, border-width;
+        transition-duration: var(--motion-duration-2);
+        transition-timing-function: var(--motion-easing-standard-decelerate),
+            var(--motion-easing-standard-accelerate);
     }
 
-    to {
-        background-size: calc(var(--ripple-width) * 2)
-            calc(var(--ripple-width) * 2);
-        background-position: calc(var(--origin-x) - var(--ripple-width))
-            calc(var(--origin-y) - var(--ripple-width));
-        opacity: 0.5319;
+    /* Check mark */
+    .checkbox::after {
+        content: 'done';
+        font-family: 'Material Symbols Rounded';
+        font-style: normal;
+        text-transform: none;
+        letter-spacing: normal;
+        word-wrap: normal;
+        white-space: nowrap;
+        direction: ltr;
+        font-weight: 700;
+
+        display: grid;
+        place-content: center;
+
+        transition: font-size var(--motion-duration-2)
+            var(--motion-easing-standard);
+    }
+
+    /* States */
+    .checkbox:checked {
+        --background-opacity: 1;
+        --state-layer-color: var(--color-primary);
+        --border-width: 0;
+        --font-size: var(--size);
+    }
+
+    .checkbox:focus-visible {
+        outline: rgb(var(--color-outline-focus)) var(--size-2) solid;
+        outline-offset: var(--size-1);
+    }
+
+    .checkbox:disabled {
+        --border-opacity: var(--state-disabled-text-opacity);
+    }
+
+    .checkbox:disabled:checked {
+        --background-opacity: var(--state-disabled-text-opacity);
+        --background-color: var(--color-on-surface);
+        --text-color: var(--color-surface);
     }
 }

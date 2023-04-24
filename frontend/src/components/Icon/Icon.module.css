@@ -1,11 +1,14 @@
-.icon {
-    font-variation-settings: 'FILL' var(--icon-fill), 'wght' var(--icon-weight),
-        'GRAD' var(--icon-grad), 'opsz' var(--icon-optical-size);
+@layer components {
+    .icon {
+        font-variation-settings: 'FILL' var(--icon-fill),
+            'wght' var(--icon-weight), 'GRAD' var(--icon-grad),
+            'opsz' var(--icon-optical-size);
 
-    font-size: var(--icon-size);
-}
+        font-size: var(--icon-size);
+    }
 
-.withTypo {
-    composes: icon;
-    vertical-align: middle;
+    .withTypo {
+        composes: icon;
+        vertical-align: middle;
+    }
 }

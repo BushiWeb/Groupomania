@@ -1,6 +1,4 @@
-@layer reset, defaults, themes, patters, layouts, components, utilities, overrides;
-@layer reset.normalize;
-@layer themes.dark;
+@import './layers.module.css';
 
 @import './vendor/normalize.css' layer(reset.normalize);
 
@@ -8,8 +6,10 @@
 
 @import './base/index.module.css' layer(defaults);
 
-@import './theme//dark.module.css' layer(themes.dark);
+@import './theme/dark.module.css' layer(themes.dark);
 
 @import './patterns/index.module.css' layer(patterns);
 
-@import './utils/index.module.css' layer(utilities);
+@import './animations/index.module.css' layer(animations);
+
+@import './utils/index.module.css' layer(utils);

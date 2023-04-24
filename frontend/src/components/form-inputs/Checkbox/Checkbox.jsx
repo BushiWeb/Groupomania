@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import style from './Checkbox.module.css';
-import { useRef } from 'react';
+import { useRipple } from '../../../hooks/useRipple.js';
 
 /**
  * checkbox with label. It handles its checked state on its own, based on the initial state.
@@ -8,45 +8,16 @@ import { useRef } from 'react';
 export default function Checkbox({
     isChecked, onChange, isDisabled, hasInitialFocus,
 }) {
-    const timeoutId = useRef(null);
-    const animationDuration = 250;
+    const rippleTrigger = useRipple();
 
-    // Handles the ripple animation
     function handlePointerDown(e) {
-        // Restart the animation if the user presses again while it is not finished
-        if (timeoutId.current) {
-            clearTimeout(timeoutId.current);
-            timeoutId.current = null;
-            e.target.classList.remove('ripple');
+        rippleTrigger(e.target, { x: e.clientX, y: e.clientY });
+    }
+
+    function handleKeyDown(e) {
+        if (e.key === ' ') {
+            rippleTrigger(e.target);
         }
-
-        // Set animation duration
-        e.target.style.setProperty('--animation-duration', `${animationDuration}ms`);
-
-        // Find the elements informations
-        const box = e.target.getBoundingClientRect();
-        const stateLayerWidth = parseInt(window.getComputedStyle(e.target, ':before').width);
-        const stateLayerMargin = (box.width - stateLayerWidth) / 2;
-
-        // Get the click coordinates
-        const clickX = e.clientX - box.x - stateLayerMargin,
-            clickY = e.clientY - box.y - stateLayerMargin;
-        e.target.style.setProperty('--origin-x', `${clickX}px`);
-        e.target.style.setProperty('--origin-y', `${clickY}px`);
-
-        // Calculates the size of the background
-        const radius = stateLayerWidth / 2 + Math.sqrt(
-            (stateLayerWidth / 2 - clickX) ** 2 + (stateLayerWidth / 2 - clickY) ** 2
-        );
-        e.target.style.setProperty('--ripple-width', `${radius * 2}px`);
-
-        // Start the animation
-        e.target.classList.add('ripple');
-        timeoutId.current = setTimeout(() => {
-            timeoutId.current = null;
-            e.target.classList.remove('ripple');
-        }, animationDuration);
-
     }
 
     return (
@@ -58,6 +29,7 @@ export default function Checkbox({
             autoFocus={!isDisabled && hasInitialFocus}
             onChange={onChange}
             onPointerDown={handlePointerDown}
+            onKeyDown={handleKeyDown}
             data-states="hovered focused pressed"
         />
     );

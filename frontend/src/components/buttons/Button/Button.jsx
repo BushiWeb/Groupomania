@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import style from './Button.module.css';
-import { useRef } from 'react';
+import { useRipple } from '../../../hooks/useRipple.js';
 
 /**
  * Basic button with no secific styling. Should be composed by another button component.
@@ -8,43 +8,16 @@ import { useRef } from 'react';
 export default function Button({
     isDisabled, hasInitialFocus, action, label, classNames, children,
 }) {
-    const timeoutId = useRef(null);
-    const animationDuration = 350;
+    const rippleTrigger = useRipple();
 
-    // Handles the ripple animation
     function handlePointerDown(e) {
-        // Restart the animation if the user presses again while it is not finished
-        if (timeoutId.current) {
-            clearTimeout(timeoutId.current);
-            timeoutId.current = null;
-            e.target.classList.remove('ripple');
+        rippleTrigger(e.target, { x: e.clientX, y: e.clientY });
+    }
+
+    function handleKeyDown(e) {
+        if (e.key === ' ' || e.key === 'Enter') {
+            rippleTrigger(e.target);
         }
-
-        // Set animation duration
-        e.target.style.setProperty('--animation-duration', `${animationDuration}ms`);
-
-        // Find the elements informations
-        const box = e.target.getBoundingClientRect();
-
-        // Get the click coordinates
-        const clickX = e.clientX - box.x,
-            clickY = e.clientY - box.y;
-        e.target.style.setProperty('--origin-x', `${clickX}px`);
-        e.target.style.setProperty('--origin-y', `${clickY}px`);
-
-        // Calculates the size of the background
-        const furthestCornerX = clickX > box.width / 2 ? 0 : box.width,
-            furthestCornerY = clickY > box.height / 2 ? 0 : box.height;
-        const radius = Math.sqrt((furthestCornerX - clickX) ** 2 + (furthestCornerY - clickY) ** 2);
-        e.target.style.setProperty('--ripple-width', `${radius * 2}px`);
-
-        // Start the animation
-        e.target.classList.add('ripple');
-        timeoutId.current = setTimeout(() => {
-            timeoutId.current = null;
-            e.target.classList.remove('ripple');
-        }, animationDuration);
-
     }
 
     return (
@@ -55,6 +28,7 @@ export default function Button({
             autoFocus={!isDisabled && hasInitialFocus}
             onClick={action}
             onPointerDown={handlePointerDown}
+            onKeyDown={handleKeyDown}
             aria-label={children && label}
             data-states="hovered focused pressed"
         >

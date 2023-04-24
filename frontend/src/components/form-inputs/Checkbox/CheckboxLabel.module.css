@@ -1,16 +1,20 @@
-.label {
-    composes: label-large from '../../../assets/styles/patterns/typography.module.css';
+@layer components {
+    .label {
+        composes: label-large from '../../../assets/styles/patterns/typography.module.css';
 
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    gap: var(--padding-2);
-    color: rgb(var(--color-on-surface));
-}
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: var(--padding-2);
+        color: rgb(var(--color-on-surface));
+    }
 
-.disabled {
-    composes: label;
+    .disabled {
+        composes: label;
 
-    color: rgb(var(--color-on-surface) / var(--state-disabled-text-opacity));
+        color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+    }
 }
