@@ -1,0 +1,58 @@
+/**
+    Enter and exit within bounds animation.
+    There can be four directions: from top, bottom, left of right.
+    This animations should be used when an element appears on the screen, without comming from outside of the screen.
+    For example, menus, small dialogs, ...
+*/
+:global(.exit-within-bounds) {
+    animation-duration: var(--animation-duration);
+    animation-timing-function: var(--motion-easing-emphasized-accelerate);
+}
+
+:global(.enter-within-bounds) {
+    animation-duration: var(--animation-duration);
+    animation-timing-function: var(--motion-easing-emphasized-decelerate);
+}
+
+/**
+    Origin: left
+*/
+:global .exit-within-bounds.origin-left {
+    animation-name: exit-within-bounds-left;
+}
+
+:global .enter-within-bounds.origin-left {
+    animation-name: enter-within-bounds-left;
+}
+
+@keyframes :global(enter-within-bounds-left) {
+    from {
+        transform-origin: center left;
+        scale: 0 1;
+        translate: -10% 0;
+        opacity: 0;
+    }
+
+    to {
+        transform-origin: center left;
+        scale: 1 1;
+        translate: 0 0;
+        opacity: 1;
+    }
+}
+
+@keyframes :global(exit-within-bounds-left) {
+    from {
+        transform-origin: center left;
+        scale: 1 1;
+        translate: 0 0;
+        opacity: 1;
+    }
+
+    to {
+        transform-origin: center left;
+        scale: 0 1;
+        translate: -10% 0;
+        opacity: 0;
+    }
+}

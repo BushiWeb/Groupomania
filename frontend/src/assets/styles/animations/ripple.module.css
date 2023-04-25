@@ -3,7 +3,7 @@
     It should be used with the useRippleAnimation hook.
 */
 
-:global(.ripple):not(:disabled)::before {
+:global .ripple:not(:disabled)::before {
     background-image: radial-gradient(
         circle farthest-side at center,
         rgb(var(--state-layer-color) / var(--state-pressed-opacity)),
@@ -16,7 +16,7 @@
         var(--motion-easing-standard) 0s 1 normal forwards ripple;
 }
 
-@keyframes ripple {
+@keyframes :global(ripple) {
     from {
         background-size: 0 0;
         background-position: var(--origin-x) var(--origin-y);

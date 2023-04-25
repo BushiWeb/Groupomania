@@ -1,31 +1,20 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import style from './HiddenNavigationLink.module.css';
-import { useRef } from 'react';
+import { useEnterExitWithinBounds } from '../../hooks/useEnterExitWithinBounds.js';
 
 /**
  * Hidden navigation link, useful for accessibility. It can be used for a "skip to main content" link for example.
  */
 export default function HiddenNavigationLink({ label, target }) {
-    const timeoutId = useRef(null);
+    const { enter, exit } = useEnterExitWithinBounds({ origin: 'left', className: 'sr-only' });
 
     function handleFocus(e) {
-        if (timeoutId.current) {
-            clearTimeout(timeoutId.current);
-            timeoutId.current = null;
-        }
-        e.target.classList.add(style.focused);
-        e.target.classList.remove(style.blured);
-        e.target.classList.remove('sr-only');
+        enter(e.target);
     }
 
     function handleBlur(e) {
-        e.target.classList.add(style.blured);
-        e.target.classList.remove(style.focused);
-        timeoutId.current = setTimeout(() => {
-            e.target.classList.add('sr-only');
-            timeoutId.current = null;
-        }, 150);
+        exit(e.target);
     }
 
     return <Link
