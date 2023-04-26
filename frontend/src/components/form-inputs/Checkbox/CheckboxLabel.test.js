@@ -1,6 +1,6 @@
 import CheckboxLabel from './CheckboxLabel.jsx';
 import { screen } from '@testing-library/react';
-import { render } from '../../../utils/test-wrapper.js';
+import { render } from '../../../utils/tests/test-wrapper.js';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 

@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { render as rtlRender } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import themeReducer from '../features/theme/theme.slice.js';
+import themeReducer from '../../features/theme/theme.slice.js';
 import { Provider } from 'react-redux';
 
 export function render(ui, {

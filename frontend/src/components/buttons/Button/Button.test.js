@@ -1,6 +1,7 @@
+import '../../../utils/tests/window-mocks.js';
 import Button from './Button.jsx';
 import { screen } from '@testing-library/react';
-import { render } from '../../../utils/test-wrapper.js';
+import { render } from '../../../utils/tests/test-wrapper.js';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 
@@ -82,5 +83,35 @@ describe('Button component test suite', () => {
         await user.keyboard(' ');
         await user.keyboard('{Enter}');
         expect(buttonAction).toHaveBeenCalledTimes(2);
+    });
+
+    it('should trigger the ripple effect when activated', async () => {
+        jest.useFakeTimers();
+        const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+        render(<Button />);
+        const buttonElt = screen.getByRole('button');
+
+        expect(buttonElt).not.toHaveClass('ripple');
+
+        await user.tab();
+        expect(buttonElt).toHaveFocus();
+
+        await user.keyboard(' ');
+        expect(buttonElt).toHaveClass('ripple');
+        jest.runAllTimers();
+        expect(buttonElt).not.toHaveClass('ripple');
+
+
+        await user.keyboard('{Enter}');
+        expect(buttonElt).toHaveClass('ripple');
+        jest.runAllTimers();
+        expect(buttonElt).not.toHaveClass('ripple');
+
+        await user.click(buttonElt);
+        expect(buttonElt).toHaveClass('ripple');
+        jest.runAllTimers();
+        expect(buttonElt).not.toHaveClass('ripple');
+
+        jest.useRealTimers();
     });
 });

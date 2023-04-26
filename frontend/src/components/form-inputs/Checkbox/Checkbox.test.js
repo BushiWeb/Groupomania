@@ -1,6 +1,7 @@
+import '../../../utils/tests/window-mocks.js';
 import Checkbox from './Checkbox.jsx';
 import { screen } from '@testing-library/react';
-import { render } from '../../../utils/test-wrapper.js';
+import { render } from '../../../utils/tests/test-wrapper.js';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 
@@ -77,5 +78,29 @@ describe('Checkbox component test suite', () => {
         await user.keyboard(' ');
         expect(checkbox).toBeChecked();
         expect(inputHandle).toHaveBeenCalled();
+    });
+
+    it('should trigger the ripple effect when activated', async () => {
+        jest.useFakeTimers();
+        const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+        render(<Checkbox />);
+        const checkboxElt = screen.getByRole('checkbox');
+
+        expect(checkboxElt).not.toHaveClass('ripple');
+
+        await user.tab();
+        expect(checkboxElt).toHaveFocus();
+
+        await user.keyboard(' ');
+        expect(checkboxElt).toHaveClass('ripple');
+        jest.runAllTimers();
+        expect(checkboxElt).not.toHaveClass('ripple');
+
+        await user.click(checkboxElt);
+        expect(checkboxElt).toHaveClass('ripple');
+        jest.runAllTimers();
+        expect(checkboxElt).not.toHaveClass('ripple');
+
+        jest.useRealTimers();
     });
 });
