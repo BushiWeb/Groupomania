@@ -21,7 +21,7 @@ export default function App() {
             }}/>
             <Button action={(e) => {
                 console.log(e);
-            }} label="test label">Valeur mais pas label</Button>
+            }} label="test label"/>
         </div>
     );
 }

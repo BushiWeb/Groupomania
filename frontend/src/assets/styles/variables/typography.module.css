@@ -2,6 +2,8 @@
     Defines all the variables for the different typography styles
 */
 :root {
+    --base-font-size: var(--ref-typography-base-font-size);
+
     /* Display large */
     --typo-display-large-line-height: 1.12;
     --typo-display-large-size: 3.56rem;

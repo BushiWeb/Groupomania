@@ -1,5 +1,11 @@
 @layer components {
     .icon {
+        --icon-optical-size: var(--icon-font-optical-size, 24);
+        --icon-size: var(
+            --icon-font-size,
+            calc(var(--icon-optical-size) * 1px)
+        );
+
         font-variation-settings: 'FILL' var(--icon-fill),
             'wght' var(--icon-weight), 'GRAD' var(--icon-grad),
             'opsz' var(--icon-optical-size);
