@@ -2,6 +2,7 @@ import HiddenNavigationLink from './components/HiddenNavigationLink/HiddenNaviga
 import Icon from './components/Icon/Icon.jsx';
 import Logo from './components/Logo/Logo.jsx';
 import Button from './components/buttons/Button/Button.jsx';
+import FilledButton from './components/buttons/FilledButton/FilledButton.jsx';
 import CheckboxLabel from './components/form-inputs/Checkbox/CheckboxLabel.jsx';
 
 export default function App() {
@@ -20,6 +21,9 @@ export default function App() {
                 console.log(e);
             }}/>
             <Button action={(e) => {
+                console.log(e);
+            }} label="test label"/>
+            <FilledButton action={(e) => {
                 console.log(e);
             }} label="test label"/>
         </div>

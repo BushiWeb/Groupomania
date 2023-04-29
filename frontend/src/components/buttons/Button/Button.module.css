@@ -11,6 +11,7 @@
         --border-color: var(--button-border-color, var(--color-outline));
         --border-opacity: var(--button-border-opacity, 1);
         --border-width: var(--button-border-width, var(--size-1));
+        --border-style: var(--button-border-style, solid);
 
         --padding-inline: var(--button-padding-inline, var(--padding-6));
         --icon-padding: var(--button-icon-padding, var(--padding-4));
@@ -28,7 +29,7 @@
         );
         --background-opacity: var(--button-background-opacity, 1);
 
-        --shadow: var(--button-shadow, none);
+        --shadow: var(--button-shadow, var(--elevation-0));
 
         --state-layer-color: var(--text-color);
         --state-layer-border-radius: calc(
@@ -50,7 +51,7 @@
         color: rgb(var(--text-color) / var(--text-opacity));
 
         border-radius: var(--border-radius);
-        border-style: solid;
+        border-style: var(--border-style);
         border-color: rgb(var(--border-color) / var(--border-opacity));
         border-width: var(--border-width);
 

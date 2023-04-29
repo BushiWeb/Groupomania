@@ -1,0 +1,21 @@
+/*
+    Defines all shadows elevations
+*/
+:root {
+    --elevation-0: none;
+
+    --elevation-1: 0 1px 2px 0 rgb(var(--color-shadow) / 30%),
+        0 1px 3px 1px rgb(var(--color-shadow) / 15%);
+
+    --elevation-2: 0 1px 2px 0 rgb(var(--color-shadow) / 30%),
+        0 2px 6px 2px rgb(var(--color-shadow) / 15%);
+
+    --elevation-3: 0 1px 3px 0 rgb(var(--color-shadow) / 30%),
+        0 4px 8px 3px rgb(var(--color-shadow) / 15%);
+
+    --elevation-4: 0 2px 3px 0 rgb(var(--color-shadow) / 30%),
+        0 6px 10px 4px rgb(var(--color-shadow) / 15%);
+
+    --elevation-5: 0 4px 4px 0 rgb(var(--color-shadow) / 30%),
+        0 8px 12px 6px rgb(var(--color-shadow) / 15%);
+}

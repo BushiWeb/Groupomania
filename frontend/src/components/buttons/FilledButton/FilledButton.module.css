@@ -1,0 +1,35 @@
+@layer components {
+    /* Button styling */
+    .filledButton {
+        --button-height: var(--size-11);
+
+        --button-border-radius: var(--button-height);
+        --button-border-style: none;
+
+        --button-padding-inline: var(--padding-6);
+        --button-icon-padding: var(--padding-4);
+        --button-icon-text-gap: var(--padding-2);
+
+        --button-text-color: var(--color-on-primary);
+        --button-text-opacity: 1;
+
+        --button-icon-font-size: var(--size-6);
+        --button-icon-font-optical-size: 20;
+
+        --button-background-color: var(--color-primary);
+        --button-background-opacity: 1;
+
+        --button-shadow: var(--elevation-0);
+    }
+
+    .filledButton:disabled {
+        --button-text-color: var(--color-on-surface);
+        --button-text-opacity: var(--state-disabled-text-opacity);
+        --button-background-color: var(--color-on-surface);
+        --button-background-opacity: var(--state-disabled-bg-opacity);
+    }
+
+    .filledButton:hover {
+        --button-shadow: var(--elevation-1);
+    }
+}
