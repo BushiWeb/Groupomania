@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
-import style from './FilledButton.module.css';
+import style from './TonalButton.module.css';
 import Button from '../Button/Button.jsx';
 
 /**
- * Filled button
+ * Tonal button
  */
-export default function FilledButton({
+export default function TonalButton({
     isDisabled, hasInitialFocus, action, label, icon, isLabelHidden,
 }) {
     return (
@@ -16,12 +16,12 @@ export default function FilledButton({
             label={label}
             icon={icon}
             isLabelHidden={isLabelHidden}
-            classNames={style.filledButton}
+            classNames={style.tonalButton}
         />
     );
 }
 
-FilledButton.defaultProps = {
+TonalButton.defaultProps = {
     isDisabled: false,
     hasInitialFocus: false,
     action: undefined,
@@ -29,7 +29,7 @@ FilledButton.defaultProps = {
     isLabelHidden: false,
 };
 
-FilledButton.propTypes = {
+TonalButton.propTypes = {
     /** Weither the button is disabled or not */
     isDisabled: PropTypes.bool,
 
