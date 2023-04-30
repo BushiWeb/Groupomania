@@ -5,9 +5,11 @@ import Button from './components/buttons/Button/Button.jsx';
 import FAB from './components/buttons/FAB/FAB.jsx';
 import FilledButton from './components/buttons/FilledButton/FilledButton.jsx';
 import OutlinedButton from './components/buttons/OutlinedButton/OutlinedButton.jsx';
+import StandardIconButton from './components/icon-button/StandardIconButton/StandardIconButton.jsx';
 import TextButton from './components/buttons/TextButton/TextButton.jsx';
 import TonalButton from './components/buttons/TonalButton/TonalButton.jsx';
 import CheckboxLabel from './components/form-inputs/Checkbox/CheckboxLabel.jsx';
+import OutlinedIconButton from './components/icon-button/OutlinedIconButton/OutlinedIconButton.jsx';
 
 export default function App() {
     return (
@@ -36,9 +38,15 @@ export default function App() {
             <OutlinedButton action={(e) => {
                 console.log(e);
             }} label="Outlined Button"/>
+            <OutlinedIconButton action={(e) => {
+                console.log(e);
+            }} label="Outlined Button" icon="favorite"/>
             <TextButton action={(e) => {
                 console.log(e);
             }} label="Text Button"/>
+            <StandardIconButton action={(e) => {
+                console.log(e);
+            }} label="Standard Icon Button" icon="favorite"/>
             <FAB action={(e) => {
                 console.log(e);
             }} label="FAB"/>

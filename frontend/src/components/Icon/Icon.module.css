@@ -5,10 +5,11 @@
             --icon-font-size,
             calc(var(--icon-optical-size) * 1px)
         );
+        --icon-fill: var(--icon-font-fill, 0);
 
         font-variation-settings: 'FILL' var(--icon-fill),
-            'wght' var(--icon-weight), 'GRAD' var(--icon-grad),
-            'opsz' var(--icon-optical-size);
+            'GRAD' var(--icon-grad), 'opsz' var(--icon-optical-size);
+        font-weight: var(--icon-weight);
 
         font-size: var(--icon-size);
     }

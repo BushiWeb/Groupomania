@@ -11,7 +11,7 @@ export default function Icon({
     return <span
         className={`material-icon ${isWithText ? style.withTypo : style.icon}`}
         style={{
-            '--icon-fill': fill ? 1 : 0,
+            ...fill && { '--icon-fill': fill },
             '--icon-weight': weight || 'inherit',
             '--icon-grad': isOnDark ? grad - 25 : grad,
             ...size && { '--icon-optical-size': `${size}` },

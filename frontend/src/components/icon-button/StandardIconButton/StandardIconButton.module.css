@@ -1,0 +1,31 @@
+@layer components {
+    /* Button styling */
+    .standardIconButton {
+        --button-border-style: none;
+
+        --button-text-color: var(--color-on-surface-variant);
+        --button-text-opacity: 1;
+
+        --button-background-color: transparent;
+        --button-background-opacity: 1;
+
+        --button-shadow: var(--elevation-0);
+    }
+
+    .standardIconButtonSelected {
+        composes: standardIconButton;
+
+        --button-text-color: var(--color-primary);
+    }
+
+    .standardIconButtonUnselected {
+        composes: standardIconButton;
+
+        --button-text-color: var(--color-on-surface-variant);
+    }
+
+    .standardIconButton:disabled {
+        --button-text-color: var(--color-on-surface);
+        --button-text-opacity: var(--state-disabled-text-opacity);
+    }
+}

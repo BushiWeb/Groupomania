@@ -23,6 +23,7 @@
 
         --icon-font-size: var(--button-icon-size, var(--size-6));
         --icon-font-optical-size: var(--button-icon-optical-size, 20);
+        --icon-font-fill: var(--button-icon-fill, 0);
 
         --background-color: var(
             --button-background-color,

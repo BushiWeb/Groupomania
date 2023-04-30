@@ -1,0 +1,43 @@
+@layer components {
+    /* Button styling */
+    .outlinedIconButton {
+        --button-border-style: solid;
+        --button-border-width: var(--size-1);
+        --button-border-color: var(--color-outline);
+        --button-border-opacity: 1;
+
+        --button-text-color: var(--color-on-surface-variant);
+        --button-text-opacity: 1;
+
+        --button-background-color: transparent;
+
+        --button-shadow: var(--elevation-0);
+    }
+
+    .outlinedIconButtonSelected {
+        composes: outlinedIconButton;
+
+        --button-text-color: var(--color-on-inverse-surface);
+        --button-background-color: var(--color-inverse-surface);
+
+        --button-border-style: none;
+    }
+
+    .outlinedIconButtonUnselected {
+        composes: outlinedIconButton;
+
+        --button-text-color: var(--color-on-surface-variant);
+    }
+
+    .outlinedIconButton:disabled {
+        --button-text-color: var(--color-on-surface);
+        --button-text-opacity: var(--state-disabled-text-opacity);
+        --button-border-color: var(--color-on-surfave);
+        --button-border-opacity: var(--state-disabled-bg-opacity);
+    }
+
+    .outlinedIconButtonSelected:disabled {
+        --button-background-color: var(--color-on-surface);
+        --button-background-opacity: var(--state-disabled-bg-opacity);
+    }
+}

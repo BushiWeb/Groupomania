@@ -1,0 +1,23 @@
+@layer components {
+    /* Button styling */
+    .iconButton {
+        --button-height: var(--size-11);
+        --button-width: var(--size-11);
+
+        --button-border-radius: var(--button-height);
+
+        --button-padding-inline: 0;
+        --button-icon-padding: 0;
+        --button-icon-padding-end: 0;
+
+        --button-icon-size: var(--size-8);
+        --button-icon-optical-size: 24;
+        --icon-weight: 400;
+    }
+
+    .iconButtonSelected {
+        composes: iconButton;
+
+        --button-icon-fill: 1;
+    }
+}
