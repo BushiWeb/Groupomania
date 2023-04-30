@@ -4,6 +4,7 @@ import Logo from './components/Logo/Logo.jsx';
 import Button from './components/buttons/Button/Button.jsx';
 import FilledButton from './components/buttons/FilledButton/FilledButton.jsx';
 import OutlinedButton from './components/buttons/OutlinedButton/OutlinedButton.jsx';
+import TextButton from './components/buttons/TextButton/TextButton.jsx';
 import TonalButton from './components/buttons/TonalButton/TonalButton.jsx';
 import CheckboxLabel from './components/form-inputs/Checkbox/CheckboxLabel.jsx';
 
@@ -34,6 +35,9 @@ export default function App() {
             <OutlinedButton action={(e) => {
                 console.log(e);
             }} label="Outlined Button"/>
+            <TextButton action={(e) => {
+                console.log(e);
+            }} label="Text Button"/>
         </div>
     );
 }

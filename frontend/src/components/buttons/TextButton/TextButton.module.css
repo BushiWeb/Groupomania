@@ -1,0 +1,30 @@
+@layer components {
+    /* Button styling */
+    .textButton {
+        --button-height: var(--size-11);
+
+        --button-border-radius: var(--button-height);
+        --button-border-style: none;
+
+        --button-padding-inline: var(--padding-3);
+        --button-icon-padding: var(--padding-3);
+        --button-icon-padding-end: var(--padding-4);
+        --button-icon-text-gap: var(--padding-2);
+
+        --button-text-color: var(--color-primary);
+        --button-text-opacity: 1;
+
+        --button-icon-font-size: var(--size-6);
+        --button-icon-font-optical-size: 20;
+
+        --button-background-color: transparent;
+        --button-background-opacity: 1;
+
+        --button-shadow: var(--elevation-0);
+    }
+
+    .textButton:disabled {
+        --button-text-color: var(--color-on-surface);
+        --button-text-opacity: var(--state-disabled-text-opacity);
+    }
+}

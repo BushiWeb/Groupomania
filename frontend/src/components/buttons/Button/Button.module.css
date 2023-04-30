@@ -15,6 +15,7 @@
 
         --padding-inline: var(--button-padding-inline, var(--padding-6));
         --icon-padding: var(--button-icon-padding, var(--padding-4));
+        --icon-padding-end: var(--button-icon-padding-end, var(--icon-padding));
         --gap: var(--button-icon-text-gap, var(--padding-2));
 
         --text-color: var(--button-text-color, var(--color-on-primary));
@@ -73,7 +74,7 @@
         composes: button;
 
         padding-inline-start: var(--icon-padding);
-        padding-inline-end: var(--padding-inline);
+        padding-inline-end: var(--icon-padding-end);
     }
 
     .buttonWithoutLabel {
