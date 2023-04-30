@@ -13,8 +13,8 @@
         --button-text-color: var(--color-on-primary);
         --button-text-opacity: 1;
 
-        --button-icon-font-size: var(--size-6);
-        --button-icon-font-optical-size: 20;
+        --button-icon-size: var(--size-6);
+        --button-icon-optical-size: 20;
 
         --button-background-color: var(--color-primary);
         --button-background-opacity: 1;

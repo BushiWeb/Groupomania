@@ -2,6 +2,7 @@ import HiddenNavigationLink from './components/HiddenNavigationLink/HiddenNaviga
 import Icon from './components/Icon/Icon.jsx';
 import Logo from './components/Logo/Logo.jsx';
 import Button from './components/buttons/Button/Button.jsx';
+import FAB from './components/buttons/FAB/FAB.jsx';
 import FilledButton from './components/buttons/FilledButton/FilledButton.jsx';
 import OutlinedButton from './components/buttons/OutlinedButton/OutlinedButton.jsx';
 import TextButton from './components/buttons/TextButton/TextButton.jsx';
@@ -38,6 +39,9 @@ export default function App() {
             <TextButton action={(e) => {
                 console.log(e);
             }} label="Text Button"/>
+            <FAB action={(e) => {
+                console.log(e);
+            }} label="FAB"/>
         </div>
     );
 }

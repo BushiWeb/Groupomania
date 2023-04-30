@@ -5,7 +5,7 @@
 
         /* Custom properties */
         --height: var(--button-height, var(--size-11));
-        --width: var(--size-11);
+        --width: var(--button-width, var(--size-11));
 
         --border-radius: var(--button-border-radius, var(--height));
         --border-color: var(--button-border-color, var(--color-outline));
@@ -84,6 +84,5 @@
         --icon-font-optical-size: var(--button-icon-optical-size, 24);
 
         padding: 0;
-        border-radius: 50%;
     }
 }

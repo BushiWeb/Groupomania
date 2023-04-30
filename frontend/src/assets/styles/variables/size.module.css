@@ -33,6 +33,10 @@
     --size-10: 2rem;
     --size-11: 2.5rem;
     --size-12: 3rem;
+    --size-13: 3.5rem;
+    --size-14: 4rem;
+    --size-15: 4.5rem;
+    --size-16: 5rem;
 
     --size-target: var(--size-12);
     --size-state-layer: var(--size-11);
