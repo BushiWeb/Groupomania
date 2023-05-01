@@ -72,8 +72,8 @@
 
     /* Label small */
     --typo-label-small-line-height: 1.45;
-    --typo-label-small-size: 0.69;
-    --typo-label-small-tracking: 0.03125;
+    --typo-label-small-size: 0.69rem;
+    --typo-label-small-tracking: 0.03125rem;
     --typo-label-small-weight: var(--ref-typography-weight-medium);
 
     /* Body large */
@@ -90,7 +90,7 @@
 
     /* Body small */
     --typo-body-small-line-height: 1.33;
-    --typo-body-small-size: 0.75;
-    --typo-body-small-tracking: 0.025;
+    --typo-body-small-size: 0.75rem;
+    --typo-body-small-tracking: 0.025rem;
     --typo-body-small-weight: var(--ref-typography-weight-regular);
 }

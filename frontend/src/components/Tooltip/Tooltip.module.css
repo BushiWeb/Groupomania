@@ -1,0 +1,49 @@
+@layer components {
+    .tooltip {
+        composes: label-small from '../../assets/styles/patterns/typography.module.css';
+
+        background-color: rgb(var(--color-inverse-surface));
+        color: rgb(var(--color-inverse-on-surface));
+
+        border-radius: var(--border-radius-2);
+        border-style: none;
+
+        padding-block: var(--padding-1);
+        padding-inline: var(--padding-2);
+
+        display: grid;
+        place-content: center;
+
+        position: absolute;
+        z-index: var(--layer-5);
+
+        visibility: hidden;
+    }
+
+    .tooltipVisible {
+        composes: tooltip;
+
+        visibility: visible;
+
+        top: var(--tooltip-y);
+        left: var(--tooltip-x);
+
+        animation-name: tooltip-appear;
+        animation-duration: var(--motion-duration-6);
+        animation-timing-function: var(--motion-easing-standard-decelerate);
+        animation-delay: 500ms;
+        animation-fill-mode: both;
+    }
+
+    @keyframes tooltip-appear {
+        from {
+            opacity: 0;
+            translate: 0 calc(0px - var(--size-3));
+        }
+
+        to {
+            opacity: 1;
+            translate: 0 var(--size-2);
+        }
+    }
+}
