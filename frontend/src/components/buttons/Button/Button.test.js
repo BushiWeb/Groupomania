@@ -128,4 +128,10 @@ describe('Button component test suite', () => {
 
         jest.useRealTimers();
     });
+
+    it('should add any other prop passed to it', () => {
+        render(<Button classNames={additionnalClass} label={label} aria-pressed={true}/>);
+        const buttonElt = screen.getByRole('button');
+        expect(buttonElt.getAttribute('aria-pressed')).toBe('true');
+    });
 });

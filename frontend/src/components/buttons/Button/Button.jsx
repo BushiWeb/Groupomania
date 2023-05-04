@@ -11,7 +11,7 @@ import { useState } from 'react';
  * Basic button with no secific styling. Should be composed by another button component.
  */
 export default function Button({
-    isDisabled, hasInitialFocus, action, label, classNames, icon, isLabelHidden,
+    isDisabled, hasInitialFocus, action, label, classNames, icon, isLabelHidden, ...other
 }) {
     const rippleTrigger = useRipple();
     const isDarkTheme = useSelector(selectIsDarkTheme);
@@ -68,6 +68,7 @@ export default function Button({
                 onPointerOut={handlerPointerOut}
                 aria-label={icon && isLabelHidden ? label : undefined}
                 data-states="hovered focused pressed"
+                {...other}
             >
                 {icon && <Icon
                     name={icon}

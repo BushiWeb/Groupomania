@@ -17,6 +17,7 @@ export default function IconButton({
             icon={icon}
             isLabelHidden={true}
             classNames={`${toggle ? style.iconButtonSelected : style.iconButton} ${classNames}`}
+            aria-pressed={toggle}
         />
     );
 }
