@@ -23,6 +23,9 @@ export default function App() {
             <HiddenNavigationLink label="Skip to main content" target="/"/>
             <Logo/>
             <Icon name='search'/>
+            <Icon name='favorite' label="like" action={(e) => {
+                console.log(e);
+            }}/>
             <CheckboxLabel label='Checkbox' onChange={(e) => {
                 console.log(e);
             }}/>

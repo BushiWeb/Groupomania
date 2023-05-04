@@ -5,19 +5,24 @@ import style from './Icon.module.css';
  * Insert a Google Font Icon.
  */
 export default function Icon({
-    name, weight, size, grad, fill, isOnDark, isWithText, hidden,
+    name, weight, size, grad, fill, isOnDark, isWithText, label, action,
 }) {
-
-    return <span
-        className={`material-icon ${isWithText ? style.withTypo : style.icon}`}
-        style={{
-            ...fill && { '--icon-fill': fill },
+    const elementsProps = {
+        className: `material-icon ${isWithText ? style.withTypo : style.icon}`,
+        style: {
+            ...fill && { '--icon-fill': 1 },
             '--icon-weight': weight || 'inherit',
             '--icon-grad': isOnDark ? grad - 25 : grad,
             ...size && { '--icon-optical-size': `${size}` },
-        }}
-        aria-hidden={hidden}
-    >{name}</span>;
+        },
+        ...label ? { 'aria-label': label } : { 'aria-hidden': true },
+    };
+
+    if (!action) {
+        return <span {...elementsProps}>{name}</span>;
+    }
+
+    return <button {...elementsProps} onClick={action}>{name}</button>;
 }
 
 Icon.defaultProps = {
@@ -27,7 +32,8 @@ Icon.defaultProps = {
     fill: false,
     isOnDark: false,
     isWithText: false,
-    hidden: true,
+    label: undefined,
+    action: undefined,
 };
 
 Icon.propTypes = {
@@ -52,6 +58,9 @@ Icon.propTypes = {
     /** Weither the icon is next to some text, thus needing a baseline shif */
     isWithText: PropTypes.bool,
 
-    /** Weither to hide the icon from screen-readers or not, defautls to true */
-    hidden: PropTypes.bool,
+    /** Accessible label of the icon. If no label is given, the icon will be hidden. */
+    label: PropTypes.string,
+
+    /** Action to execute on click on the icon. Transforms the icon into a button */
+    action: PropTypes.func,
 };
