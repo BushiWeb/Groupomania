@@ -10,6 +10,7 @@ import TextButton from './components/buttons/TextButton/TextButton.jsx';
 import TonalButton from './components/buttons/TonalButton/TonalButton.jsx';
 import CheckboxLabel from './components/form-inputs/Checkbox/CheckboxLabel.jsx';
 import OutlinedIconButton from './components/icon-button/OutlinedIconButton/OutlinedIconButton.jsx';
+import Tooltip from './features/tooltip/Tooltip.jsx';
 
 export default function App() {
     return (
@@ -20,6 +21,7 @@ export default function App() {
             padding: '2rem',
             alignItems: 'start',
         }}>
+            <Tooltip/>
             <HiddenNavigationLink label="Skip to main content" target="/"/>
             <Logo/>
             <Icon name='search'/>

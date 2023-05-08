@@ -2,10 +2,9 @@ import PropTypes from 'prop-types';
 import style from './Button.module.css';
 import { useRipple } from '../../../hooks/useRipple.js';
 import Icon from '../../Icon/Icon.jsx';
-import { selectIsDarkTheme } from '../../../utils/selectors';
+import { selectIsDarkTheme } from '../../../utils/selectors.js';
 import { useSelector } from 'react-redux';
-import Tooltip from '../../Tooltip/Tooltip';
-import { useState } from 'react';
+import { useTooltip } from '../../../features/tooltip/useTooltip.js';
 
 /**
  * Basic button with no secific styling. Should be composed by another button component.
@@ -15,10 +14,7 @@ export default function Button({
 }) {
     const rippleTrigger = useRipple();
     const isDarkTheme = useSelector(selectIsDarkTheme);
-    const [tooltipShown, setTooltipShown] = useState(false);
-    const [tooltipCoordinates, setTooltipCoordinates] = useState({
-        x: 0, y: 0, height: 0, width: 0,
-    });
+    const [showTooltip, hideTooltip] = useTooltip();
 
     let buttonClass;
 
@@ -40,51 +36,41 @@ export default function Button({
         }
     }
 
-    function handlerPointerOver(e) {
-        setTooltipCoordinates({
-            y: e.target.offsetTop,
+    function handlePointerOver(e) {
+        showTooltip(label, {
             x: e.target.offsetLeft,
-            height: e.target.offsetHeight,
+            y: e.target.offsetTop,
             width: e.target.offsetWidth,
+            height: e.target.offsetHeight,
         });
-        setTooltipShown(true);
     }
 
-    function handlerPointerOut(e) {
-        setTooltipShown(false);
+    function handlePointerOut(e) {
+        hideTooltip();
     }
 
     return (
-        <>
-            <button
-                type="button"
-                className={`state-layer target-layer ${buttonClass} ${classNames}`}
-                disabled={isDisabled}
-                autoFocus={!isDisabled && hasInitialFocus}
-                onClick={action}
-                onPointerDown={handlePointerDown}
-                onKeyDown={handleKeyDown}
-                onPointerOver={handlerPointerOver}
-                onPointerOut={handlerPointerOut}
-                aria-label={icon && isLabelHidden ? label : undefined}
-                data-states="hovered focused pressed"
-                {...other}
-            >
-                {icon && <Icon
-                    name={icon}
-                    isWithText={!isLabelHidden}
-                    isOnDark={isDarkTheme} />
-                }
-                {(!isLabelHidden || !icon) && label}
-            </button>
-            {icon && isLabelHidden ?
-                <Tooltip
-                    text={label}
-                    show={tooltipShown}
-                    coordinates={tooltipCoordinates}
-                /> :
-                undefined}
-        </>
+        <button
+            type="button"
+            className={`state-layer target-layer ${buttonClass} ${classNames}`}
+            disabled={isDisabled}
+            autoFocus={!isDisabled && hasInitialFocus}
+            onClick={action}
+            onPointerDown={handlePointerDown}
+            onKeyDown={handleKeyDown}
+            onPointerOut={handlePointerOut}
+            aria-label={icon && isLabelHidden ? label : undefined}
+            data-states="hovered focused pressed"
+            { ... icon && isLabelHidden ? { onPointerOver: handlePointerOver } : undefined }
+            {...other}
+        >
+            {icon && <Icon
+                name={icon}
+                isWithText={!isLabelHidden}
+                isOnDark={isDarkTheme} />
+            }
+            {(!isLabelHidden || !icon) && label}
+        </button>
     );
 }
 

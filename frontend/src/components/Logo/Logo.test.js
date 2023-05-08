@@ -1,6 +1,6 @@
 import Logo from './Logo';
 import { screen } from '@testing-library/react';
-import { render } from '../../utils/test-wrapper';
+import { render } from '../../utils/tests/test-wrapper.js';
 import '@testing-library/jest-dom';
 import { themeToggle } from '../../features/theme/theme.slice.js';
 import { act } from 'react-dom/test-utils';
