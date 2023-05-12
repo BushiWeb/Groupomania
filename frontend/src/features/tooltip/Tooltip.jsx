@@ -60,5 +60,6 @@ export default function Tooltip() {
         }}
         ref={tooltipRef}
         aria-hidden={true}
+        role='tooltip'
     >{label}</span>;
 }

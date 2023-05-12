@@ -21,6 +21,10 @@
         --button-background-opacity: 1;
 
         --button-shadow: var(--elevation-3);
+
+        position: absolute;
+        bottom: var(--padding-4);
+        right: var(--padding-4);
     }
 
     .fab:hover {

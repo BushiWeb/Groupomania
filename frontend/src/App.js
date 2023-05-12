@@ -11,8 +11,12 @@ import TonalButton from './components/buttons/TonalButton/TonalButton.jsx';
 import CheckboxLabel from './components/form-inputs/Checkbox/CheckboxLabel.jsx';
 import OutlinedIconButton from './components/icon-button/OutlinedIconButton/OutlinedIconButton.jsx';
 import Tooltip from './features/tooltip/Tooltip.jsx';
+import Snackbar from './features/snackbar/Snackbar.jsx';
+import { useSnackbar } from './features/snackbar/useSnackbar.js';
 
 export default function App() {
+    const displaySnackbar = useSnackbar();
+
     return (
         <div style={{
             display: 'flex',
@@ -22,6 +26,7 @@ export default function App() {
             alignItems: 'start',
         }}>
             <Tooltip/>
+            <Snackbar/>
             <HiddenNavigationLink label="Skip to main content" target="/"/>
             <Logo/>
             <Icon name='search'/>
@@ -35,7 +40,7 @@ export default function App() {
                 console.log(e);
             }} label="Button"/>
             <FilledButton action={(e) => {
-                console.log(e);
+                displaySnackbar(Date.now());
             }} label="Filled Button"/>
             <TonalButton action={(e) => {
                 console.log(e);

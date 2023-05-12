@@ -144,8 +144,6 @@ describe('Button component test suite', () => {
         </>);
         const buttonElt = screen.getByRole('button');
 
-        screen.debug();
-
         await user.hover(buttonElt);
         let tooltipElt = screen.getByText(label, { selector: '.tooltipVisible' });
 
@@ -161,8 +159,6 @@ describe('Button component test suite', () => {
             <Tooltip/>
         </>);
         const buttonElt = screen.getByRole('button');
-
-        screen.debug();
 
         await user.hover(buttonElt);
         let tooltipElt = screen.queryByText(label, { selector: '.tooltipVisible' });
