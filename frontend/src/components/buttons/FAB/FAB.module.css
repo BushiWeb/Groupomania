@@ -22,7 +22,7 @@
 
         --button-shadow: var(--elevation-3);
 
-        position: absolute;
+        position: fixed;
         bottom: var(--padding-4);
         right: var(--padding-4);
     }

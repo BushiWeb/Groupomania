@@ -46,8 +46,8 @@
     --color-surface-container-lowest: var(--ref-color-palette-neutral100);
     --color-surface-container-low: var(--ref-color-palette-neutral96);
     --color-surface-container: var(--ref-color-palette-neutral94);
-    --color-surface-container-hight: var(--ref-color-palette-neutral92);
-    --color-surface-container-hightest: var(--ref-color-palette-neutral90);
+    --color-surface-container-high: var(--ref-color-palette-neutral92);
+    --color-surface-container-highest: var(--ref-color-palette-neutral90);
 
     --color-on-surface: var(--ref-color-palette-neutral10);
     --color-on-surface-variant: var(--ref-color-palette-neutral-variant30);

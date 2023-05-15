@@ -13,6 +13,7 @@ import OutlinedIconButton from './components/icon-button/OutlinedIconButton/Outl
 import Tooltip from './features/tooltip/Tooltip.jsx';
 import Snackbar from './features/snackbar/Snackbar.jsx';
 import { useSnackbar } from './features/snackbar/useSnackbar.js';
+import ProgressIndicator from './components/ProgressIndicator/ProgressIndicator.jsx';
 
 export default function App() {
     const displaySnackbar = useSnackbar();
@@ -60,6 +61,8 @@ export default function App() {
             <FAB action={(e) => {
                 console.log(e);
             }} label="FAB"/>
+            <ProgressIndicator label="Linear indicator"/>
+            <ProgressIndicator circular={true} label="Circular indicator"/>
         </div>
     );
 }
