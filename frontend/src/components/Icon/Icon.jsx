@@ -5,10 +5,10 @@ import style from './Icon.module.css';
  * Insert a Google Font Icon.
  */
 export default function Icon({
-    name, weight, size, grad, fill, isOnDark, isWithText, label, action,
+    name, weight, size, grad, fill, isOnDark, isWithText, label, action, className,
 }) {
     const elementsProps = {
-        className: `material-icon ${isWithText ? style.withTypo : style.icon}`,
+        className: `material-icon ${isWithText ? style.withTypo : style.icon} ${className}`,
         style: {
             ...fill && { '--icon-fill': 1 },
             '--icon-weight': weight || 'inherit',
@@ -34,6 +34,7 @@ Icon.defaultProps = {
     isWithText: false,
     label: undefined,
     action: undefined,
+    className: '',
 };
 
 Icon.propTypes = {
@@ -63,4 +64,7 @@ Icon.propTypes = {
 
     /** Action to execute on click on the icon. Transforms the icon into a button */
     action: PropTypes.func,
+
+    /** Other class names to add to the icon */
+    className: PropTypes.string,
 };

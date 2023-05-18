@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { render as rtlRender } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import {
+    MemoryRouter, Routes, Route, useLocation,
+} from 'react-router-dom';
 import themeReducer from '../../features/theme/theme.slice.js';
 import tooltipReducer from '../../features/tooltip/tooltip.slice.js';
 import snackbarReducer from '../../features/snackbar/snackbar.slice.js';
@@ -22,10 +24,24 @@ export function render(ui, {
         });
     }
 
+    function ShowLocation() {
+        const location = useLocation();
+        return (
+            <>
+                <pre data-testid="search-param">{location.search}</pre>
+            </>
+        );
+    }
+
     function Wrapper({ children }) {
         return (
             <Provider store={store}>
-                <MemoryRouter>{children}</MemoryRouter>
+                <MemoryRouter>
+                    <Routes>
+                        <Route path="/test" element={<ShowLocation/>}/>
+                    </Routes>
+                    {children}
+                </MemoryRouter>
             </Provider>
         );
     }

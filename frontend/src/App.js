@@ -14,6 +14,7 @@ import Tooltip from './features/tooltip/Tooltip.jsx';
 import Snackbar from './features/snackbar/Snackbar.jsx';
 import { useSnackbar } from './features/snackbar/useSnackbar.js';
 import ProgressIndicator from './components/ProgressIndicator/ProgressIndicator.jsx';
+import List from './components/List/List.jsx';
 
 export default function App() {
     const displaySnackbar = useSnackbar();
@@ -63,6 +64,17 @@ export default function App() {
             }} label="FAB"/>
             <ProgressIndicator label="Linear indicator"/>
             <ProgressIndicator circular={true} label="Circular indicator"/>
+            <List data={[
+                {
+                    headline: 'test@gmail.com',
+                    link: '/?test=oui',
+                },
+                {
+                    headline: 'admin@gmail.com',
+                    supportingText: 'admin',
+                    link: '/',
+                },
+            ]} label="test list"/>
         </div>
     );
 }

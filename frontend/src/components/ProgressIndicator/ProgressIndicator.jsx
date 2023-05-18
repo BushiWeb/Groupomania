@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import style from './ProgressIndicator.module.css';
 
 /**
- * Basic button with no secific styling. Should be composed by another button component.
+ * Indeterminate progress indicator, circular or linear.
  */
 export default function ProgressIndicator({
     circular, label, className,

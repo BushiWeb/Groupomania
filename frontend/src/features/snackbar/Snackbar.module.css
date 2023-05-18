@@ -29,7 +29,7 @@
 
         box-shadow: var(--elevation-3);
 
-        position: absolute;
+        position: fixed;
         left: 50%;
         bottom: var(--snackbar-margin);
         translate: -50% 0;

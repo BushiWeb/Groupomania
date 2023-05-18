@@ -27,7 +27,7 @@ export default function Button({
     }
 
     function handlePointerDown(e) {
-        rippleTrigger(e.target, { x: e.clientX, y: e.clientY });
+        rippleTrigger(e.currentTarget, { x: e.clientX, y: e.clientY });
     }
 
     function handleKeyDown(e) {
