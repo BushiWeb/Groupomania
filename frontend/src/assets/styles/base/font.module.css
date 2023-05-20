@@ -10,3 +10,7 @@ a {
     text-decoration: none;
     color: currentColor;
 }
+
+address {
+    font-style: normal;
+}

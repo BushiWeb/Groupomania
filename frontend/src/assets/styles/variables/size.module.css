@@ -37,9 +37,15 @@
     --size-14: 4rem;
     --size-15: 4.5rem;
     --size-16: 5rem;
+    --size-25: 25rem;
 
     --size-target: var(--size-12);
     --size-state-layer: var(--size-11);
+
+    /* Text size */
+    --size-text-small: 20ch;
+    --size-text-medium: 40ch;
+    --size-text-large: 60ch;
 }
 
 @media bp-medium {

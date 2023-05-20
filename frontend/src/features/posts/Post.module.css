@@ -1,0 +1,146 @@
+@value expanded as bp-expanded, medium as bp-medium from "../../assets/styles/variables/breakpoints.module.css";
+
+@layer components {
+    .post {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, auto);
+        grid-template-areas:
+            'header'
+            'divider'
+            'content'
+            'image';
+        row-gap: var(--size-4);
+
+        background-color: rgb(var(--color-surface));
+        border: solid rgb(var(--color-outline)) var(--size-1);
+        border-radius: var(--border-radius-4);
+
+        max-width: var(--size-text-medium);
+
+        overflow: hidden;
+    }
+
+    .header {
+        grid-area: header;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--size-4);
+
+        padding-inline-start: var(--padding-4);
+        padding-inline-end: var(--padding-1);
+        padding-block-start: var(--padding-3);
+    }
+
+    .postInfo {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 0;
+
+        flex-grow: 1;
+    }
+
+    .author {
+        composes: title-small from '../../assets/styles/patterns/typography.module.css';
+    }
+
+    .date {
+        composes: body-small from '../../assets/styles/patterns/typography.module.css';
+    }
+
+    .like {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .likeNumber {
+        composes: label-large from '../../assets/styles/patterns/typography.module.css';
+
+        color: rgb(var(--color-on-surface-variant));
+    }
+
+    .likedLikeNumber {
+        composes: likeNumber;
+
+        color: rgb(var(--color-primary));
+    }
+
+    .content {
+        grid-area: content;
+
+        padding-inline: var(--padding-4);
+        padding-block-end: var(--padding-4);
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: var(--size-4);
+    }
+
+    .title {
+        composes: title-medium from '../../assets/styles/patterns/typography.module.css';
+    }
+
+    .message {
+        composes: body-medium from '../../assets/styles/patterns/typography.module.css';
+    }
+
+    .image {
+        grid-area: image;
+
+        width: 100%;
+        aspect-ratio: 1;
+
+        object-fit: cover;
+    }
+
+    @media bp-medium {
+        .post {
+            max-width: var(--size-text-large);
+        }
+
+        .header {
+            padding-inline-start: var(--padding-6);
+            padding-inline-end: var(--padding-3);
+            padding-block-start: var(--padding-4);
+
+            gap: var(--size-6);
+        }
+
+        .content {
+            padding-inline: var(--padding-6);
+            padding-block-start: var(--padding-1);
+            padding-block-end: var(--padding-6);
+        }
+
+        .image {
+            aspect-ratio: 4 / 3;
+        }
+    }
+
+    @media bp-expanded {
+        .post {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto 1fr;
+            grid-template-areas:
+                'header image'
+                'divider image'
+                'content image';
+
+            max-width: calc(var(--size-text-large) * 2);
+        }
+
+        .image {
+            aspect-ratio: 1;
+        }
+    }
+}

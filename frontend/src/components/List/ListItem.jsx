@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { selectIsDarkTheme } from '../../utils/selectors';
 import { Link } from 'react-router-dom';
 import { useRipple } from '../../hooks/useRipple';
+import { useId } from 'react';
 
 /**
  * Item of a list, used within the List component.
@@ -16,7 +17,7 @@ export default function ListItem({
     const rippleTrigger = useRipple();
 
     const Heading = `h${headlineLevel}`;
-    const headingId = `${headline}-${Math.round(Math.random() * 1000)}`;
+    const headingId = useId();
 
     const linkRef = (node) => {
         if (focused) {
