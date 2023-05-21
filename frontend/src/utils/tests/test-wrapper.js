@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { render as rtlRender } from '@testing-library/react';
 import {
-    MemoryRouter, Routes, Route, useLocation,
+    MemoryRouter, Routes, Route, useLocation, Outlet,
 } from 'react-router-dom';
 import themeReducer from '../../features/theme/theme.slice.js';
 import tooltipReducer from '../../features/tooltip/tooltip.slice.js';
@@ -38,6 +38,7 @@ export function render(ui, {
             <Provider store={store}>
                 <MemoryRouter>
                     <Routes>
+                        <Route path="/" element={<Outlet/>}/>
                         <Route path="/test" element={<ShowLocation/>}/>
                     </Routes>
                     {children}

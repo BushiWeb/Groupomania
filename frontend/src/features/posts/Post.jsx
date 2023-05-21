@@ -30,7 +30,7 @@ export default function Post({
                 <StandardIconButton label={`${liked ? 'Ne plus aimer' : 'Aimer'}, ${likeNumber} j'aimes`} icon="favorite" toggle={liked}/>
                 <span className={liked ? style.likedLikeNumber : style.likeNumber}>{likeNumber}</span>
             </div>
-            {hasRights && <StandardIconButton label={'More actions'} icon="more_vert"/>}
+            {hasRights && <StandardIconButton label={'Plus d\'actions'} icon="more_vert"/>}
         </header>
         <Divider className={style.divider}/>
         <div className={style.content}>
