@@ -20,7 +20,12 @@ export default function Post({
         timeZoneName: undefined,
     });
 
-    return <article className={style.post} aria-posinset={posinset} aria-setsize={setsize} aria-labelledby={headerId}>
+    return <article
+        className={imageUrl ? style.imagePost : style.post}
+        aria-posinset={posinset}
+        aria-setsize={setsize}
+        aria-labelledby={headerId}
+    >
         <header className={style.header}>
             <div className={style.postInfo}>
                 <address className={style.author}>{authorEmail}</address>

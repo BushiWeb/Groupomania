@@ -4,12 +4,11 @@
     .post {
         display: grid;
         grid-template-columns: 1fr;
-        grid-template-rows: repeat(4, auto);
+        grid-template-rows: repeat(3, auto);
         grid-template-areas:
             'header'
             'divider'
-            'content'
-            'image';
+            'content';
         row-gap: var(--size-4);
 
         background-color: rgb(var(--color-surface));
@@ -19,6 +18,17 @@
         max-width: var(--size-text-medium);
 
         overflow: hidden;
+    }
+
+    .imagePost {
+        composes: post;
+
+        grid-template-rows: repeat(4, auto);
+        grid-template-areas:
+            'header'
+            'divider'
+            'content'
+            'image';
     }
 
     .header {
@@ -58,6 +68,7 @@
         flex-direction: row;
         justify-content: flex-start;
         align-items: center;
+        padding-inline-end: var(--padding-3);
     }
 
     .likeNumber {
@@ -70,6 +81,10 @@
         composes: likeNumber;
 
         color: rgb(var(--color-primary));
+    }
+
+    .divider {
+        grid-area: divider;
     }
 
     .content {
@@ -111,8 +126,6 @@
             padding-inline-start: var(--padding-6);
             padding-inline-end: var(--padding-3);
             padding-block-start: var(--padding-4);
-
-            gap: var(--size-6);
         }
 
         .content {
@@ -129,14 +142,23 @@
     @media bp-expanded {
         .post {
             display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto 1fr;
+            grid-template-areas:
+                'header'
+                'divider'
+                'content';
+
+            max-width: calc(var(--size-text-large) * 2);
+        }
+
+        .imagePost {
             grid-template-columns: 1fr 1fr;
             grid-template-rows: auto auto 1fr;
             grid-template-areas:
                 'header image'
                 'divider image'
                 'content image';
-
-            max-width: calc(var(--size-text-large) * 2);
         }
 
         .image {
