@@ -5,6 +5,7 @@ import Icon from '../../Icon/Icon.jsx';
 import { selectIsDarkTheme } from '../../../utils/selectors.js';
 import { useSelector } from 'react-redux';
 import { useTooltip } from '../../../features/tooltip/useTooltip.js';
+import { useEffect, useRef } from 'react';
 
 /**
  * Basic button with no secific styling. Should be composed by another button component.
@@ -14,7 +15,8 @@ export default function Button({
 }) {
     const rippleTrigger = useRipple();
     const isDarkTheme = useSelector(selectIsDarkTheme);
-    const [showTooltip, hideTooltip] = useTooltip();
+    const [showTooltip, hideTooltip, updateTooltip] = useTooltip();
+    const canUpdateTooltip = useRef(false);
 
     let buttonClass;
 
@@ -25,6 +27,12 @@ export default function Button({
     } else {
         buttonClass = style.button;
     }
+
+    useEffect(() => {
+        if (canUpdateTooltip.current) {
+            updateTooltip(label);
+        }
+    }, [label, canUpdateTooltip, updateTooltip]);
 
     function handlePointerDown(e) {
         rippleTrigger(e.currentTarget, { x: e.clientX, y: e.clientY });
@@ -37,16 +45,19 @@ export default function Button({
     }
 
     function handlePointerOver(e) {
+        const elementBoundingBox = e.target.getBoundingClientRect();
         showTooltip(label, {
-            x: e.target.offsetLeft,
-            y: e.target.offsetTop,
-            width: e.target.offsetWidth,
-            height: e.target.offsetHeight,
+            x: elementBoundingBox.x,
+            y: elementBoundingBox.y,
+            width: elementBoundingBox.width,
+            height: elementBoundingBox.height,
         });
+        canUpdateTooltip.current = true;
     }
 
     function handlePointerOut(e) {
         hideTooltip();
+        canUpdateTooltip.current = false;
     }
 
     return (
@@ -58,9 +69,9 @@ export default function Button({
             onClick={action}
             onPointerDown={handlePointerDown}
             onKeyDown={handleKeyDown}
-            onPointerOut={handlePointerOut}
             aria-label={icon && isLabelHidden ? label : undefined}
             data-states="hovered focused pressed"
+            { ... icon && isLabelHidden ? { onPointerOut: handlePointerOut } : undefined }
             { ... icon && isLabelHidden ? { onPointerOver: handlePointerOver } : undefined }
             {...other}
         >

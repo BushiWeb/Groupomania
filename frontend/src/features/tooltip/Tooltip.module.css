@@ -14,7 +14,7 @@
         display: grid;
         place-content: center;
 
-        position: absolute;
+        position: fixed;
         z-index: var(--layer-5);
 
         visibility: hidden;

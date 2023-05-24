@@ -21,5 +21,12 @@ export function useTooltip() {
         dispatch(tooltipHide());
     };
 
-    return [showTooltip, hideTooltip];
+    /**
+     * Updates the tooltip label
+     */
+    const updateTooltip = (label) => {
+        dispatch(tooltipShow(label));
+    };
+
+    return [showTooltip, hideTooltip, updateTooltip];
 }

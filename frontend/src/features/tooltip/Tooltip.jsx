@@ -41,12 +41,13 @@ export default function Tooltip() {
             newCoordinates.x = newCoordinates.x - (newCoordinates.x + node.offsetWidth - window.innerWidth);
         }
 
-        if (newCoordinates.y - window.scrollY < 0) {
+        if (newCoordinates.y < 0) {
             newCoordinates.y = targetY + targetHeight + tooltipMargin;
         }
 
         setTooltipCoordinates(newCoordinates);
-    }, [targetX, targetY, targetWidth, targetHeight]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [targetX, targetY, targetWidth, targetHeight, label]);
 
     if (!show) {
         return null;

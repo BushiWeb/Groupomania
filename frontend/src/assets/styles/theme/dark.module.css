@@ -1,2 +1,51 @@
 :global(.dark) {
+    /* Primary */
+    --color-primary: var(--ref-color-palette-primary80);
+    --color-on-primary: var(--ref-color-palette-primary20);
+    --color-primary-container: var(--ref-color-palette-primary30);
+    --color-on-primary-container: var(--ref-color-palette-primary90);
+
+    /* Secondary */
+    --color-secondary: var(--ref-color-palette-secondary80);
+    --color-on-secondary: var(--ref-color-palette-secondary20);
+    --color-secondary-container: var(--ref-color-palette-secondary30);
+    --color-on-secondary-container: var(--ref-color-palette-secondary90);
+
+    /* Tertiary */
+    --color-tertiary: var(--ref-color-palette-tertiary80);
+    --color-on-tertiary: var(--ref-color-palette-tertiary20);
+    --color-tertiary-container: var(--ref-color-palette-tertiary30);
+    --color-on-tertiary-container: var(--ref-color-palette-tertiary90);
+
+    /* Error */
+    --color-error: var(--ref-color-palette-error80);
+    --color-on-error: var(--ref-color-palette-error20);
+    --color-error-container: var(--ref-color-palette-error30);
+    --color-on-error-container: var(--ref-color-palette-error90);
+
+    /* Surface */
+    --color-surface-dim: var(--ref-color-palette-neutral6);
+    --color-surface: var(--ref-color-palette-neutral6);
+    --color-surface-bright: var(--ref-color-palette-neutral24);
+
+    --color-surface-container-lowest: var(--ref-color-palette-neutral4);
+    --color-surface-container-low: var(--ref-color-palette-neutral10);
+    --color-surface-container: var(--ref-color-palette-neutral12);
+    --color-surface-container-high: var(--ref-color-palette-neutral17);
+    --color-surface-container-highest: var(--ref-color-palette-neutral22);
+
+    --color-on-surface: var(--ref-color-palette-neutral90);
+    --color-on-surface-variant: var(--ref-color-palette-neutral-variant80);
+
+    /* Outline */
+    --color-outline: var(--ref-color-palette-neutral-variant60);
+    --color-outline-variant: var(--ref-color-palette-neutral-variant30);
+
+    /* Inverse */
+    --color-inverse-surface: var(--ref-color-palette-neutral90);
+    --color-inverse-on-surface: var(--ref-color-palette-neutral20);
+    --color-inverse-primary:: var(--ref-color-palette-primary40);
+
+    /* Other */
+    --color-outline-focus: var(--ref-color-key-white);
 }

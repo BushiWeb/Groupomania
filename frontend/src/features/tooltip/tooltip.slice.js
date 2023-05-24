@@ -14,7 +14,7 @@ const { actions, reducer } = createSlice({
         show: {
             prepare: (label, {
                 x, y, width, height,
-            }) => {
+            } = {}) => {
                 return {
                     payload: {
                         x, y, width, height, label,
@@ -26,10 +26,10 @@ const { actions, reducer } = createSlice({
                     x, y, width, height, label,
                 },
             }) => ({
-                targetX: x,
-                targetY: y,
-                targetWidth: width,
-                targetHeight: height,
+                targetX: x || draft.targetX,
+                targetY: y || draft.targetY,
+                targetWidth: width || draft.targetWidth,
+                targetHeight: height || draft.targetHeight,
                 label,
                 show: true,
             }),
