@@ -7,6 +7,7 @@ import { THEMES_NAMES, themeToggle } from '../../features/theme/theme.slice';
 import { useEffect } from 'react';
 import HiddenNavigationLink from '../../components/HiddenNavigationLink/HiddenNavigationLink.jsx';
 import PropTypes from 'prop-types';
+import { useScrollThreshold } from '../../hooks/useScrollThreshold';
 
 /**
  * Main header off the application, used for the top level pages.
@@ -14,6 +15,7 @@ import PropTypes from 'prop-types';
 export default function MainHeader({ mainContentId }) {
     const theme = useSelector(selectTheme);
     const { dispatch } = useStore();
+    const scrolled = useScrollThreshold(10);
 
     useEffect(() => {
         document.body.classList.forEach((value) => {
@@ -24,7 +26,7 @@ export default function MainHeader({ mainContentId }) {
         document.body.classList.add(theme);
     }, [theme]);
 
-    return <header className={style.header}>
+    return <header className={scrolled ? style.scrolledHeader : style.header}>
         <HiddenNavigationLink label="Accéder directement au contenu" target={`#${mainContentId}`}/>
         <div className={style.logo}>
             <Logo label="Retourner à la page d'accueil" target="/"/>

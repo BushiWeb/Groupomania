@@ -12,6 +12,7 @@ export function render(ui, {
     preloadedState,
     store,
     renderOptions,
+    initialEntries = ['/'],
 } = {}) {
     if (!store) {
         store = configureStore({
@@ -29,6 +30,8 @@ export function render(ui, {
         return (
             <>
                 <pre data-testid="search-param">{location.search}</pre>
+                <pre data-testid="search-anchor">{location.hash}</pre>
+                <pre data-testid="search-path">{location.pathname}</pre>
             </>
         );
     }
@@ -36,11 +39,12 @@ export function render(ui, {
     function Wrapper({ children }) {
         return (
             <Provider store={store}>
-                <MemoryRouter>
+                <MemoryRouter initialEntries={initialEntries}>
                     <Routes>
                         <Route path="/" element={<Outlet/>}/>
-                        <Route path="/test" element={<ShowLocation/>}/>
+                        <Route path="/test" element={<Outlet/>}/>
                     </Routes>
+                    <ShowLocation/>
                     {children}
                 </MemoryRouter>
             </Provider>

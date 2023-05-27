@@ -1,66 +1,76 @@
-import HiddenNavigationLink from './HiddenNavigationLink';
+import MainHeader from './MainHeader';
 import { screen } from '@testing-library/react';
 import { render } from '../../utils/tests/test-wrapper';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 
-describe('HiddenNavigationLink component test suite', () => {
-    const label = 'Skip navigation';
-    const target = '/test';
+describe('MainHeader component test suite', () => {
+    const contentId = 'main-content';
 
     it('should render', () => {
-        render(<HiddenNavigationLink label={label} target={target} />);
+        render(<MainHeader mainContentId={contentId} />);
     });
 
-    it('should have the right label', () => {
-        render(<HiddenNavigationLink label={label} target={target} />);
-        screen.getByRole('link', { name: label });
-    });
-
-    it('should be accessible using the keyboard', async () => {
+    it('should change the theme when clicking on the theme button', async () => {
         const user = userEvent.setup();
+        render(<MainHeader mainContentId={contentId} />);
+        const themeButton = screen.getByRole('button', { name: 'Passer au mode sombre' });
 
-        render(<HiddenNavigationLink label={label} target={target} />);
-        const linkElt = screen.getByRole('link', { name: label });
+        await user.click(themeButton);
+        expect(document.body).toHaveClass('dark');
+        expect(themeButton).toHaveAccessibleName('Passer au mode clair');
 
-        expect(linkElt).not.toHaveFocus();
-
-        await user.tab();
-
-        expect(linkElt).toHaveFocus();
+        await user.click(themeButton);
+        expect(document.body).toHaveClass('light');
+        expect(themeButton).toHaveAccessibleName('Passer au mode sombre');
     });
 
-    it('should trigger the animation when focused and blurred', async () => {
-        jest.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-        render(<HiddenNavigationLink label={label} target={target} />);
-        const linkElt = screen.getByRole('link', { name: label });
+    it.skip('should log the user out', async () => {
+        const user = userEvent.setup();
+        render(<MainHeader mainContentId={contentId} />);
+        const logoutButton = screen.getByRole('button', { name: 'Se déconnecter' });
 
-        expect(linkElt).toHaveClass('sr-only');
-        expect(linkElt).not.toHaveClass('exit-within-bounds');
-        expect(linkElt).not.toHaveClass('enter-within-bounds');
-        expect(linkElt).not.toHaveClass('origin-left');
+        await user.click(logoutButton);
+    });
 
-        await user.tab();
-        expect(linkElt).toHaveFocus();
-        expect(linkElt).not.toHaveClass('sr-only');
-        expect(linkElt).not.toHaveClass('exit-within-bounds');
-        expect(linkElt).toHaveClass('enter-within-bounds');
-        expect(linkElt).toHaveClass('origin-left');
+    it('should focus the elements in the right order', async () => {
+        const user = userEvent.setup();
+        render(<MainHeader mainContentId={contentId} />);
+        const hiddenLink = screen.getByRole('link', { name: 'Accéder directement au contenu' });
+        const logoLink = screen.getByRole('link', { name: 'Groupomania Retourner à la page d\'accueil' });
+        const themeButton = screen.getByRole('button', { name: 'Passer au mode sombre' });
+        const logoutButton = screen.getByRole('button', { name: 'Se déconnecter' });
 
         await user.tab();
-        expect(linkElt).not.toHaveFocus();
-        expect(linkElt).not.toHaveClass('sr-only');
-        expect(linkElt).toHaveClass('exit-within-bounds');
-        expect(linkElt).not.toHaveClass('enter-within-bounds');
-        expect(linkElt).toHaveClass('origin-left');
+        expect(hiddenLink).toHaveFocus();
 
-        jest.runAllTimers();
-        expect(linkElt).toHaveClass('sr-only');
-        expect(linkElt).toHaveClass('exit-within-bounds');
-        expect(linkElt).not.toHaveClass('enter-within-bounds');
-        expect(linkElt).toHaveClass('origin-left');
+        await user.tab();
+        expect(logoLink).toHaveFocus();
 
-        jest.useRealTimers();
+        await user.tab();
+        expect(themeButton).toHaveFocus();
+
+        await user.tab();
+        expect(logoutButton).toHaveFocus();
+    });
+
+    it('should link to the main content', async () => {
+        const user = userEvent.setup();
+        render(<MainHeader mainContentId={contentId} />);
+        const hiddenLink = screen.getByRole('link', { name: 'Accéder directement au contenu' });
+
+        await user.click(hiddenLink);
+        const anchor = screen.getByTestId('search-anchor').textContent;
+        expect(anchor).toBe(`#${contentId}`);
+    });
+
+    it('should link to the home page', async () => {
+        const user = userEvent.setup();
+        render(<MainHeader mainContentId={contentId} />, { initialEntries: ['/test']});
+        const logoLink = screen.getByRole('link', { name: 'Groupomania Retourner à la page d\'accueil' });
+
+        await user.click(logoLink);
+        const path = screen.getByTestId('search-path').textContent;
+        expect(path).toBe('/');
     });
 });
