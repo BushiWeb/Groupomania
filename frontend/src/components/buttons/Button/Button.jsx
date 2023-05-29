@@ -6,6 +6,7 @@ import { selectIsDarkTheme } from '../../../utils/selectors.js';
 import { useSelector } from 'react-redux';
 import { useTooltip } from '../../../features/tooltip/useTooltip.js';
 import { useEffect, useRef } from 'react';
+import { useTargetLayer } from '../../../hooks/useTargetLayer.js';
 
 /**
  * Basic button with no secific styling. Should be composed by another button component.
@@ -14,6 +15,7 @@ export default function Button({
     isDisabled, hasInitialFocus, action, label, classNames, icon, isLabelHidden, ...other
 }) {
     const rippleTrigger = useRipple();
+    const targetLayerProps = useTargetLayer();
     const isDarkTheme = useSelector(selectIsDarkTheme);
     const [showTooltip, hideTooltip, updateTooltip] = useTooltip();
     const canUpdateTooltip = useRef(false);
@@ -63,7 +65,7 @@ export default function Button({
     return (
         <button
             type="button"
-            className={`state-layer target-layer ${buttonClass} ${classNames}`}
+            className={`state-layer ${buttonClass} ${classNames}`}
             disabled={isDisabled}
             autoFocus={!isDisabled && hasInitialFocus}
             onClick={action}
@@ -73,6 +75,7 @@ export default function Button({
             data-states="hovered focused pressed"
             { ... icon && isLabelHidden ? { onPointerOut: handlePointerOut } : undefined }
             { ... icon && isLabelHidden ? { onPointerOver: handlePointerOver } : undefined }
+            {...targetLayerProps}
             {...other}
         >
             {icon && <Icon

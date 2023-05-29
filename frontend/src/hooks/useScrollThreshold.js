@@ -15,7 +15,6 @@ export function useScrollThreshold(threshold, fromBottom = false) {
             const currentThreshold = fromBottom ?
                 document.documentElement.scrollHeight - document.documentElement.clientHeight - threshold :
                 threshold;
-            console.log(currentThreshold, window.scrollY);
 
             if (window.scrollY > currentThreshold) {
                 setPastThreshold(true);
