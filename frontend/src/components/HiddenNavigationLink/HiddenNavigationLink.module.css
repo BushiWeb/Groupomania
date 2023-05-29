@@ -18,9 +18,6 @@
 
         --background-color: var(--color-tertiary);
 
-        --state-layer-color: var(--text-color);
-        --state-layer-border-radius: var(--border-radius);
-
         /* Hidden link properties */
         display: grid;
         place-content: center;

@@ -18,11 +18,6 @@
         --background-color: var(--color-primary);
         --background-opacity: 0;
 
-        --state-layer-color: var(--color-on-surface);
-        --state-layer-width: var(--size-state-layer);
-        --state-layer-height: var(--size-state-layer);
-        --state-layer-border-radius: var(--border-radius-7);
-
         /* chekbox properties */
         appearance: none;
         vertical-align: middle;

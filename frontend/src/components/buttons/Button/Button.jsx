@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { useTooltip } from '../../../features/tooltip/useTooltip.js';
 import { useEffect, useRef } from 'react';
 import { useTargetLayer } from '../../../hooks/useTargetLayer.js';
+import { useStateLayer } from '../../../hooks/useStateLayer';
 
 /**
  * Basic button with no secific styling. Should be composed by another button component.
@@ -16,6 +17,9 @@ export default function Button({
 }) {
     const rippleTrigger = useRipple();
     const targetLayerProps = useTargetLayer();
+    const stateLayerProps = useStateLayer({
+        hover: true, focus: true, active: true, dragged: false,
+    });
     const isDarkTheme = useSelector(selectIsDarkTheme);
     const [showTooltip, hideTooltip, updateTooltip] = useTooltip();
     const canUpdateTooltip = useRef(false);
@@ -65,17 +69,17 @@ export default function Button({
     return (
         <button
             type="button"
-            className={`state-layer ${buttonClass} ${classNames}`}
+            className={`${buttonClass} ${classNames}`}
             disabled={isDisabled}
             autoFocus={!isDisabled && hasInitialFocus}
             onClick={action}
             onPointerDown={handlePointerDown}
             onKeyDown={handleKeyDown}
             aria-label={icon && isLabelHidden ? label : undefined}
-            data-states="hovered focused pressed"
             { ... icon && isLabelHidden ? { onPointerOut: handlePointerOut } : undefined }
             { ... icon && isLabelHidden ? { onPointerOver: handlePointerOver } : undefined }
             {...targetLayerProps}
+            {...stateLayerProps}
             {...other}
         >
             {icon && <Icon

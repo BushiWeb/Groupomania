@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import style from './Checkbox.module.css';
 import { useRipple } from '../../../hooks/useRipple.js';
 import { useTargetLayer } from '../../../hooks/useTargetLayer';
+import { useStateLayer } from '../../../hooks/useStateLayer';
 
 /**
  * checkbox with label. It handles its checked state on its own, based on the initial state.
@@ -11,6 +12,12 @@ export default function Checkbox({
 }) {
     const rippleTrigger = useRipple();
     const targetLayerProps = useTargetLayer();
+    const stateLayerProps = useStateLayer(
+        { hover: true, focus: true, active: true },
+        {
+            width: '2.5rem', height: '2.5rem', color: 'on-surface', borderRadius: '50%',
+        }
+    );
 
     function handlePointerDown(e) {
         rippleTrigger(e.target, { x: e.clientX, y: e.clientY });
@@ -25,15 +32,15 @@ export default function Checkbox({
     return (
         <input
             type="checkbox"
-            className={`state-layer ${style.checkbox}`}
+            className={style.checkbox}
             defaultChecked={isChecked}
             disabled={isDisabled}
             autoFocus={!isDisabled && hasInitialFocus}
             onChange={onChange}
             onPointerDown={handlePointerDown}
             onKeyDown={handleKeyDown}
-            data-states="hovered focused pressed"
             {...targetLayerProps}
+            {...stateLayerProps}
         />
     );
 }

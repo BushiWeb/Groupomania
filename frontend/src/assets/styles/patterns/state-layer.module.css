@@ -5,7 +5,7 @@
 */
 
 /* Component */
-:global(.state-layer) {
+[data-state-layer] {
     --state-layer-opacity: 0;
 
     position: relative;
@@ -13,7 +13,7 @@
 }
 
 /* Layer */
-:global(.state-layer)::before {
+[data-state-layer]::before {
     content: '';
 
     position: absolute;
@@ -24,26 +24,23 @@
 
     width: var(--state-layer-width, 100%);
     height: var(--state-layer-height, 100%);
-    border-radius: var(--state-layer-border-radius, 0);
+    border-radius: var(--state-layer-border-radius, inherit);
 
-    background-color: rgb(
-        var(--state-layer-color, --color-on-surface) /
-            var(--state-layer-opacity)
-    );
+    background-color: var(--state-layer-color, currentColor);
+    opacity: var(--state-layer-opacity);
 
-    transition: background-color var(--motion-duration-2)
-        var(--motion-easing-standard);
+    transition: opacity var(--motion-duration-4) var(--motion-easing-standard);
 }
 
 /* States */
-:global(.state-layer)[data-states~='hovered']:hover:not(:disabled) {
+[data-state-layer~='hover']:hover:not(:disabled) {
     --state-layer-opacity: var(--state-hovered-opacity);
 }
 
-:global(.state-layer)[data-states~='focused']:focus:not(:disabled) {
+[data-state-layer~='focus']:focus:not(:disabled) {
     --state-layer-opacity: var(--state-focused-opacity);
 }
 
-:global(.state-layer)[data-states~='pressed']:active:not(:disabled) {
+[data-state-layer~='active']:active:not(:disabled) {
     --state-layer-opacity: var(--state-pressed-opacity);
 }

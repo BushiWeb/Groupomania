@@ -4,7 +4,7 @@
 :root {
     /* Duration */
     --motion-duration-1: 50ms;
-    --motion-duration-2: 150ms;
+    --motion-duration-2: 100ms;
     --motion-duration-3: 150ms;
     --motion-duration-4: 200ms;
     --motion-duration-5: 250ms;

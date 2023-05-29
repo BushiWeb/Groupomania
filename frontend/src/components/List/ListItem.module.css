@@ -5,7 +5,7 @@
 
         background-color: rgb(var(--color-surface));
 
-        --state-layer-color: var(--color-on-surface);
+        color: rgb(var(--color-on-surface));
     }
 
     .link {
@@ -29,8 +29,6 @@
 
     .headline {
         composes: body-large from '../../assets/styles/patterns/typography.module.css';
-
-        color: rgb(var(--color-on-surface));
     }
 
     .supportingText {

@@ -6,6 +6,7 @@ import { selectIsDarkTheme } from '../../utils/selectors';
 import { Link } from 'react-router-dom';
 import { useRipple } from '../../hooks/useRipple';
 import { useId } from 'react';
+import { useStateLayer } from '../../hooks/useStateLayer';
 
 /**
  * Item of a list, used within the List component.
@@ -15,6 +16,7 @@ export default function ListItem({
 }) {
     const isDarkTheme = useSelector(selectIsDarkTheme);
     const rippleTrigger = useRipple();
+    const stateLayerProps = useStateLayer({ hover: true, focus: true, active: true });
 
     const Heading = `h${headlineLevel}`;
     const headingId = useId();
@@ -45,8 +47,8 @@ export default function ListItem({
         <Link
             to={link}
             aria-labelledby={headingId}
-            className={`state-layer ${style.link}`}
-            data-states="hovered focused pressed"
+            className={`${style.link}`}
+            {...stateLayerProps}
             onPointerDown={handlePointerDown}
             onKeyDown={handleKeyDown}
             ref={linkRef}

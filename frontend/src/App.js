@@ -32,11 +32,6 @@ export default function App() {
             <Tooltip/>
             <Snackbar/>
             <MainHeader mainContentId={'main'}/>
-            <div style={{
-                position: 'relative',
-            }}>
-                <UserHeader heading="test@gmail.com" subheading="admin" deleteUser={true} updateRole={true} updateProfile={true}/>
-            </div>
             <div id="main" style={{
                 display: 'flex',
                 flexDirection: 'column',

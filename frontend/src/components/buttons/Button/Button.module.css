@@ -33,11 +33,6 @@
 
         --shadow: var(--button-shadow, var(--elevation-0));
 
-        --state-layer-color: var(--text-color);
-        --state-layer-border-radius: calc(
-            var(--border-radius) - var(--border-width)
-        );
-
         /* Button properties */
         display: flex;
         flex-direction: row;
