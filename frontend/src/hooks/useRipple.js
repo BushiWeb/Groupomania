@@ -3,23 +3,20 @@ import { useRef } from 'react';
 /**
  * Get the coordinates in the click relative to the state layer.
  * @param {{x: number, y: number, width: number, height: number}} elementBox
- * @param {{width: number, height: number}} stateLayer
  * @param {{x: number, y: number}} [clickCoordinates]
  * @returns {{x: number, y: number}} Returns the coordinates
  */
-function getClickCoordinates(elementBox, stateLayer, clickCoordinates) {
+function getClickCoordinates(elementBox, clickCoordinates) {
     if (!clickCoordinates) {
         return {
-            x: stateLayer.width / 2,
-            y: stateLayer.height / 2,
+            x: elementBox.width / 2,
+            y: elementBox.height / 2,
         };
     }
 
-    const spaceInline = (elementBox.width - stateLayer.width) / 2,
-        spaceBlock = (elementBox.height - stateLayer.height) / 2;
     return {
-        x: clickCoordinates.x - elementBox.x - spaceInline,
-        y: clickCoordinates.y - elementBox.y - spaceBlock,
+        x: clickCoordinates.x - elementBox.x,
+        y: clickCoordinates.y - elementBox.y,
     };
 }
 
@@ -29,34 +26,34 @@ function getClickCoordinates(elementBox, stateLayer, clickCoordinates) {
  * Get the coordinates of the furthest border-radius center.
  * @param {HTMLElement} element
  * @param {{x: number, y: number}} click
- * @param {{width: number, height: number}} stateLayer
  * @returns {{x: number, y: number, borderRadius: number}} Returns the coordinates of the furthest corner radius center,
  *  and the border radius.
  */
-function getFurthestCornerRadiusCoordinates(element, click, stateLayer) {
-    let borderRadius = window.getComputedStyle(element, ':before').borderTopLeftRadius;
+function getFurthestCornerRadiusCoordinates(element, click) {
+    let borderRadius = window.getComputedStyle(element).borderTopLeftRadius;
+    const elementBox = element.getBoundingClientRect();
 
     if (borderRadius === '50%') {
-        return { x: stateLayer.width / 2, y: stateLayer.height / 2, borderRadius: stateLayer.width / 2 };
+        return { x: elementBox.width / 2, y: elementBox.height / 2, borderRadius: elementBox.width / 2 };
     }
 
     borderRadius = parseInt(borderRadius);
 
-    if (borderRadius >= stateLayer.height && borderRadius >= stateLayer.width) {
-        return { x: stateLayer.width / 2, y: stateLayer.height / 2, borderRadius: stateLayer.width / 2 };
+    if (borderRadius >= elementBox.height && borderRadius >= elementBox.width) {
+        return { x: elementBox.width / 2, y: elementBox.height / 2, borderRadius: elementBox.width / 2 };
     }
 
-    if (borderRadius >= stateLayer.height) {
-        borderRadius = stateLayer.height / 2;
+    if (borderRadius >= elementBox.height) {
+        borderRadius = elementBox.height / 2;
     }
 
-    if (borderRadius >= stateLayer.width) {
-        borderRadius = stateLayer.width / 2;
+    if (borderRadius >= elementBox.width) {
+        borderRadius = elementBox.width / 2;
     }
 
     return {
-        x: click.x > stateLayer.width / 2 ? borderRadius : stateLayer.width - borderRadius,
-        y: click.y > stateLayer.height / 2 ? borderRadius : stateLayer.height - borderRadius,
+        x: click.x > elementBox.width / 2 ? borderRadius : elementBox.width - borderRadius,
+        y: click.y > elementBox.height / 2 ? borderRadius : elementBox.height - borderRadius,
         borderRadius,
     };
 }
@@ -64,33 +61,27 @@ function getFurthestCornerRadiusCoordinates(element, click, stateLayer) {
 
 
 /**
- * Calculates the distance to the furthest point on the shape outline.
- * @param {HTMLElement} element
+ * Calculates the distance to the furthest point on the shape outline, and add a bit more to finish the ripple effect.
+ * @param {{x: number, y: number, borderRadius: number}} furthestCorner
  * @param {{x: number, y: number}} click
- * @param {{width: number, height: number}} stateLayer
  * @returns {number} Returns the ripple end radius
  */
-function getMaxRadius(element, click, stateLayer) {
-    const {
-        x: cornerRadiusX,
-        y: cornerRadiusY,
-        borderRadius,
-    } = getFurthestCornerRadiusCoordinates(element, click, stateLayer);
-
+function getMaxRadius(furthestCorner, click) {
     const distanceToRadiusCenter = Math.sqrt(
-        (cornerRadiusX - click.x) ** 2 + (cornerRadiusY - click.y) ** 2
+        (furthestCorner.x - click.x) ** 2 + (furthestCorner.y - click.y) ** 2
     );
-    return distanceToRadiusCenter + borderRadius;
+
+    return (distanceToRadiusCenter + furthestCorner.borderRadius) * 1.25;
 }
 
 
 
 /**
  * Hook allowing to add the ripple effect to an element.
- * @param {number} [duration=350] - Duration of the effect in milliseconds.
+ * @param {number} duration - Duration of the effect in milliseconds.
  * @returns {Function} Returns a function triggering the effect.
  */
-export function useRipple(duration = 350) {
+export function useRipple(duration) {
     const timeoutId = useRef(null);
 
     /**
@@ -100,10 +91,6 @@ export function useRipple(duration = 350) {
      *  These can be accessed with clientX and clientY.
      */
     return function (element, clickCoordinates) {
-        if (!element.classList.contains('state-layer')) {
-            element.classList.add('state-layer');
-        }
-
         // Restart the animation if the user triggers it while it is still running
         if (timeoutId.current) {
             clearTimeout(timeoutId.current);
@@ -115,22 +102,21 @@ export function useRipple(duration = 350) {
         element.style.setProperty('--animation-duration', `${duration}ms`);
 
         // Get the elements informations
-        const elementBox = element.getBoundingClientRect(), stateLayer = {};
-        stateLayer.width = parseInt(window.getComputedStyle(element, ':before').width);
-        stateLayer.height = parseInt(window.getComputedStyle(element, ':before').height);
+        const elementBox = element.getBoundingClientRect();
 
         // Get the click coordinates within the state layer
-        const { x: clickX, y: clickY } = getClickCoordinates(elementBox, stateLayer, clickCoordinates);
-        element.style.setProperty('--origin-x', `${clickX}px`);
-        element.style.setProperty('--origin-y', `${clickY}px`);
+        const click = getClickCoordinates(elementBox, clickCoordinates);
+        element.style.setProperty('--origin-x', `${click.x}px`);
+        element.style.setProperty('--origin-y', `${click.y}px`);
 
         /*
             Calculate the end radius of the ripple.
             The ripple will stretch to the side of the state-layer, taking the curvature into account.
             We consider that all corners have the same border radius.
         */
-        const endRadius = getMaxRadius(element, { x: clickX, y: clickY }, stateLayer);
-        element.style.setProperty('--ripple-width', `${endRadius * 2}px`);
+        const furthestCorner = getFurthestCornerRadiusCoordinates(element, click);
+        const endRadius = getMaxRadius(furthestCorner, click);
+        element.style.setProperty('--ripple-width', `${endRadius}`);
 
         // Start the animation
         element.classList.add('ripple');

@@ -16,7 +16,7 @@ import ProgressIndicator from './components/ProgressIndicator/ProgressIndicator.
 import List from './components/List/List.jsx';
 import Post from './features/posts/Post.jsx';
 import MainHeader from './layouts/MainHeader/MainHeader.jsx';
-import UserHeader from './layouts/UserHeader/UserHeader.jsx';
+import ButtonTest from './components/InteractiveElement/ButtonTest.jsx';
 
 export default function App() {
     const displaySnackbar = useSnackbar();
@@ -38,6 +38,7 @@ export default function App() {
                 gap: '2rem',
                 alignItems: 'start',
             }}>
+                <ButtonTest label="Test interactive element" action={() => console.log('Click interactive element')}/>
                 <Logo/>
                 <Icon name='search'/>
                 <Icon name='favorite' label="like" action={(e) => {

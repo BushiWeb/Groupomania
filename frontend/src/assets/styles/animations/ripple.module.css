@@ -4,40 +4,30 @@
 */
 
 :global .ripple:not(:disabled)::before {
-    background-image: radial-gradient(
-        circle farthest-side at center,
-        rgb(var(--state-layer-color) / var(--state-pressed-opacity)),
-        rgb(var(--state-layer-color) / var(--state-pressed-opacity)) 50%,
-        transparent 50%,
-        transparent
-    );
-    background-repeat: no-repeat;
+    content: '';
+
+    position: absolute;
+    top: var(--origin-y);
+    left: var(--origin-x);
+    translate: -50% -50%;
+    width: 2px;
+    height: 2px;
+
+    background-color: rgb(var(--state-layer-color, var(--color-on-surface)));
+    border-radius: 50%;
+
     animation: var(--animation-duration, --motion-duration-5)
-        var(--motion-easing-standard) 0s 1 normal forwards ripple;
+        var(--motion-easing-linear) 0s 1 normal forwards ripple;
 }
 
 @keyframes :global(ripple) {
     from {
-        background-size: 0 0;
-        background-position: var(--origin-x) var(--origin-y);
-        opacity: 1;
+        opacity: var(--state-pressed-opacity);
+        scale: 0;
     }
 
     to {
-        background-size: calc(var(--ripple-width) * 2)
-            calc(var(--ripple-width) * 2);
-        background-position: calc(var(--origin-x) - var(--ripple-width))
-            calc(var(--origin-y) - var(--ripple-width));
-        /* We use the formula a = a1 + a2 * (1 - a1) to calculate the opacity of both the background stacked.
-            Then we calculate the ratio between this opacity and the original one to know by how much we have to decrease
-                the opacity to go back to the original one.
-        */
-        opacity: calc(
-            var(--state-pressed-opacity) /
-                (
-                    var(--state-pressed-opacity) + var(--state-pressed-opacity) *
-                        (1 - var(--state-pressed-opacity))
-                )
-        );
+        opacity: 0;
+        scale: var(--ripple-width);
     }
 }
