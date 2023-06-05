@@ -1,48 +1,5 @@
 @layer components {
-    .tooltip {
-        composes: body-small from '../../assets/styles/patterns/typography.module.css';
-
-        background-color: rgb(var(--color-inverse-surface));
-        color: rgb(var(--color-inverse-on-surface));
-
-        border-radius: var(--border-radius-2);
-        border-style: none;
-
-        min-height: var(--size-8);
-        padding-inline: var(--padding-2);
-
-        display: grid;
-        place-content: center;
-
-        position: fixed;
-        z-index: var(--layer-5);
-
-        visibility: hidden;
-    }
-
-    .tooltipVisible {
-        composes: tooltip;
-
-        visibility: visible;
-
-        top: var(--tooltip-y);
-        left: var(--tooltip-x);
-
-        animation-name: tooltip-appear;
-        animation-duration: var(--motion-duration-6);
-        animation-timing-function: var(--motion-easing-standard-decelerate);
-        animation-fill-mode: both;
-    }
-
-    @keyframes tooltip-appear {
-        from {
-            opacity: 0;
-            translate: 0 calc(0px - var(--size-3));
-        }
-
-        to {
-            opacity: 1;
-            translate: 0 var(--size-2);
-        }
+    .tooltipContainer {
+        position: relative;
     }
 }

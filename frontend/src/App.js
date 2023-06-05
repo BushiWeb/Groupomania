@@ -16,7 +16,6 @@ import ProgressIndicator from './components/ProgressIndicator/ProgressIndicator.
 import List from './components/List/List.jsx';
 import Post from './features/posts/Post.jsx';
 import MainHeader from './layouts/MainHeader/MainHeader.jsx';
-import ButtonTest from './components/InteractiveElement/ButtonTest.jsx';
 
 export default function App() {
     const displaySnackbar = useSnackbar();
@@ -29,7 +28,6 @@ export default function App() {
             padding: '2rem',
             alignItems: 'start',
         }}>
-            <Tooltip/>
             <Snackbar/>
             <MainHeader mainContentId={'main'}/>
             <div id="main" style={{
@@ -38,7 +36,6 @@ export default function App() {
                 gap: '2rem',
                 alignItems: 'start',
             }}>
-                <ButtonTest label="Test interactive element" action={() => console.log('Click interactive element')}/>
                 <Logo/>
                 <Icon name='search'/>
                 <Icon name='favorite' label="like" action={(e) => {
@@ -47,9 +44,11 @@ export default function App() {
                 <CheckboxLabel label='Checkbox' onChange={(e) => {
                     console.log(e);
                 }}/>
-                <Button action={(e) => {
-                    console.log(e);
-                }} label="Button"/>
+                <Tooltip label="Label test">
+                    <Button action={(e) => {
+                        console.log(e);
+                    }} label="Button"/>
+                </Tooltip>
                 <FilledButton action={(e) => {
                     displaySnackbar(Date.now());
                 }} label="Filled Button"/>

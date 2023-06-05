@@ -1,66 +1,74 @@
+import PropTypes from 'prop-types';
 import style from './Tooltip.module.css';
 import {
-    useCallback, useState,
+    useState, useRef,
 } from 'react';
-import { useSelector } from 'react-redux';
-import { selectIsTooltipvisible, selectTooltipCoordinates, selectTooltipLabel } from '../../utils/selectors';
+import TooltipLabel from './TooltipLabel';
 
 /**
- * Tooltip. Should be used to displaythe meaning of interactive elements with no visible label.
- * Useful only for sighted users, as all interactive elements must have an accessible label.
- * As such, it is hidden from the accessible content to avoid duplication for user using screen readers.
+ * Adds a tooltip to an element. The tooltip will not be accessible and should only be used to provide a visual
+ * label to elements that don't have one. That label should already be accessible by other users.
  */
-export default function Tooltip() {
-    const {
-        targetX, targetY, targetWidth, targetHeight,
-    } = useSelector(selectTooltipCoordinates);
-    const label = useSelector(selectTooltipLabel);
-    const show = useSelector(selectIsTooltipvisible);
-
-    const [tooltipCoordinates, setTooltipCoordinates] = useState(null);
+export default function Tooltip({ children, label }) {
+    const timeoutId = useRef(null);
+    const [showTooltip, setShowTooltip] = useState(false);
 
     /**
-     * Function executed when the DOM component is rendered. It calculates the position of the tooltip to make sure
-     *      it is within the bounds of the screen.
+     * Displays or hide the tooltip. Manages an optionnal timeout.
      */
-    const tooltipRef = useCallback((node) => {
-        if (!node) {
-            return;
+    const displayTooltip = (isVisible = true, timeout = 0) => {
+        if (timeoutId.current) {
+            clearTimeout(timeoutId.current);
+            timeoutId.current = null;
         }
 
-        const tooltipMargin = 8;
-
-        const newCoordinates = {
-            x: targetX + targetWidth / 2 - node.offsetWidth / 2,
-            y: targetY - node.offsetHeight - tooltipMargin,
-        };
-
-        if (newCoordinates.x < 0) {
-            newCoordinates.x = 0;
-        } else if (newCoordinates.x + node.offsetWidth > window.innerWidth) {
-            newCoordinates.x = newCoordinates.x - (newCoordinates.x + node.offsetWidth - window.innerWidth);
+        if (timeout) {
+            return timeoutId.current = setTimeout(() => setShowTooltip(isVisible), 1500);
         }
 
-        if (newCoordinates.y < 0) {
-            newCoordinates.y = targetY + targetHeight + tooltipMargin;
-        }
+        setShowTooltip(isVisible);
+    };
 
-        setTooltipCoordinates(newCoordinates);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [targetX, targetY, targetWidth, targetHeight, label]);
 
-    if (!show) {
-        return null;
+    function handlePointerOver() {
+        displayTooltip();
     }
 
-    return <span
-        className={tooltipCoordinates ? style.tooltipVisible : style.tooltip}
-        style={tooltipCoordinates && {
-            '--tooltip-x': `${tooltipCoordinates.x}px`,
-            '--tooltip-y': `${tooltipCoordinates.y}px`,
-        }}
-        ref={tooltipRef}
-        aria-hidden={true}
-        role='tooltip'
-    >{label}</span>;
+    function handlePointerOut() {
+        displayTooltip(false, 1500);
+    }
+
+    function handleFocus() {
+        displayTooltip();
+    }
+
+    function handleBlur() {
+        displayTooltip(false);
+    }
+
+    function handleKeyDown(e) {
+        if (e.key === 'Escape') {
+            displayTooltip(false);
+        }
+    }
+
+    return <div
+        className={style.tooltipContainer}
+        onPointerOver={handlePointerOver}
+        onPointerOut={handlePointerOut}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
+    >
+        {children}
+        <TooltipLabel label={label} shown={showTooltip}/>
+    </div>;
 }
+
+Tooltip.defaultProps = {
+};
+
+Tooltip.propTypes = {
+    /** Label of the tooltip */
+    label: PropTypes.string.isRequired,
+};

@@ -1,7 +1,6 @@
 import '../../../utils/tests/window-mocks.js';
 import Button from './Button.jsx';
-import Tooltip from '../../../features/tooltip/Tooltip.jsx';
-import { screen, act, waitForElementToBeRemoved } from '@testing-library/react';
+import { screen, act } from '@testing-library/react';
 import { render } from '../../../utils/tests/test-wrapper.js';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
@@ -113,18 +112,24 @@ describe('Button component test suite', () => {
 
         await user.keyboard(' ');
         expect(buttonElt).toHaveClass('ripple');
-        jest.runAllTimers();
+        act(() => {
+            jest.runAllTimers();
+        });
         expect(buttonElt).not.toHaveClass('ripple');
 
 
         await user.keyboard('{Enter}');
         expect(buttonElt).toHaveClass('ripple');
-        jest.runAllTimers();
+        act(() => {
+            jest.runAllTimers();
+        });
         expect(buttonElt).not.toHaveClass('ripple');
 
         await user.click(buttonElt);
         expect(buttonElt).toHaveClass('ripple');
-        jest.runAllTimers();
+        act(() => {
+            jest.runAllTimers();
+        });
         expect(buttonElt).not.toHaveClass('ripple');
 
         jest.useRealTimers();
@@ -134,34 +139,5 @@ describe('Button component test suite', () => {
         render(<Button classNames={additionnalClass} label={label} aria-pressed={true}/>);
         const buttonElt = screen.getByRole('button');
         expect(buttonElt.getAttribute('aria-pressed')).toBe('true');
-    });
-
-    it('should render the tooltip on hover if the button only contains an icon', async () => {
-        const user = userEvent.setup();
-        render(<>
-            <Button label={label} icon={icon} isLabelHidden={true}/>
-            <Tooltip/>
-        </>);
-        const buttonElt = screen.getByRole('button');
-
-        await user.hover(buttonElt);
-        let tooltipElt = screen.getByText(label, { selector: '.tooltipVisible' });
-
-        await user.unhover(buttonElt);
-        tooltipElt = screen.queryByText(label, { selector: '.tooltipVisible' });
-        expect(tooltipElt).toBeNull();
-    });
-
-    it('should never render the tooltip on hover if the button contains text', async () => {
-        const user = userEvent.setup();
-        render(<>
-            <Button label={label} isLabelHidden={true}/>
-            <Tooltip/>
-        </>);
-        const buttonElt = screen.getByRole('button');
-
-        await user.hover(buttonElt);
-        let tooltipElt = screen.queryByText(label, { selector: '.tooltipVisible' });
-        expect(tooltipElt).toBeNull();
     });
 });

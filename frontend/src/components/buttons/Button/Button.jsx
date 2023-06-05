@@ -4,8 +4,6 @@ import { useRipple } from '../../../hooks/useRipple.js';
 import Icon from '../../Icon/Icon.jsx';
 import { selectIsDarkTheme } from '../../../utils/selectors.js';
 import { useSelector } from 'react-redux';
-import { useTooltip } from '../../../features/tooltip/useTooltip.js';
-import { useEffect, useRef } from 'react';
 import { useTargetLayer } from '../../../hooks/useTargetLayer.js';
 import { useStateLayer } from '../../../hooks/useStateLayer';
 
@@ -21,8 +19,6 @@ export default function Button({
         hover: true, focus: true, active: true, dragged: false,
     });
     const isDarkTheme = useSelector(selectIsDarkTheme);
-    const [showTooltip, hideTooltip, updateTooltip] = useTooltip();
-    const canUpdateTooltip = useRef(false);
 
     let buttonClass;
 
@@ -34,12 +30,6 @@ export default function Button({
         buttonClass = style.button;
     }
 
-    useEffect(() => {
-        if (canUpdateTooltip.current) {
-            updateTooltip(label);
-        }
-    }, [label, canUpdateTooltip, updateTooltip]);
-
     function handlePointerDown(e) {
         rippleTrigger(e.currentTarget, { x: e.clientX, y: e.clientY });
     }
@@ -48,22 +38,6 @@ export default function Button({
         if (e.key === ' ' || e.key === 'Enter') {
             rippleTrigger(e.target);
         }
-    }
-
-    function handlePointerOver(e) {
-        const elementBoundingBox = e.target.getBoundingClientRect();
-        showTooltip(label, {
-            x: elementBoundingBox.x,
-            y: elementBoundingBox.y,
-            width: elementBoundingBox.width,
-            height: elementBoundingBox.height,
-        });
-        canUpdateTooltip.current = true;
-    }
-
-    function handlePointerOut(e) {
-        hideTooltip();
-        canUpdateTooltip.current = false;
     }
 
     return (
@@ -76,8 +50,6 @@ export default function Button({
             onPointerDown={handlePointerDown}
             onKeyDown={handleKeyDown}
             aria-label={icon && isLabelHidden ? label : undefined}
-            { ... icon && isLabelHidden ? { onPointerOut: handlePointerOut } : undefined }
-            { ... icon && isLabelHidden ? { onPointerOver: handlePointerOver } : undefined }
             {...targetLayerProps}
             {...stateLayerProps}
             {...other}
