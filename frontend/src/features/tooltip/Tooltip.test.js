@@ -1,7 +1,8 @@
 import Tooltip from './Tooltip.jsx';
-import { screen } from '@testing-library/react';
+import { screen, act } from '@testing-library/react';
 import { render } from '../../utils/tests/test-wrapper.js';
-import userEvent from '@testing-library/user-event';
+import userEvent from '../../utils/tests/user-event.js';
+import fakeTimers from '../../utils/tests/fake-timers.js';
 import '@testing-library/jest-dom';
 
 describe('Tooltip component test suite', () => {
@@ -46,8 +47,8 @@ describe('Tooltip component test suite', () => {
     });
 
     it('should be displayed and hidden on hover', async () => {
-        jest.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+        fakeTimers.useFakeTimers();
+        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
         const { container } = render(<Tooltip label={tooltipLabel}>{content}</Tooltip>);
         const tooltipContainer = container.querySelector('.tooltipContainer');
 
@@ -61,10 +62,10 @@ describe('Tooltip component test suite', () => {
         await user.unhover(tooltipContainer);
         tooltip = screen.queryByText(tooltipLabel);
         expect(tooltip).not.toBeNull();
-        jest.runOnlyPendingTimers();
+        fakeTimers.runAllTimers();
         tooltip = screen.queryByText(tooltipLabel);
         expect(tooltip).toBeNull();
 
-        jest.useRealTimers();
+        fakeTimers.cleanAndUseRealTimers();
     });
 });

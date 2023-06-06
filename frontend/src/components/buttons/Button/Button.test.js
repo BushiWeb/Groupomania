@@ -5,6 +5,11 @@ import { render } from '../../../utils/tests/test-wrapper.js';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 
+afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+});
+
 describe('Button component test suite', () => {
     const label = 'test';
     const icon = 'search';
@@ -131,8 +136,6 @@ describe('Button component test suite', () => {
             jest.runAllTimers();
         });
         expect(buttonElt).not.toHaveClass('ripple');
-
-        jest.useRealTimers();
     });
 
     it('should add any other prop passed to it', () => {
