@@ -29,6 +29,12 @@ const userEvent = {
                     await user.unhover(element);
                 });
             },
+
+            click: async (element) => {
+                await act(async () => {
+                    await user.click(element);
+                });
+            },
         };
     },
 };

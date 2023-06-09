@@ -1,24 +1,23 @@
 import '../../../utils/tests/window-mocks.js';
-import Button from './Button.jsx';
+import OutlinedButton from './OutlinedButton.jsx';
 import { screen } from '@testing-library/react';
 import { render } from '../../../utils/tests/test-wrapper.js';
 import userEvent from '../../../utils/tests/user-event.js';
 import fakeTimers from '../../../utils/tests/fake-timers.js';
 import '@testing-library/jest-dom';
 
-describe('Button component test suite', () => {
+describe('OutlinedButton component test suite', () => {
     const label = 'test';
-    const additionnalClass = 'testClass';
 
     it('should render', () => {
-        render(<Button>{label}</Button>);
+        render(<OutlinedButton>{label}</OutlinedButton>);
         screen.getByRole('button', { name: label });
     });
 
     it('should execute the action when clicked', async () => {
         const buttonAction = jest.fn(() => true);
         const user = userEvent.setup();
-        render(<Button onClick={buttonAction}>{label}</Button>);
+        render(<OutlinedButton onClick={buttonAction}>{label}</OutlinedButton>);
 
         const buttonElt = screen.getByRole('button');
 
@@ -28,41 +27,35 @@ describe('Button component test suite', () => {
     });
 
     it('should have the initial focus', () => {
-        render(<Button autoFocus={true}>{label}</Button>);
+        render(<OutlinedButton autoFocus={true}>{label}</OutlinedButton>);
         const buttonElt = screen.getByRole('button');
         expect(buttonElt).toHaveFocus();
     });
 
     it('should be disabled', () => {
-        render(<Button disabled={true}>{label}</Button>);
+        render(<OutlinedButton disabled={true}>{label}</OutlinedButton>);
         const buttonElt = screen.getByRole('button');
         expect(buttonElt).toBeDisabled();
     });
 
     it('should be disabled and don\'t have the focus', () => {
-        render(<Button disabled={true} autoFocus={true}>{label}</Button>);
+        render(<OutlinedButton disabled={true} autoFocus={true}>{label}</OutlinedButton>);
         const buttonElt = screen.getByRole('button');
         expect(buttonElt).toBeDisabled();
         expect(buttonElt).not.toHaveFocus();
     });
 
     it('should have an accessible label', () => {
-        render(<Button label={label}>Random text</Button>);
+        render(<OutlinedButton label={label}>Random text</OutlinedButton>);
         const buttonElt = screen.getByRole('button', { name: label });
 
         expect(buttonElt).not.toHaveTextContent(label);
     });
 
-    it('should have additionnal classnames', () => {
-        render(<Button classNames={additionnalClass}>{label}</Button>);
-        const buttonElt = screen.getByRole('button');
-        expect(buttonElt).toHaveClass(additionnalClass);
-    });
-
     it('should be accessible using the keyboard', async () => {
         const buttonAction = jest.fn(() => true);
         const user = userEvent.setup();
-        render(<Button onClick={buttonAction}>{label}</Button>);
+        render(<OutlinedButton onClick={buttonAction}>{label}</OutlinedButton>);
         const buttonElt = screen.getByRole('button');
 
         expect(buttonElt).not.toHaveFocus();
@@ -82,7 +75,7 @@ describe('Button component test suite', () => {
     it('should trigger the ripple effect when activated', async () => {
         fakeTimers.useFakeTimers();
         const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        render(<Button>{label}</Button>);
+        render(<OutlinedButton>{label}</OutlinedButton>);
         const buttonElt = screen.getByRole('button');
         const stateLayer = buttonElt.querySelector('.stateLayer');
 
@@ -112,7 +105,7 @@ describe('Button component test suite', () => {
 
     it('should not trigger the ripple effect if disabled', async () => {
         const user = userEvent.setup();
-        render(<Button disabled={true}>{label}</Button>);
+        render(<OutlinedButton disabled={true}>{label}</OutlinedButton>);
         const buttonElt = screen.getByRole('button');
         const stateLayer = buttonElt.querySelector('.stateLayer');
 
@@ -126,13 +119,13 @@ describe('Button component test suite', () => {
     });
 
     it('should add any other prop passed to it', () => {
-        render(<Button aria-pressed={true}>{label}</Button>);
+        render(<OutlinedButton aria-pressed={true}>{label}</OutlinedButton>);
         const buttonElt = screen.getByRole('button');
         expect(buttonElt.getAttribute('aria-pressed')).toBe('true');
     });
 
-    it('should have all activated states by default', () => {
-        render(<Button>{label}</Button>);
+    it('should have all activated states', () => {
+        render(<OutlinedButton>{label}</OutlinedButton>);
         const buttonElt = screen.getByRole('button');
 
         expect(buttonElt).toHaveAttribute('data-state-focus', 'true');
@@ -140,19 +133,10 @@ describe('Button component test suite', () => {
         expect(buttonElt).toHaveAttribute('data-state-active', 'true');
     });
 
-    it('should have all states disabled', () => {
-        render(<Button hover={false} focus={false} active={false}>{label}</Button>);
-        const buttonElt = screen.getByRole('button');
+    it('should have an icon', () => {
+        const { container } = render(<OutlinedButton icon="favorite">{label}</OutlinedButton>);
+        const iconElt = container.querySelector('span.material-icon');
 
-        expect(buttonElt).not.toHaveAttribute('data-state-focus');
-        expect(buttonElt).not.toHaveAttribute('data-state-hover');
-        expect(buttonElt).not.toHaveAttribute('data-state-active');
-    });
-
-    it('should give the right color to the state layer', () => {
-        const { container } = render(<Button stateLayerColor='on-primary'>{label}</Button>);
-        const stateLayer = container.querySelector('.stateLayer');
-
-        expect(stateLayer).toHaveStyle('--state-layer-color: var(--color-on-primary)');
+        expect(iconElt).not.toBeNull();
     });
 });

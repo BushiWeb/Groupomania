@@ -136,18 +136,28 @@ describe('InteractiveElement component test suite', () => {
         jest.useRealTimers();
     });
 
-    it('should execute the action', async () => {
-        const mockAction = jest.fn(() => true);
+    it('should execute the on pointer down handler', async () => {
+        const mockHandlePointerDown = jest.fn(() => true);
         const user = userEvent.setup();
-        render(<InteractiveElement rootElement='button' action={mockAction}>{buttonText}</InteractiveElement>);
+        render(<InteractiveElement rootElement='button' onPointerDown={mockHandlePointerDown}>{buttonText}</InteractiveElement>);
+        const buttonElt = screen.getByRole('button');
+
+        await user.click(buttonElt);
+
+        expect(mockHandlePointerDown).toHaveBeenCalled();
+    });
+
+    it('should execute the on key down handler', async () => {
+        const mockOnKeyDown = jest.fn(() => true);
+        const user = userEvent.setup();
+        render(<InteractiveElement rootElement='button' onKeyDown={mockOnKeyDown}>{buttonText}</InteractiveElement>);
         const buttonElt = screen.getByRole('button');
 
         await user.tab();
         await user.keyboard(' ');
-        await user.keyboard('{Enter}');
         await user.click(buttonElt);
 
-        expect(mockAction).toHaveBeenCalledTimes(3);
+        expect(mockOnKeyDown).toHaveBeenCalled();
     });
 
     it('should give the right color to the state layer', () => {

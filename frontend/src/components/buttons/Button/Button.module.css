@@ -1,84 +1,10 @@
 @layer components {
-    /* Button styling */
     .button {
-        composes: label-large from '../../../assets/styles/patterns/typography.module.css';
-
-        /* Custom properties */
-        --height: var(--button-height, var(--size-11));
-        --width: var(--button-width, var(--size-11));
-
-        --border-radius: var(--button-border-radius, var(--height));
-        --border-color: var(--button-border-color, var(--color-outline));
-        --border-opacity: var(--button-border-opacity, 1);
-        --border-width: var(--button-border-width, var(--size-1));
-        --border-style: var(--button-border-style, solid);
-
-        --padding-inline: var(--button-padding-inline, var(--padding-6));
-        --icon-padding: var(--button-icon-padding, var(--padding-4));
-        --icon-padding-end: var(--button-icon-padding-end, var(--icon-padding));
-        --gap: var(--button-icon-text-gap, var(--padding-2));
-
-        --text-color: var(--button-text-color, var(--color-on-primary));
-        --text-opacity: var(--button-text-opacity, 1);
-
-        --icon-font-size: var(--button-icon-size, var(--size-6));
-        --icon-font-optical-size: var(--button-icon-optical-size, 20);
-        --icon-font-fill: var(--button-icon-fill, 0);
-
-        --background-color: var(
-            --button-background-color,
-            var(--color-primary)
-        );
-        --background-opacity: var(--button-background-opacity, 1);
-
-        --shadow: var(--button-shadow, var(--elevation-0));
-
-        /* Button properties */
         display: flex;
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        gap: var(--gap);
-
-        min-height: var(--height);
-        min-width: var(--width);
-        padding-inline: var(--padding-inline);
 
         text-align: center;
-        color: rgb(var(--text-color) / var(--text-opacity));
-
-        border-radius: var(--border-radius);
-        border-style: var(--border-style);
-        border-color: rgb(var(--border-color) / var(--border-opacity));
-        border-width: var(--border-width);
-
-        background-color: rgb(
-            var(--background-color) / var(--background-opacity)
-        );
-
-        box-shadow: var(--shadow);
-    }
-
-    /* States */
-    .button:focus-visible {
-        outline: rgb(var(--color-outline-focus)) var(--size-2) solid;
-        outline-offset: var(--size-1);
-    }
-
-    /* Content */
-    .buttonWithIcon {
-        composes: button;
-
-        padding-inline-start: var(--icon-padding);
-        padding-inline-end: var(--icon-padding-end);
-    }
-
-    .buttonWithoutLabel {
-        composes: button;
-
-        --icon-font-size: var(--button-icon-size, var(--size-8));
-        --icon-font-optical-size: var(--button-icon-optical-size, 24);
-
-        padding: 0;
     }
 }

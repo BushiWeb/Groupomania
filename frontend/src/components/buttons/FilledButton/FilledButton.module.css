@@ -1,35 +1,41 @@
 @layer components {
-    /* Button styling */
     .filledButton {
-        --button-height: var(--size-11);
+        composes: label-large from '../../../assets/styles/patterns/typography.module.css';
 
-        --button-border-radius: var(--button-height);
-        --button-border-style: none;
+        min-height: var(--size-11);
+        min-width: var(--size-11);
 
-        --button-padding-inline: var(--padding-6);
-        --button-icon-padding: var(--padding-4);
-        --button-icon-text-gap: var(--padding-2);
+        border-radius: var(--size-11);
+        border: none;
 
-        --button-text-color: var(--color-on-primary);
-        --button-text-opacity: 1;
+        padding-inline-start: var(--button-padding-start, var(--padding-6));
+        padding-inline-end: var(--padding-6);
+        gap: var(--padding-2);
 
-        --button-icon-size: var(--size-6);
-        --button-icon-optical-size: 20;
+        color: rgb(var(--color-on-primary));
+        background-color: rgb(var(--color-primary));
+    }
 
-        --button-background-color: var(--color-primary);
-        --button-background-opacity: 1;
+    .filledButtonIcon {
+        composes: filledButton;
 
-        --button-shadow: var(--elevation-0);
+        --button-padding-start: var(--padding-4);
     }
 
     .filledButton:disabled {
-        --button-text-color: var(--color-on-surface);
-        --button-text-opacity: var(--state-disabled-text-opacity);
-        --button-background-color: var(--color-on-surface);
-        --button-background-opacity: var(--state-disabled-bg-opacity);
+        color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+        background-color: rgb(
+            var(--color-on-surface) / var(--state-disabled-bg-opacity)
+        );
     }
 
     .filledButton:hover {
         --button-shadow: var(--elevation-1);
+    }
+
+    .icon {
+        --icon-size: var(--size-6);
     }
 }

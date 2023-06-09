@@ -9,7 +9,17 @@ import { useRef } from 'react';
  * The root element is given via the prop, and the content is given as children.
  */
 export default function InteractiveElement({
-    children, rootElement, className, hover, focus, active, rippleDuration, stateLayerColor, action, ...rootProps
+    children,
+    rootElement,
+    className,
+    hover,
+    focus,
+    active,
+    rippleDuration,
+    stateLayerColor,
+    onPointerDown,
+    onKeyDown,
+    ...rootProps
 }) {
     const rippleTrigger = useRipple(rippleDuration);
     const stateLayerRef = useRef(null);
@@ -21,35 +31,31 @@ export default function InteractiveElement({
         ...active && { 'data-state-active': true },
     };
 
-    function handlePointerDown() {
-        if (action) {
-            action();
+    function handlePointerDown(e) {
+        if (onPointerDown) {
+            onPointerDown(e);
         }
 
         if (rippleDuration > 0) {
-            rippleTrigger(stateLayerRef.current);
+            rippleTrigger(stateLayerRef.current, { x: e.clientX, y: e.clientY });
         }
     }
 
     function handleKeyDown(e) {
-        if (e.key === ' ' || e.key === 'Enter') {
-            if (action) {
-                action();
-            }
+        if (onKeyDown) {
+            onKeyDown(e);
+        }
 
-            if (rippleDuration > 0) {
-                rippleTrigger(stateLayerRef.current);
-            }
+        if ((e.key === ' ' || e.key === 'Enter') && rippleDuration > 0) {
+            rippleTrigger(stateLayerRef.current);
         }
     }
 
     return <Root
         {...states}
         className={classNames}
-        {... (rippleDuration > 0 || action) && {
-            onPointerDown: handlePointerDown,
-            onKeyDown: handleKeyDown,
-        }}
+        {... (rippleDuration > 0 || onPointerDown) && { onPointerDown: handlePointerDown }}
+        {... (rippleDuration > 0 || onKeyDown) && { onKeyDown: handleKeyDown }}
         {...rootProps}
     >
         <div className={style.targetLayer}></div>
@@ -71,7 +77,8 @@ InteractiveElement.defaultProps = {
     active: true,
     rippleDuration: 0,
     stateLayerColor: 'on-surface',
-    action: undefined,
+    onPointerDown: undefined,
+    onKeyDown: undefined,
 };
 
 InteractiveElement.propTypes = {
@@ -141,6 +148,9 @@ InteractiveElement.propTypes = {
         'inverse-primary',
     ]),
 
-    /** Action to execute when activating the element with a pointer or the keyboard */
-    action: PropTypes.func,
+    /** Event handler to execute on pointer down */
+    onPointerDown: PropTypes.func,
+
+    /** Event handler to execute on key down */
+    onKeyDown: PropTypes.func,
 };

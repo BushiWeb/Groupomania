@@ -1,34 +1,39 @@
 @layer components {
-    /* Button styling */
     .outlinedButton {
-        --button-height: var(--size-11);
+        composes: label-large from '../../../assets/styles/patterns/typography.module.css';
 
-        --button-border-radius: var(--button-height);
-        --button-border-style: solid;
-        --button-border-color: var(--color-outline);
-        --button-border-width: var(--size-1);
-        --button-border-opacity: 1;
+        min-height: var(--size-11);
+        min-width: var(--size-11);
 
-        --button-padding-inline: var(--padding-6);
-        --button-icon-padding: var(--padding-4);
-        --button-icon-text-gap: var(--padding-2);
+        border-radius: var(--size-11);
+        border-style: solid;
+        border-width: var(--size-1);
+        border-color: rgb(var(--color-outline));
 
-        --button-text-color: var(--color-primary);
-        --button-text-opacity: 1;
+        padding-inline-start: var(--button-padding-start, var(--padding-6));
+        padding-inline-end: var(--padding-6);
+        gap: var(--padding-2);
 
-        --button-icon-size: var(--size-6);
-        --button-icon-optical-size: 20;
+        color: rgb(var(--color-primary));
+        background-color: transparent;
+    }
 
-        --button-background-color: transparent;
-        --button-background-opacity: 1;
+    .outlinedButtonIcon {
+        composes: outlinedButton;
 
-        --button-shadow: var(--elevation-0);
+        --button-padding-start: var(--padding-4);
     }
 
     .outlinedButton:disabled {
-        --button-text-color: var(--color-on-surface);
-        --button-text-opacity: var(--state-disabled-text-opacity);
-        --button-border-color: var(--color-on-surface);
-        --button-border-opacity: var(--state-disabled-bg-opacity);
+        color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+        border-color: rgb(
+            var(--color-on-surface) / var(--state-disabled-bg-opacity)
+        );
+    }
+
+    .icon {
+        --icon-size: var(--size-6);
     }
 }

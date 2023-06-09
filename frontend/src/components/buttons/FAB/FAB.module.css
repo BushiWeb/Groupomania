@@ -1,39 +1,40 @@
 @layer components {
-    /* Button styling */
     .fab {
-        --button-height: var(--size-13);
-        --button-width: var(--size-13);
+        composes: label-large from '../../../assets/styles/patterns/typography.module.css';
 
-        --button-border-radius: var(--border-radius-5);
-        --button-border-style: none;
+        min-height: var(--size-13);
+        min-width: var(--fab-min-width, var(--size-13));
 
-        --button-padding-inline: var(--padding-4);
-        --button-icon-padding: var(--padding-4);
-        --button-icon-text-gap: var(--padding-2);
+        border-radius: var(--border-radius-5);
+        border: none;
 
-        --button-text-color: var(--color-on-primary-container);
-        --button-text-opacity: 1;
+        padding-inline: var(--padding-4);
+        gap: var(--padding-2);
 
-        --button-icon-size: var(--size-8);
-        --button-icon-optical-size: 24;
+        color: rgb(var(--color-on-primary-container));
+        background-color: rgb(var(--color-primary-container));
 
-        --button-background-color: var(--color-primary-container);
-        --button-background-opacity: 1;
-
-        --button-shadow: var(--elevation-3);
-
-        position: fixed;
-        bottom: var(--padding-4);
-        right: var(--padding-4);
+        box-shadow: var(--elevation-3);
     }
 
     .fab:hover {
-        --button-shadow: var(--elevation-4);
+        box-shadow: var(--elevation-4);
     }
 
     .extendedFab {
         composes: fab;
 
-        --button-width: var(--size-16);
+        --fab-min-width: var(--size-16);
+    }
+
+    .icon {
+        --icon-size: var(--size-8);
+    }
+
+    .floating {
+        position: fixed;
+        bottom: var(--size-5);
+        right: var(--size-5);
+        z-index: var(--layer-5);
     }
 }
