@@ -14,7 +14,7 @@
         z-index: var(--layer-5);
 
         text-align: center;
-        color: rgb(var(--color-inverse-on-surface));
+        color: rgb(var(--color-on-inverse-surface));
 
         background-color: rgb(var(--color-inverse-surface));
 

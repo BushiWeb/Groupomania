@@ -6,54 +6,50 @@ import IconButton from '../IconButton/IconButton.jsx';
  * Outlined icon button button
  */
 export default function OutlinedIconButton({
-    isDisabled, hasInitialFocus, action, label, icon, toggle,
+    disabled, autoFocus, onClick, label, icon, toggle, ...other
 }) {
     return (
         <IconButton
-            isDisabled={isDisabled}
-            hasInitialFocus={hasInitialFocus}
-            action={action}
+            disabled={disabled}
+            autoFocus={autoFocus}
+            onClick={onClick}
             label={label}
             icon={icon}
-            classNames={
-                toggle ?
-                    style.outlinedIconButtonSelected :
-                    toggle === false ?
-                        style.outlinedIconButtonUnselected :
-                        style.outlinedIconButton
-            }
+            classNames={style.outlinedIconButton}
             toggle={toggle}
+            stateLayerColor={toggle ? 'on-inverse-surface' : 'on-surface-variant'}
+            {...other}
         />
     );
 }
 
 OutlinedIconButton.defaultProps = {
-    isDisabled: false,
-    hasInitialFocus: false,
-    action: undefined,
+    disabled: false,
+    autoFocus: false,
+    onClick: undefined,
     toggle: undefined,
 };
 
 OutlinedIconButton.propTypes = {
     /** Weither the button is disabled or not */
-    isDisabled: PropTypes.bool,
+    disabled: PropTypes.bool,
 
     /** Weither the button gets the focus when the component mounts */
-    hasInitialFocus: PropTypes.bool,
+    autoFocus: PropTypes.bool,
 
     /** Action that should be executed when clicking on the button */
-    action: PropTypes.func,
+    onClick: PropTypes.func,
 
-    /**
-     * Label of the button. If the label is visible, it will be displayed in the button. Otherwise, it will only serve
-     * as the button label.
-     */
+    /** Accessible label of the button */
     label: PropTypes.string.isRequired,
 
     /** Icon name */
     icon: PropTypes.string.isRequired,
 
-    /** State of the button. If no set, the button only has one state. If true, the button is selected.
+    /**
+     * State of the button.
+     * If no set, the button only has one state.
+     * If true, the button is selected.
      * If false, the button is not selected.
      */
     toggle: PropTypes.bool,

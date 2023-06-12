@@ -144,7 +144,7 @@ InteractiveElement.propTypes = {
         'on-surface',
         'on-surface-variant',
         'inverse-surface',
-        'inverse-on-surface',
+        'on-inverse-surface',
         'inverse-primary',
     ]),
 

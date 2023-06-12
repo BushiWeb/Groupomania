@@ -58,7 +58,7 @@
 
     /* Inverse */
     --color-inverse-surface: var(--ref-color-palette-neutral20);
-    --color-inverse-on-surface: var(--ref-color-palette-neutral95);
+    --color-on-inverse-surface: var(--ref-color-palette-neutral95);
     --color-inverse-primary:: var(--ref-color-palette-primary80);
 
     /* Other */

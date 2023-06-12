@@ -1,31 +1,25 @@
 @layer components {
-    /* Button styling */
     .standardIconButton {
-        --button-border-style: none;
+        height: var(--size-11);
+        width: var(--size-11);
 
-        --button-text-color: var(--color-on-surface-variant);
-        --button-text-opacity: 1;
+        display: grid;
+        place-content: center;
 
-        --button-background-color: transparent;
-        --button-background-opacity: 1;
+        border-style: none;
+        border-radius: var(--border-radius-7);
 
-        --button-shadow: var(--elevation-0);
-    }
-
-    .standardIconButtonSelected {
-        composes: standardIconButton;
-
-        --button-text-color: var(--color-primary);
-    }
-
-    .standardIconButtonUnselected {
-        composes: standardIconButton;
-
-        --button-text-color: var(--color-on-surface-variant);
+        color: rgb(var(--color-on-surface-variant));
+        background-color: transparent;
     }
 
     .standardIconButton:disabled {
-        --button-text-color: var(--color-on-surface);
-        --button-text-opacity: var(--state-disabled-text-opacity);
+        color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+    }
+
+    .standardIconButton[aria-pressed='true'] {
+        color: rgb(var(--color-primary));
     }
 }

@@ -1,23 +1,26 @@
 import '../../../utils/tests/window-mocks.js';
-import FAB from './FAB.jsx';
+import OutlinedIconButton from './OutlinedIconButton.jsx';
 import { screen } from '@testing-library/react';
 import { render } from '../../../utils/tests/test-wrapper.js';
 import userEvent from '../../../utils/tests/user-event.js';
 import fakeTimers from '../../../utils/tests/fake-timers.js';
 import '@testing-library/jest-dom';
 
-describe('FAB component test suite', () => {
+describe('OutlinedIconButton component test suite', () => {
     const label = 'test';
+    const icon = 'favorite';
 
     it('should render', () => {
-        render(<FAB>{label}</FAB>);
-        screen.getByRole('button', { name: label });
+        render(<OutlinedIconButton icon={icon} label={label}/>);
+        const buttonElt = screen.getByRole('button', { name: label });
+        expect(buttonElt).toHaveTextContent(icon);
+        expect(buttonElt).not.toHaveAttribute('aria-pressed');
     });
 
     it('should execute the action when clicked', async () => {
         const buttonAction = jest.fn(() => true);
         const user = userEvent.setup();
-        render(<FAB onClick={buttonAction}>{label}</FAB>);
+        render(<OutlinedIconButton icon={icon} label={label} onClick={buttonAction}/>);
 
         const buttonElt = screen.getByRole('button');
 
@@ -26,23 +29,10 @@ describe('FAB component test suite', () => {
         expect(buttonAction).toHaveBeenCalled();
     });
 
-    it('should have the initial focus', () => {
-        render(<FAB autoFocus={true}>{label}</FAB>);
-        const buttonElt = screen.getByRole('button');
-        expect(buttonElt).toHaveFocus();
-    });
-
-    it('should have an accessible label', () => {
-        render(<FAB label={label}>Random text</FAB>);
-        const buttonElt = screen.getByRole('button', { name: label });
-
-        expect(buttonElt).not.toHaveTextContent(label);
-    });
-
     it('should be accessible using the keyboard', async () => {
         const buttonAction = jest.fn(() => true);
         const user = userEvent.setup();
-        render(<FAB onClick={buttonAction}>{label}</FAB>);
+        render(<OutlinedIconButton icon={icon} label={label} onClick={buttonAction}/>);
         const buttonElt = screen.getByRole('button');
 
         expect(buttonElt).not.toHaveFocus();
@@ -59,10 +49,29 @@ describe('FAB component test suite', () => {
         expect(buttonAction).toHaveBeenCalled();
     });
 
+    it('should have the initial focus', () => {
+        render(<OutlinedIconButton icon={icon} label={label} autoFocus={true}/>);
+        const buttonElt = screen.getByRole('button');
+        expect(buttonElt).toHaveFocus();
+    });
+
+    it('should be disabled', () => {
+        render(<OutlinedIconButton icon={icon} label={label} disabled={true}/>);
+        const buttonElt = screen.getByRole('button');
+        expect(buttonElt).toBeDisabled();
+    });
+
+    it('should be disabled and don\'t have the focus', () => {
+        render(<OutlinedIconButton icon={icon} label={label} disabled={true} autoFocus={true}/>);
+        const buttonElt = screen.getByRole('button');
+        expect(buttonElt).toBeDisabled();
+        expect(buttonElt).not.toHaveFocus();
+    });
+
     it('should trigger the ripple effect when activated', async () => {
         fakeTimers.useFakeTimers();
         const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        render(<FAB>{label}</FAB>);
+        render(<OutlinedIconButton icon={icon} label={label} />);
         const buttonElt = screen.getByRole('button');
         const stateLayer = buttonElt.querySelector('.stateLayer');
 
@@ -92,7 +101,7 @@ describe('FAB component test suite', () => {
 
     it('should not trigger the ripple effect if disabled', async () => {
         const user = userEvent.setup();
-        render(<FAB disabled={true}>{label}</FAB>);
+        render(<OutlinedIconButton icon={icon} label={label} disabled={true}/>);
         const buttonElt = screen.getByRole('button');
         const stateLayer = buttonElt.querySelector('.stateLayer');
 
@@ -106,50 +115,21 @@ describe('FAB component test suite', () => {
     });
 
     it('should add any other prop passed to it', () => {
-        render(<FAB aria-pressed={true}>{label}</FAB>);
+        const description = 'lorem';
+        render(<OutlinedIconButton icon={icon} label={label} aria-describedby={description}/>);
         const buttonElt = screen.getByRole('button');
-        expect(buttonElt.getAttribute('aria-pressed')).toBe('true');
+        expect(buttonElt.getAttribute('aria-describedby')).toBe(description);
     });
 
-    it('should have all activated states', () => {
-        render(<FAB>{label}</FAB>);
-        const buttonElt = screen.getByRole('button');
-
-        expect(buttonElt).toHaveAttribute('data-state-focus', 'true');
-        expect(buttonElt).toHaveAttribute('data-state-hover', 'true');
-        expect(buttonElt).toHaveAttribute('data-state-active', 'true');
-    });
-
-    it('should have an icon and be extended', () => {
-        const { container } = render(<FAB icon="favorite">{label}</FAB>);
-        const iconElt = container.querySelector('span.material-icon');
-        const buttonElt = screen.getByRole('button');
-
-        expect(iconElt).not.toBeNull();
-        expect(buttonElt).toHaveClass('extendedFab');
-        expect(buttonElt).toHaveTextContent(label);
-    });
-
-    it('should have an icon and no text', () => {
-        const { container } = render(<FAB icon="favorite" label={label}/>);
-        const iconElt = container.querySelector('span.material-icon');
+    it('should be activated', () => {
+        render(<OutlinedIconButton icon={icon} label={label} toggle={true}/>);
         const buttonElt = screen.getByRole('button', { name: label });
-
-        expect(iconElt).not.toBeNull();
-        expect(buttonElt).toHaveClass('fab');
+        expect(buttonElt).toHaveAttribute('aria-pressed', 'true');
     });
 
-    it('should be a floating by default', () => {
-        render(<FAB>{label}</FAB>);
+    it('should not be activated', () => {
+        render(<OutlinedIconButton icon={icon} label={label} toggle={false}/>);
         const buttonElt = screen.getByRole('button', { name: label });
-
-        expect(buttonElt).toHaveClass('floating');
-    });
-
-    it('should not be floating', () => {
-        render(<FAB floating={false}>{label}</FAB>);
-        const buttonElt = screen.getByRole('button', { name: label });
-
-        expect(buttonElt).not.toHaveClass('floating');
+        expect(buttonElt).toHaveAttribute('aria-pressed', 'false');
     });
 });

@@ -5,12 +5,16 @@ import OutlinedButton from './components/buttons/OutlinedButton/OutlinedButton.j
 import TextButton from './components/buttons/TextButton/TextButton.jsx';
 import TonalButton from './components/buttons/TonalButton/TonalButton.jsx';
 import Tooltip from './features/tooltip/Tooltip.jsx';
+import IconButton from './components/icon-button/IconButton/IconButton.jsx';
+import OutlinedIconButton from './components/icon-button/OutlinedIconButton/OutlinedIconButton.jsx';
 import { useState } from 'react';
+import StandardIconButton from './components/icon-button/StandardIconButton/StandardIconButton.jsx';
 
 export default function App() {
     const [disabled, setDisabled] = useState(false);
     const [mobile, setMobile] = useState(false);
     const [icon, setIcon] = useState(null);
+    const [toggle, setToggle] = useState(undefined);
 
     const buttonProps = {
         disabled,
@@ -50,6 +54,16 @@ export default function App() {
             <FAB onClick={() => setMobile((value) => !value)} icon="edit" floating={mobile} >
                 {!mobile && 'FAB, toggle extended'}
             </FAB>
+
+            <IconButton icon="favorite" label="Icon button" onClick={() => setToggle((toggle) => toggle ? undefined : toggle === false)}/>
+
+            <OutlinedIconButton icon="edit" label="Outlined icon button" disabled={disabled} onClick={() => {
+                console.log(true);
+            }} toggle={toggle}/>
+
+            <StandardIconButton icon="search" label="Standard icon button" disabled={disabled} onClick={() => {
+                console.log(true);
+            }} toggle={toggle}/>
         </div>
     );
 }
