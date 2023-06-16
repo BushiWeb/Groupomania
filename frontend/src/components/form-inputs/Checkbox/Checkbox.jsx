@@ -1,66 +1,87 @@
 import PropTypes from 'prop-types';
 import style from './Checkbox.module.css';
-import { useRipple } from '../../../hooks/useRipple.js';
-import { useTargetLayer } from '../../../hooks/useTargetLayer';
-import { useStateLayer } from '../../../hooks/useStateLayer';
+import InteractiveElement from '../../InteractiveElement/InteractiveElement.jsx';
+import Tooltip from '../../../features/tooltip/Tooltip.jsx';
+import { useRef } from 'react';
 
 /**
- * checkbox with label. It handles its checked state on its own, based on the initial state.
+ * Checkbox, with or without label
  */
 export default function Checkbox({
-    isChecked, onChange, isDisabled, hasInitialFocus,
+    checked, onChange, disabled, autoFocus, label, name, className, ...other
 }) {
-    const rippleTrigger = useRipple();
-    const targetLayerProps = useTargetLayer();
-    const stateLayerProps = useStateLayer(
-        { hover: true, focus: true, active: true },
-        {
-            width: '2.5rem', height: '2.5rem', color: 'on-surface', borderRadius: '50%',
-        }
-    );
+    const checkboxRef = useRef();
 
-    function handlePointerDown(e) {
-        rippleTrigger(e.target, { x: e.clientX, y: e.clientY });
+    function handleClickTarget(e) {
+        checkboxRef.current.focus();
+        checkboxRef.current.click();
     }
 
-    function handleKeyDown(e) {
-        if (e.key === ' ') {
-            rippleTrigger(e.target);
-        }
+    function handleClickCheckbox(e) {
+        e.stopPropagation();
     }
 
-    return (
+    const checkboxElt = <InteractiveElement
+        rootElement="div"
+        rippleDuration={disabled ? null : 350}
+        stateLayerColor={checked ? 'primary' : 'on-surface'}
+        className={`${style.checkboxContainer} ${!label ? className : ''}`}
+        hover={!disabled}
+        active={!disabled}
+        focus={!disabled}
+        onClick={!disabled ? handleClickTarget : undefined}
+    >
         <input
             type="checkbox"
+            name={name}
             className={style.checkbox}
-            defaultChecked={isChecked}
-            disabled={isDisabled}
-            autoFocus={!isDisabled && hasInitialFocus}
+            checked={checked}
+            disabled={disabled}
+            autoFocus={!disabled && autoFocus}
             onChange={onChange}
-            onPointerDown={handlePointerDown}
-            onKeyDown={handleKeyDown}
-            {...targetLayerProps}
-            {...stateLayerProps}
+            onClick={handleClickCheckbox}
+            aria-label={label}
+            ref={checkboxRef}
+            {...other}
         />
-    );
+    </InteractiveElement>;
+
+    if (label) {
+        return <Tooltip label={label} className={className}>
+            {checkboxElt}
+        </Tooltip>;
+    }
+
+    return checkboxElt;
 }
 
 Checkbox.defaultProps = {
-    isChecked: false,
-    isDisabled: false,
-    hasInitialFocus: false,
+    checked: false,
+    disabled: false,
+    autoFocus: false,
+    label: undefined,
+    className: '',
 };
 
 Checkbox.propTypes = {
     /** Weither the checkbox is checked or not */
-    isChecked: PropTypes.bool,
+    checked: PropTypes.bool,
 
     /** Action to execute on click */
-    onChange: PropTypes.func,
+    onChange: PropTypes.func.isRequired,
 
     /** Weither the checkbox is disabled or not */
-    isDisabled: PropTypes.bool,
+    disabled: PropTypes.bool,
 
     /** Weither the checkbox has focus or not */
-    hasInitialFocus: PropTypes.bool,
+    autoFocus: PropTypes.bool,
+
+    /** Checkbox' label. Should be provided if no external label is present */
+    label: PropTypes.string,
+
+    /** Checkbox' name */
+    name: PropTypes.string.isRequired,
+
+    /** Other classnames */
+    className: PropTypes.string,
 };

@@ -9,12 +9,15 @@ import IconButton from './components/icon-button/IconButton/IconButton.jsx';
 import OutlinedIconButton from './components/icon-button/OutlinedIconButton/OutlinedIconButton.jsx';
 import { useState } from 'react';
 import StandardIconButton from './components/icon-button/StandardIconButton/StandardIconButton.jsx';
+import Checkbox from './components/form-inputs/Checkbox/Checkbox.jsx';
+import CheckboxLabel from './components/form-inputs/Checkbox/CheckboxLabel.jsx';
 
 export default function App() {
     const [disabled, setDisabled] = useState(false);
     const [mobile, setMobile] = useState(false);
     const [icon, setIcon] = useState(null);
     const [toggle, setToggle] = useState(undefined);
+    const [checked, setChecked] = useState(false);
 
     const buttonProps = {
         disabled,
@@ -64,6 +67,10 @@ export default function App() {
             <StandardIconButton icon="search" label="Standard icon button" disabled={disabled} onClick={() => {
                 console.log(true);
             }} toggle={toggle}/>
+
+            <Checkbox name="test" checked={checked} label="Test checkbox" onChange={(e) => setChecked(e.target.checked)} disabled={disabled}/>
+
+            <CheckboxLabel name="test" checked={checked} onChange={(e) => setChecked(e.target.checked)} disabled={disabled}>Test checkbox label</CheckboxLabel>
         </div>
     );
 }

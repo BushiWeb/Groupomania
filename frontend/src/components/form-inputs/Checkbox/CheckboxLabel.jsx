@@ -3,43 +3,50 @@ import style from './CheckboxLabel.module.css';
 import Checkbox from './Checkbox.jsx';
 
 /**
- * checkbox with label. It handles its checked state on its own, based on the initial state.
+ * Checkbox with a visible label. The label is given as the child of the component.
  */
 export default function CheckboxLabel({
-    isChecked, label, onChange, isDisabled, hasInitialFocus,
+    children, checked, onChange, disabled, autoFocus, name, className, ...other
 }) {
     return (
-        <label className={`${isDisabled ? style.disabled : style.label}`}>
+        <label className={`${disabled ? style.disabled : style.label} ${className}`}>
             <Checkbox
-                isChecked={isChecked}
+                checked={checked}
                 onChange={onChange}
-                isDisabled={isDisabled}
-                hasInitialFocus={hasInitialFocus}
+                disabled={disabled}
+                autoFocus={autoFocus}
+                name={name}
+                {...other}
             />
-            {label}
+            {children}
         </label>
     );
 }
 
 CheckboxLabel.defaultProps = {
-    isChecked: false,
-    isDisabled: false,
-    hasInitialFocus: false,
+    checked: false,
+    disabled: false,
+    autoFocus: false,
+    label: undefined,
+    className: '',
 };
 
 CheckboxLabel.propTypes = {
     /** Weither the checkbox is checked or not */
-    isChecked: PropTypes.bool,
-
-    /** Label of the checkbox */
-    label: PropTypes.string.isRequired,
+    checked: PropTypes.bool,
 
     /** Action to execute on click */
-    onChange: PropTypes.func,
+    onChange: PropTypes.func.isRequired,
 
     /** Weither the checkbox is disabled or not */
-    isDisabled: PropTypes.bool,
+    disabled: PropTypes.bool,
 
     /** Weither the checkbox has focus or not */
-    hasInitialFocus: PropTypes.bool,
+    autoFocus: PropTypes.bool,
+
+    /** Checkbox' name */
+    name: PropTypes.string.isRequired,
+
+    /** Other classnames */
+    className: PropTypes.string,
 };

@@ -9,7 +9,7 @@ import TooltipLabel from './TooltipLabel';
  * Adds a tooltip to an element. The tooltip will not be accessible and should only be used to provide a visual
  * label to elements that don't have one. That label should already be accessible by other users.
  */
-export default function Tooltip({ children, label }) {
+export default function Tooltip({ children, label, className }) {
     const timeoutId = useRef(null);
     const [showTooltip, setShowTooltip] = useState(false);
 
@@ -53,7 +53,7 @@ export default function Tooltip({ children, label }) {
     }
 
     return <div
-        className={style.tooltipContainer}
+        className={`${style.tooltipContainer} ${className}`}
         onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}
         onFocus={handleFocus}
@@ -66,9 +66,13 @@ export default function Tooltip({ children, label }) {
 }
 
 Tooltip.defaultProps = {
+    className: '',
 };
 
 Tooltip.propTypes = {
     /** Label of the tooltip */
     label: PropTypes.string.isRequired,
+
+    /** Classnames */
+    className: PropTypes.string,
 };

@@ -68,4 +68,12 @@ describe('Tooltip component test suite', () => {
 
         fakeTimers.cleanAndUseRealTimers();
     });
+
+    it('should have additionnal classnames', () => {
+        const classname = 'test';
+        const { container } = render(<Tooltip label={tooltipLabel} className={classname}>{content}</Tooltip>);
+        const tooltipElt = container.querySelector('.tooltipContainer');
+
+        expect(tooltipElt).toHaveClass(classname);
+    });
 });

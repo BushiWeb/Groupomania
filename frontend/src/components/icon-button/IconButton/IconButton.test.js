@@ -121,6 +121,20 @@ describe('IconButton component test suite', () => {
         expect(stateLayer).not.toHaveClass('ripple');
     });
 
+    it('should display a tooltip when hovered', async () => {
+        fakeTimers.useFakeTimers();
+        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
+        const { container } = render(<IconButton icon={icon} label={label}/>);
+        const buttonElt = screen.getByRole('button', { name: label });
+
+        await user.hover(buttonElt);
+        const tooltipLabel = container.querySelector('.tooltip');
+        expect(tooltipLabel).not.toBeNull();
+        expect(tooltipLabel).toHaveTextContent(label);
+
+        fakeTimers.cleanAndUseRealTimers();
+    });
+
     it('should add any other prop passed to it', () => {
         const description = 'lorem';
         render(<IconButton icon={icon} label={label} aria-describedby={description}/>);

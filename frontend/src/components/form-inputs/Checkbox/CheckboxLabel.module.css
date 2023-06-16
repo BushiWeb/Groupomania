@@ -6,7 +6,7 @@
         flex-direction: row;
         justify-content: flex-start;
         align-items: center;
-        gap: var(--padding-2);
+        gap: var(--padding-5);
         color: rgb(var(--color-on-surface));
     }
 
