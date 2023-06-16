@@ -2,41 +2,22 @@
     .hiddenLink {
         composes: label-large from '../../assets/styles/patterns/typography.module.css';
 
-        /* Custom properties */
-        --height: var(--size-11);
-        --width: var(--size-target);
-
-        --border-radius: var(--border-radius-5);
-
-        --padding-inline: var(--padding-6);
-        --page-margin: var(--page-margin);
-        --margin-bloc: max((var(--size-target) - var(--height)) / 2, 0px);
-        --margin-inline: max((var(--size-target) - var(--width)) / 2, 0px);
-        --stack-layer: var(--layer-5);
-
-        --text-color: var(--color-on-tertiary);
-
-        --background-color: var(--color-tertiary);
-
-        /* Hidden link properties */
         display: grid;
         place-content: center;
 
         position: fixed;
         top: var(--page-margin);
         left: var(--page-margin);
-        z-index: var(--stack-layer);
+        z-index: var(--layer-5);
 
-        min-height: var(--height);
-        min-width: var(--width);
-        padding-inline: var(--padding-inline);
-        margin-block: var(--margin-bloc);
-        margin-inline: var(--margin-inline);
+        min-height: var(--size-11);
+        min-width: var(--size-target);
+        padding-inline: var(--padding-6);
 
-        border-radius: var(--border-radius);
+        border-radius: var(--border-radius-5);
 
-        background-color: rgb(var(--background-color));
-        color: rgb(var(--text-color));
+        background-color: rgb(var(--color-tertiary));
+        color: rgb(var(--color-on-tertiary));
     }
 
     /* States */

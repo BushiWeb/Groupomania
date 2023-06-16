@@ -11,6 +11,7 @@ import { useState } from 'react';
 import StandardIconButton from './components/icon-button/StandardIconButton/StandardIconButton.jsx';
 import Checkbox from './components/form-inputs/Checkbox/Checkbox.jsx';
 import CheckboxLabel from './components/form-inputs/Checkbox/CheckboxLabel.jsx';
+import HiddenNavigationLink from './components/HiddenNavigationLink/HiddenNavigationLink.jsx';
 
 export default function App() {
     const [disabled, setDisabled] = useState(false);
@@ -32,6 +33,9 @@ export default function App() {
             padding: '2rem',
             alignItems: 'start',
         }}>
+
+            <HiddenNavigationLink target="#main">Hidden link</HiddenNavigationLink>
+
             <Button onClick={() => setDisabled((value) => !value)}>
                 Bouton de base, toggle disabled
             </Button>
