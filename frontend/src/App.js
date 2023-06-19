@@ -13,6 +13,7 @@ import Checkbox from './components/form-inputs/Checkbox/Checkbox.jsx';
 import CheckboxLabel from './components/form-inputs/Checkbox/CheckboxLabel.jsx';
 import HiddenNavigationLink from './components/HiddenNavigationLink/HiddenNavigationLink.jsx';
 import Icon from './components/Icon/Icon.jsx';
+import List from './components/List/List.jsx';
 
 export default function App() {
     const [disabled, setDisabled] = useState(false);
@@ -80,6 +81,19 @@ export default function App() {
             <CheckboxLabel name="test" checked={checked} onChange={(e) => setChecked(e.target.checked)} disabled={disabled}>Test checkbox label</CheckboxLabel>
 
             <p><Icon name="favorite" fill={iconFill}/> {iconWithText && 'Texte!!!'}</p>
+
+            <List data={[
+                {
+                    headline: 'coucou',
+                    supportingText: 'supp',
+                    link: '/',
+                },
+                {
+                    headline: 'coucou2',
+                    supportingText: 'supp2',
+                    link: '#anchor',
+                },
+            ]} label="Liste test"/>
         </div>
     );
 }

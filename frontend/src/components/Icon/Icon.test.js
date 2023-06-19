@@ -1,7 +1,6 @@
 import Icon from './Icon.jsx';
 import { screen } from '@testing-library/react';
 import { render } from '../../utils/tests/test-wrapper.js';
-import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 
 describe('Icon component test suite', () => {

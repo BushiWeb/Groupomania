@@ -1,14 +1,14 @@
 import { useRipple } from '../../hooks/useRipple';
 import style from './InteractiveElement.module.css';
 import PropTypes from 'prop-types';
-import { useRef } from 'react';
+import { forwardRef, useRef } from 'react';
 
 /**
  * Creates an interactive element with a minimum target size and a state layer.
  * Additionnal props are passed as are to the root elements.
  * The root element is given via the prop, and the content is given as children.
  */
-export default function InteractiveElement({
+const InteractiveElement = forwardRef(function InteractiveElement({
     children,
     rootElement,
     className,
@@ -20,7 +20,7 @@ export default function InteractiveElement({
     onPointerDown,
     onKeyDown,
     ...rootProps
-}) {
+}, ref) {
     const rippleTrigger = useRipple(rippleDuration);
     const stateLayerRef = useRef(null);
     const Root = rootElement;
@@ -57,6 +57,7 @@ export default function InteractiveElement({
         {... (rippleDuration > 0 || onPointerDown) && { onPointerDown: handlePointerDown }}
         {... (rippleDuration > 0 || onKeyDown) && { onKeyDown: handleKeyDown }}
         {...rootProps}
+        ref={ref}
     >
         <div className={style.targetLayer}></div>
         <div
@@ -68,7 +69,7 @@ export default function InteractiveElement({
         ></div>
         {children}
     </Root>;
-}
+});
 
 InteractiveElement.defaultProps = {
     className: '',
@@ -154,3 +155,5 @@ InteractiveElement.propTypes = {
     /** Event handler to execute on key down */
     onKeyDown: PropTypes.func,
 };
+
+export default InteractiveElement;

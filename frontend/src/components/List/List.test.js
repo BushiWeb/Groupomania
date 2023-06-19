@@ -1,7 +1,7 @@
 import List from './List.jsx';
 import { screen, getByRole, getByText } from '@testing-library/react';
 import { render } from '../../utils/tests/test-wrapper';
-import userEvent from '@testing-library/user-event';
+import userEvent from '../../utils/tests/user-event.js';
 import '@testing-library/jest-dom';
 
 describe('List component test suite', () => {

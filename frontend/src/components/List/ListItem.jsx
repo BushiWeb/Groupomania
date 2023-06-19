@@ -4,9 +4,8 @@ import Icon from '../Icon/Icon.jsx';
 import { useSelector } from 'react-redux';
 import { selectIsDarkTheme } from '../../utils/selectors';
 import { Link } from 'react-router-dom';
-import { useRipple } from '../../hooks/useRipple';
 import { useId } from 'react';
-import { useStateLayer } from '../../hooks/useStateLayer';
+import InteractiveElement from '../InteractiveElement/InteractiveElement';
 
 /**
  * Item of a list, used within the List component.
@@ -15,8 +14,6 @@ export default function ListItem({
     headline, headlineLevel, supportingText, link, focused, onFocus,
 }) {
     const isDarkTheme = useSelector(selectIsDarkTheme);
-    const rippleTrigger = useRipple();
-    const stateLayerProps = useStateLayer({ hover: true, focus: true, active: true });
 
     const Heading = `h${headlineLevel}`;
     const headingId = useId();
@@ -27,16 +24,7 @@ export default function ListItem({
         }
     };
 
-
-    function handlePointerDown(e) {
-        rippleTrigger(e.currentTarget, { x: e.clientX, y: e.clientY });
-    }
-
     function handleKeyDown(e) {
-        if (e.key === ' ' || e.key === 'Enter') {
-            rippleTrigger(e.target);
-        }
-
         if (e.key === ' ') {
             e.preventDefault();
             e.target.click();
@@ -44,12 +32,13 @@ export default function ListItem({
     }
 
     return <li className={style.listItem} onFocus={onFocus}>
-        <Link
+        <InteractiveElement
+            rootElement={Link}
+            stateLayerColor="on-surface"
+            rippleDuration={350}
             to={link}
             aria-labelledby={headingId}
             className={`${style.link}`}
-            {...stateLayerProps}
-            onPointerDown={handlePointerDown}
             onKeyDown={handleKeyDown}
             ref={linkRef}
         >
@@ -58,7 +47,7 @@ export default function ListItem({
                 {supportingText && <p className={style.supportingText}>{supportingText}</p>}
             </div>
             {link && <Icon className={style.icon} name="arrow_right" isOnDark={isDarkTheme}/>}
-        </Link>
+        </InteractiveElement>
     </li>;
 }
 
