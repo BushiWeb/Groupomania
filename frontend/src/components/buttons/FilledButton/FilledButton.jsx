@@ -25,7 +25,7 @@ export default function FilledButton({
         stateLayerColor="on-primary"
         {...other}
     >
-        {icon && <Icon name={icon} className={style.icon} size={20} isWithText={true} isOnDark={isDarkTheme}/>}
+        {icon && <Icon name={icon} className={style.icon} size={20} isOnDark={isDarkTheme}/>}
         {children}
     </Button>;
 }

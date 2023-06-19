@@ -31,7 +31,6 @@ export default function IconButton({
                     className={style.icon}
                     size={24}
                     fill={toggle}
-                    isWithText={true}
                     isOnDark={isDarkTheme}
                 />
             </Button>

@@ -5,10 +5,10 @@ import style from './Icon.module.css';
  * Insert a Google Font Icon.
  */
 export default function Icon({
-    name, weight, size, grad, fill, isOnDark, isWithText, label, action, className,
+    name, weight, size, grad, fill, isOnDark, label, className,
 }) {
     const elementsProps = {
-        className: `material-icon ${isWithText ? style.withTypo : style.icon} ${className}`,
+        className: `material-icon ${style.icon} ${className}`,
         style: {
             ...fill && { '--icon-fill': 1 },
             '--icon-weight': weight || 'inherit',
@@ -18,11 +18,7 @@ export default function Icon({
         ...label ? { 'aria-label': label } : { 'aria-hidden': true },
     };
 
-    if (!action) {
-        return <span {...elementsProps}>{name}</span>;
-    }
-
-    return <button {...elementsProps} onClick={action}>{name}</button>;
+    return <span {...elementsProps}>{name}</span>;
 }
 
 Icon.defaultProps = {
@@ -31,9 +27,7 @@ Icon.defaultProps = {
     grad: 0,
     fill: false,
     isOnDark: false,
-    isWithText: false,
     label: undefined,
-    action: undefined,
     className: '',
 };
 
@@ -56,14 +50,8 @@ Icon.propTypes = {
     /** Weither the appearance of the icon should be tweaked for better readability on black backgrounds */
     isOnDark: PropTypes.bool,
 
-    /** Weither the icon is next to some text, thus needing a baseline shif */
-    isWithText: PropTypes.bool,
-
     /** Accessible label of the icon. If no label is given, the icon will be hidden. */
     label: PropTypes.string,
-
-    /** Action to execute on click on the icon. Transforms the icon into a button */
-    action: PropTypes.func,
 
     /** Other class names to add to the icon */
     className: PropTypes.string,

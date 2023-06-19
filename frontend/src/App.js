@@ -12,6 +12,7 @@ import StandardIconButton from './components/icon-button/StandardIconButton/Stan
 import Checkbox from './components/form-inputs/Checkbox/Checkbox.jsx';
 import CheckboxLabel from './components/form-inputs/Checkbox/CheckboxLabel.jsx';
 import HiddenNavigationLink from './components/HiddenNavigationLink/HiddenNavigationLink.jsx';
+import Icon from './components/Icon/Icon.jsx';
 
 export default function App() {
     const [disabled, setDisabled] = useState(false);
@@ -19,6 +20,8 @@ export default function App() {
     const [icon, setIcon] = useState(null);
     const [toggle, setToggle] = useState(undefined);
     const [checked, setChecked] = useState(false);
+    const [iconWithText, setIconWithText] = useState(true);
+    const [iconFill, setIconFill] = useState(true);
 
     const buttonProps = {
         disabled,
@@ -46,16 +49,16 @@ export default function App() {
                 </FilledButton>
             </Tooltip>
 
-            <TonalButton onClick={() => console.log('click')} {...buttonProps}>
-                Bouton rempli
+            <TonalButton onClick={() => setIconFill((value) => !value)} {...buttonProps}>
+                Bouton rempli, icônes remplies
             </TonalButton>
 
             <OutlinedButton onClick={() => setIcon((icon) => icon ? null : 'favorite')} {...buttonProps}>
                 Bouton entouré, toggle icons
             </OutlinedButton>
 
-            <TextButton onClick={(e) => console.log(e)} {...buttonProps}>
-                Bouton texte
+            <TextButton onClick={() => setIconWithText((value) => !value)} {...buttonProps}>
+                Bouton texte, icon with text
             </TextButton>
 
             <FAB onClick={() => setMobile((value) => !value)} icon="edit" floating={mobile} >
@@ -75,6 +78,8 @@ export default function App() {
             <Checkbox name="test" checked={checked} label="Test checkbox" onChange={(e) => setChecked(e.target.checked)} disabled={disabled}/>
 
             <CheckboxLabel name="test" checked={checked} onChange={(e) => setChecked(e.target.checked)} disabled={disabled}>Test checkbox label</CheckboxLabel>
+
+            <p><Icon name="favorite" fill={iconFill}/> {iconWithText && 'Texte!!!'}</p>
         </div>
     );
 }

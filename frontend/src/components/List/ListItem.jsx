@@ -57,7 +57,7 @@ export default function ListItem({
                 <Heading id={headingId} className={style.headline}>{headline}</Heading>
                 {supportingText && <p className={style.supportingText}>{supportingText}</p>}
             </div>
-            {link && <Icon className={style.icon} name="arrow_right" isWithText={true} isOnDark={isDarkTheme}/>}
+            {link && <Icon className={style.icon} name="arrow_right" isOnDark={isDarkTheme}/>}
         </Link>
     </li>;
 }

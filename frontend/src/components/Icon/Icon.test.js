@@ -10,6 +10,7 @@ describe('Icon component test suite', () => {
 
     it('should render', () => {
         render(<Icon name={iconName}/>);
+        screen.getByText(iconName);
     });
 
     it('should have a label', () => {
@@ -46,21 +47,10 @@ describe('Icon component test suite', () => {
         expect(iconElt.style.getPropertyValue('--icon-grad')).toBe('175');
     });
 
-    it('should be aligned with text', () => {
-        render(<Icon name={iconName} isWithText/>);
+    it('should receive additionnal class names', () => {
+        const className = 'test';
+        render(<Icon name={iconName} className={className}/>);
         const iconElt = screen.getByText(iconName);
-        expect(iconElt).toHaveClass('withTypo');
-    });
-
-    it('should be a button and trigger an action on click', async () => {
-        const iconAction = jest.fn(() => true);
-        const user = userEvent.setup();
-        render(<Icon name={iconName} action={iconAction} label={iconLabel}/>);
-
-        const iconElt = screen.getByRole('button');
-
-        await user.click(iconElt);
-
-        expect(iconAction).toHaveBeenCalled();
+        expect(iconElt).toHaveClass(className);
     });
 });

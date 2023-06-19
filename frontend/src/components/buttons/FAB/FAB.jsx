@@ -26,7 +26,7 @@ export default function FAB({
         stateLayerColor="on-secondary-container"
         {...other}
     >
-        {icon && <Icon name={icon} className={style.icon} size={24} isWithText={true} isOnDark={isDarkTheme}/>}
+        {icon && <Icon name={icon} className={style.icon} size={24} isOnDark={isDarkTheme}/>}
         {children}
     </Button>;
 }

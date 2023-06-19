@@ -12,23 +12,9 @@
         font-weight: var(--icon-weight);
 
         font-size: var(--icon-size);
-    }
-
-    .withTypo {
-        composes: icon;
         vertical-align: middle;
-    }
 
-    /* Reset button style */
-    button.icon {
-        border: none;
-        background-color: transparent;
-        padding: 0;
-        margin: 0;
-    }
-
-    button.icon:focus-visible {
-        outline: rgb(var(--color-outline-focus)) var(--size-2) solid;
-        outline-offset: var(--size-1);
+        transition: font-variation-settings var(--motion-duration-3)
+            var(--motion-easing-standard-decelerate);
     }
 }
