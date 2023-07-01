@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
-import style from './StandardIconButton.module.css';
+import style from './SimpleIconButton.module.css';
 import IconButton from '../IconButton/IconButton.jsx';
 
 /**
- * Standard icon button
+ * Icon button with no state layer or complex styling
  */
-export default function StandardIconButton({
+export default function SimpleIconButton({
     disabled, autoFocus, onClick, label, name, toggle, className, ...other
 }) {
     return (
@@ -15,16 +15,16 @@ export default function StandardIconButton({
             onClick={onClick}
             label={label}
             name={name}
-            buttonClassName={style.standardIconButton}
+            buttonClassName={style.simpleIconButton}
             className={className}
             toggle={toggle}
-            stateLayerColor={toggle ? 'primary' : 'on-surface-variant'}
+            stateLayerColor={false}
             {...other}
         />
     );
 }
 
-StandardIconButton.defaultProps = {
+SimpleIconButton.defaultProps = {
     disabled: false,
     autoFocus: false,
     onClick: undefined,
@@ -32,7 +32,7 @@ StandardIconButton.defaultProps = {
     className: '',
 };
 
-StandardIconButton.propTypes = {
+SimpleIconButton.propTypes = {
     /** Weither the button is disabled or not */
     disabled: PropTypes.bool,
 

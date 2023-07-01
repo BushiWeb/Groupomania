@@ -1,5 +1,5 @@
 @layer components {
     .tooltipContainer {
-        position: relative;
+        position: var(--tooltip-position, relative);
     }
 }

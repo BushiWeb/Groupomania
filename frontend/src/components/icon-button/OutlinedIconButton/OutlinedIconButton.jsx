@@ -6,7 +6,7 @@ import IconButton from '../IconButton/IconButton.jsx';
  * Outlined icon button button
  */
 export default function OutlinedIconButton({
-    disabled, autoFocus, onClick, label, icon, toggle, ...other
+    disabled, autoFocus, onClick, label, name, toggle, className, ...other
 }) {
     return (
         <IconButton
@@ -14,8 +14,9 @@ export default function OutlinedIconButton({
             autoFocus={autoFocus}
             onClick={onClick}
             label={label}
-            icon={icon}
-            classNames={style.outlinedIconButton}
+            name={name}
+            buttonClassName={style.outlinedIconButton}
+            className={className}
             toggle={toggle}
             stateLayerColor={toggle ? 'on-inverse-surface' : 'on-surface-variant'}
             {...other}
@@ -28,6 +29,7 @@ OutlinedIconButton.defaultProps = {
     autoFocus: false,
     onClick: undefined,
     toggle: undefined,
+    className: '',
 };
 
 OutlinedIconButton.propTypes = {
@@ -44,7 +46,7 @@ OutlinedIconButton.propTypes = {
     label: PropTypes.string.isRequired,
 
     /** Icon name */
-    icon: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
 
     /**
      * State of the button.
@@ -53,4 +55,7 @@ OutlinedIconButton.propTypes = {
      * If false, the button is not selected.
      */
     toggle: PropTypes.bool,
+
+    /** Additional class, useful for positionning the element */
+    className: PropTypes.string,
 };

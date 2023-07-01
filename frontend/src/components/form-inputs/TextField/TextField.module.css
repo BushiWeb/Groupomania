@@ -1,5 +1,191 @@
 @layer components {
-    /* Text field styling */
     .textField {
+        display: flex;
+        flex-direction: column;
+        gap: var(--padding-1);
+
+        position: relative;
+    }
+
+    .labelContainer {
+        height: var(--size-13);
+
+        --input-padding-start: var(--padding-4);
+        --input-padding-end: var(--padding-4);
+        padding-inline-start: var(--input-padding-start);
+        padding-inline-end: var(--input-padding-end);
+
+        border: var(--input-border-width, var(--size-1)) solid
+            var(--input-border-color, rgb(var(--color-outline)));
+        border-radius: var(--border-radius-2);
+
+        position: relative;
+
+        display: grid;
+        place-content: center / stretch;
+
+        background-color: rgb(var(--text-input-bg, var(--color-surface)));
+    }
+
+    .labelContainer[data-leading-icon] {
+        --input-padding-start: var(--padding-13);
+    }
+
+    .labelContainer[data-trailing-icon] {
+        --input-padding-end: var(--padding-13);
+    }
+
+    .labelText {
+        color: rgb(var(--color-on-surface-variant));
+        background-color: inherit;
+
+        position: absolute;
+        left: var(--input-padding-start);
+        top: 50%;
+        translate: 0 -50%;
+
+        font-size: var(--typo-label-large-size);
+        font-weight: var(--typo-label-large-weight);
+        line-height: var(--typo-label-large-line-height);
+        letter-spacing: var(--typo-label-large-tracking);
+
+        transition-property: all;
+        transition-duration: var(--motion-duration-4);
+        transition-timing-function: var(--motion-easing-standard-decelerate);
+    }
+
+    .input:focus + .labelText,
+    .input:placeholder-shown + .labelText,
+    .filledInput + .labelText {
+        padding-inline: var(--padding-1);
+        left: var(--padding-3);
+        top: 0;
+
+        background-color: inherit;
+
+        font-size: var(--typo-body-small-size);
+        font-weight: var(--typo-body-small-weight);
+        line-height: var(--typo-body-small-line-height);
+        letter-spacing: var(--typo-body-small-tracking);
+    }
+
+    .input {
+        composes: body-large from '../../../assets/styles/patterns/typography.module.css';
+
+        color: rgb(var(--color-on-surface));
+        caret-color: rgb(var(--color-primary));
+        appearance: none;
+        background-color: transparent;
+        border: none;
+        padding: 0;
+    }
+
+    .input::placeholder {
+        color: rgb(var(--color-on-surface-variant));
+    }
+
+    .input:focus-visible {
+        outline: none;
+    }
+
+    .supportText {
+        composes: body-small from '../../../assets/styles/patterns/typography.module.css';
+
+        color: rgb(var(--color-on-surface-variant));
+        padding-inline: var(--padding-4);
+    }
+
+    .leadingIcon {
+        color: rgb(var(--color-on-surface-variant));
+
+        position: absolute;
+        left: var(--padding-3);
+        top: calc((var(--size-13) - var(--size-8)) / 2);
+        z-index: var(--layer-2);
+    }
+
+    .trailingIcon {
+        color: rgb(var(--color-on-surface-variant));
+
+        position: absolute;
+        right: var(--padding-3);
+        top: calc((var(--size-13) - var(--size-8)) / 2);
+        z-index: var(--layer-2);
+    }
+
+    .trailingIconButton {
+        --tooltip-position: absolute;
+        right: var(--padding-3);
+        top: calc((var(--size-13) - var(--size-11)) / 2);
+        z-index: var(--layer-2);
+    }
+
+    /* Disabled state */
+    .textField[data-disabled] .labelContainer {
+        --input-border-color: rgb(
+            var(--color-on-surface) / var(--state-disabled-bg-opacity)
+        );
+    }
+
+    .input:disabled + .labelText,
+    .input:disabled,
+    .textField[data-disabled] .supportText,
+    .textField[data-disabled] .leadingIcon,
+    .textField[data-disabled] .trailingIcon {
+        color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+    }
+
+    /* Hovered state */
+    .textField:hover .labelContainer {
+        --input-border-color: rgb(var(--color-on-surface));
+    }
+
+    .textField:hover .labelText {
+        color: rgb(var(--color-on-surface));
+    }
+
+    /* Focus state */
+    .labelContainer:focus-within,
+    .textField:hover .labelContainer:focus-within {
+        --input-border-color: rgb(var(--color-primary));
+        --input-border-width: var(--size-2);
+    }
+
+    .labelContainer:focus-within .labelText {
+        color: rgb(var(--color-primary));
+    }
+
+    /* Error */
+    .errorMessage {
+        composes: supportText;
+
+        color: rgb(var(--color-error));
+    }
+
+    .textField[data-error]:hover .labelContainer {
+        --input-border-color: rgb(var(--color-on-error-container));
+    }
+
+    .textField[data-error]:hover .labelText,
+    .textField[data-error]:hover .trailingIcon {
+        color: rgb(var(--color-on-error-container));
+    }
+
+    .textField[data-error] .labelContainer,
+    .textField[data-error] .labelContainer:focus-within {
+        --input-border-color: rgb(var(--color-error));
+    }
+
+    .textField[data-error] .input {
+        caret-color: rgb(var(--color-error));
+    }
+
+    .textField[data-error] .labelText,
+    .textField[data-error] .trailingIcon,
+    .textField[data-error] .labelContainer:focus-within .labelText,
+    .textField[data-error]:focus-within .trailingIcon {
+        color: rgb(var(--color-error));
     }
 }

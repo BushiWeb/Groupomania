@@ -14,6 +14,10 @@
     --padding-7: calc(var(--ref-spacing-padding-increment) * 7);
     --padding-8: calc(var(--ref-spacing-padding-increment) * 8);
     --padding-9: calc(var(--ref-spacing-padding-increment) * 9);
+    --padding-10: calc(var(--ref-spacing-padding-increment) * 10);
+    --padding-11: calc(var(--ref-spacing-padding-increment) * 11);
+    --padding-12: calc(var(--ref-spacing-padding-increment) * 12);
+    --padding-13: calc(var(--ref-spacing-padding-increment) * 13);
 
     /* Margin sizes */
     --page-margin: var(--ref-spacing-margin-small);

@@ -60,13 +60,13 @@ const InteractiveElement = forwardRef(function InteractiveElement({
         ref={ref}
     >
         <div className={style.targetLayer}></div>
-        <div
+        {stateLayerColor && <div
             className={style.stateLayer}
             style={{
                 '--state-layer-color': `var(--color-${stateLayerColor})`,
             }}
             ref={stateLayerRef}
-        ></div>
+        ></div>}
         {children}
     </Root>;
 });
@@ -104,8 +104,9 @@ InteractiveElement.propTypes = {
     /** Duration of the ripple effect. To prevent the effect from running, give the value 0. Defaults to 0 */
     rippleDuration: PropTypes.number,
 
-    /** Color of the state layer, on-surface by default */
+    /** Color of the state layer, on-surface by default, false to remove it */
     stateLayerColor: PropTypes.oneOf([
+        false,
         'primary',
         'on-primary',
         'primary-container',

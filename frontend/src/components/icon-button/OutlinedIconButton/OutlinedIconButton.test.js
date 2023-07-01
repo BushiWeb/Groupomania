@@ -8,19 +8,19 @@ import '@testing-library/jest-dom';
 
 describe('OutlinedIconButton component test suite', () => {
     const label = 'test';
-    const icon = 'favorite';
+    const name = 'favorite';
 
     it('should render', () => {
-        render(<OutlinedIconButton icon={icon} label={label}/>);
+        render(<OutlinedIconButton name={name} label={label}/>);
         const buttonElt = screen.getByRole('button', { name: label });
-        expect(buttonElt).toHaveTextContent(icon);
+        expect(buttonElt).toHaveTextContent(name);
         expect(buttonElt).not.toHaveAttribute('aria-pressed');
     });
 
     it('should execute the action when clicked', async () => {
         const buttonAction = jest.fn(() => true);
         const user = userEvent.setup();
-        render(<OutlinedIconButton icon={icon} label={label} onClick={buttonAction}/>);
+        render(<OutlinedIconButton name={name} label={label} onClick={buttonAction}/>);
 
         const buttonElt = screen.getByRole('button');
 
@@ -32,7 +32,7 @@ describe('OutlinedIconButton component test suite', () => {
     it('should be accessible using the keyboard', async () => {
         const buttonAction = jest.fn(() => true);
         const user = userEvent.setup();
-        render(<OutlinedIconButton icon={icon} label={label} onClick={buttonAction}/>);
+        render(<OutlinedIconButton name={name} label={label} onClick={buttonAction}/>);
         const buttonElt = screen.getByRole('button');
 
         expect(buttonElt).not.toHaveFocus();
@@ -50,19 +50,19 @@ describe('OutlinedIconButton component test suite', () => {
     });
 
     it('should have the initial focus', () => {
-        render(<OutlinedIconButton icon={icon} label={label} autoFocus={true}/>);
+        render(<OutlinedIconButton name={name} label={label} autoFocus={true}/>);
         const buttonElt = screen.getByRole('button');
         expect(buttonElt).toHaveFocus();
     });
 
     it('should be disabled', () => {
-        render(<OutlinedIconButton icon={icon} label={label} disabled={true}/>);
+        render(<OutlinedIconButton name={name} label={label} disabled={true}/>);
         const buttonElt = screen.getByRole('button');
         expect(buttonElt).toBeDisabled();
     });
 
     it('should be disabled and don\'t have the focus', () => {
-        render(<OutlinedIconButton icon={icon} label={label} disabled={true} autoFocus={true}/>);
+        render(<OutlinedIconButton name={name} label={label} disabled={true} autoFocus={true}/>);
         const buttonElt = screen.getByRole('button');
         expect(buttonElt).toBeDisabled();
         expect(buttonElt).not.toHaveFocus();
@@ -71,7 +71,7 @@ describe('OutlinedIconButton component test suite', () => {
     it('should trigger the ripple effect when activated', async () => {
         fakeTimers.useFakeTimers();
         const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        render(<OutlinedIconButton icon={icon} label={label} />);
+        render(<OutlinedIconButton name={name} label={label} />);
         const buttonElt = screen.getByRole('button');
         const stateLayer = buttonElt.querySelector('.stateLayer');
 
@@ -101,7 +101,7 @@ describe('OutlinedIconButton component test suite', () => {
 
     it('should not trigger the ripple effect if disabled', async () => {
         const user = userEvent.setup();
-        render(<OutlinedIconButton icon={icon} label={label} disabled={true}/>);
+        render(<OutlinedIconButton name={name} label={label} disabled={true}/>);
         const buttonElt = screen.getByRole('button');
         const stateLayer = buttonElt.querySelector('.stateLayer');
 
@@ -117,7 +117,7 @@ describe('OutlinedIconButton component test suite', () => {
     it('should display a tooltip when hovered', async () => {
         fakeTimers.useFakeTimers();
         const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        const { container } = render(<OutlinedIconButton icon={icon} label={label}/>);
+        const { container } = render(<OutlinedIconButton name={name} label={label}/>);
         const buttonElt = screen.getByRole('button', { name: label });
 
         await user.hover(buttonElt);
@@ -130,20 +130,27 @@ describe('OutlinedIconButton component test suite', () => {
 
     it('should add any other prop passed to it', () => {
         const description = 'lorem';
-        render(<OutlinedIconButton icon={icon} label={label} aria-describedby={description}/>);
+        render(<OutlinedIconButton name={name} label={label} aria-describedby={description}/>);
         const buttonElt = screen.getByRole('button');
         expect(buttonElt.getAttribute('aria-describedby')).toBe(description);
     });
 
     it('should be activated', () => {
-        render(<OutlinedIconButton icon={icon} label={label} toggle={true}/>);
+        render(<OutlinedIconButton name={name} label={label} toggle={true}/>);
         const buttonElt = screen.getByRole('button', { name: label });
         expect(buttonElt).toHaveAttribute('aria-pressed', 'true');
     });
 
     it('should not be activated', () => {
-        render(<OutlinedIconButton icon={icon} label={label} toggle={false}/>);
+        render(<OutlinedIconButton name={name} label={label} toggle={false}/>);
         const buttonElt = screen.getByRole('button', { name: label });
         expect(buttonElt).toHaveAttribute('aria-pressed', 'false');
+    });
+
+    it('should have additionnal classnamest', () => {
+        const additionnalClass = 'test';
+        const { container } = render(<OutlinedIconButton name={name} label={label} className={additionnalClass}/>);
+        const iconButtonElt = container.querySelector('.tooltipContainer');
+        expect(iconButtonElt).toHaveClass(additionnalClass);
     });
 });

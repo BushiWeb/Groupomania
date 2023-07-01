@@ -19,7 +19,7 @@ export default function Button({
     return <InteractiveElement
         rootElement="button"
         className={`${style.button} ${classNames}`}
-        rippleDuration={disabled ? null : 350}
+        rippleDuration={disabled || !stateLayerColor ? null : 350}
         stateLayerColor={stateLayerColor}
         hover={hover}
         focus={focus}
@@ -76,6 +76,6 @@ Button.propTypes = {
     /** InteractiveElement's active prop. */
     active: PropTypes.bool,
 
-    /** InteractiveElement's stateLayerColor prop. */
-    stateLayerColor: PropTypes.string,
+    /** InteractiveElement's stateLayerColor prop */
+    stateLayerColor: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 };

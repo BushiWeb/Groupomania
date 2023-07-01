@@ -10,24 +10,24 @@ import Tooltip from '../../../features/tooltip/Tooltip.jsx';
  * Icon button. Should be used as a blueprint to create other stylised button like outlined ones.
  */
 export default function IconButton({
-    disabled, autoFocus, onClick, label, icon, classNames, toggle, stateLayerColor, ...other
+    disabled, autoFocus, onClick, label, name, className, buttonClassName, toggle, stateLayerColor, ...other
 }) {
     const isDarkTheme = useSelector(selectIsDarkTheme);
 
     return (
-        <Tooltip label={label}>
+        <Tooltip label={label} className={className}>
             <Button
                 disabled={disabled}
                 autoFocus={autoFocus}
                 onClick={onClick}
                 label={label}
-                classNames={classNames}
+                classNames={buttonClassName}
                 stateLayerColor={stateLayerColor}
                 aria-pressed={toggle}
                 {...other}
             >
                 <Icon
-                    name={icon}
+                    name={name}
                     className={style.icon}
                     size={24}
                     fill={toggle}
@@ -42,7 +42,8 @@ IconButton.defaultProps = {
     disabled: false,
     autoFocus: false,
     onClick: undefined,
-    classNames: '',
+    className: '',
+    buttonClassName: '',
     toggle: undefined,
     stateLayerColor: undefined,
 };
@@ -63,10 +64,13 @@ IconButton.propTypes = {
     label: PropTypes.string.isRequired,
 
     /** Icon name */
-    icon: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
 
-    /** Additional class names */
-    classNames: PropTypes.string,
+    /** Additional class names for the component */
+    className: PropTypes.string,
+
+    /** Additional class names for the button element */
+    buttonClassName: PropTypes.string,
 
     /**
      * State of the button.
@@ -77,5 +81,5 @@ IconButton.propTypes = {
     toggle: PropTypes.bool,
 
     /** InteractiveElement's stateLayerColor prop. */
-    stateLayerColor: PropTypes.string,
+    stateLayerColor: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 };

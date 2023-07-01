@@ -1,51 +1,139 @@
-import PropTypes from 'prop-types';
+import PropTypes, { instanceOf } from 'prop-types';
 import style from './TextField.module.css';
-import Icon from '../../Icon/Icon.jsx';
-import StandardIconButton from '../../icon-button/StandardIconButton/StandardIconButton.jsx';
+import InteractiveElement from '../../InteractiveElement/InteractiveElement.jsx';
+import Icon from '../../Icon/Icon';
+import SimpleIconButton from '../../icon-button/SimpleIconButton/SimpleIconButton.jsx';
+import { useId, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { selectIsDarkTheme } from '../../../utils/selectors';
 
 /**
- * Text field component.
+ * Text field component. It is a controlled component.
+ * Allows to create text, password, email, tel and url inputs.
+ * All additionnal props are given to the input, so passing autoFocus, disabled and such is possible.
  */
 export default function TextField({
-    label, value, trailingIcon, trailingIconAction, supportText, inputType, disabled,
+    value, onChange, label, type, supportText, errorMessage, trailingIcon, leadingIcon, className, ...inputProps
 }) {
-    return <div className={style.textField}>
-        <label htmlFor="">{label}</label>
-        <div>
-            <input type={inputType} id="" value={value} disabled={disabled} />
-            <StandardIconButton icon={trailingIcon} action={trailingIconAction}/>
-        </div>
+    const supportTextId = useId();
+    const darkTheme = useSelector(selectIsDarkTheme);
+    const inputRef = useRef();
+
+    function handleClick(e) {
+        if (inputRef) {
+            inputRef.current.focus();
+        }
+    }
+
+    return <div
+        className={`${style.textField} ${className}`}
+        onClick={handleClick}
+        {...inputProps?.disabled && { 'data-disabled': true }}
+        {...errorMessage && { 'data-error': true, 'role': 'alert' }}
+        {...(errorMessage || supportText) && { 'aria-labelledby': supportTextId }}
+    >
+
+        {leadingIcon && <Icon {...leadingIcon} className={style.leadingIcon} isOnDark={darkTheme}/>}
+
+        <InteractiveElement
+            rootElement="label"
+            active={false}
+            stateLayerColor={false}
+            className={style.labelContainer}
+            {...leadingIcon && { 'data-leading-icon': true }}
+            {...trailingIcon && { 'data-trailing-icon': true }}
+        >
+            <input
+                type={type}
+                className={`${style.input} ${value ? style.filledInput : ''}`}
+                onChange={onChange}
+                value={value}
+                {...inputProps}
+                ref={inputRef}
+            />
+            <span className={style.labelText}>{label}{inputProps?.required && '*'}</span>
+        </InteractiveElement>
+
+        {
+            (trailingIcon || errorMessage) &&
+            (errorMessage ?
+                <Icon name="error" label="Error" fill={true} className={style.trailingIcon} isOnDark={darkTheme}/> :
+                trailingIcon.onClick ?
+                    <SimpleIconButton
+                        {...trailingIcon}
+                        className={style.trailingIconButton}
+                        {...inputProps?.disabled && { disabled: true }}
+                    /> :
+                    <Icon {...trailingIcon} className={style.trailingIcon} isOnDark={darkTheme}/>)
+        }
+
+        {(errorMessage || supportText) &&
+        <p className={errorMessage ? style.errorMessage : style.supportText} id={supportTextId}>
+            {errorMessage || supportText}
+        </p> }
     </div>;
 }
 
 TextField.defaultProps = {
-    value: undefined,
+    type: 'text',
+    value: '',
+    supportText: undefined,
+    errorMessage: undefined,
+    placeholder: undefined,
     trailingIcon: undefined,
-    trailingIconAction: undefined,
-    supportText: '',
-    inputType: 'text',
-    disabled: false,
+    leadingIcon: undefined,
+    className: '',
 };
 
 TextField.propTypes = {
-    /** Label of the checkbox */
+    /** Current value of the test input */
+    value: PropTypes.string,
+
+    /** Function to execute when the value changes, required */
+    onChange: PropTypes.func.isRequired,
+
+    /** Label of the input, required */
     label: PropTypes.string.isRequired,
 
-    /** Initial value of the text field */
-    value: PropTypes.any,
+    /** Type of the input, defaults to text */
+    type: PropTypes.oneOf([
+        'text',
+        'password',
+        'email',
+        'tel',
+        'url',
+    ]),
 
-    /** Trailing icon name. If no name is given, no icon will be present */
-    trailingIcon: PropTypes.string,
+    /** Text giving more informations about the input */
+    supportText: PropTypes.string,
 
-    /** Action to execute when clicking on the trailing icon. If no action is given, the icon is not clickable */
-    trailingIconAction: PropTypes.func,
+    /** Error message. If it is given, then the input value is considered invalid */
+    errorMessage: PropTypes.string,
 
-    /** Text to display underneath the text field */
-    supportText: PropTypes.func,
+    /** Input placeholder */
+    placeholder: PropTypes.string,
 
-    /** Type of the input. Can be text (default), email, password, tel or url */
-    inputType: PropTypes.oneOf(['text', 'email', 'password', 'tel', 'url']),
+    /**
+     * Object describing the trailing icon,
+     * additionnal properties are given to the icon,
+     * adding an onClick transforms the icon into a button,
+     * unless the functions calls stopPropagation, the input will be focused after the event
+     */
+    trailingIcon: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        label: PropTypes.string,
+        onClick: PropTypes.func,
+    }),
 
-    /** Weither the element is disabled or not */
-    disabled: PropTypes.bool,
+    /**
+     * Object describing the leading icon,
+     * additionnal properties are given to the icon
+     */
+    leadingIcon: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        label: PropTypes.string,
+    }),
+
+    /** Additional class names to add to the container */
+    className: PropTypes.string,
 };
