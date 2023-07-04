@@ -1,9 +1,10 @@
 import { useState } from 'react';
+import PasswordField from './components/form-inputs/PasswordField/PasswordField.jsx';
 import TextField from './components/form-inputs/TextField/TextField.jsx';
+import FilledButton from './components/buttons/FilledButton/FilledButton.jsx';
 
 export default function App() {
     const [value, setValue] = useState('');
-    const [value2, setValue2] = useState('');
 
     return (
         <div style={{
@@ -15,77 +16,65 @@ export default function App() {
             backgroundColor: 'rgb(var(--color-surface))',
             isolation: 'isolate',
         }}>
-            <TextField value={value} label="Text input test" onChange={(e) => setValue(e.target.value)} name="test" supportText="Supporting text"/>
-
-            <TextField
-                value={value2}
-                label="Text input test avec icônes"
-                onChange={(e) => setValue2(e.target.value)}
+            <FilledButton onClick={(e) => console.log(Math.random())}>Coucou</FilledButton>
+            <PasswordField
+                value={value}
+                label="Classique"
+                onChange={(e) => setValue(e.target.value)}
                 name="test2"
-                leadingIcon={{ name: 'favorite', label: 'favorite' }}
-                trailingIcon={{ name: 'done', label: 'done', onClick: (e) => console.log('coucou') }}
                 supportText="Supporting text"
             />
 
-            <TextField
-                value={value2}
-                label="Text input test avec icônes"
-                onChange={(e) => setValue2(e.target.value)}
+            <PasswordField
+                value={value}
+                label="Erreur"
+                onChange={(e) => setValue(e.target.value)}
                 name="test2"
-                leadingIcon={{ name: 'favorite', label: 'favorite' }}
-                trailingIcon={{ name: 'done', label: 'done', onClick: (e) => console.log('coucou') }}
                 supportText="Supporting text"
                 errorMessage="Error"
             />
 
             <TextField
-                value={value2}
-                label="Text input disabled"
+                value={value}
+                label="Erreur"
+                onChange={(e) => setValue(e.target.value)}
+                supportText="Supporting text"
+                errorMessage="Error"
+            />
+
+            <PasswordField
+                value={value}
+                label="Disabled"
                 disabled={true}
-                onChange={(e) => setValue2(e.target.value)}
+                onChange={(e) => setValue(e.target.value)}
                 name="test2"
-                leadingIcon={{ name: 'favorite', label: 'favorite' }}
-                trailingIcon={{ name: 'done', label: 'done', onClick: (e) => setValue2('') }}
                 supportText="Supporting text"
             />
 
-            <TextField
-                value={value2}
-                label="Text input placeholder"
+            <PasswordField
+                value={value}
+                label="Placeholder"
                 placeholder="Placeholder"
-                onChange={(e) => setValue2(e.target.value)}
+                onChange={(e) => setValue(e.target.value)}
                 name="test2"
-                leadingIcon={{ name: 'favorite', label: 'favorite' }}
-                trailingIcon={{
-                    name: 'done',
-                    label: 'done',
-                    onClick: (e) => {
-                        e.stopPropagation();
-                        setValue2('');
-                    },
-                }}
                 supportText="Supporting text"
             />
 
-            <TextField
-                value={value2}
-                label="Text input read only"
+            <PasswordField
+                value={value}
+                label="ReadOnly"
                 readOnly={true}
-                onChange={(e) => setValue2(e.target.value)}
+                onChange={(e) => setValue(e.target.value)}
                 name="test2"
-                leadingIcon={{ name: 'favorite', label: 'favorite' }}
-                trailingIcon={{ name: 'done', label: 'done', onClick: (e) => setValue2('') }}
                 supportText="Supporting text"
             />
 
-            <TextField
-                value={value2}
-                label="Text input required"
+            <PasswordField
+                value={value}
+                label="Required"
                 required={true}
-                onChange={(e) => setValue2(e.target.value)}
+                onChange={(e) => setValue(e.target.value)}
                 name="test2"
-                leadingIcon={{ name: 'favorite', label: 'favorite' }}
-                trailingIcon={{ name: 'done', label: 'done', onClick: (e) => setValue2('') }}
                 supportText="Supporting text"
             />
         </div>

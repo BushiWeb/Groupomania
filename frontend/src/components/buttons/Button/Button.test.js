@@ -72,11 +72,11 @@ describe('Button component test suite', () => {
 
         buttonAction.mockClear();
         await user.keyboard(' ');
-        expect(buttonAction).toHaveBeenCalled();
+        expect(buttonAction).toHaveBeenCalledTimes(1);
 
         buttonAction.mockClear();
         await user.keyboard('{Enter}');
-        expect(buttonAction).toHaveBeenCalled();
+        expect(buttonAction).toHaveBeenCalledTimes(1);
     });
 
     it('should trigger the ripple effect when activated', async () => {

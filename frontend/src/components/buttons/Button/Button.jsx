@@ -10,12 +10,6 @@ import InteractiveElement from '../../InteractiveElement/InteractiveElement.jsx'
 export default function Button({
     children, disabled, autoFocus, onClick, label, classNames, hover, focus, active, stateLayerColor, ...other
 }) {
-    function handleKeyDown(e) {
-        if ((e.key === ' ' || e.key === 'Enter') && onClick) {
-            onClick(e);
-        }
-    }
-
     return <InteractiveElement
         rootElement="button"
         className={`${style.button} ${classNames}`}
@@ -28,7 +22,6 @@ export default function Button({
         disabled={disabled}
         autoFocus={autoFocus}
         onClick={onClick}
-        onKeyDown={handleKeyDown}
         aria-label={label}
         {...other}
     >

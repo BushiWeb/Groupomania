@@ -22,7 +22,7 @@
         position: relative;
 
         display: grid;
-        place-content: center / stretch;
+        place-content: center stretch;
 
         background-color: rgb(var(--text-input-bg, var(--color-surface)));
     }
@@ -115,6 +115,7 @@
 
     .trailingIconButton {
         --tooltip-position: absolute;
+        color: rgb(var(--color-on-surface-variant));
         right: var(--padding-3);
         top: calc((var(--size-13) - var(--size-11)) / 2);
         z-index: var(--layer-2);
@@ -138,11 +139,11 @@
     }
 
     /* Hovered state */
-    .textField:hover .labelContainer {
+    .textField:not([data-disabled]):hover .labelContainer {
         --input-border-color: rgb(var(--color-on-surface));
     }
 
-    .textField:hover .labelText {
+    .textField:not([data-disabled]):hover .labelText {
         color: rgb(var(--color-on-surface));
     }
 
@@ -160,32 +161,53 @@
     /* Error */
     .errorMessage {
         composes: supportText;
+    }
 
+    .textField:not([data-disabled]) .errorMessage {
         color: rgb(var(--color-error));
     }
 
-    .textField[data-error]:hover .labelContainer {
+    .errorMessageWithIcon {
+        composes: errorMessage;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: var(--padding-1);
+    }
+
+    .errorMessageIcon {
+        --icon-font-size: calc(
+            var(--typo-body-small-size) * var(--typo-body-small-line-height)
+        );
+    }
+
+    .textField[data-error]:not([data-disabled]):hover .labelContainer {
         --input-border-color: rgb(var(--color-on-error-container));
     }
 
-    .textField[data-error]:hover .labelText,
-    .textField[data-error]:hover .trailingIcon {
+    .textField[data-error]:not([data-disabled]):hover .labelText,
+    .textField[data-error]:not([data-disabled]):hover .trailingIcon,
+    .textField[data-error]:not([data-disabled]):hover .trailingIconButton {
         color: rgb(var(--color-on-error-container));
     }
 
-    .textField[data-error] .labelContainer,
+    .textField[data-error]:not([data-disabled]) .labelContainer,
     .textField[data-error] .labelContainer:focus-within {
         --input-border-color: rgb(var(--color-error));
     }
 
-    .textField[data-error] .input {
+    .textField[data-error]:not([data-disabled]) .input {
         caret-color: rgb(var(--color-error));
     }
 
-    .textField[data-error] .labelText,
-    .textField[data-error] .trailingIcon,
+    .textField[data-error]:not([data-disabled]) .labelText,
+    .textField[data-error]:not([data-disabled]) .trailingIcon,
+    .textField[data-error]:not([data-disabled]) .trailingIconButton,
     .textField[data-error] .labelContainer:focus-within .labelText,
-    .textField[data-error]:focus-within .trailingIcon {
+    .textField[data-error]:focus-within .trailingIcon,
+    .textField[data-error]:focus-within .trailingIconButton {
         color: rgb(var(--color-error));
     }
 }

@@ -1,11 +1,12 @@
-import PropTypes, { instanceOf } from 'prop-types';
+import PropTypes from 'prop-types';
 import style from './TextField.module.css';
 import InteractiveElement from '../../InteractiveElement/InteractiveElement.jsx';
 import Icon from '../../Icon/Icon';
-import SimpleIconButton from '../../icon-button/SimpleIconButton/SimpleIconButton.jsx';
 import { useId, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { selectIsDarkTheme } from '../../../utils/selectors';
+import TrailingIcon from './TrailingIcon';
+import SupportText from './SupportText';
 
 /**
  * Text field component. It is a controlled component.
@@ -19,6 +20,10 @@ export default function TextField({
     const darkTheme = useSelector(selectIsDarkTheme);
     const inputRef = useRef();
 
+    if (inputProps?.required) {
+        supportText = `*required${supportText ? `, ${supportText}` : ''}`;
+    }
+
     function handleClick(e) {
         if (inputRef) {
             inputRef.current.focus();
@@ -30,7 +35,6 @@ export default function TextField({
         onClick={handleClick}
         {...inputProps?.disabled && { 'data-disabled': true }}
         {...errorMessage && { 'data-error': true, 'role': 'alert' }}
-        {...(errorMessage || supportText) && { 'aria-labelledby': supportTextId }}
     >
 
         {leadingIcon && <Icon {...leadingIcon} className={style.leadingIcon} isOnDark={darkTheme}/>}
@@ -50,27 +54,26 @@ export default function TextField({
                 value={value}
                 {...inputProps}
                 ref={inputRef}
+                {...(errorMessage || supportText) && { 'aria-describedby': supportTextId }}
             />
             <span className={style.labelText}>{label}{inputProps?.required && '*'}</span>
         </InteractiveElement>
 
         {
             (trailingIcon || errorMessage) &&
-            (errorMessage ?
-                <Icon name="error" label="Error" fill={true} className={style.trailingIcon} isOnDark={darkTheme}/> :
-                trailingIcon.onClick ?
-                    <SimpleIconButton
-                        {...trailingIcon}
-                        className={style.trailingIconButton}
-                        {...inputProps?.disabled && { disabled: true }}
-                    /> :
-                    <Icon {...trailingIcon} className={style.trailingIcon} isOnDark={darkTheme}/>)
+            <TrailingIcon
+                disabled={inputProps?.disabled}
+                error={!!errorMessage}
+                {...trailingIcon}
+            />
         }
 
-        {(errorMessage || supportText) &&
-        <p className={errorMessage ? style.errorMessage : style.supportText} id={supportTextId}>
-            {errorMessage || supportText}
-        </p> }
+        <SupportText
+            errorMessage={errorMessage}
+            supportText={supportText}
+            id={supportTextId}
+            errorIcon={!!trailingIcon?.onClick}
+        />
     </div>;
 }
 
@@ -116,8 +119,7 @@ TextField.propTypes = {
     /**
      * Object describing the trailing icon,
      * additionnal properties are given to the icon,
-     * adding an onClick transforms the icon into a button,
-     * unless the functions calls stopPropagation, the input will be focused after the event
+     * adding an onClick transforms the icon into a button
      */
     trailingIcon: PropTypes.shape({
         name: PropTypes.string.isRequired,

@@ -1,12 +1,11 @@
 import '../../../utils/tests/window-mocks.js';
 import TextField from './TextField.jsx';
-import { screen } from '@testing-library/react';
+import { getByLabelText, screen } from '@testing-library/react';
 import { render } from '../../../utils/tests/test-wrapper.js';
 import userEvent from '../../../utils/tests/user-event.js';
-import fakeTimers from '../../../utils/tests/fake-timers.js';
 import '@testing-library/jest-dom';
 
-describe('Checkbox component test suite', () => {
+describe('Textnput component test suite', () => {
     const props = {
         label: 'test label',
         onChange: jest.fn(),
@@ -46,36 +45,56 @@ describe('Checkbox component test suite', () => {
         expect(textInputElt).toHaveAttribute('type', type);
     });
 
-    it('should have a support text, which is the label of the entire widget', () => {
+    it('should have a support text, which describes the input', () => {
         const supportText = 'support text';
         render(<TextField {...props} supportText={supportText}/>);
-        screen.getByText(supportText);
-        const widgetElt = screen.getByLabelText(supportText);
+        const supportTextElt = screen.getByText(supportText);
+        const inputElt = screen.getByLabelText(props.label);
 
-        expect(widgetElt).toHaveClass('textField');
+        expect(inputElt).toHaveAttribute('aria-describedby', supportTextElt.id);
     });
 
-    it('should be have an error message and the alert role', () => {
+    it('should have an error message and the alert role', () => {
         const errorMessage = 'error message';
         render(<TextField {...props} errorMessage={errorMessage}/>);
-        screen.getByText(errorMessage);
+        const errorMessageElt = screen.getByText(errorMessage);
         screen.getByLabelText('Error');
-        const widgetElt = screen.getByRole('alert', { name: errorMessage });
 
+        const widgetElt = screen.getByRole('alert');
         expect(widgetElt).toHaveClass('textField');
+
+        const inputElt = screen.getByLabelText(props.label);
+        expect(inputElt).toHaveAttribute('aria-describedby', errorMessageElt.id);
+    });
+
+    it('should add an error icon in the support text if there is a trailing icon button', () => {
+        const errorMessage = 'error message';
+        const trailingIcon = {
+            name: 'favorite',
+            label: 'trailing icon',
+            onClick: jest.fn(),
+        };
+        const { container } = render(<TextField {...props} errorMessage={errorMessage} trailingIcon={trailingIcon}/>);
+        screen.getByText(errorMessage);
+        screen.getByRole('button', { name: trailingIcon.label });
+        const errorMessageElt = container.querySelector('.errorMessageWithIcon');
+        getByLabelText(errorMessageElt, 'Error');
     });
 
     it('should choose the error message over the support text', () => {
         const errorMessage = 'error message';
         const supportText = 'support text';
         render(<TextField {...props} errorMessage={errorMessage} supportText={supportText}/>);
-        screen.getByText(errorMessage);
+        const errorMessageElt = screen.getByText(errorMessage);
         screen.getByLabelText('Error');
-        const widgetElt = screen.getByRole('alert', { name: errorMessage });
+        const widgetElt = screen.getByRole('alert');
         const supportTextElt = screen.queryByText(supportText);
 
         expect(widgetElt).toHaveClass('textField');
         expect(supportTextElt).toBeNull();
+
+        const inputElt = screen.getByLabelText(props.label);
+        expect(inputElt).toHaveAttribute('aria-describedby', errorMessageElt.id);
     });
 
     it('should have a leading icon', () => {
@@ -115,11 +134,32 @@ describe('Checkbox component test suite', () => {
         await user.click(trailingIconElt);
 
         expect(trailingIcon.onClick).toHaveBeenCalled();
+        expect(trailingIconElt).not.toHaveFocus();
+    });
+
+    it('should give access to the trailing icon button using the keyboard', async () => {
+        const user = userEvent.setup();
+        const trailingIcon = {
+            name: 'favorite',
+            label: 'trailing icon',
+            onClick: jest.fn(),
+        };
+        render(<TextField {...props} trailingIcon={trailingIcon}/>);
+        const trailingIconElt = screen.getByRole('button', { name: trailingIcon.label });
+
+        await user.tab();
+        await user.tab();
+        expect(trailingIconElt).toHaveFocus();
+
+        await user.keyboard('{Enter}');
+        await user.keyboard(' ');
+        expect(trailingIcon.onClick).toHaveBeenCalledTimes(2);
     });
 
     it('should have an asterix next to the label when required', () => {
         render(<TextField {...props} required/>);
         const textInputElt = screen.getByRole('textbox', { name: props.label + '*' });
+        screen.getByText('*required', { exact: false });
         expect(textInputElt).toBeRequired();
     });
 
@@ -127,6 +167,18 @@ describe('Checkbox component test suite', () => {
         render(<TextField {...props} disabled/>);
         const textInputElt = screen.getByRole('textbox', { name: props.label });
         expect(textInputElt).toBeDisabled();
+    });
+
+    it('should disable the trailing icon button', () => {
+        const trailingIcon = {
+            name: 'favorite',
+            label: 'trailing icon',
+            onClick: jest.fn(),
+        };
+        render(<TextField {...props} trailingIcon={trailingIcon} disabled/>);
+        const trailingIconElt = screen.getByRole('button', { name: trailingIcon.label });
+
+        expect(trailingIconElt).toBeDisabled();
     });
 
     it('should be accessible using the keyboard', async () => {
