@@ -84,7 +84,7 @@ describe('IconButton component test suite', () => {
     it('should trigger the ripple effect when activated', async () => {
         fakeTimers.useFakeTimers();
         const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        render(<IconButton name={name} label={label} />);
+        render(<IconButton name={name} label={label} stateLayerColor={'primary'}/>);
         const buttonElt = screen.getByRole('button');
         const stateLayer = buttonElt.querySelector('.stateLayer');
 
@@ -114,7 +114,7 @@ describe('IconButton component test suite', () => {
 
     it('should not trigger the ripple effect if disabled', async () => {
         const user = userEvent.setup();
-        render(<IconButton name={name} label={label} disabled={true}/>);
+        render(<IconButton name={name} label={label} disabled={true} stateLayerColor={'primary'}/>);
         const buttonElt = screen.getByRole('button');
         const stateLayer = buttonElt.querySelector('.stateLayer');
 
@@ -122,6 +122,28 @@ describe('IconButton component test suite', () => {
 
         await user.tab();
         expect(buttonElt).not.toHaveFocus();
+
+        await user.click(buttonElt);
+        expect(stateLayer).not.toHaveClass('ripple');
+    });
+
+    it('should trigger the ripple effect when activated', async () => {
+        const user = userEvent.setup();
+        render(<IconButton name={name} label={label}/>);
+        const buttonElt = screen.getByRole('button');
+        const stateLayer = buttonElt.querySelector('.stateLayer');
+
+        expect(stateLayer).not.toHaveClass('ripple');
+
+        await user.tab();
+        expect(buttonElt).toHaveFocus();
+
+        await user.keyboard(' ');
+        expect(stateLayer).not.toHaveClass('ripple');
+
+
+        await user.keyboard('{Enter}');
+        expect(stateLayer).not.toHaveClass('ripple');
 
         await user.click(buttonElt);
         expect(stateLayer).not.toHaveClass('ripple');

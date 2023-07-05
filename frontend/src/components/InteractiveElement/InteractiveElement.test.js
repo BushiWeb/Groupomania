@@ -1,7 +1,8 @@
 import InteractiveElement from './InteractiveElement.jsx';
 import { screen } from '@testing-library/react';
 import { render } from '../../utils/tests/test-wrapper.js';
-import userEvent from '@testing-library/user-event';
+import userEvent from '../../utils/tests/user-event.js';
+import fakeTimers from '../../utils/tests/fake-timers.js';
 import '@testing-library/jest-dom';
 
 describe('InteractiveElement component test suite', () => {
@@ -106,8 +107,8 @@ describe('InteractiveElement component test suite', () => {
     });
 
     it('should have the ripple effect for the right duration', async () => {
-        jest.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+        fakeTimers.useFakeTimers();
+        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
         render(<InteractiveElement rootElement='button' rippleDuration={500}>{buttonText}</InteractiveElement>);
         const buttonElt = screen.getByRole('button');
         const stateLayer = buttonElt.querySelector('.stateLayer');
@@ -119,21 +120,21 @@ describe('InteractiveElement component test suite', () => {
 
         await user.keyboard(' ');
         expect(stateLayer).toHaveClass('ripple');
-        jest.advanceTimersByTime(500);
+        fakeTimers.advanceTimersByTime(500);
         expect(stateLayer).not.toHaveClass('ripple');
 
 
         await user.keyboard('{Enter}');
         expect(stateLayer).toHaveClass('ripple');
-        jest.advanceTimersByTime(500);
+        fakeTimers.advanceTimersByTime(500);
         expect(stateLayer).not.toHaveClass('ripple');
 
         await user.click(buttonElt);
         expect(stateLayer).toHaveClass('ripple');
-        jest.advanceTimersByTime(500);
+        fakeTimers.advanceTimersByTime(500);
         expect(stateLayer).not.toHaveClass('ripple');
 
-        jest.useRealTimers();
+        fakeTimers.cleanAndUseRealTimers();
     });
 
     it('should execute the on pointer down handler', async () => {

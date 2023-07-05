@@ -25,6 +25,12 @@ const fakeTimers = {
         });
     },
 
+    advanceTimersByTime: (time) => {
+        act(() => {
+            jest.advanceTimersByTime(time);
+        });
+    },
+
     rawAdvanceTimersByTime: jest.advanceTimersByTime,
 };
 
