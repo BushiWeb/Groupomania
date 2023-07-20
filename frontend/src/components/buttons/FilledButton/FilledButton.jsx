@@ -11,13 +11,13 @@ import { selectIsDarkTheme } from '../../../utils/selectors';
  * All additionnal props are passed to the DOM element.
  */
 export default function FilledButton({
-    disabled, autoFocus, onClick, label, children, icon, ...other
+    disabled, autoFocus, onClick, label, children, icon, className, ...other
 }) {
-    const className = icon ? style.filledButtonIcon : style.filledButton;
+    const classNameButton = icon ? style.filledButtonIcon : style.filledButton;
     const isDarkTheme = useSelector(selectIsDarkTheme);
 
     return <Button
-        classNames={className}
+        classNames={`${classNameButton} ${className}`}
         disabled={disabled}
         autoFocus={autoFocus}
         onClick={onClick}
@@ -36,6 +36,7 @@ FilledButton.defaultProps = {
     onClick: undefined,
     label: undefined,
     icon: undefined,
+    className: '',
 };
 
 FilledButton.propTypes = {
@@ -56,4 +57,7 @@ FilledButton.propTypes = {
 
     /** Name of the icon to add before the text. */
     icon: PropTypes.string,
+
+    /** Additionnal class names */
+    className: PropTypes.string,
 };

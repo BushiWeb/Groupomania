@@ -14,7 +14,7 @@ import { THEMES_NAMES } from '../../features/theme/theme.slice.js';
  * Only giving one of the dimension will scale the image proportionnaly.
  */
 export default function Logo({
-    target, color, width, height, label,
+    target, color, width, height, label, ...otherProps
 }) {
     // Calculating the size of the image
     const initialWidth = 136, initialHeight = 25;
@@ -36,12 +36,13 @@ export default function Logo({
         loading='lazy'
         width={width}
         height={height}
+        className={target ? undefined : otherProps?.className}
     />;
 
     // The structure depends weither or not the logo is a link
     if (target) {
         return (
-            <Link to={target}>{logoElement}</Link>
+            <Link to={target} className={otherProps?.className}>{logoElement}</Link>
         );
     }
 

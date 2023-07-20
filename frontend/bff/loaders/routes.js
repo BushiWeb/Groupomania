@@ -20,11 +20,11 @@ export default function routeLoader(app) {
     loaderLogger.debug('Build static route added');
 
     // Add the BFF router
-    app.use('/bff/', BFFRouter);
+    app.use('/data/', BFFRouter);
     loaderLogger.debug('BFF router added');
 
     // Add the route to serve the HTML page
-    app.use('/', HTMLRouter);
+    app.use('/*', HTMLRouter);
     loaderLogger.debug('HTML serving route added');
 
     // Finds all available routes to analyse errors

@@ -21,7 +21,7 @@ export default function TextField({
     const inputRef = useRef();
 
     if (inputProps?.required) {
-        supportText = `*required${supportText ? `, ${supportText}` : ''}`;
+        supportText = `*requis${supportText ? `, ${supportText}` : ''}`;
     }
 
     function handleClick(e) {

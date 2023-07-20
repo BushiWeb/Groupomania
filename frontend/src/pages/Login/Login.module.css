@@ -1,0 +1,11 @@
+@layer components {
+    .login {
+        display: grid;
+        place-items: center;
+
+        flex-grow: 1;
+
+        background-color: rgb(var(--color-primary-container));
+        padding-inline: var(--page-margin);
+    }
+}

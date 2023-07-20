@@ -20,3 +20,5 @@ export const selectTooltipLabel = (state) => state.tooltip.label;
 export const selectIsTooltipvisible = (state) => state.tooltip.show;
 
 export const selectNextSnackbarMessage = (state) => state.snackbar.messages[0] || null;
+
+export const selectIsAuthenticated = (state) => !!state.user.email;

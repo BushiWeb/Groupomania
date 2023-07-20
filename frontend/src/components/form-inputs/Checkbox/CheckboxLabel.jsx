@@ -6,7 +6,7 @@ import Checkbox from './Checkbox.jsx';
  * Checkbox with a visible label. The label is given as the child of the component.
  */
 export default function CheckboxLabel({
-    children, checked, onChange, disabled, autoFocus, name, className, ...other
+    children, checked, onChange, disabled, autoFocus, className, ...other
 }) {
     return (
         <label className={`${disabled ? style.disabled : style.label} ${className}`}>
@@ -15,7 +15,6 @@ export default function CheckboxLabel({
                 onChange={onChange}
                 disabled={disabled}
                 autoFocus={autoFocus}
-                name={name}
                 {...other}
             />
             {children}
@@ -43,9 +42,6 @@ CheckboxLabel.propTypes = {
 
     /** Weither the checkbox has focus or not */
     autoFocus: PropTypes.bool,
-
-    /** Checkbox' name */
-    name: PropTypes.string.isRequired,
 
     /** Other classnames */
     className: PropTypes.string,

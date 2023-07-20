@@ -22,7 +22,7 @@ export default function generateEmailSchema(
                 exists: {
                     errorMessage: 'The email is required.',
                     options: {
-                        checkNull: true,
+                        checkFalsy: true,
                     },
                     bail: true,
                 },

@@ -16,7 +16,7 @@ export default function generatePasswordSchema(
                 exists: {
                     errorMessage: 'The password is required.',
                     options: {
-                        checkNull: true,
+                        checkFalsy: true,
                     },
                     bail: true,
                 },

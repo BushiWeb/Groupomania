@@ -8,7 +8,7 @@ import { useRef } from 'react';
  * Checkbox, with or without label
  */
 export default function Checkbox({
-    checked, onChange, disabled, autoFocus, label, name, className, ...other
+    checked, onChange, disabled, autoFocus, label, className, ...other
 }) {
     const checkboxRef = useRef();
 
@@ -33,7 +33,6 @@ export default function Checkbox({
     >
         <input
             type="checkbox"
-            name={name}
             className={style.checkbox}
             checked={checked}
             disabled={disabled}
@@ -78,9 +77,6 @@ Checkbox.propTypes = {
 
     /** Checkbox' label. Should be provided if no external label is present */
     label: PropTypes.string,
-
-    /** Checkbox' name */
-    name: PropTypes.string.isRequired,
 
     /** Other classnames */
     className: PropTypes.string,
