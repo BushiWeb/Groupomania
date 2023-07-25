@@ -1,4 +1,4 @@
-import { getAntiCSRFToken } from '../../utils/antiCSRFToken.js';
+import { simpleFetch } from '../../utils/fetch.js';
 import { ERROR_MESSAGES } from './validation.js';
 
 /**
@@ -8,18 +8,11 @@ import { ERROR_MESSAGES } from './validation.js';
  * @throws Throws in case of an error
  */
 export async function signupRequest(data) {
-    const response = await fetch('/data/signup', {
+    const response = simpleFetch({
+        url: '/data/signup',
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CRSF-Token': getAntiCSRFToken(),
-        },
-        body: JSON.stringify(data),
+        data,
     });
-
-    if (!response.ok) {
-        throw response;
-    }
 
     return response;
 }

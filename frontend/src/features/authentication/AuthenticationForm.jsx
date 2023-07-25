@@ -1,23 +1,21 @@
-import TonalButton from '../../components/buttons/TonalButton/TonalButton';
-import FilledButton from '../../components/buttons/FilledButton/FilledButton';
 import { useReducer } from 'react';
 import style from './AuthenticationForm.module.css';
 import Logo from '../../components/Logo/Logo';
 import { useMutation } from '@tanstack/react-query';
-import { setAntiCSRFToken } from '../../utils/antiCSRFToken.js';
+import { handleCSRFToken } from '../../utils/antiCSRFToken.js';
 import { useStore } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { login } from './user.slice.js';
-import ProgressIndicator from '../../components/ProgressIndicator/ProgressIndicator';
 import { ACTIONS, initialState, reducer } from './formReducer.js';
 import { handleSignupValidationError, validateSignupData } from './validation.js';
 import { handleSignupRequestError, signupRequest } from './request';
 import FormFields from './FormFields';
 import FormButtons from './FormButtons';
 import RequestLoader from './RequestLoader';
+import PropTypes from 'prop-types';
 
 /** Authentication Form. Allows to sign up or log in. */
-export default function AuthenticationForm() {
+export default function AuthenticationForm({ loading }) {
     const redirect = useNavigate();
     const store = useStore();
     const [
@@ -62,17 +60,13 @@ export default function AuthenticationForm() {
             store.dispatch(login(userData));
             dispatch({ type: ACTIONS.reset });
         },
-        onSettled: (data, error) => {
-            const headers = data ? data.headers : error.headers;
-            const csrfToken = headers.get('X-Crsf-Token');
-            if (csrfToken) {
-                setAntiCSRFToken(csrfToken);
-            }
-        },
+        onSettled: handleCSRFToken,
     });
 
+    const isLoading = loading || signupMutation.isLoading;
+
     return <form className={style.form}>
-        <RequestLoader signupLoading={signupMutation.isLoading}/>
+        <RequestLoader signupLoading={isLoading}/>
 
         <Logo color width={240} className={style.logo}/>
 
@@ -83,14 +77,22 @@ export default function AuthenticationForm() {
             password={password}
             passwordError={passwordError}
             rememberMe={rememberMe}
-            isLoading={signupMutation.isLoading}
+            isLoading={isLoading}
             dispatch={dispatch}
         />
 
         <FormButtons
-            isLoading={signupMutation.isLoading}
+            isLoading={isLoading}
             onSignupClick={signupMutation.mutate}
         />
     </form>;
 
 }
+
+AuthenticationForm.defaultProps = {
+    loading: false,
+};
+
+AuthenticationForm.propTypes = {
+    loading: PropTypes.bool,
+};
