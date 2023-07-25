@@ -7,8 +7,10 @@ import { useStore } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { login } from './user.slice.js';
 import { ACTIONS, initialState, reducer } from './formReducer.js';
-import { handleSignupValidationError, validateSignupData } from './validation.js';
-import { handleSignupRequestError, signupRequest } from './request';
+import { handleValidationError, validateLoginData, validateSignupData } from './validation.js';
+import {
+    handleLoginRequestError, handleSignupRequestError, loginRequest, signupRequest,
+} from './request';
 import FormFields from './FormFields';
 import FormButtons from './FormButtons';
 import RequestLoader from './RequestLoader';
@@ -37,7 +39,7 @@ export default function AuthenticationForm({ loading }) {
         onError: async (error) => {
             const errorMessages = error instanceof Response ?
                 await handleSignupRequestError(error) :
-                handleSignupValidationError(error);
+                handleValidationError(error);
 
             if (!errorMessages) {
                 return redirect('/error');
@@ -63,7 +65,45 @@ export default function AuthenticationForm({ loading }) {
         onSettled: handleCSRFToken,
     });
 
-    const isLoading = loading || signupMutation.isLoading;
+    const loginMutation = useMutation({
+        mutationFn: async () => {
+            const data = { email, password, rememberMe };
+            validateLoginData(data);
+            return loginRequest(data);
+        },
+        onMutate: () => {
+            dispatch({ type: ACTIONS.removeErrors });
+        },
+        onError: async (error) => {
+            const errorMessages = error instanceof Response ?
+                await handleLoginRequestError(error) :
+                handleValidationError(error);
+
+            if (!errorMessages) {
+                return redirect('/error');
+            }
+
+            if (errorMessages.email) {
+                dispatch({ type: ACTIONS.setEmailError, payload: errorMessages.email });
+            }
+
+            if (errorMessages.password) {
+                dispatch({ type: ACTIONS.setPasswordError, payload: errorMessages.password });
+            }
+
+            if (errorMessages.global) {
+                dispatch({ type: ACTIONS.setGlobalError, payload: errorMessages.global });
+            }
+        },
+        onSuccess: async (data) => {
+            const userData = await data.json();
+            store.dispatch(login(userData));
+            dispatch({ type: ACTIONS.reset });
+        },
+        onSettled: handleCSRFToken,
+    });
+
+    const isLoading = loading || signupMutation.isLoading || loginMutation.isLoading;
 
     return <form className={style.form}>
         <RequestLoader signupLoading={isLoading}/>
@@ -84,6 +124,7 @@ export default function AuthenticationForm({ loading }) {
         <FormButtons
             isLoading={isLoading}
             onSignupClick={signupMutation.mutate}
+            onLoginClick={loginMutation.mutate}
         />
     </form>;
 

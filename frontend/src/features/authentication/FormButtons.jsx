@@ -4,11 +4,12 @@ import style from './AuthenticationForm.module.css';
 import PropTypes from 'prop-types';
 
 export default function FormButtons({
-    isLoading, onSignupClick,
+    isLoading, onSignupClick, onLoginClick,
 }) {
     return <div className={style.buttons}>
         <TonalButton
             className={style.login}
+            onClick={isLoading ? undefined : onLoginClick}
         >Se connecter</TonalButton>
 
         <FilledButton
