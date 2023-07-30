@@ -7,7 +7,7 @@ export default function RequestLoader({
 }) {
     if (signupLoading) {
         return <div className={style.requestLoader}>
-            <ProgressIndicator circular label="Requête d'inscription en attente" />
+            <ProgressIndicator circular label="Requête en attente" />
         </div>;
     }
 
