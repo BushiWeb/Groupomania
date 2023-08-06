@@ -18,6 +18,12 @@ const userEvent = {
                 });
             },
 
+            type: async (element, input) => {
+                await act(async () => {
+                    await user.type(element, input);
+                });
+            },
+
             hover: async (element) => {
                 await act(async () => {
                     await user.hover(element);

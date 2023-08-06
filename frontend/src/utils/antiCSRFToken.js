@@ -3,7 +3,7 @@
  * @returns {string}
  */
 export const getAntiCSRFToken = () => {
-    return document.querySelector('meta[name="crsf-token"]').getAttribute('content');
+    return document.querySelector('meta[name="crsf-token"]')?.getAttribute('content');
 };
 
 /**
@@ -11,7 +11,15 @@ export const getAntiCSRFToken = () => {
  * @param {string} token
  */
 export const setAntiCSRFToken = (token) => {
-    document.querySelector('meta[name="crsf-token"]').setAttribute('content', token);
+    let antiCsrfMeta = document.querySelector('meta[name="crsf-token"]');
+
+    if (!antiCsrfMeta) {
+        antiCsrfMeta = document.createElement('meta');
+        antiCsrfMeta.setAttribute('name', 'crsf-token');
+        document.head.append(antiCsrfMeta);
+    }
+
+    antiCsrfMeta.setAttribute('content', token);
 };
 
 /**

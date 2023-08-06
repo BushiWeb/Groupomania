@@ -67,24 +67,27 @@ export async function authRequest(data, path) {
 /**
  * Handles request errors from authentication requests
  * @param {Response} error - Response returned containing the error.
- * @returns {bool|{email: string, password: string, global: string}}
- *  Returns an object container the error message for each field, or false if the error is not handled
+ * @returns {Promise}
+ *  Returns a Promise resolved with an object container the error message for each field
+ * @throws Throws an error if the error doesn't contain a body, or if it is not handled
  */
 export async function handleAuthRequestError(error) {
     const requestError = await error.json();
+    const errorMessages = {};
 
-    switch (requestError.error?.statusCode) {
+    switch (error.status) {
     case 409:
         return { global: ERROR_MESSAGES.existingAccount };
     case 401:
         return { global: ERROR_MESSAGES.wrongCredentials };
     case 400:
+        if (!requestError.error?.details) {
+            throw new Error('Unhandled 400 error type');
+        }
         break;
     default:
-        return false;
+        throw new Error('Unhandled error status');
     }
-
-    const errorMessages = {};
 
     for (const fieldError of requestError.error.details) {
         const isRequiredError = /required/.test(fieldError.message);

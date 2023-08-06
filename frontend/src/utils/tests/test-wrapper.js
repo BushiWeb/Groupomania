@@ -5,7 +5,10 @@ import {
 } from 'react-router-dom';
 import themeReducer from '../../features/theme/theme.slice.js';
 import snackbarReducer from '../../features/snackbar/snackbar.slice.js';
+import userReducer from '../../features/authentication/user.slice.js';
 import { Provider } from 'react-redux';
+import Login from '../../pages/Login/Login.jsx';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export function render(ui, {
     preloadedState,
@@ -18,6 +21,7 @@ export function render(ui, {
             reducer: {
                 theme: themeReducer,
                 snackbar: snackbarReducer,
+                user: userReducer,
             },
             ...preloadedState && { preloadedState },
         });
@@ -35,17 +39,22 @@ export function render(ui, {
     }
 
     function Wrapper({ children }) {
+        const queryClient = new QueryClient();
+
         return (
-            <Provider store={store}>
-                <MemoryRouter initialEntries={initialEntries}>
-                    <Routes>
-                        <Route path="/" element={<Outlet/>}/>
-                        <Route path="/test" element={<Outlet/>}/>
-                    </Routes>
-                    <ShowLocation/>
-                    {children}
-                </MemoryRouter>
-            </Provider>
+            <QueryClientProvider client={queryClient}>
+                <Provider store={store}>
+                    <MemoryRouter initialEntries={initialEntries}>
+                        <Routes>
+                            <Route path="/" element={<Outlet/>}/>
+                            <Route path='/login' element={<Login/>}/>
+                            <Route path="/test" element={<Outlet/>}/>
+                        </Routes>
+                        <ShowLocation/>
+                        {children}
+                    </MemoryRouter>
+                </Provider>
+            </QueryClientProvider>
         );
     }
 

@@ -159,7 +159,7 @@ describe('Textnput component test suite', () => {
     it('should have an asterix next to the label when required', () => {
         render(<TextField {...props} required/>);
         const textInputElt = screen.getByRole('textbox', { name: props.label + '*' });
-        screen.getByText('*required', { exact: false });
+        screen.getByText('*requis', { exact: false });
         expect(textInputElt).toBeRequired();
     });
 

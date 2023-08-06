@@ -21,7 +21,7 @@ export default function AuthenticationForm() {
         },
     } = useAuthForm();
 
-    return <form className={style.form}>
+    return <form className={style.form} aria-label="Formulaire d'inscription et de connection">
         <RequestLoader signupLoading={isLoading}/>
 
         <Logo color width={240} className={style.logo}/>

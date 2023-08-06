@@ -32,11 +32,14 @@ export function useAuthForm() {
             dispatch({ type: ACTIONS.removeErrors });
         },
         onError: async (error) => {
-            const errorMessages = error instanceof Response ?
-                await handleAuthRequestError(error) :
-                handleValidationError(error);
-
-            if (!errorMessages) {
+            let errorMessages = error;
+            try {
+                if (error instanceof Response) {
+                    errorMessages = await handleAuthRequestError(error);
+                } else if (error instanceof Error) {
+                    throw error;
+                }
+            } catch (error) {
                 return redirect('/error');
             }
 
