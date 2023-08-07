@@ -99,15 +99,3 @@ export async function handleAuthRequestError(error) {
     }
     return errorMessages;
 }
-
-/**
- * Handles frontend validation errors
- * @param {Object} error - Response returned containing the error.
- * @returns {{email: string, password: string}} Returns an object container the error message for each field
- */
-export function handleValidationError(error) {
-    return {
-        email: error.email,
-        password: error.password,
-    };
-}

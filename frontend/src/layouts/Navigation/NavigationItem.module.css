@@ -1,0 +1,82 @@
+@layer components {
+    .navigationItem {
+        flex-grow: 1;
+        flex-basis: var(--size-18);
+
+        position: relative;
+        isolation: isolate;
+
+        --padding-block-start: var(--padding-3);
+    }
+
+    .activeItem {
+        composes: navigationItem;
+    }
+
+    .link {
+        composes: label-medium from '../../assets/styles/patterns/typography.module.css';
+
+        padding-block-start: var(--padding-block-start);
+        padding-block-end: var(--padding-4);
+
+        height: 100%;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+
+        color: rgb(var(--color-on-surface-variant));
+    }
+
+    .activeItem .link {
+        color: rgb(var(--color-on-surface));
+    }
+
+    .icon {
+        height: var(--size-10);
+        width: var(--size-14);
+        border-radius: var(--border-radius-5);
+
+        background-color: rgb(
+            var(--icon-bg-color, var(--color-on-surface-variant)) /
+                var(--icon-bg-opacity, 0)
+        );
+
+        display: grid;
+        place-content: center;
+    }
+
+    .activeItem .icon {
+        --icon-bg-color: var(--color-on-surface);
+        color: rgb(var(--color-on-secondary-container));
+    }
+
+    .navigationItem:hover .icon {
+        --icon-bg-opacity: var(--state-hovered-opacity);
+    }
+
+    .navigationItem:focus-within .icon {
+        --icon-bg-opacity: var(--state-focused-opacity);
+    }
+
+    .navigationItem:active .icon {
+        --icon-bg-opacity: var(--state-pressed-opacity);
+    }
+
+    .activeIndicator {
+        height: var(--size-10);
+        width: var(--size-14);
+        border-radius: var(--border-radius-5);
+
+        position: absolute;
+        top: var(--padding-block-start);
+        left: 50%;
+        translate: -50%;
+        z-index: var(--layer-00);
+    }
+
+    .activeItem .activeIndicator {
+        background-color: rgb(var(--color-secondary-container));
+    }
+}

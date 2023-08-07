@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './assets/styles/global.module.css';
-import App from './App.js';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './utils/store.js';
 import Login from './pages/Login/Login.jsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import UI from './pages/UI/UI.jsx';
 //import reportWebVitals from './utils/reportWebVitals.js';
 
 const queryClient = new QueryClient();
@@ -19,7 +19,11 @@ root.render(
             <React.StrictMode>
                 <BrowserRouter>
                     <Routes>
-                        <Route path='/' element={<App/>} />
+                        <Route path='/' element={<UI/>}>
+                            <Route index element={undefined} />
+                            <Route path='reseau' element={undefined} />
+                            <Route path='profil' element={undefined} />
+                        </Route>
                         <Route path='/login' element={<Login/>} />
                     </Routes>
                 </BrowserRouter>

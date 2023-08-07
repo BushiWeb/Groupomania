@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { ACTIONS, initialState, reducer } from './formReducer.js';
 import { useMutation } from '@tanstack/react-query';
 import {
-    authRequest, handleAuthRequestError, handleValidationError, validateAuthData,
+    authRequest, handleAuthRequestError, validateAuthData,
 } from './request.js';
 import { login } from './user.slice.js';
 import { handleCSRFToken } from '../../utils/antiCSRFToken.js';

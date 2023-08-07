@@ -1,5 +1,5 @@
 import AuthenticationForm from './AuthenticationForm.jsx';
-import { getByText, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { render } from '../../utils/tests/test-wrapper.js';
 import userEvent from '../../utils/tests/user-event.js';
 import { ERROR_MESSAGES } from './request.js';
