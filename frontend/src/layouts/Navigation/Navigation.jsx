@@ -1,8 +1,11 @@
 import { useLocation } from 'react-router-dom';
-import NavigationBar from './NavigationBar';
+import NavigationBar from './NavigationBar/NavigationBar';
+import NavigationRail from './NavigationRail/NavigationRail';
+import { useBreakpoint } from '../../hooks/useBreakpoints';
 
 export default function Navigation() {
     const { pathname } = useLocation();
+    const breakpoint = useBreakpoint();
     const links = [
         {
             label: 'Accueil',
@@ -24,7 +27,15 @@ export default function Navigation() {
         },
     ];
 
+    let component;
+
+    if (breakpoint >= 1) {
+        component = <NavigationRail links={links}/>;
+    } else {
+        component = <NavigationBar links={links}/>;
+    }
+
     return <nav>
-        <NavigationBar links={links}/>
+        {component}
     </nav>;
 }

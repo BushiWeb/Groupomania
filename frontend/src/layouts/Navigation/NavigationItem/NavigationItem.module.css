@@ -9,12 +9,8 @@
         --padding-block-start: var(--padding-3);
     }
 
-    .activeItem {
-        composes: navigationItem;
-    }
-
     .link {
-        composes: label-medium from '../../assets/styles/patterns/typography.module.css';
+        composes: label-medium from '../../../assets/styles/patterns/typography.module.css';
 
         padding-block-start: var(--padding-block-start);
         padding-block-end: var(--padding-4);
@@ -27,10 +23,6 @@
         align-items: center;
 
         color: rgb(var(--color-on-surface-variant));
-    }
-
-    .activeItem .link {
-        color: rgb(var(--color-on-surface));
     }
 
     .icon {
@@ -46,8 +38,24 @@
         display: grid;
         place-content: center;
     }
+    .activeIndicator {
+        height: var(--size-10);
+        width: var(--size-14);
+        border-radius: var(--border-radius-5);
 
-    .activeItem .icon {
+        position: absolute;
+        top: var(--padding-block-start);
+        left: 50%;
+        translate: -50%;
+        z-index: var(--layer-00);
+    }
+
+    /* States */
+    [data-active] .link {
+        color: rgb(var(--color-on-surface));
+    }
+
+    [data-active] .icon {
         --icon-bg-color: var(--color-on-surface);
         color: rgb(var(--color-on-secondary-container));
     }
@@ -64,19 +72,36 @@
         --icon-bg-opacity: var(--state-pressed-opacity);
     }
 
-    .activeIndicator {
-        height: var(--size-10);
-        width: var(--size-14);
-        border-radius: var(--border-radius-5);
-
-        position: absolute;
-        top: var(--padding-block-start);
-        left: 50%;
-        translate: -50%;
-        z-index: var(--layer-00);
+    [data-active] .activeIndicator {
+        background-color: rgb(var(--color-secondary-container));
     }
 
-    .activeItem .activeIndicator {
-        background-color: rgb(var(--color-secondary-container));
+    /* Navigation rail version */
+    .navigationRailItem {
+        composes: navigationItem;
+
+        flex-grow: 0;
+        flex-basis: auto;
+    }
+
+    .navigationRailItem .link {
+        height: var(--size-13);
+
+        padding: 0;
+
+        gap: var(--padding-1);
+    }
+
+    .navigationRailItem .icon {
+        width: var(--size-13);
+    }
+
+    .navigationRailItem .activeIndicator {
+        width: var(--size-13);
+        top: 0;
+    }
+
+    /* Navigation drawer version */
+    .navigationDrawerItem {
     }
 }

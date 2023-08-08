@@ -1,11 +1,7 @@
 import NavigationBar from './NavigationBar.jsx';
 import { screen } from '@testing-library/react';
-import { render } from '../../utils/tests/test-wrapper.js';
+import { render } from '../../../utils/tests/test-wrapper.js';
 import '@testing-library/jest-dom';
-
-beforeEach(() => {
-    sessionStorage.clear();
-});
 
 describe('NavigationBar component test suite', () => {
     const links = [

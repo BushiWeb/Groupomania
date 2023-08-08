@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
-import NavigationItem from './NavigationItem';
+import NavigationItem from '../NavigationItem/NavigationItem';
 import style from './NavigationBar.module.css';
 
 /**
  * Inserts a navigation bar, generally at the bottom of the screen.
  */
-export default function NavigationBar({ links }) {
-    return <ul className={style.navigationBar} role="tablist">
+export default function NavigationBar({ links, ...props }) {
+    return <ul className={`${style.navigationBar} ${props.className || ''}`} role="tablist">
         {links.map((value) => <NavigationItem {...value} key={`${value.label}-${value.target}`}/>)}
     </ul>;
 }

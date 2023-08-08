@@ -1,19 +1,26 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import Icon from '../../components/Icon/Icon';
+import Icon from '../../../components/Icon/Icon';
 import { useSelector } from 'react-redux';
-import { selectIsDarkTheme } from '../../utils/selectors.js';
+import { selectIsDarkTheme } from '../../../utils/selectors.js';
 import style from './NavigationItem.module.css';
 
 /**
  * Navigation item for the different navigation elements
  */
 export default function NavigationItem({
-    label, icon, target, active,
+    label, icon, target, active, type,
 }) {
     const isOnDark = useSelector(selectIsDarkTheme);
 
-    return <li className={active ? style.activeItem : style.navigationItem}>
+    let className = style.navigationItem;
+    if (type === 'rail') {
+        className = style.navigationRailItem;
+    } else if (type === 'drawer') {
+        className = style.navigationDrawerItem;
+    }
+
+    return <li className={className} {...active && { 'data-active': 'true' }}>
         <div className={style.activeIndicator}></div>
         <Link
             to={target}
@@ -31,6 +38,7 @@ export default function NavigationItem({
 
 NavigationItem.defaultProps = {
     active: false,
+    type: 'bar',
 };
 
 NavigationItem.propTypes = {
@@ -45,4 +53,7 @@ NavigationItem.propTypes = {
 
     // Weither the navigation item is active or not
     active: PropTypes.bool,
+
+    // Type of navigation containing the item
+    type: PropTypes.oneOf(['bar', 'rail', 'drawer']),
 };
