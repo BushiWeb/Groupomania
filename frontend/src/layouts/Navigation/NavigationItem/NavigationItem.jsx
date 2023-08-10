@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import { selectIsDarkTheme } from '../../../utils/selectors.js';
 import style from './NavigationItem.module.css';
 import { useRipple } from '../../../hooks/useRipple';
-import { useRef } from 'react';
 
 /**
  * Navigation item for the different navigation elements
@@ -14,28 +13,17 @@ export default function NavigationItem({
     label, icon, target, active, type, focused, onFocus, ...rest
 }) {
     const isOnDark = useSelector(selectIsDarkTheme);
-    const rippleTrigger = useRipple(350);
-    const stateLayerRef = useRef(null);
+    const {
+        handlePointerDown,
+        handleKeyDown,
+        stateLayerRef,
+    } = useRipple(350, { onKeyDown: rest.onKeyDown, onPointerDown: rest.onPointerDown });
 
     const linkRef = (node) => {
         if (focused) {
             node?.focus();
         }
     };
-
-    function handlePointerDown(e) {
-        rest.onPointerDown?.(e);
-
-        rippleTrigger(stateLayerRef.current, { x: e.clientX, y: e.clientY });
-    }
-
-    function handleKeyDown(e) {
-        rest.onKeyDown?.(e);
-
-        if (e.key === ' ' || e.key === 'Enter') {
-            rippleTrigger(stateLayerRef.current);
-        }
-    }
 
     let className = style.navigationBarItem;
     if (type === 'rail') {

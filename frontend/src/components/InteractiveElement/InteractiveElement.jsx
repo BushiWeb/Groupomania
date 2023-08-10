@@ -1,7 +1,7 @@
 import { useRipple } from '../../hooks/useRipple';
 import style from './InteractiveElement.module.css';
 import PropTypes from 'prop-types';
-import { forwardRef, useRef } from 'react';
+import { forwardRef } from 'react';
 
 /**
  * Creates an interactive element with a minimum target size and a state layer.
@@ -21,8 +21,11 @@ const InteractiveElement = forwardRef(function InteractiveElement({
     onKeyDown,
     ...rootProps
 }, ref) {
-    const rippleTrigger = useRipple(rippleDuration);
-    const stateLayerRef = useRef(null);
+    const {
+        handleKeyDown,
+        handlePointerDown,
+        stateLayerRef,
+    } = useRipple(rippleDuration, { onPointerDown, onKeyDown });
     const Root = rootElement;
     const classNames = `${style.interactiveElement} ${className}`;
     const states = {
@@ -30,26 +33,6 @@ const InteractiveElement = forwardRef(function InteractiveElement({
         ...focus && { 'data-state-focus': true },
         ...active && { 'data-state-active': true },
     };
-
-    function handlePointerDown(e) {
-        if (onPointerDown) {
-            onPointerDown(e);
-        }
-
-        if (rippleDuration > 0) {
-            rippleTrigger(stateLayerRef.current, { x: e.clientX, y: e.clientY });
-        }
-    }
-
-    function handleKeyDown(e) {
-        if (onKeyDown) {
-            onKeyDown(e);
-        }
-
-        if ((e.key === ' ' || e.key === 'Enter') && rippleDuration > 0) {
-            rippleTrigger(stateLayerRef.current);
-        }
-    }
 
     return <Root
         {...states}

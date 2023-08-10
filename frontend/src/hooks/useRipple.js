@@ -79,10 +79,18 @@ function getMaxRadius(furthestCorner, click) {
 /**
  * Hook allowing to add the ripple effect to an element.
  * @param {number} duration - Duration of the effect in milliseconds.
- * @returns {Function} Returns a function triggering the effect.
+ * @param {{onPointerDown: Function, onKeyDown: Function}} event - Functions to execute on pointer down and key down.
+ * @returns {{
+ *  rippleTrigger: Function,
+ *  handlePointerDown: Function,
+ *  handleKeyDown: Function,
+ *  stateLayerRef
+ * }}
+ *  Returns an object container the trigger function, the ref for the state layer and the event handlers
  */
-export function useRipple(duration) {
+export function useRipple(duration, { onPointerDown, onKeyDown }) {
     const timeoutId = useRef(null);
+    const stateLayerRef = useRef(null);
 
     /**
      * Function triggering the ripple effect.
@@ -90,7 +98,7 @@ export function useRipple(duration) {
      * @param {{x: number, y: number}} [clickCoordinates] - Coordinates of the click relative to the viewport.
      *  These can be accessed with clientX and clientY.
      */
-    return function (element, clickCoordinates) {
+    function rippleTrigger(element, clickCoordinates) {
         // Restart the animation if the user triggers it while it is still running
         if (timeoutId.current) {
             clearTimeout(timeoutId.current);
@@ -126,5 +134,28 @@ export function useRipple(duration) {
             element.classList.remove('ripple');
         }, duration);
 
+    }
+
+    function handlePointerDown(e) {
+        onPointerDown?.(e);
+
+        if (duration > 0) {
+            rippleTrigger(stateLayerRef.current, { x: e.clientX, y: e.clientY });
+        }
+    }
+
+    function handleKeyDown(e) {
+        onKeyDown?.(e);
+
+        if ((e.key === ' ' || e.key === 'Enter') && duration > 0) {
+            rippleTrigger(stateLayerRef.current);
+        }
+    }
+
+    return {
+        handleKeyDown,
+        handlePointerDown,
+        rippleTrigger,
+        stateLayerRef,
     };
 }
