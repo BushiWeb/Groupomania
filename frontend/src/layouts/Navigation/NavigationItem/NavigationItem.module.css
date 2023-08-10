@@ -1,17 +1,19 @@
 @layer components {
     .navigationItem {
-        flex-grow: 1;
-        flex-basis: var(--size-18);
-
         position: relative;
         isolation: isolate;
+    }
+
+    .navigationBarItem {
+        composes: navigationItem, label-medium from '../../../assets/styles/patterns/typography.module.css';
+
+        flex-grow: 1;
+        flex-basis: var(--size-18);
 
         --padding-block-start: var(--padding-3);
     }
 
-    .link {
-        composes: label-medium from '../../../assets/styles/patterns/typography.module.css';
-
+    .navigationBarItem .link {
         padding-block-start: var(--padding-block-start);
         padding-block-end: var(--padding-4);
 
@@ -25,20 +27,21 @@
         color: rgb(var(--color-on-surface-variant));
     }
 
-    .icon {
+    .navigationBarItem .icon {
         height: var(--size-10);
         width: var(--size-14);
         border-radius: var(--border-radius-5);
 
         background-color: rgb(
-            var(--icon-bg-color, var(--color-on-surface-variant)) /
-                var(--icon-bg-opacity, 0)
+            var(--state-bg-color, var(--color-on-surface-variant)) /
+                var(--state-bg-opacity, 0)
         );
 
         display: grid;
         place-content: center;
     }
-    .activeIndicator {
+
+    .navigationBarItem .activeIndicator {
         height: var(--size-10);
         width: var(--size-14);
         border-radius: var(--border-radius-5);
@@ -51,25 +54,28 @@
     }
 
     /* States */
+    [data-active] {
+        --state-bg-color: var(--color-on-surface);
+    }
+
     [data-active] .link {
         color: rgb(var(--color-on-surface));
     }
 
     [data-active] .icon {
-        --icon-bg-color: var(--color-on-surface);
         color: rgb(var(--color-on-secondary-container));
     }
 
-    .navigationItem:hover .icon {
-        --icon-bg-opacity: var(--state-hovered-opacity);
+    .navigationItem:hover {
+        --state-bg-opacity: var(--state-hovered-opacity);
     }
 
-    .navigationItem:focus-within .icon {
-        --icon-bg-opacity: var(--state-focused-opacity);
+    .navigationItem:focus-within {
+        --state-bg-opacity: var(--state-focused-opacity);
     }
 
-    .navigationItem:active .icon {
-        --icon-bg-opacity: var(--state-pressed-opacity);
+    .navigationItem:active {
+        --state-bg-opacity: var(--state-pressed-opacity);
     }
 
     [data-active] .activeIndicator {
@@ -78,30 +84,83 @@
 
     /* Navigation rail version */
     .navigationRailItem {
-        composes: navigationItem;
-
-        flex-grow: 0;
-        flex-basis: auto;
+        composes: navigationItem, label-medium from '../../../assets/styles/patterns/typography.module.css';
     }
 
     .navigationRailItem .link {
         height: var(--size-13);
 
-        padding: 0;
-
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
         gap: var(--padding-1);
+
+        color: rgb(var(--color-on-surface-variant));
     }
 
     .navigationRailItem .icon {
+        height: var(--size-10);
         width: var(--size-13);
+        border-radius: var(--border-radius-5);
+
+        background-color: rgb(
+            var(--state-bg-color, var(--color-on-surface-variant)) /
+                var(--state-bg-opacity, 0)
+        );
+
+        display: grid;
+        place-content: center;
     }
 
     .navigationRailItem .activeIndicator {
+        height: var(--size-10);
         width: var(--size-13);
+        border-radius: var(--border-radius-5);
+
+        position: absolute;
         top: 0;
+        left: 50%;
+        translate: -50%;
+        z-index: var(--layer-00);
     }
 
     /* Navigation drawer version */
     .navigationDrawerItem {
+        composes: navigationItem, label-large from '../../../assets/styles/patterns/typography.module.css';
+        width: 100%;
+    }
+
+    .navigationDrawerItem .link {
+        height: var(--size-13);
+
+        padding-block: 0;
+        padding-inline-start: var(--padding-4);
+        padding-inline-end: var(--padding-3);
+        border-radius: var(--border-radius-6);
+
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: var(--padding-3);
+
+        background-color: rgb(
+            var(--state-bg-color, var(--color-on-surface-variant)) /
+                var(--state-bg-opacity, 0)
+        );
+    }
+
+    .navigationDrawerItem .icon {
+        display: grid;
+        place-content: center;
+    }
+
+    .navigationDrawerItem .activeIndicator {
+        border-radius: var(--border-radius-6);
+
+        position: absolute;
+        inset: 0;
+        z-index: var(--layer-00);
     }
 }

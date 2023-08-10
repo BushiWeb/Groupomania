@@ -9,24 +9,43 @@ import style from './NavigationItem.module.css';
  * Navigation item for the different navigation elements
  */
 export default function NavigationItem({
-    label, icon, target, active, type,
+    label, icon, target, active, type, focused, onFocus,
 }) {
     const isOnDark = useSelector(selectIsDarkTheme);
 
-    let className = style.navigationItem;
+    const linkRef = (node) => {
+        if (focused) {
+            node?.focus();
+        }
+    };
+
+    function handleKeyDown(e) {
+        if (e.key === ' ') {
+            e.preventDefault();
+            e.target.click();
+        }
+    }
+
+    let className = style.navigationBarItem;
     if (type === 'rail') {
         className = style.navigationRailItem;
     } else if (type === 'drawer') {
         className = style.navigationDrawerItem;
     }
 
-    return <li className={className} {...active && { 'data-active': 'true' }}>
+    return <li
+        className={`${style.navigationItem} ${className}`}
+        {...active && { 'data-active': 'true' }}
+        onFocus={onFocus}
+    >
         <div className={style.activeIndicator}></div>
         <Link
             to={target}
             className={style.link}
             role="tab"
             aria-selected={active}
+            ref={linkRef}
+            onKeyDown={handleKeyDown}
         >
             <div className={style.icon}>
                 <Icon name={icon} fill={active} isOnDark={isOnDark} size={24}/>
@@ -39,6 +58,7 @@ export default function NavigationItem({
 NavigationItem.defaultProps = {
     active: false,
     type: 'bar',
+    focused: false,
 };
 
 NavigationItem.propTypes = {
@@ -56,4 +76,10 @@ NavigationItem.propTypes = {
 
     // Type of navigation containing the item
     type: PropTypes.oneOf(['bar', 'rail', 'drawer']),
+
+    /** Weither the element is focused or not */
+    focused: PropTypes.bool,
+
+    /** Function to execute on focus of the element */
+    onFocus: PropTypes.func,
 };
