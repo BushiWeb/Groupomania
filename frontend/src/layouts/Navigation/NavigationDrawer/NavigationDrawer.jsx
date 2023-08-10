@@ -1,38 +1,18 @@
 import PropTypes from 'prop-types';
 import NavigationItem from '../NavigationItem/NavigationItem';
 import style from './NavigationDrawer.module.css';
-import { useState } from 'react';
+import { useArrowNavigation } from '../../../hooks/useArrowNavigation';
 
 /**
  * Inserts a navigation drawer, generally on the side of the screen on large screens.
  */
 export default function NavigationDrawer({ links, ...props }) {
-    const [focusId, setFocusId] = useState(null);
-
-    function handleBlur() {
-        setFocusId(null);
-    }
-
-    function handleFocus(id) {
-        return () => {
-            setFocusId(id);
-        };
-    }
-
-    function handleKeyDown(e) {
-        switch (e.key) {
-        case 'ArrowDown':
-            e.preventDefault();
-            setFocusId((id) => Math.min(links.length - 1, ++id));
-            break;
-        case 'ArrowUp':
-            e.preventDefault();
-            setFocusId((id) => Math.max(0, --id));
-            break;
-        default:
-            return;
-        }
-    }
+    const {
+        handleBlur,
+        handleFocus,
+        handleKeyDown,
+        focusId,
+    } = useArrowNavigation(links.length);
 
     return <ul
         className={`${style.navigationDrawer} ${props.className || ''}`}
