@@ -18,11 +18,20 @@
         z-index: var(--layer-00);
     }
 
-    /* States */
-    [data-active] {
-        --state-bg-color: var(--color-on-surface);
+    .stateLayer {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border-radius: inherit;
+        background-color: rgb(
+            var(--color-on-surface) / var(--state-layer-opacity)
+        );
+
+        transition: background-color var(--motion-duration-5)
+            var(--motion-easing-standard-decelerate);
     }
 
+    /* States */
     [data-active] .link {
         color: rgb(var(--color-on-surface));
     }
@@ -32,15 +41,15 @@
     }
 
     .navigationItem:hover {
-        --state-bg-opacity: var(--state-hovered-opacity);
+        --state-layer-opacity: var(--state-hovered-opacity);
     }
 
     .navigationItem:focus-within {
-        --state-bg-opacity: var(--state-focused-opacity);
+        --state-layer-opacity: var(--state-focused-opacity);
     }
 
     .navigationItem:active {
-        --state-bg-opacity: var(--state-pressed-opacity);
+        --state-layer-opacity: var(--state-pressed-opacity);
     }
 
     [data-active] .activeIndicator {
