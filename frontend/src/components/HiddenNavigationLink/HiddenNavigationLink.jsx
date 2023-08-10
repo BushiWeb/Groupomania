@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import Link from '../Link/Link';
 import style from './HiddenNavigationLink.module.css';
 import { useEnterExitWithinBounds } from '../../hooks/useEnterExitWithinBounds.js';
 import InteractiveElement from '../InteractiveElement/InteractiveElement.jsx';

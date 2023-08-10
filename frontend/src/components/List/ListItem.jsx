@@ -3,7 +3,7 @@ import style from './ListItem.module.css';
 import Icon from '../Icon/Icon.jsx';
 import { useSelector } from 'react-redux';
 import { selectIsDarkTheme } from '../../utils/selectors';
-import { Link } from 'react-router-dom';
+import Link from '../Link/Link';
 import { useId } from 'react';
 import InteractiveElement from '../InteractiveElement/InteractiveElement';
 
@@ -24,13 +24,6 @@ export default function ListItem({
         }
     };
 
-    function handleKeyDown(e) {
-        if (e.key === ' ') {
-            e.preventDefault();
-            e.target.click();
-        }
-    }
-
     return <li className={style.listItem} onFocus={onFocus}>
         <InteractiveElement
             rootElement={Link}
@@ -39,7 +32,6 @@ export default function ListItem({
             to={link}
             aria-labelledby={headingId}
             className={`${style.link}`}
-            onKeyDown={handleKeyDown}
             ref={linkRef}
         >
             <div>

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import Link from '../../../components/Link/Link';
 import Icon from '../../../components/Icon/Icon';
 import { useSelector } from 'react-redux';
 import { selectIsDarkTheme } from '../../../utils/selectors.js';
@@ -18,13 +18,6 @@ export default function NavigationItem({
             node?.focus();
         }
     };
-
-    function handleKeyDown(e) {
-        if (e.key === ' ') {
-            e.preventDefault();
-            e.target.click();
-        }
-    }
 
     let className = style.navigationBarItem;
     if (type === 'rail') {
@@ -45,7 +38,6 @@ export default function NavigationItem({
             role="tab"
             aria-selected={active}
             ref={linkRef}
-            onKeyDown={handleKeyDown}
         >
             <div className={style.icon}>
                 <Icon name={icon} fill={active} isOnDark={isOnDark} size={24}/>

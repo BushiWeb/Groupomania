@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import colorLogo from '../../assets/images/groupomania-logo.svg';
 import whiteLogo from '../../assets/images/groupomania-logo-white.svg';
 import blackLogo from '../../assets/images/groupomania-logo-black.svg';
-import { Link } from 'react-router-dom';
+import Link from '../Link/Link';
 import { useSelector } from 'react-redux';
 import { selectTheme } from '../../utils/selectors.js';
 import { THEMES_NAMES } from '../../features/theme/theme.slice.js';
