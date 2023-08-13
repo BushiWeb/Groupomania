@@ -7,15 +7,17 @@ import { THEMES_NAMES, themeToggle } from '../../features/theme/theme.slice';
 import { useEffect } from 'react';
 import HiddenNavigationLink from '../../components/HiddenNavigationLink/HiddenNavigationLink.jsx';
 import PropTypes from 'prop-types';
-import { useScrollThreshold } from '../../hooks/useScrollThreshold';
 
 /**
  * Main header off the application, used for the top level pages.
  */
-export default function MainHeader({ mainContentId }) {
+export default function MainHeader({ mainContentId, ...props }) {
     const theme = useSelector(selectTheme);
     const { dispatch } = useStore();
-    const scrolled = useScrollThreshold(10);
+
+    function handleLogoutClick(e) {
+
+    }
 
     useEffect(() => {
         document.body.classList.forEach((value) => {
@@ -26,15 +28,20 @@ export default function MainHeader({ mainContentId }) {
         document.body.classList.add(theme);
     }, [theme]);
 
-    return <header className={scrolled ? style.scrolledHeader : style.header}>
-        <HiddenNavigationLink label="Accéder directement au contenu" target={`#${mainContentId}`}/>
+    const className = `${style.header} ${props.className || ''}`;
+
+    return <header className={className}>
+        <HiddenNavigationLink target={`#${mainContentId}`}>Accéder directement au contenu</HiddenNavigationLink>
+
         <div className={style.logo}>
             <Logo label="Retourner à la page d'accueil" target="/"/>
         </div>
-        <StandardIconButton icon={theme === THEMES_NAMES.dark ? 'light_mode' : 'dark_mode'} action={() => {
+
+        <StandardIconButton name={theme === THEMES_NAMES.dark ? 'light_mode' : 'dark_mode'} onClick={() => {
             dispatch(themeToggle());
         }} label={theme === THEMES_NAMES.dark ? 'Passer au mode clair' : 'Passer au mode sombre'} />
-        <StandardIconButton icon="logout" action={() => {}} label="Se déconnecter" />
+
+        <StandardIconButton name="logout" onClick={handleLogoutClick} label="Se déconnecter" />
     </header>;
 }
 

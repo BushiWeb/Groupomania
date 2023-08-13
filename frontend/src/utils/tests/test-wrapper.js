@@ -9,6 +9,7 @@ import userReducer from '../../features/authentication/user.slice.js';
 import { Provider } from 'react-redux';
 import Login from '../../pages/Login/Login.jsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import UI from '../../pages/UI/UI.jsx';
 
 export function render(ui, {
     preloadedState,
@@ -46,8 +47,12 @@ export function render(ui, {
                 <Provider store={store}>
                     <MemoryRouter initialEntries={initialEntries}>
                         <Routes>
-                            <Route path="/" element={<Outlet/>}/>
-                            <Route path='/login' element={<Login/>}/>
+                            <Route path='/' element={<UI/>}>
+                                <Route index element={undefined} />
+                                <Route path='reseau' element={undefined} />
+                                <Route path='profil' element={undefined} />
+                            </Route>
+                            <Route path='/login' element={<Login/>} />
                             <Route path="/test" element={<Outlet/>}/>
                         </Routes>
                         <ShowLocation/>

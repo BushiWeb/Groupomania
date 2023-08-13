@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { login } from '../../features/authentication/user.slice.js';
 
 /**
- * Hook rederecting the user to the main page if already authenticated, and trying to log the user in of not.
+ * Hook rederecting the user to the main page if already authenticated, and trying to log the user in if not.
  * @returns {boolean} Returns weither the login succedeed or not
  */
 export function useAutoLogin() {

@@ -1,7 +1,5 @@
-import Login from './Login';
 import { screen, waitFor } from '@testing-library/react';
 import { render } from '../../utils/tests/test-wrapper';
-import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 
 beforeEach(() => {

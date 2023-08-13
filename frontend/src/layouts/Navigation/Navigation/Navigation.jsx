@@ -25,7 +25,7 @@ export default function Navigation({
         className = style.navigationDrawer;
     }
 
-    return <nav>
+    return <nav {...props}>
         <ul
             className={`${className} ${props.className || ''}`}
             role="tablist"
@@ -33,7 +33,6 @@ export default function Navigation({
                 onBlur: handleBlur,
                 onKeyDown: handleKeyDown,
             }}
-            {...props}
         >
             {links.map((value, index) => <NavigationItem
                 {...value}

@@ -4,7 +4,7 @@ import style from './NavigationSection.module.css';
 import PropTypes from 'prop-types';
 import FAB from '../../components/buttons/FAB/FAB';
 
-export default function NavigationSection({ fab }) {
+export default function NavigationSection({ fab, ...props }) {
     const breakpoint = useBreakpoint();
     const links = [
         {
@@ -24,14 +24,14 @@ export default function NavigationSection({ fab }) {
         },
     ];
 
-    let component;
+    let type;
 
     if (breakpoint >= 3) {
-        component = <Navigation links={links} type="drawer"/>;
+        type = 'drawer';
     } else if (breakpoint >= 1) {
-        component = <Navigation links={links} type="rail"/>;
+        type = 'rail';
     } else {
-        component = <Navigation links={links} type="bar"/>;
+        type = 'bar';
     }
 
     let fabChildren;
@@ -42,8 +42,10 @@ export default function NavigationSection({ fab }) {
         delete fabProps.value;
     }
 
-    return <div className={style.container}>
-        {component}
+    const className = `${style.container} ${props.className || ''}`;
+
+    return <div className={className}>
+        <Navigation links={links} type={type} className={style.navigation}/>
         {fab && <FAB {...fabProps} className={style.fab}>{fabChildren}</FAB>}
     </div>;
 }

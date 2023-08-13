@@ -1,7 +1,7 @@
 import MainHeader from './MainHeader';
 import { screen } from '@testing-library/react';
 import { render } from '../../utils/tests/test-wrapper';
-import userEvent from '@testing-library/user-event';
+import userEvent from '../../utils/tests/user-event.js';
 import '@testing-library/jest-dom';
 
 describe('MainHeader component test suite', () => {
@@ -9,6 +9,13 @@ describe('MainHeader component test suite', () => {
 
     it('should render', () => {
         render(<MainHeader mainContentId={contentId} />);
+    });
+
+    it('should render with additional classes', () => {
+        const testClass = 'test';
+        render(<MainHeader mainContentId={contentId} className={testClass}/>);
+        const headerElt = screen.getByRole('banner');
+        expect(headerElt).toHaveClass(testClass);
     });
 
     it('should change the theme when clicking on the theme button', async () => {
