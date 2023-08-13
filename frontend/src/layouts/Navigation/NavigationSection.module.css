@@ -1,0 +1,61 @@
+@value extra-large as bp-extra-large, medium as bp-medium from "../../assets/styles/variables/breakpoints.module.css";
+
+@layer components {
+    .container {
+        width: 100%;
+        height: var(--size-16);
+        background-color: rgb(var(--color-surface-container));
+        position: fixed;
+        bottom: 0;
+        left: 0;
+    }
+
+    .fab {
+        position: absolute;
+        right: var(--size-5);
+        bottom: calc(100% + var(--size-5));
+        z-index: var(--layer-5);
+    }
+
+    @media bp-medium {
+        .container {
+            padding-block: var(--size-16);
+            width: var(--size-16);
+            height: 100%;
+            background-color: rgb(var(--color-surface));
+
+            display: flex;
+            flex-direction: column-reverse;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--size-16);
+        }
+
+        .fab {
+            position: relative;
+            inset: 0;
+        }
+    }
+
+    @media bp-extra-large {
+        .container {
+            padding-inline: var(--padding-3);
+            padding-block: var(--padding-4);
+
+            width: var(--size-22);
+
+            background-color: rgb(var(--color-surface));
+            border-radius: 0 var(--border-radius-5) var(--border-radius-5) 0;
+
+            overflow: hidden;
+
+            justify-content: flex-end;
+            align-items: stretch;
+            gap: var(--size-13);
+        }
+
+        .fab {
+            width: 100%;
+        }
+    }
+}

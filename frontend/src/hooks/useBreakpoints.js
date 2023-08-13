@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const BREAKPOINTS = {
     compact: 0,
@@ -28,18 +28,10 @@ function getBreakpoint() {
  */
 export function useBreakpoint() {
     const [breakpoint, setBreakpoint] = useState(getBreakpoint());
-    const delay = 500;
-    let throttled = useRef(false);
 
     useEffect(() => {
         const eventListener = () => {
-            if (!throttled.current) {
-                setBreakpoint(getBreakpoint());
-                throttled.current = true;
-                setTimeout(() => {
-                    throttled.current = false;
-                }, delay);
-            }
+            setBreakpoint(getBreakpoint());
         };
 
         window.addEventListener('resize', eventListener);

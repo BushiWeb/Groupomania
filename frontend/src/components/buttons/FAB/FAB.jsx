@@ -12,11 +12,12 @@ import { selectIsDarkTheme } from '../../../utils/selectors';
  * All additionnal props are passed to the DOM element.
  */
 export default function FAB({
-    autoFocus, onClick, label, children, icon, floating, ...other
+    autoFocus, onClick, label, children, icon, ...other
 }) {
     const isDarkTheme = useSelector(selectIsDarkTheme);
 
-    let className = `${children ? style.extendedFab : style.fab} ${floating ? style.floating : ''}`;
+    const className = `${children ? style.extendedFab : style.fab} ${other.className ? other.className : ''}`;
+    delete other.className;
 
     return <Button
         classNames={className}
@@ -36,7 +37,6 @@ FAB.defaultProps = {
     onClick: undefined,
     label: undefined,
     icon: undefined,
-    floating: true,
 };
 
 FAB.propTypes = {
@@ -54,7 +54,4 @@ FAB.propTypes = {
 
     /** Name of the icon to add before the text. */
     icon: PropTypes.string,
-
-    /** Weither the button is floating or still within the flow. Defaults to true. */
-    floating: PropTypes.bool,
 };

@@ -138,18 +138,4 @@ describe('FAB component test suite', () => {
         expect(iconElt).not.toBeNull();
         expect(buttonElt).toHaveClass('fab');
     });
-
-    it('should be a floating by default', () => {
-        render(<FAB>{label}</FAB>);
-        const buttonElt = screen.getByRole('button', { name: label });
-
-        expect(buttonElt).toHaveClass('floating');
-    });
-
-    it('should not be floating', () => {
-        render(<FAB floating={false}>{label}</FAB>);
-        const buttonElt = screen.getByRole('button', { name: label });
-
-        expect(buttonElt).not.toHaveClass('floating');
-    });
 });

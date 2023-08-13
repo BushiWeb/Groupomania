@@ -3,7 +3,7 @@
         composes: label-large from '../../../assets/styles/patterns/typography.module.css';
 
         min-height: var(--size-13);
-        min-width: var(--fab-min-width, var(--size-13));
+        width: var(--size-13);
 
         border-radius: var(--border-radius-5);
         border: none;
@@ -23,18 +23,11 @@
 
     .extendedFab {
         composes: fab;
-
-        --fab-min-width: var(--size-16);
+        width: auto;
+        min-width: var(--size-16);
     }
 
     .icon {
         --icon-size: var(--size-8);
-    }
-
-    .floating {
-        position: fixed;
-        bottom: var(--size-5);
-        right: var(--size-5);
-        z-index: var(--layer-5);
     }
 }

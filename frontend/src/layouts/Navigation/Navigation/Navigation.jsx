@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import NavigationItem from '../NavigationItem/NavigationItem';
-import style from './NavigationList.module.css';
+import style from './Navigation.module.css';
 import { useArrowNavigation } from '../../../hooks/useArrowNavigation';
+import { useLocation } from 'react-router-dom';
 
 /**
  * Inserts a navigation list, the format depends on the type
  */
-export default function NavigationList({
+export default function Navigation({
     links, type, ...props
 }) {
     const {
@@ -15,6 +16,7 @@ export default function NavigationList({
         handleKeyDown,
         focusId,
     } = useArrowNavigation(links.length);
+    const { pathname } = useLocation();
 
     let className = style.navigationBar;
     if (type === 'rail') {
@@ -23,32 +25,35 @@ export default function NavigationList({
         className = style.navigationDrawer;
     }
 
-    return <ul
-        className={`${className} ${props.className || ''}`}
-        role="tablist"
-        {...type === 'drawer' && {
-            onBlur: handleBlur,
-            onKeyDown: handleKeyDown,
-        }}
-        {...props}
-    >
-        {links.map((value, index) => <NavigationItem
-            {...value}
-            key={`${value.label}-${value.target}`}
-            type={type}
+    return <nav>
+        <ul
+            className={`${className} ${props.className || ''}`}
+            role="tablist"
             {...type === 'drawer' && {
-                onFocus: handleFocus(index),
-                focused: focusId === index,
+                onBlur: handleBlur,
+                onKeyDown: handleKeyDown,
             }}
-        />)}
-    </ul>;
+            {...props}
+        >
+            {links.map((value, index) => <NavigationItem
+                {...value}
+                active={pathname === value.target}
+                key={`${value.label}-${value.target}`}
+                type={type}
+                {...type === 'drawer' && {
+                    onFocus: handleFocus(index),
+                    focused: focusId === index,
+                }}
+            />)}
+        </ul>
+    </nav>;
 }
 
-NavigationList.defaultProps = {
+Navigation.defaultProps = {
     type: 'bar',
 };
 
-NavigationList.propTypes = {
+Navigation.propTypes = {
     // Descriptions of the links, with their label, icon and target, as well as if the link is active or not
     links: PropTypes.arrayOf(PropTypes.exact({
         label: PropTypes.string.isRequired,
