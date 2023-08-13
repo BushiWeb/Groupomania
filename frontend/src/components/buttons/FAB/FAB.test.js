@@ -138,4 +138,18 @@ describe('FAB component test suite', () => {
         expect(iconElt).not.toBeNull();
         expect(buttonElt).toHaveClass('fab');
     });
+
+    it('should be lowered', () => {
+        render(<FAB icon="favorite" label={label} low={true}/>);
+        const buttonElt = screen.getByRole('button', { name: label });
+
+        expect(buttonElt).toHaveAttribute('data-low');
+    });
+
+    it('should not be lowered', () => {
+        render(<FAB icon="favorite" label={label}/>);
+        const buttonElt = screen.getByRole('button', { name: label });
+
+        expect(buttonElt).not.toHaveAttribute('data-low');
+    });
 });

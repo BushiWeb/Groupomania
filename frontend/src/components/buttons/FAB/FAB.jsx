@@ -12,7 +12,7 @@ import { selectIsDarkTheme } from '../../../utils/selectors';
  * All additionnal props are passed to the DOM element.
  */
 export default function FAB({
-    autoFocus, onClick, label, children, icon, ...other
+    autoFocus, onClick, label, children, icon, low, ...other
 }) {
     const isDarkTheme = useSelector(selectIsDarkTheme);
 
@@ -25,6 +25,7 @@ export default function FAB({
         onClick={onClick}
         label={label}
         stateLayerColor="on-secondary-container"
+        {...low && { 'data-low': true }}
         {...other}
     >
         {icon && <Icon name={icon} className={style.icon} size={24} isOnDark={isDarkTheme}/>}
@@ -37,6 +38,7 @@ FAB.defaultProps = {
     onClick: undefined,
     label: undefined,
     icon: undefined,
+    low: false,
 };
 
 FAB.propTypes = {
@@ -54,4 +56,7 @@ FAB.propTypes = {
 
     /** Name of the icon to add before the text. */
     icon: PropTypes.string,
+
+    /** Decrease the visual elevation of the fav, default to false */
+    low: PropTypes.bool,
 };

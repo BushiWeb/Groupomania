@@ -38,13 +38,13 @@ export default function NavigationSection({ fab }) {
     let fabProps;
     if (fab) {
         fabChildren = breakpoint >= 3 ? fab.value || fab.label : undefined;
-        fabProps = { ...fab };
+        fabProps = { ...fab, low: breakpoint >= 1 };
         delete fabProps.value;
     }
 
     return <div className={style.container}>
         {component}
-        {fab && <FAB {...fab} className={style.fab}>{fabChildren}</FAB>}
+        {fab && <FAB {...fabProps} className={style.fab}>{fabChildren}</FAB>}
     </div>;
 }
 
