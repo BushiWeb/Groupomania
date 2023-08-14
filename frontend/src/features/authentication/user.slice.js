@@ -5,7 +5,7 @@ const { actions, reducer } = createSlice({
     initialState: {},
     reducers: {
         login: (state, action) => action.payload,
-        logout: () => {},
+        logout: () => ({}),
     },
 });
 

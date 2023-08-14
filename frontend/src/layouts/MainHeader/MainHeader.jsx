@@ -7,6 +7,10 @@ import { THEMES_NAMES, themeToggle } from '../../features/theme/theme.slice';
 import { useEffect } from 'react';
 import HiddenNavigationLink from '../../components/HiddenNavigationLink/HiddenNavigationLink.jsx';
 import PropTypes from 'prop-types';
+import { useMutation } from '@tanstack/react-query';
+import { simpleFetch } from '../../utils/fetch';
+import { handleCSRFToken } from '../../utils/antiCSRFToken';
+import { logout } from '../../features/authentication/user.slice';
 
 /**
  * Main header off the application, used for the top level pages.
@@ -14,9 +18,21 @@ import PropTypes from 'prop-types';
 export default function MainHeader({ mainContentId, ...props }) {
     const theme = useSelector(selectTheme);
     const { dispatch } = useStore();
+    const { mutate } = useMutation({
+        mutationFn: async () => {
+            return simpleFetch({
+                url: '/data/logout',
+                method: 'POST',
+            });
+        },
+        onSettled: async (data, error) => {
+            handleCSRFToken(data, error);
+            dispatch(logout());
+        },
+    });
 
     function handleLogoutClick(e) {
-
+        mutate();
     }
 
     useEffect(() => {

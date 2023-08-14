@@ -8,7 +8,7 @@ describe('Navigation component test suite', () => {
     const links = [
         {
             label: 'Accueil',
-            target: '/',
+            target: '/test',
             icon: 'home',
         },
         {
@@ -25,8 +25,6 @@ describe('Navigation component test suite', () => {
         const listItemsElts = screen.getAllByRole('listitem');
         const listElt = screen.getByRole('tablist');
 
-        expect(link1).toHaveAttribute('aria-selected', 'true');
-        expect(link2).toHaveAttribute('aria-selected', 'false');
         expect(link1).toHaveTextContent(links[0].label);
         expect(link1).toHaveTextContent(links[0].icon);
         expect(link2).toHaveTextContent(links[1].label);
@@ -138,6 +136,8 @@ describe('Navigation component test suite', () => {
         render(<Navigation links={links}/>, { initialEntries: [links[0].target]});
         const link1 = screen.getByRole('tab', { name: links[0].label });
         const link2 = screen.getByRole('tab', { name: links[1].label });
+
+        screen.debug();
 
         expect(link1).toHaveAttribute('aria-selected', 'true');
         expect(link2).toHaveAttribute('aria-selected', 'false');

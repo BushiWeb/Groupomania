@@ -32,14 +32,6 @@ describe('MainHeader component test suite', () => {
         expect(themeButton).toHaveAccessibleName('Passer au mode sombre');
     });
 
-    it.skip('should log the user out', async () => {
-        const user = userEvent.setup();
-        render(<MainHeader mainContentId={contentId} />);
-        const logoutButton = screen.getByRole('button', { name: 'Se déconnecter' });
-
-        await user.click(logoutButton);
-    });
-
     it('should focus the elements in the right order', async () => {
         const user = userEvent.setup();
         render(<MainHeader mainContentId={contentId} />);

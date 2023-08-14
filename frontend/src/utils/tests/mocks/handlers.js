@@ -164,4 +164,12 @@ export const handlers = [
             })
         );
     }),
+
+    rest.post('/data/logout', async (req, res, ctx) => {
+        return res(
+            ctx.delay(),
+            ctx.status(200),
+            ctx.set('X-Crsf-Token', 'testToken')
+        );
+    }),
 ];

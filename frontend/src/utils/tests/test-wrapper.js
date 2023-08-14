@@ -15,7 +15,7 @@ export function render(ui, {
     preloadedState,
     store,
     renderOptions,
-    initialEntries = ['/'],
+    initialEntries = ['/test'],
 } = {}) {
     if (!store) {
         store = configureStore({
