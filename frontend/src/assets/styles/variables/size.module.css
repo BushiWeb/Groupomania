@@ -47,7 +47,9 @@
     --size-23: 23rem;
     --size-25: 25rem;
     --size-26: 26rem;
+    --size-34: 34rem;
     --size-36: 36rem;
+    --size-68: 68rem;
 
     --size-target: var(--size-12);
     --size-state-layer: var(--size-11);

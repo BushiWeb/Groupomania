@@ -22,3 +22,13 @@ export const selectIsTooltipvisible = (state) => state.tooltip.show;
 export const selectNextSnackbarMessage = (state) => state.snackbar.messages[0] || null;
 
 export const selectIsAuthenticated = (state) => !!state.user.email;
+
+export const selectIsAdmin = (state) => state.user.roleId === 1;
+
+export const selectUserId = (state) => state.user.userId;
+
+export const selectRighInfos = createSelector(
+    selectIsAdmin,
+    selectUserId,
+    (isAdmin, userId) => ({ isAdmin, userId })
+);

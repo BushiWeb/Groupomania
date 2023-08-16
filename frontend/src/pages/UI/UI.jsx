@@ -6,6 +6,7 @@ import { useEffect, useId } from 'react';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../../utils/selectors';
 
+/** Global UI, containing the main pages */
 export default function UI() {
     const redirect = useNavigate();
     const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -27,8 +28,6 @@ export default function UI() {
     return <div className={style.container}>
         <MainHeader mainContentId={mainId} className={style.header}/>
         <NavigationSection fab={fab} className={style.navigation}/>
-        <main className={style.main} id={mainId}>
-            <Outlet/>
-        </main>
+        <Outlet context={{ id: mainId, className: style.main }}/>
     </div>;
 }

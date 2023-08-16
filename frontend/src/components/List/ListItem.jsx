@@ -6,6 +6,7 @@ import { selectIsDarkTheme } from '../../utils/selectors';
 import Link from '../Link/Link';
 import { useId } from 'react';
 import InteractiveElement from '../InteractiveElement/InteractiveElement';
+import { useFocusable } from '../../hooks/useFocusable';
 
 /**
  * Item of a list, used within the List component.
@@ -18,11 +19,7 @@ export default function ListItem({
     const Heading = `h${headlineLevel}`;
     const headingId = useId();
 
-    const linkRef = (node) => {
-        if (focused) {
-            node?.focus();
-        }
-    };
+    const linkRef = useFocusable(focused);
 
     return <li className={style.listItem} onFocus={onFocus}>
         <InteractiveElement

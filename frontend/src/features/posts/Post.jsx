@@ -3,12 +3,16 @@ import StandardIconButton from '../../components/icon-button/StandardIconButton/
 import Divider from '../../components/Divider/Divider';
 import { useId } from 'react';
 import style from './Post.module.css';
+import { useFocusable } from '../../hooks/useFocusable';
 
 /** Displays one post data. */
 export default function Post({
-    title, message, authorEmail, date, imageUrl, liked, likeNumber, posinset, setsize, hasRights,
+    title, message, authorEmail, date, imageUrl, liked, likeNumber, posinset, setsize, hasRights, focused, ...props
 }) {
     const headerId = useId();
+    const messageId = useId();
+    const emailId = useId();
+    const dateId = useId();
     const formatedDate = new Date(date).toLocaleString('fr-FR', {
         year: 'numeric',
         month: 'long',
@@ -20,28 +24,39 @@ export default function Post({
         timeZoneName: undefined,
     });
 
+    const postRef = useFocusable(focused);
+
     return <article
         className={imageUrl ? style.imagePost : style.post}
+        tabIndex={0}
+        ref={postRef}
+        onFocus={props.onFocus}
         aria-posinset={posinset}
         aria-setsize={setsize}
         aria-labelledby={headerId}
+        aria-describedby={`${emailId} ${dateId} ${messageId}`}
     >
         <header className={style.header}>
             <div className={style.postInfo}>
-                <address className={style.author}>{authorEmail}</address>
-                <time className={style.date} dateTime={date}>{formatedDate}</time>
+                <address className={style.author} id={emailId}>{authorEmail}</address>
+                <time className={style.date} dateTime={date} id={dateId}>{formatedDate}</time>
             </div>
+
             <div className={style.like}>
-                <StandardIconButton label={`${liked ? 'Ne plus aimer' : 'Aimer'}, ${likeNumber} j'aimes`} icon="favorite" toggle={liked}/>
+                <StandardIconButton label={`${liked ? 'Ne plus aimer' : 'Aimer'}, ${likeNumber} j'aimes`} name="favorite" toggle={liked}/>
                 <span className={liked ? style.likedLikeNumber : style.likeNumber}>{likeNumber}</span>
             </div>
-            {hasRights && <StandardIconButton label={'Plus d\'actions'} icon="more_vert"/>}
+
+            {hasRights && <StandardIconButton label={'Plus d\'actions'} name="more_vert"/>}
         </header>
+
         <Divider className={style.divider}/>
+
         <div className={style.content}>
             <h2 className={style.title} id={headerId}>{title}</h2>
-            <p className={style.message}>{message}</p>
+            <p className={style.message} id={messageId}>{message}</p>
         </div>
+
         {imageUrl && <img className={style.image} src={imageUrl} alt=""/>}
     </article>;
 
@@ -52,6 +67,8 @@ Post.defaultProps = {
     likeNumber: 0,
     imageUrl: undefined,
     hasRights: false,
+    setsize: -1,
+    focused: false,
 };
 
 Post.propTypes = {
@@ -76,12 +93,15 @@ Post.propTypes = {
     /** Number of likes. 0 by default. */
     likeNumber: PropTypes.number,
 
-    /** Position of the post within the post feed, for accessibility */
-    posinset: PropTypes.number.isRequired,
+    /** Position of the post within the post feed, for accessibility, required is setsize is set */
+    posinset: PropTypes.number,
 
-    /** Number of posts within the feed, for accessibility */
-    setsize: PropTypes.number.isRequired,
+    /** Number of posts within the feed, for accessibility, defaults to -1 */
+    setsize: PropTypes.number,
 
     /** Weither the user has the rights of update and deletion on the post. False by default. */
     hasRights: PropTypes.bool,
+
+    /** Weither the element should receive the focus or not, defaults to false */
+    focused: PropTypes.bool,
 };

@@ -1,0 +1,60 @@
+@value extra-large as bp-extra-large, expanded as bp-expanded, medium as bp-medium from "../../assets/styles/variables/breakpoints.module.css";
+
+@layer components {
+    .home {
+        padding: var(--padding-4);
+    }
+
+    .heading {
+        margin-block-end: var(--padding-4);
+    }
+
+    .posts,
+    .heading {
+        width: 100%;
+    }
+
+    @media bp-medium {
+        .home {
+            padding-block: var(--padding-8);
+            padding-inline: var(--padding-12);
+        }
+
+        .heading {
+            margin-block-end: var(--padding-8);
+        }
+
+        .posts,
+        .heading {
+            max-width: var(--size-34);
+            margin-inline: auto;
+        }
+    }
+
+    @media bp-expanded {
+        .home {
+            padding-block: var(--padding-8);
+            padding-inline: var(--padding-10);
+        }
+
+        .posts,
+        .heading {
+            max-width: none;
+        }
+    }
+
+    @media bp-extra-large {
+        .home {
+            padding-inline: var(--padding-12);
+        }
+
+        .heading {
+            margin-block-end: var(--padding-12);
+        }
+
+        .posts,
+        .heading {
+            max-width: var(--size-68);
+        }
+    }
+}

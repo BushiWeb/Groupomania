@@ -1,0 +1,16 @@
+@value expanded as bp-expanded, medium as bp-medium from "../../assets/styles/variables/breakpoints.module.css";
+
+@layer components {
+    .postsList {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--padding-8);
+    }
+
+    @media bp-medium {
+        .postsList {
+            gap: var(--padding-12);
+        }
+    }
+}

@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { selectIsDarkTheme } from '../../../utils/selectors.js';
 import style from './NavigationItem.module.css';
 import { useRipple } from '../../../hooks/useRipple';
+import { useFocusable } from '../../../hooks/useFocusable';
 
 /**
  * Navigation item for the different navigation elements
@@ -19,11 +20,7 @@ export default function NavigationItem({
         stateLayerRef,
     } = useRipple(350, { onKeyDown: rest.onKeyDown, onPointerDown: rest.onPointerDown });
 
-    const linkRef = (node) => {
-        if (focused) {
-            node?.focus();
-        }
-    };
+    const linkRef = useFocusable(focused);
 
     let className = style.navigationBarItem;
     if (type === 'rail') {

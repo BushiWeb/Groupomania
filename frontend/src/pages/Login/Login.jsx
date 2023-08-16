@@ -3,6 +3,7 @@ import style from './Login.module.css';
 import ProgressIndicator from '../../components/ProgressIndicator/ProgressIndicator';
 import { useAutoLogin } from './useAutoLogin';
 
+/** Login page */
 export default function Login() {
     const authenticationError = useAutoLogin();
     let content;

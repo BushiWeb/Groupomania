@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import Login from '../../pages/Login/Login.jsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import UI from '../../pages/UI/UI.jsx';
+import Home from '../../pages/Home/Home.jsx';
 
 export function render(ui, {
     preloadedState,
@@ -48,7 +49,7 @@ export function render(ui, {
                     <MemoryRouter initialEntries={initialEntries}>
                         <Routes>
                             <Route path='/' element={<UI/>}>
-                                <Route index element={undefined} />
+                                <Route index element={<Home/>} />
                                 <Route path='reseau' element={undefined} />
                                 <Route path='profil' element={undefined} />
                             </Route>

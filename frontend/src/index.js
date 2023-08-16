@@ -8,6 +8,7 @@ import Login from './pages/Login/Login.jsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import UI from './pages/UI/UI.jsx';
+import Home from './pages/Home/Home.jsx';
 //import reportWebVitals from './utils/reportWebVitals.js';
 
 const queryClient = new QueryClient();
@@ -20,7 +21,7 @@ root.render(
                 <BrowserRouter>
                     <Routes>
                         <Route path='/' element={<UI/>}>
-                            <Route index element={undefined} />
+                            <Route index element={<Home/>} />
                             <Route path='reseau' element={undefined} />
                             <Route path='profil' element={undefined} />
                         </Route>
