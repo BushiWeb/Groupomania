@@ -17,7 +17,7 @@ describe('PostsList component test suite', () => {
             },
             creationDate: '2023-08-14T14:39:11Z',
             lastUpdateDate: '2023-08-15T14:39:11Z',
-            usersLiked: [1, 2, 3],
+            usersLiked: [40, 1, 2, 3],
             likes: 3,
         },
         {
@@ -130,5 +130,17 @@ describe('PostsList component test suite', () => {
         // Use shortcuts even when focused inside of an element
         await user.keyboard('{Control>}{End}{/Control}');
         expect(postsElts[2]).toHaveFocus();
+    });
+
+    it('should have the first post liked by the user', () => {
+        render(<PostsList posts={posts}/>, { preloadedState: { user: { userId: posts[0].usersLiked[0], roleId: 2 }}});
+
+        const likedPost = screen.getByRole('article', { name: posts[0].title });
+        getByRole(likedPost, 'button', { name: /Ne plus aimer/ });
+
+        const otherPost = screen.getByRole('article', { name: posts[1].title });
+        const otherLikeButton = queryByRole(otherPost, 'button', { name: /Ne plus aimer/ });
+        expect(otherLikeButton).toBeNull();
+        getByRole(otherPost, 'button', { name: /Aimer/ });
     });
 });
