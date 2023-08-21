@@ -41,7 +41,18 @@ export function render(ui, {
     }
 
     function Wrapper({ children }) {
-        const queryClient = new QueryClient();
+        const queryClient = new QueryClient({
+            defaultOptions: {
+                queries: {
+                    retry: false,
+                },
+            },
+            logger: {
+                log: console.log,
+                warn: console.warn,
+                error: process.env.NODE_ENV === 'test' ? () => {} : console.error,
+            },
+        });
 
         return (
             <QueryClientProvider client={queryClient}>

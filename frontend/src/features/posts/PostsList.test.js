@@ -45,8 +45,19 @@ describe('PostsList component test suite', () => {
         },
     ];
 
+    const mockLike = jest.fn();
+
+    const props = {
+        posts,
+        handleLike: () => mockLike,
+    };
+
+    beforeEach(() => {
+        mockLike.mockClear();
+    });
+
     it('should render', () => {
-        render(<PostsList posts={posts}/>);
+        render(<PostsList {...props}/>);
 
         const postsElts = screen.getAllByRole('article');
         expect(postsElts).toHaveLength(posts.length);
@@ -56,7 +67,7 @@ describe('PostsList component test suite', () => {
     });
 
     it('should allow more action if the user owns the posts', () => {
-        render(<PostsList posts={posts}/>, { preloadedState: { user: { userId: posts[0].writer.writerId, roleId: 2 }}});
+        render(<PostsList {...props}/>, { preloadedState: { user: { userId: posts[0].writer.writerId, roleId: 2 }}});
 
         const ownedPost = screen.getByRole('article', { name: posts[0].title });
         getByRole(ownedPost, 'button', { name: /Plus/ });
@@ -67,7 +78,7 @@ describe('PostsList component test suite', () => {
     });
 
     it('should allow more actions if the user is an admin', () => {
-        render(<PostsList posts={posts}/>, { preloadedState: { user: { userId: 666, roleId: 1 }}});
+        render(<PostsList {...props}/>, { preloadedState: { user: { userId: 666, roleId: 1 }}});
         const postsElts = screen.getAllByRole('article');
 
         for (const post of postsElts) {
@@ -76,7 +87,7 @@ describe('PostsList component test suite', () => {
     });
 
     it('should be identified as busy', () => {
-        render(<PostsList posts={posts} busy/>);
+        render(<PostsList {...props} busy/>);
         const feedElt = screen.getByRole('feed');
         screen.getByLabelText(/Chargement/);
 
@@ -85,7 +96,7 @@ describe('PostsList component test suite', () => {
 
     it('should be navigable using the keyboard', async () => {
         const user = userEvent.setup();
-        render(<PostsList posts={posts}/>);
+        render(<PostsList {...props}/>);
         const postsElts = screen.getAllByRole('article');
 
         await user.tab();
@@ -134,7 +145,7 @@ describe('PostsList component test suite', () => {
     });
 
     it('should have the first post liked by the user', () => {
-        render(<PostsList posts={posts}/>, { preloadedState: { user: { userId: posts[0].usersLiked[0], roleId: 2 }}});
+        render(<PostsList {...props}/>, { preloadedState: { user: { userId: posts[0].usersLiked[0], roleId: 2 }}});
 
         const likedPost = screen.getByRole('article', { name: posts[0].title });
         getByRole(likedPost, 'button', { name: /Ne plus aimer/ });
@@ -143,5 +154,16 @@ describe('PostsList component test suite', () => {
         const otherLikeButton = queryByRole(otherPost, 'button', { name: /Ne plus aimer/ });
         expect(otherLikeButton).toBeNull();
         getByRole(otherPost, 'button', { name: /Aimer/ });
+    });
+
+    it('should pass the like function to the individual posts', async () => {
+        const user = userEvent.setup();
+        render(<PostsList {...props}/>);
+
+        const postsElts = screen.getAllByRole('article');
+        const likeButton = getByRole(postsElts[0], 'button', { name: /j'aimes/ });
+
+        await user.click(likeButton);
+        expect(mockLike).toHaveBeenCalled();
     });
 });

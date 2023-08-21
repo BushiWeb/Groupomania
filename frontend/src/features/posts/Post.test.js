@@ -1,6 +1,7 @@
 import Post from './Post.jsx';
 import { screen } from '@testing-library/react';
 import { render } from '../../utils/tests/test-wrapper.js';
+import userEvent from '../../utils/tests/user-event.js';
 import '@testing-library/jest-dom';
 
 describe('Post component test suite', () => {
@@ -12,7 +13,12 @@ describe('Post component test suite', () => {
         likeNumber: 113,
         posinset: 3,
         setsize: 10,
+        onLike: jest.fn(),
     };
+
+    beforeEach(() => {
+        postInformations.onLike.mockClear();
+    });
 
     it('should render', () => {
         render(<Post {...postInformations}/>);
@@ -55,5 +61,14 @@ describe('Post component test suite', () => {
 
         expect(imgElt).toHaveAttribute('src', imageUrl);
         expect(imgElt).toHaveAttribute('alt', '');
+    });
+
+    it('should execute the function when clicking on the like button', async () => {
+        const user = userEvent.setup();
+        render(<Post {...postInformations}/>);
+        const likeButton = screen.getByRole('button', { name: `Aimer, ${postInformations.likeNumber} j'aimes` });
+
+        await user.click(likeButton);
+        expect(postInformations.onLike).toHaveBeenCalled();
     });
 });

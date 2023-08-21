@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { useScrollThreshold } from '../../hooks/useScrollThreshold.js';
-import { useNavigate } from 'react-router-dom';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { simpleFetch } from '../../utils/fetch.js';
 
@@ -22,7 +21,7 @@ export function useInfiniteScroll() {
         data,
         isError,
         fetchNextPage,
-        isFetching,
+        isLoading,
         isFetchingNextPage,
     } = useInfiniteQuery({
         queryKey: ['posts'],
@@ -31,7 +30,7 @@ export function useInfiniteScroll() {
             return { data, pageParam };
         },
         getNextPageParam: (lastPage) => lastPage.data.length === 0 ? undefined : lastPage.pageParam + 1,
-        useErrorBoundary: true,
+        useErrorBoundary: (error) => error.status === 401 || error.status >= 500,
     });
 
     useEffect(() => {
@@ -45,7 +44,7 @@ export function useInfiniteScroll() {
     return {
         posts,
         mainRef,
-        isFetching,
+        isLoading,
         isFetchingNextPage,
         isError,
     };

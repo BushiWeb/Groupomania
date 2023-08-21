@@ -216,4 +216,28 @@ export const handlers = [
             ctx.json(response)
         );
     }),
+
+    rest.post('/data/posts/:id/like', async (req, res, ctx) => {
+        const { like } = await req.json();
+        const id = parseInt(req.params.id);
+        const userId = parseInt(sessionStorage.getItem('userId'));
+
+        const postIndex = POSTS.findIndex(elt => elt.postId === id);
+        POSTS[postIndex].likes += like ? 1 : -1;
+
+        if (like) {
+            POSTS[postIndex].usersLiked.push(userId);
+        } else {
+            POSTS[postIndex].usersLiked.splice(POSTS[postIndex].usersLiked.indexOf(userId), 1);
+        }
+
+        const response = { message: 'done, or not' };
+
+        return res(
+            ctx.delay(),
+            ctx.status(200),
+            ctx.set('X-Crsf-Token', 'testToken'),
+            ctx.json(response)
+        );
+    }),
 ];

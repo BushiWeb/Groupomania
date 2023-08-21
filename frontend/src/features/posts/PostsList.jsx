@@ -7,7 +7,9 @@ import style from './PostsList.module.css';
 import ProgressIndicator from '../../components/ProgressIndicator/ProgressIndicator';
 
 /** List of posts */
-export default function PostsList({ posts, busy, ...props }) {
+export default function PostsList({
+    posts, busy, handleLike, ...props
+}) {
     const { isAdmin, userId } = useSelector(selectRighInfos);
     const {
         handleBlur,
@@ -24,19 +26,34 @@ export default function PostsList({ posts, busy, ...props }) {
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
     >
-        {posts && posts.map((value, index) => <Post
-            title={value.title}
-            message={value.message}
-            authorEmail={value.writer.email}
-            date={value.creationDate}
-            imageUrl={value.imageUrl}
-            liked={value.usersLiked?.includes(userId)}
-            likeNumber={value.likes}
-            hasRights={isAdmin || userId === value.writer.writerId}
-            key={value.postId}
-            focused={index === focusId}
-            onFocus={handleFocus(index)}
-        />)}
+        {posts && posts.map(({
+            title,
+            message,
+            writer: { email: authorEmail, writerId },
+            creationDate: date,
+            imageUrl,
+            usersLiked,
+            likes: likeNumber,
+            postId,
+        }, index) => {
+            const postData = {
+                title,
+                message,
+                authorEmail,
+                date,
+                imageUrl,
+                liked: usersLiked?.includes(userId),
+                likeNumber,
+                hasRights: isAdmin || userId === writerId,
+            };
+            return <Post
+                {...postData}
+                key={postId}
+                focused={index === focusId}
+                onFocus={handleFocus(index)}
+                onLike={handleLike(postId, postData.liked)}
+            />;
+        })}
 
         {busy && <ProgressIndicator label="Chargement d'anciens posts" circular/>}
     </section>;
@@ -66,4 +83,8 @@ PostsList.propTypes = {
 
     /** value of aria-busy, should be true if the posts list is being updated */
     busy: PropTypes.bool,
+
+    /** Function taking the post id and weither the user likes the post or not,
+     * and returns the function to be executed to handle the like action. */
+    handleLike: PropTypes.func.isRequired,
 };

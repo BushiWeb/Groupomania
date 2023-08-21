@@ -7,7 +7,19 @@ import { useFocusable } from '../../hooks/useFocusable';
 
 /** Displays one post data. */
 export default function Post({
-    title, message, authorEmail, date, imageUrl, liked, likeNumber, posinset, setsize, hasRights, focused, ...props
+    title,
+    message,
+    authorEmail,
+    date,
+    imageUrl,
+    liked,
+    likeNumber,
+    posinset,
+    setsize,
+    hasRights,
+    focused,
+    onLike,
+    ...props
 }) {
     const headerId = useId();
     const messageId = useId();
@@ -43,7 +55,7 @@ export default function Post({
             </div>
 
             <div className={style.like}>
-                <StandardIconButton label={`${liked ? 'Ne plus aimer' : 'Aimer'}, ${likeNumber} j'aimes`} name="favorite" toggle={liked}/>
+                <StandardIconButton label={`${liked ? 'Ne plus aimer' : 'Aimer'}, ${likeNumber} j'aimes`} name="favorite" toggle={liked} onClick={onLike}/>
                 <span className={liked ? style.likedLikeNumber : style.likeNumber}>{likeNumber}</span>
             </div>
 
@@ -104,4 +116,7 @@ Post.propTypes = {
 
     /** Weither the element should receive the focus or not, defaults to false */
     focused: PropTypes.bool,
+
+    /** Function to execute when a user clicks on the like button */
+    onLike: PropTypes.func.isRequired,
 };
