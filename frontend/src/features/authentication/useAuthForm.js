@@ -7,7 +7,6 @@ import {
     authRequest, handleAuthRequestError, validateAuthData,
 } from './request.js';
 import { login } from './user.slice.js';
-import { handleCSRFToken } from '../../utils/antiCSRFToken.js';
 
 /**
  * Hook handling form validation, submission and request errors.
@@ -55,12 +54,10 @@ export function useAuthForm() {
                 dispatch({ type: ACTIONS.setGlobalError, payload: errorMessages.global });
             }
         },
-        onSuccess: async (data) => {
-            const userData = await data.json();
-            store.dispatch(login(userData));
+        onSuccess: (data) => {
+            store.dispatch(login(data));
             dispatch({ type: ACTIONS.reset });
         },
-        onSettled: handleCSRFToken,
     });
 
     return {

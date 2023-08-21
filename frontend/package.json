@@ -36,8 +36,9 @@
         "winston-daily-rotate-file": "^4.7.1"
     },
     "scripts": {
-        "frontend-start": "react-scripts start",
-        "backend-start": "nodemon -r dotenv/config ./bff/server.js",
+        "frontend-dev": "react-scripts start",
+        "backend-dev": "nodemon -r dotenv/config ./bff/server.js",
+        "backend-start": "node -r dotenv/config ./bff/server.js",
         "dev-start": "npm run build && npm run backend-start",
         "start": "npm run build && node -r dotenv/config ./bff/server.js --env production",
         "build": "react-scripts build",

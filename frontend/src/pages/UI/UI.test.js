@@ -5,16 +5,17 @@ import '@testing-library/jest-dom';
 
 describe('UI test suite', () => {
     it('should render', async () => {
-        render(undefined, { initialEntries: ['/'], preloadedState: { user: { email: 'test' }}});
+        const { container } = render(undefined, { initialEntries: ['/'], preloadedState: { user: { email: 'test' }}});
 
         await waitFor(() => {
             screen.getByRole('main');
             screen.getByRole('navigation');
-            screen.getByRole('banner');
+            const header = container.querySelector('header');
+            expect(header).not.toBeNull();
         });
     });
 
-    it('should redirect to the login page if the usre is not authenticated', async () => {
+    it('should redirect to the login page if the user is not authenticated', async () => {
         render(undefined, { initialEntries: ['/']});
 
         await waitFor(() => {

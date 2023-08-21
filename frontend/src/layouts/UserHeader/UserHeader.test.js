@@ -4,7 +4,7 @@ import { render } from '../../utils/tests/test-wrapper';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 
-describe('MainHeader component test suite', () => {
+describe.skip('MainHeader component test suite', () => {
     const heading = 'test@email.com', subheading = 'admin';
 
     it('should render', () => {

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { selectRighInfos } from '../../utils/selectors';
 import { useArrowNavigation } from '../../hooks/useArrowNavigation';
 import style from './PostsList.module.css';
+import ProgressIndicator from '../../components/ProgressIndicator/ProgressIndicator';
 
 /** List of posts */
 export default function PostsList({ posts, busy, ...props }) {
@@ -13,7 +14,7 @@ export default function PostsList({ posts, busy, ...props }) {
         handleFocus,
         handleKeyDown,
         focusId,
-    } = useArrowNavigation(posts.length, { usePageKeys: true, useHomeEnd: true });
+    } = useArrowNavigation(posts?.length || 0, { usePageKeys: true, useHomeEnd: true });
 
     return <section
         className={`${props.className || ''} ${style.postsList}`}
@@ -23,7 +24,7 @@ export default function PostsList({ posts, busy, ...props }) {
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
     >
-        {posts.map((value, index) => <Post
+        {posts && posts.map((value, index) => <Post
             title={value.title}
             message={value.message}
             authorEmail={value.writer.email}
@@ -36,6 +37,8 @@ export default function PostsList({ posts, busy, ...props }) {
             focused={index === focusId}
             onFocus={handleFocus(index)}
         />)}
+
+        {busy && <ProgressIndicator label="Chargement d'anciens posts" circular/>}
     </section>;
 }
 
@@ -53,6 +56,7 @@ PostsList.propTypes = {
         writer: PropTypes.exact({
             writerId: PropTypes.number.isRequired,
             email: PropTypes.string.isRequired,
+            roleId: PropTypes.number,
         }).isRequired,
         creationDate: PropTypes.string.isRequired,
         lastUpdateDate: PropTypes.string,

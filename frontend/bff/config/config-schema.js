@@ -159,12 +159,12 @@ const CONFIG_SCHEMA = {
         users: {
             doc: 'Number of users to display per page.',
             format: 'nat',
-            default: 100,
+            default: 25,
         },
         posts: {
             doc: 'Number of posts to display per page.',
             format: 'nat',
-            default: 50,
+            default: 15,
         },
     },
 };

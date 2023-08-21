@@ -6,11 +6,19 @@
     }
 
     .heading {
+        composes: headline-large from '../../assets/styles/patterns/typography.module.css';
         margin-block-end: var(--padding-4);
+        color: rgb(var(--color-on-surface));
+    }
+
+    .error {
+        composes: body-large from '../../assets/styles/patterns/typography.module.css';
+        color: rgb(var(--color-on-surface));
     }
 
     .posts,
-    .heading {
+    .heading,
+    .error {
         width: 100%;
     }
 
@@ -25,7 +33,8 @@
         }
 
         .posts,
-        .heading {
+        .heading,
+        .error {
             max-width: var(--size-34);
             margin-inline: auto;
         }
@@ -38,7 +47,8 @@
         }
 
         .posts,
-        .heading {
+        .heading,
+        .error {
             max-width: none;
         }
     }
@@ -53,7 +63,8 @@
         }
 
         .posts,
-        .heading {
+        .heading,
+        .error {
             max-width: var(--size-68);
         }
     }

@@ -9,7 +9,6 @@ import HiddenNavigationLink from '../../components/HiddenNavigationLink/HiddenNa
 import PropTypes from 'prop-types';
 import { useMutation } from '@tanstack/react-query';
 import { simpleFetch } from '../../utils/fetch';
-import { handleCSRFToken } from '../../utils/antiCSRFToken';
 import { logout } from '../../features/authentication/user.slice';
 
 /**
@@ -25,8 +24,7 @@ export default function MainHeader({ mainContentId, ...props }) {
                 method: 'POST',
             });
         },
-        onSettled: async (data, error) => {
-            handleCSRFToken(data, error);
+        onSettled: () => {
             dispatch(logout());
         },
     });

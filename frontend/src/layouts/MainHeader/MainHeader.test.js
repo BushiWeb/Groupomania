@@ -65,7 +65,7 @@ describe('MainHeader component test suite', () => {
 
     it('should link to the home page', async () => {
         const user = userEvent.setup();
-        render(<MainHeader mainContentId={contentId} />, { initialEntries: ['/test']});
+        render(<MainHeader mainContentId={contentId} />, { initialEntries: ['/test'], preloadedState: { user: { email: 'email', userId: 1, roleId: 2 }}});
         const logoLink = screen.getByRole('link', { name: 'Groupomania Retourner à la page d\'accueil' });
 
         await user.click(logoLink);

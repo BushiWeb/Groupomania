@@ -1,0 +1,29 @@
+@value medium as bp-medium from "../../assets/styles/variables/breakpoints.module.css";
+
+@layer components {
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--padding-8);
+
+        text-align: center;
+        color: var(--color-on-surface);
+
+        padding: var(--padding-8) var(--padding-4);
+    }
+
+    .title {
+        composes: headline-large from '../../assets/styles/patterns/typography.module.css';
+    }
+
+    .message {
+        composes: body-large from '../../assets/styles/patterns/typography.module.css';
+    }
+
+    @media bp-medium {
+        .wrapper {
+            padding: var(--padding-12) var(--padding-8);
+        }
+    }
+}

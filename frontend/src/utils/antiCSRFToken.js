@@ -24,12 +24,10 @@ export const setAntiCSRFToken = (token) => {
 
 /**
  * Handles the result of a request, weither it is successful or not, to save the CSRF token.
- * Intended to be used in the onSettled event of react query mutations.
  * @param {Response} data
- * @param {Response} error
  */
-export const handleCSRFToken = (data, error) => {
-    const headers = data ? data.headers : error.headers;
+export const handleCSRFToken = (data) => {
+    const headers = data.headers;
     const csrfToken = headers.get('X-Crsf-Token');
     if (csrfToken) {
         setAntiCSRFToken(csrfToken);

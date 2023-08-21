@@ -78,6 +78,7 @@ describe('PostsList component test suite', () => {
     it('should be identified as busy', () => {
         render(<PostsList posts={posts} busy/>);
         const feedElt = screen.getByRole('feed');
+        screen.getByLabelText(/Chargement/);
 
         expect(feedElt).toHaveAttribute('aria-busy', 'true');
     });

@@ -3,7 +3,6 @@ import { selectIsAuthenticated } from '../../utils/selectors.js';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { simpleFetch } from '../../utils/fetch.js';
-import { handleCSRFToken } from '../../utils/antiCSRFToken.js';
 import { useEffect } from 'react';
 import { login } from '../../features/authentication/user.slice.js';
 
@@ -25,11 +24,9 @@ export function useAutoLogin() {
                 method: 'POST',
             });
         },
-        onSuccess: async (data) => {
-            const userData = await data.json();
-            store.dispatch(login(userData));
+        onSuccess: (data) => {
+            store.dispatch(login(data));
         },
-        onSettled: handleCSRFToken,
     });
 
     useEffect(() => {

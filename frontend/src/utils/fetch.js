@@ -1,4 +1,4 @@
-import { getAntiCSRFToken } from './antiCSRFToken.js';
+import { getAntiCSRFToken, handleCSRFToken } from './antiCSRFToken.js';
 
 /**
  *
@@ -28,9 +28,11 @@ export async function simpleFetch({
         ...data && { body: JSON.stringify(data) },
     });
 
+    handleCSRFToken(response);
+
     if (!response.ok) {
         throw response;
     }
 
-    return response;
+    return response.json();
 }

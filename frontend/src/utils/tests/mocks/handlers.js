@@ -1,4 +1,5 @@
 import { rest } from 'msw';
+import POSTS from './posts';
 
 export const handlers = [
     rest.post('/data/login', async (req, res, ctx) => {
@@ -170,6 +171,49 @@ export const handlers = [
             ctx.delay(),
             ctx.status(200),
             ctx.set('X-Crsf-Token', 'testToken')
+        );
+    }),
+
+    rest.get('/data/posts', async (req, res, ctx) => {
+        if (sessionStorage.getItem('inputError')) {
+            return res(
+                ctx.delay(),
+                ctx.status(400),
+                ctx.set('X-Crsf-Token', 'testToken'),
+                ctx.json({
+                    error: {
+                        type: 'UserInputValidationError',
+                        statusCode: 400,
+                    },
+                })
+            );
+        }
+
+        if (sessionStorage.getItem('networkError')) {
+            return res.networkError();
+        }
+
+        if (sessionStorage.getItem('authError')) {
+            return res(
+                ctx.delay(),
+                ctx.status(401),
+                ctx.set('X-Crsf-Token', 'testToken'),
+                ctx.json({
+                    error: {
+                        type: 'UnauthorizedError',
+                        statusCode: 401,
+                    },
+                })
+            );
+        }
+
+        const page = req.url.searchParams.get('page');
+        const response = page === '1' ? POSTS.slice(0, 2) : POSTS.slice(2);
+        return res(
+            ctx.delay(),
+            ctx.status(200),
+            ctx.set('X-Crsf-Token', 'testToken'),
+            ctx.json(response)
         );
     }),
 ];
