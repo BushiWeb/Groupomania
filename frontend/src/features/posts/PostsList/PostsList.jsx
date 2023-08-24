@@ -1,10 +1,10 @@
 import { useSelector } from 'react-redux';
-import Post from './Post';
+import Post from '../Posts/Post';
 import PropTypes from 'prop-types';
-import { selectRighInfos } from '../../utils/selectors';
-import { useArrowNavigation } from '../../hooks/useArrowNavigation';
+import { selectRighInfos } from '../../../utils/selectors';
+import { useArrowNavigation } from '../../../hooks/useArrowNavigation';
 import style from './PostsList.module.css';
-import ProgressIndicator from '../../components/ProgressIndicator/ProgressIndicator';
+import ProgressIndicator from '../../../components/ProgressIndicator/ProgressIndicator';
 
 /** List of posts */
 export default function PostsList({

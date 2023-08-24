@@ -189,6 +189,20 @@ export const handlers = [
             );
         }
 
+        if (sessionStorage.getItem('serverError')) {
+            return res(
+                ctx.delay(),
+                ctx.status(500),
+                ctx.set('X-Crsf-Token', 'testToken'),
+                ctx.json({
+                    error: {
+                        type: 'ServerError',
+                        statusCode: 500,
+                    },
+                })
+            );
+        }
+
         if (sessionStorage.getItem('networkError')) {
             return res.networkError();
         }
@@ -218,6 +232,51 @@ export const handlers = [
     }),
 
     rest.post('/data/posts/:id/like', async (req, res, ctx) => {
+        if (sessionStorage.getItem('inputError')) {
+            return res(
+                ctx.delay(),
+                ctx.status(400),
+                ctx.set('X-Crsf-Token', 'testToken'),
+                ctx.json({
+                    error: {
+                        type: 'UserInputValidationError',
+                        statusCode: 400,
+                    },
+                })
+            );
+        }
+
+        if (sessionStorage.getItem('serverError')) {
+            return res(
+                ctx.delay(),
+                ctx.status(500),
+                ctx.set('X-Crsf-Token', 'testToken'),
+                ctx.json({
+                    error: {
+                        type: 'ServerError',
+                        statusCode: 500,
+                    },
+                })
+            );
+        }
+
+        if (sessionStorage.getItem('networkError')) {
+            return res.networkError();
+        }
+
+        if (sessionStorage.getItem('authError')) {
+            return res(
+                ctx.delay(),
+                ctx.status(401),
+                ctx.set('X-Crsf-Token', 'testToken'),
+                ctx.json({
+                    error: {
+                        type: 'UnauthorizedError',
+                        statusCode: 401,
+                    },
+                })
+            );
+        }
         const { like } = await req.json();
         const id = parseInt(req.params.id);
         const userId = parseInt(sessionStorage.getItem('userId'));

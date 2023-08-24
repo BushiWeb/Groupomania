@@ -1,7 +1,7 @@
 import Post from './Post.jsx';
 import { screen } from '@testing-library/react';
-import { render } from '../../utils/tests/test-wrapper.js';
-import userEvent from '../../utils/tests/user-event.js';
+import { render } from '../../../utils/tests/test-wrapper.js';
+import userEvent from '../../../utils/tests/user-event.js';
 import '@testing-library/jest-dom';
 
 describe('Post component test suite', () => {

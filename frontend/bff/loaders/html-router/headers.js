@@ -14,7 +14,7 @@ export default function htmlHeadersLoader(router) {
         helmet.contentSecurityPolicy({
             useDefaults: false,
             directives: {
-                defaultSrc: ['\'self\'', 'localhost:8000', 'fonts.googleapis.com', 'fonts.gstatic.com'],
+                defaultSrc: ['\'self\'', 'localhost:8000', 'localhost:3000', 'fonts.googleapis.com', 'fonts.gstatic.com'],
                 objectSrc: ['\'none\''],
                 frameAncestors: ['none'],
             },

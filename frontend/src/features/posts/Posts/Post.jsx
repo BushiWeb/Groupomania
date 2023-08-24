@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-import StandardIconButton from '../../components/icon-button/StandardIconButton/StandardIconButton';
-import Divider from '../../components/Divider/Divider';
+import StandardIconButton from '../../../components/icon-button/StandardIconButton/StandardIconButton';
+import Divider from '../../../components/Divider/Divider';
 import { useId } from 'react';
 import style from './Post.module.css';
-import { useFocusable } from '../../hooks/useFocusable';
+import { useFocusable } from '../../../hooks/useFocusable';
 
 /** Displays one post data. */
 export default function Post({

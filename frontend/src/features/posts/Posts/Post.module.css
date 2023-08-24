@@ -1,4 +1,4 @@
-@value expanded as bp-expanded, medium as bp-medium from "../../assets/styles/variables/breakpoints.module.css";
+@value expanded as bp-expanded, medium as bp-medium from "../../../assets/styles/variables/breakpoints.module.css";
 
 @layer components {
     .post {
@@ -58,11 +58,11 @@
     }
 
     .author {
-        composes: title-small from '../../assets/styles/patterns/typography.module.css';
+        composes: title-small from '../../../assets/styles/patterns/typography.module.css';
     }
 
     .date {
-        composes: body-small from '../../assets/styles/patterns/typography.module.css';
+        composes: body-small from '../../../assets/styles/patterns/typography.module.css';
 
         color: rgb(var(--color-on-surface-variant));
     }
@@ -76,7 +76,7 @@
     }
 
     .likeNumber {
-        composes: label-large from '../../assets/styles/patterns/typography.module.css';
+        composes: label-large from '../../../assets/styles/patterns/typography.module.css';
 
         color: rgb(var(--color-on-surface-variant));
     }
@@ -105,11 +105,11 @@
     }
 
     .title {
-        composes: title-medium from '../../assets/styles/patterns/typography.module.css';
+        composes: title-medium from '../../../assets/styles/patterns/typography.module.css';
     }
 
     .message {
-        composes: body-medium from '../../assets/styles/patterns/typography.module.css';
+        composes: body-medium from '../../../assets/styles/patterns/typography.module.css';
     }
 
     .image {
