@@ -2,10 +2,6 @@ import PostsList from '../PostsList/PostsList';
 import { useInfiniteScroll } from './useInfiniteScroll';
 import PropTypes from 'prop-types';
 import { useLikePost } from './useLikePost';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useStore } from 'react-redux';
-import { logout } from '../../authentication/user.slice';
 import { useHandleRequestError } from '../../../hooks/useHandleRequestError';
 
 /**

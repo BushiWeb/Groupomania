@@ -66,3 +66,8 @@
     --color-shadow: var(--ref-color-key-black);
     --color-outline-focus: var(--ref-color-key-black);
 }
+
+::backdrop {
+    --color-scrim: var(--ref-color-key-black);
+    --color-scrim-opacity : 0.6;
+}

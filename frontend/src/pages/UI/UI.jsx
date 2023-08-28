@@ -2,7 +2,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import MainHeader from '../../layouts/MainHeader/MainHeader';
 import NavigationSection from '../../layouts/Navigation/NavigationSection';
 import style from './UI.module.css';
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useId } from 'react';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../../utils/selectors';
 

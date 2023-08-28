@@ -4,6 +4,7 @@ import Divider from '../../../components/Divider/Divider';
 import { useId } from 'react';
 import style from './Post.module.css';
 import { useFocusable } from '../../../hooks/useFocusable';
+import ImageWithLighbox from '../../../components/Image/ImageWithLightbox';
 
 /** Displays one post data. */
 export default function Post({
@@ -69,7 +70,14 @@ export default function Post({
             <p className={style.message} id={messageId}>{message}</p>
         </div>
 
-        {imageUrl && <img className={style.image} src={imageUrl} alt=""/>}
+        {
+            imageUrl &&
+            <ImageWithLighbox
+                className={style.image}
+                src={imageUrl}
+                lightboxLabel={`Lightbox contenant l'image du post ${title} de ${authorEmail}`}
+            />
+        }
     </article>;
 
 }

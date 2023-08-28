@@ -12,7 +12,7 @@ export default function Login() {
         content = <AuthenticationForm/>;
 
     } else {
-        content = <ProgressIndicator circular label="Requête de connexion en attente en attente" />;
+        content = <ProgressIndicator circular label="Tentative de connexion, veuillez patienter" />;
     }
 
     return <div className={style.login}>

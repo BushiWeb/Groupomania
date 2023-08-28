@@ -115,10 +115,10 @@
     .image {
         grid-area: image;
 
-        width: 100%;
+        justify-self: stretch;
         aspect-ratio: 1;
 
-        object-fit: cover;
+        border-radius: 0 0 var(--border-radius-4) var(--border-radius-4);
     }
 
     @media bp-medium {
@@ -162,7 +162,9 @@
         }
 
         .image {
-            aspect-ratio: 1;
+            aspect-ratio: unset;
+            place-self: stretch;
+            border-radius: 0 var(--border-radius-4) var(--border-radius-4) 0;
         }
     }
 }

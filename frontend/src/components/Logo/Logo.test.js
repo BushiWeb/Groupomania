@@ -5,7 +5,7 @@ import '@testing-library/jest-dom';
 import { themeToggle } from '../../features/theme/theme.slice.js';
 import { act } from 'react-dom/test-utils';
 
-describe('HiddenNavigationLink component test suite', () => {
+describe('Logo component test suite', () => {
     const label = 'Skip navigation';
     const target = '/test';
 

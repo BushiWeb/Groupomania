@@ -55,7 +55,7 @@ export default function PostsList({
             />;
         })}
 
-        {busy && <ProgressIndicator label="Chargement d'anciens posts" circular/>}
+        {busy && <ProgressIndicator label="Chargement d'anciens posts" circular className={style.busy}/>}
     </section>;
 }
 
