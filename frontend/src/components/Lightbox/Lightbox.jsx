@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import style from './Lightbox.module.css';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useClickOutsideModal } from '../../hooks/useClickOutside';
 import TonalIconButton from '../icon-button/TonalIconButton/TonalIconButton';
+import { useDialog } from '../../hooks/useDialog';
 
 /**
  * Displays a modal lightbox containing an image with a close icon.
@@ -10,24 +11,8 @@ import TonalIconButton from '../icon-button/TonalIconButton/TonalIconButton';
 export default function Lightbox({
     open, onClose, src, alt, ...props
 }) {
-    const dialogRef = useRef(null);
+    const dialogRef = useDialog(open);
     const containerRef = useRef(null);
-
-    useEffect(() => {
-        if (!dialogRef.current) {
-            return;
-        }
-
-        if (dialogRef.current.open && !open) {
-            dialogRef.current.close();
-            return;
-        }
-
-        if (!dialogRef.current.open && open) {
-            dialogRef.current.showModal();
-            return;
-        }
-    }, [open, dialogRef]);
 
     useClickOutsideModal(containerRef, () => {
         if (dialogRef.current.open) {

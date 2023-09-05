@@ -49,8 +49,8 @@
         }
 
         .image {
-            max-width: 80vw;
-            max-height: 80vh;
+            max-width: 80dvw;
+            max-height: 80dvh;
         }
     }
 }

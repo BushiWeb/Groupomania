@@ -48,6 +48,8 @@
 
             align-items: stretch;
             gap: var(--size-13);
+
+            overflow: auto;
         }
 
         .navigation {

@@ -1,0 +1,4 @@
+@value expanded as bp-expanded, medium as bp-medium from "../../../assets/styles/variables/breakpoints.module.css";
+
+@layer components {
+}
