@@ -39,9 +39,6 @@ export default function Home() {
     return <main id={id} className={`${className} ${style.home}`} ref={mainRef}>
         <h1 className={style.heading}>Accueil</h1>
         <InfinitePostFeed containerElt={containerRef} errorClassName={style.error} className={style.posts}/>
-        {
-            isCreatePostOpen &&
-            <CreatePostDialog isOpen={isCreatePostOpen} setIsOpen={setIsCreatePostOpen}/>
-        }
+        <CreatePostDialog isOpen={isCreatePostOpen} setIsOpen={setIsCreatePostOpen}/>
     </main>;
 }

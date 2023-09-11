@@ -11,7 +11,7 @@ import FullscreenDialogHeadline from './FullscreenDialogHeadline';
  * and changes back to a large regular dialog on larger ones.
  */
 export default function FullscreenDialog({
-    open, onClose, label, children, acceptButton, dismissButton, closeButton, headline, ...props
+    open, onClose, onEscape, label, children, acceptButton, dismissButton, closeButton, headline, ...props
 }) {
     const largeScreen = useBreakpoint() > 0;
 
@@ -19,6 +19,7 @@ export default function FullscreenDialog({
         label={label}
         className={!largeScreen ? style.fullscreenDialog : ''}
         onClose={onClose}
+        onEscape={onEscape}
         open={open}
         {...props}
     >
@@ -62,4 +63,9 @@ FullscreenDialog.propTypes = {
 
     /** Accessible lable of the modal, required */
     label: PropTypes.string.isRequired,
+
+    /**
+     * Function to execute when the user presses the escape key
+     */
+    onEscape: PropTypes.func,
 };

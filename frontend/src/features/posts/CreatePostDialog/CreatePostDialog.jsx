@@ -20,7 +20,14 @@ export default function CreatePostDialog({ isOpen, setIsOpen }) {
 
     return <FullscreenDialog
         label="Test"
-        onClose={() => setIsOpen(false)}
+        onClose={() => {
+            console.log('closed');
+            setIsOpen(false);
+        }}
+        onEscape={(e) => {
+            e.preventDefault();
+            console.log('escape');
+        }}
         open={isOpen}
         acceptButton={acceptButton}
         dismissButton={dismissButton}
