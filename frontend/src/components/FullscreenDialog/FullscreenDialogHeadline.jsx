@@ -1,13 +1,17 @@
+import { useContext } from 'react';
 import { DialogHeadline } from '../Dialog';
 import style from './FullscreenDialog.module.css';
 import PropTypes from 'prop-types';
+import { FullscreenDialogContext } from './FullscreenDialogContext';
 
 /**
  * Headline of the dialog.
  */
 export default function FullscreenDialogHeadline({
-    largeScreen, children, className, ...props
+    children, className, ...props
 }) {
+    const largeScreen = useContext(FullscreenDialogContext);
+
     if (largeScreen) {
         return <DialogHeadline>{children}</DialogHeadline>;
     }
@@ -20,7 +24,4 @@ FullscreenDialogHeadline.defaultProps = {
 
 FullscreenDialogHeadline.propTypes = {
     className: PropTypes.string,
-
-    /** Weither the dialog is displayed on a large screen or a small one, defaults to false */
-    largeScreen: PropTypes.bool,
 };

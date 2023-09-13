@@ -1,13 +1,17 @@
 import PropTypes from 'prop-types';
 import style from './FullscreenDialog.module.css';
 import { DialogHeader } from '../Dialog';
+import { useContext } from 'react';
+import { FullscreenDialogContext } from './FullscreenDialogContext';
 
 /**
  * Fullscreen modal header. Depending on the screen size, changes its content.
  */
 export default function FullscreenDialogHeader({
-    closeButton, actionButton, largeScreen, className, children, ...props
+    closeButton, actionButton, className, children, ...props
 }) {
+    const largeScreen = useContext(FullscreenDialogContext);
+
     if (largeScreen) {
         return <DialogHeader className={className} {...props}>
             {children}
@@ -33,9 +37,6 @@ FullscreenDialogHeader.propTypes = {
 
     /** Action button to use, required, must be a DialogAction element */
     actionButton: PropTypes.element.isRequired,
-
-    /** Weither the dialog is displayed on a large screen or a small one, defaults to false */
-    largeScreen: PropTypes.bool,
 
     /** Additionnal class names */
     className: PropTypes.string,

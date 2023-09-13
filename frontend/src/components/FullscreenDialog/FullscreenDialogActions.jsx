@@ -1,12 +1,16 @@
 import PropTypes from 'prop-types';
 import { DialogActions } from '../Dialog';
+import { useContext } from 'react';
+import { FullscreenDialogContext } from './FullscreenDialogContext';
 
 /**
  * Fullscreen modal actions. Disappear on small screens.
  */
 export default function FullscreenDialogActions({
-    largeScreen, className, children, ...props
+    className, children, ...props
 }) {
+    const largeScreen = useContext(FullscreenDialogContext);
+
     if (!largeScreen) {
         return;
     }
@@ -22,9 +26,6 @@ FullscreenDialogActions.defaultProps = {
 };
 
 FullscreenDialogActions.propTypes = {
-    /** Weither the dialog is displayed on a large screen or a small one, defaults to false */
-    largeScreen: PropTypes.bool,
-
     /** Additionnal class names */
     className: PropTypes.string,
 };
