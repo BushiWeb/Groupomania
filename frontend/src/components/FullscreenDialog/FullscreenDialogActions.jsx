@@ -21,7 +21,6 @@ export default function FullscreenDialogActions({
 }
 
 FullscreenDialogActions.defaultProps = {
-    largeScreen: false,
     className: '',
 };
 

@@ -27,7 +27,6 @@ export default function FullscreenDialogHeader({
 }
 
 FullscreenDialogHeader.defaultProps = {
-    largeScreen: false,
     className: '',
 };
 

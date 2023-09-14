@@ -1,5 +1,5 @@
 import {
-    useCallback, useEffect, useRef, useState,
+    useCallback, useRef,
 } from 'react';
 import { tabbable } from 'tabbable';
 
@@ -12,6 +12,13 @@ export function useDialog(isOpen) {
     const ref = useRef(null);
     const tabbableElements = useRef(null);
 
+    // Use the mutation observer to recalculate the tabbable elements when the dialog content changes.
+    function handleDOMUpdate(record) {
+        tabbableElements.current = tabbable(ref.current);
+    }
+    const { current: mutationObserver } = useRef(new MutationObserver(handleDOMUpdate));
+
+    // Creates the focus trap.
     function handleTab(e) {
         if (e.key !== 'Tab') {
             return;
@@ -36,6 +43,7 @@ export function useDialog(isOpen) {
         if (ref.current) {
             // Removes focus trap
             ref.current.removeEventListener('keydown', handleTab);
+            mutationObserver.disconnect();
         }
 
         if (node) {
@@ -50,11 +58,28 @@ export function useDialog(isOpen) {
             if (node.open) {
                 tabbableElements.current = tabbable(node);
                 node.addEventListener('keydown', handleTab);
+                mutationObserver.observe(node, {
+                    subtree: true,
+                    childList: true,
+                    attributes: true,
+                    attributeFilter: [
+                        'style',
+                        'hidden',
+                        'inert',
+                        'disabled',
+                        'tabindex',
+                        'controls',
+                        'contenteditable',
+                        'class',
+                        'type',
+                        'href',
+                    ],
+                });
             }
         }
 
         ref.current = node;
-    }, [tabbableElements, isOpen]);
+    }, [tabbableElements, isOpen, mutationObserver]);
 
     return dialogRef;
 }
