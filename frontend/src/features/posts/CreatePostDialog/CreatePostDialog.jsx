@@ -1,8 +1,12 @@
+import { useState } from 'react';
 import { DialogAction, DialogCloseButton } from '../../../components/Dialog';
 import FullscreenDialog from '../../../components/FullscreenDialog/FullscreenDialog';
+import TextArea from '../../../components/form-inputs/TextArea/TextArea';
+import TextField from '../../../components/form-inputs/TextField/TextField';
 
 /** Dilaog allowing the creation of a post */
 export default function CreatePostDialog({ isOpen, setIsOpen }) {
+    const [message, setMessage] = useState(undefined);
     const acceptButton = <DialogAction onClick={() => {
         console.log('bouton2');
         setIsOpen(false);
@@ -34,7 +38,7 @@ export default function CreatePostDialog({ isOpen, setIsOpen }) {
         closeButton={closeButton}
         headline="Titre de ma dialog"
     >
-        Contenu du dialog
+        <TextArea onChange={(e) => setMessage(e.target.value)} value={message} label={'Test text area'} errorMessage="Support text" required cols={20} rows={10}/>
     </FullscreenDialog>;
 
 }
