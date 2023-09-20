@@ -7,7 +7,16 @@ import { useState } from 'react';
  * All additionnal props are given to the input, so passing autoFocus, disabled and such is possible.
  */
 export default function PasswordField({
-    value, onChange, label, supportText, errorMessage, leadingIcon, className, ...inputProps
+    value,
+    onChange,
+    label,
+    supportText,
+    errorMessage,
+    leadingIconProps,
+    className,
+    disabled,
+    required,
+    ...inputProps
 }) {
     const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -18,13 +27,15 @@ export default function PasswordField({
         supportText,
         errorMessage,
         className,
-        leadingIcon,
+        leadingIconProps,
+        disabled,
+        required,
         ...inputProps,
     };
 
     return <TextField
         type={passwordVisible ? 'text' : 'password'}
-        trailingIcon={{
+        trailingIconProps={{
             name: passwordVisible ? 'visibility_off' : 'visibility',
             label: passwordVisible ? 'Cacher le mot de passe' : 'Montrer le mot de passe',
             onClick: (e) => setPasswordVisible((visible) => !visible),
@@ -37,7 +48,10 @@ PasswordField.defaultProps = {
     value: '',
     supportText: undefined,
     errorMessage: undefined,
+    leadingIconProps: undefined,
     className: '',
+    disabled: false,
+    required: false,
 };
 
 PasswordField.propTypes = {
@@ -59,12 +73,15 @@ PasswordField.propTypes = {
     /** Additional class names to add to the container */
     className: PropTypes.string,
 
-    /**
-     * Object describing the leading icon,
-     * additionnal properties are given to the icon
-     */
-    leadingIcon: PropTypes.shape({
+    /* Object describing the leading icon */
+    leadingIconProps: PropTypes.shape({
         name: PropTypes.string.isRequired,
         label: PropTypes.string,
     }),
+
+    /* Weither the input is disabled or not, defaults to false */
+    disabled: PropTypes.bool,
+
+    /* Weither the input is required or not, defaults to false */
+    required: PropTypes.bool,
 };

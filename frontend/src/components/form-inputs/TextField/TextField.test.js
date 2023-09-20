@@ -61,7 +61,7 @@ describe('Textnput component test suite', () => {
         screen.getByLabelText('Error');
 
         const widgetElt = screen.getByRole('alert');
-        expect(widgetElt).toHaveClass('textField');
+        expect(widgetElt).toHaveClass('root');
 
         const inputElt = screen.getByLabelText(props.label);
         expect(inputElt).toHaveAttribute('aria-describedby', errorMessageElt.id);
@@ -74,10 +74,14 @@ describe('Textnput component test suite', () => {
             label: 'trailing icon',
             onClick: jest.fn(),
         };
-        const { container } = render(<TextField {...props} errorMessage={errorMessage} trailingIcon={trailingIcon}/>);
+        const { container } = render(<TextField
+            {...props}
+            errorMessage={errorMessage}
+            trailingIconProps={trailingIcon}
+        />);
         screen.getByText(errorMessage);
         screen.getByRole('button', { name: trailingIcon.label });
-        const errorMessageElt = container.querySelector('.errorMessageWithIcon');
+        const errorMessageElt = container.querySelector('.supportTextWithIcon');
         getByLabelText(errorMessageElt, 'Error');
     });
 
@@ -90,7 +94,7 @@ describe('Textnput component test suite', () => {
         const widgetElt = screen.getByRole('alert');
         const supportTextElt = screen.queryByText(supportText);
 
-        expect(widgetElt).toHaveClass('textField');
+        expect(widgetElt).toHaveClass('root');
         expect(supportTextElt).toBeNull();
 
         const inputElt = screen.getByLabelText(props.label);
@@ -102,7 +106,7 @@ describe('Textnput component test suite', () => {
             name: 'favorite',
             label: 'trailing icon',
         };
-        render(<TextField {...props} leadingIcon={leadingIcon}/>);
+        render(<TextField {...props} leadingIconProps={leadingIcon}/>);
         const leadingIconElt = screen.getByLabelText(leadingIcon.label);
 
         expect(leadingIconElt).toHaveTextContent(leadingIcon.name);
@@ -113,7 +117,7 @@ describe('Textnput component test suite', () => {
             name: 'favorite',
             label: 'trailing icon',
         };
-        render(<TextField {...props} trailingIcon={trailingIcon}/>);
+        render(<TextField {...props} trailingIconProps={trailingIcon}/>);
         const trailingIconElt = screen.getByLabelText(trailingIcon.label);
 
         expect(trailingIconElt).toHaveTextContent(trailingIcon.name);
@@ -126,7 +130,7 @@ describe('Textnput component test suite', () => {
             label: 'trailing icon',
             onClick: jest.fn(),
         };
-        render(<TextField {...props} trailingIcon={trailingIcon}/>);
+        render(<TextField {...props} trailingIconProps={trailingIcon}/>);
         const trailingIconElt = screen.getByRole('button', { name: trailingIcon.label });
 
         expect(trailingIconElt).toHaveTextContent(trailingIcon.name);
@@ -144,7 +148,7 @@ describe('Textnput component test suite', () => {
             label: 'trailing icon',
             onClick: jest.fn(),
         };
-        render(<TextField {...props} trailingIcon={trailingIcon}/>);
+        render(<TextField {...props} trailingIconProps={trailingIcon}/>);
         const trailingIconElt = screen.getByRole('button', { name: trailingIcon.label });
 
         await user.tab();
@@ -156,7 +160,7 @@ describe('Textnput component test suite', () => {
         expect(trailingIcon.onClick).toHaveBeenCalledTimes(2);
     });
 
-    it('should have an asterix next to the label when required', () => {
+    it('should be required and have an asterix next to the label when required', () => {
         render(<TextField {...props} required/>);
         const textInputElt = screen.getByRole('textbox', { name: props.label + '*' });
         screen.getByText('*requis', { exact: false });
@@ -169,15 +173,17 @@ describe('Textnput component test suite', () => {
         expect(textInputElt).toBeDisabled();
     });
 
-    it('should disable the trailing icon button', () => {
+    it('should be disabled and disable the trailing icon button', () => {
         const trailingIcon = {
             name: 'favorite',
             label: 'trailing icon',
             onClick: jest.fn(),
         };
-        render(<TextField {...props} trailingIcon={trailingIcon} disabled/>);
+        render(<TextField {...props} trailingIconProps={trailingIcon} disabled/>);
+        const inputElt = screen.getByRole('textbox', { name: props.label });
         const trailingIconElt = screen.getByRole('button', { name: trailingIcon.label });
 
+        expect(inputElt).toBeDisabled();
         expect(trailingIconElt).toBeDisabled();
     });
 
@@ -208,7 +214,7 @@ describe('Textnput component test suite', () => {
             name: 'favorite',
             label: 'leading icon',
         };
-        render(<TextField {...props} leadingIcon={leadingIcon}/>);
+        render(<TextField {...props} leadingIconProps={leadingIcon}/>);
         const textInputElt = screen.getByRole('textbox', { name: props.label });
         const leadingIconElt = screen.getByLabelText(leadingIcon.label);
 
@@ -223,7 +229,7 @@ describe('Textnput component test suite', () => {
             name: 'favorite',
             label: 'leading icon',
         };
-        render(<TextField {...props} trailingIcon={trailingIcon}/>);
+        render(<TextField {...props} trailingIconProps={trailingIcon}/>);
         const textInputElt = screen.getByRole('textbox', { name: props.label });
         const trailingIconelt = screen.getByLabelText(trailingIcon.label);
 
@@ -232,11 +238,11 @@ describe('Textnput component test suite', () => {
         expect(textInputElt).toHaveFocus();
     });
 
-    it('should have additional classnames', () => {
-        const className = 'testClass';
-        const { container } = render(<TextField {...props} className={className}/>);
-        const widgetElt = container.querySelector('.textField');
+    it('should have a placeholder', () => {
+        const placeholder = 'test';
+        render(<TextField {...props} placeholder={placeholder}/>);
+        const inputElt = screen.getByRole('textbox', { name: props.label });
 
-        expect(widgetElt).toHaveClass(className);
+        expect(inputElt).toHaveProperty('placeholder', placeholder);
     });
 });

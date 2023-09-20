@@ -7,6 +7,7 @@ import TextField from '../../../components/form-inputs/TextField/TextField';
 /** Dilaog allowing the creation of a post */
 export default function CreatePostDialog({ isOpen, setIsOpen }) {
     const [message, setMessage] = useState(undefined);
+    const [value, setValue] = useState('');
     const acceptButton = <DialogAction onClick={() => {
         console.log('bouton2');
         setIsOpen(false);
@@ -39,6 +40,24 @@ export default function CreatePostDialog({ isOpen, setIsOpen }) {
         headline="Titre de ma dialog"
     >
         <TextArea onChange={(e) => setMessage(e.target.value)} value={message} label={'Test text area'} errorMessage="Support text" required cols={20} rows={10}/>
+
+        <TextField
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            type='text'
+            label='Textbox test'
+            supportText='Texte de support'
+            leadingIconProps={{
+                name: 'favorite',
+                label: 'favorite',
+            }}
+            trailingIconProps={{
+                name: 'favorite',
+                label: 'favorite',
+                onClick: (e) => console.log('favorite'),
+            }}
+            errorMessage="Error message"
+        />
     </FullscreenDialog>;
 
 }

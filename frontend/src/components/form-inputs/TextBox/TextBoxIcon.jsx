@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import style from './TextField.module.css';
+import style from './TextBox.module.css';
 import Icon from '../../Icon/Icon';
 import SimpleIconButton from '../../icon-button/SimpleIconButton/SimpleIconButton.jsx';
 import { useSelector } from 'react-redux';
@@ -8,8 +8,13 @@ import { selectIsDarkTheme } from '../../../utils/selectors';
 /**
  * TextField trailing icon
  */
-export default function TrailingIcon({
-    name, label, onClick, error, disabled, ...iconProps
+export default function TextBoxIcon({
+    name,
+    label,
+    onClick,
+    disabled,
+    error,
+    ...props
 }) {
     const darkTheme = useSelector(selectIsDarkTheme);
 
@@ -22,37 +27,57 @@ export default function TrailingIcon({
                 onClick(e);
             }}
             onMouseDown={e => e.preventDefault()}
-            className={style.trailingIconButton}
+            className={style.textBoxIconButton}
             disabled={disabled}
-            {...iconProps}
+            {...props}
         />;
     }
 
     if (error) {
-        return <Icon name="error" label="Error" fill={true} className={style.trailingIcon} isOnDark={darkTheme}/>;
+        return <Icon
+            name="error"
+            label="Error"
+            fill={true}
+            className={style.textBoxIcon}
+            isOnDark={darkTheme}
+            {...props}
+        />;
+    }
+
+    if (!name) {
+        return;
     }
 
     return <Icon
         name={name}
         label={label}
-        className={style.trailingIconButton}
-        disabled={disabled}
-        {...iconProps}
+        className={style.textBoxIcon}
+        isOnDark={darkTheme}
+        {...props}
     />;
 }
 
-TrailingIcon.defaultProps = {
+TextBoxIcon.defaultProps = {
+    name: undefined,
     label: '',
     onClick: undefined,
     error: false,
     disabled: false,
-    name: '',
 };
 
-TrailingIcon.propTypes = {
+TextBoxIcon.propTypes = {
+    /* Name of the icon, if no name is given and there is no error, no icon is displayed */
     name: PropTypes.string,
+
+    /* Label of the icon */
     label: PropTypes.string,
+
+    /* Action to execute when clicking on the icon, transforms the icon into a button */
     onClick: PropTypes.func,
+
+    /* Weither the input has an error or not, false by default */
     error: PropTypes.bool,
+
+    /* Weither the button should be disabled, false, by default */
     disabled: PropTypes.bool,
 };

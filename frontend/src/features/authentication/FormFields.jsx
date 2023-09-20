@@ -24,7 +24,7 @@ export default function FormFields({
             errorMessage={emailError}
             onChange={(e) => dispatch({ type: ACTIONS.setEmail, payload: e.target.value })}
             label="Email"
-            leadingIcon={{
+            leadingIconProps={{
                 name: 'mail',
             }}
             autoFocus
@@ -37,7 +37,7 @@ export default function FormFields({
             errorMessage={passwordError}
             onChange={(e) => dispatch({ type: ACTIONS.setPassword, payload: e.target.value })}
             label="Mot de passe"
-            leadingIcon={{
+            leadingIconProps={{
                 name: 'lock',
             }}
             className={style.password}

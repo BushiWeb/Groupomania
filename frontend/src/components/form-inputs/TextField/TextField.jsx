@@ -1,12 +1,7 @@
 import PropTypes from 'prop-types';
 import style from './TextField.module.css';
-import InteractiveElement from '../../InteractiveElement/InteractiveElement.jsx';
-import Icon from '../../Icon/Icon';
 import { useId, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { selectIsDarkTheme } from '../../../utils/selectors';
-import TrailingIcon from './TrailingIcon';
-import SupportText from './SupportText';
+import * as TextBox from '../TextBox/index.js';
 
 /**
  * Text field component. It is a controlled component.
@@ -14,78 +9,83 @@ import SupportText from './SupportText';
  * All additionnal props are given to the input, so passing autoFocus, disabled and such is possible.
  */
 export default function TextField({
-    value, onChange, label, type, supportText, errorMessage, trailingIcon, leadingIcon, className, ...inputProps
+    value,
+    onChange,
+    type,
+    label,
+    supportText,
+    errorMessage,
+    leadingIconProps,
+    trailingIconProps,
+    className,
+    disabled,
+    required,
+    placeholder,
+    ...props
 }) {
     const supportTextId = useId();
-    const darkTheme = useSelector(selectIsDarkTheme);
     const inputRef = useRef();
+    const inputId = useId();
 
-    if (inputProps?.required) {
-        supportText = `*requis${supportText ? `, ${supportText}` : ''}`;
-    }
+    const leadingIcon = leadingIconProps && <TextBox.TextBoxIcon {...leadingIconProps}/>;
 
-    function handleClick(e) {
-        if (inputRef) {
-            inputRef.current.focus();
-        }
-    }
+    const trailingIcon = (trailingIconProps || errorMessage) && <TextBox.TextBoxIcon
+        {...trailingIconProps}
+        disabled={disabled}
+        error={!!errorMessage}
+    />;
 
-    return <div
-        className={`${style.textField} ${className}`}
-        onClick={handleClick}
-        {...inputProps?.disabled && { 'data-disabled': true }}
-        {...errorMessage && { 'data-error': true, 'role': 'alert' }}
+    return <TextBox.Root
+        focusInput={() => inputRef.current?.focus?.()}
+        hasPlaceholder={!!placeholder}
+        hasValue={!!value}
+        isDisabled={disabled}
+        hasError={!!errorMessage}
+        className={className}
     >
-
-        {leadingIcon && <Icon {...leadingIcon} className={style.leadingIcon} isOnDark={darkTheme}/>}
-
-        <InteractiveElement
-            rootElement="label"
-            active={false}
-            stateLayerColor={false}
-            className={style.labelContainer}
-            {...leadingIcon && { 'data-leading-icon': true }}
-            {...trailingIcon && { 'data-trailing-icon': true }}
+        <TextBox.InteractiveContainer
+            label={label}
+            leadingIcon={leadingIcon}
+            trailingIcon={trailingIcon}
+            inputId={inputId}
+            required={required}
         >
             <input
-                type={type}
-                className={`${style.input} ${value ? style.filledInput : ''}`}
-                onChange={onChange}
                 value={value}
-                {...inputProps}
+                onChange={onChange}
+                type={type}
+                id={inputId}
+                disabled={disabled}
+                required={required}
+                placeholder={placeholder}
+                className={style.input}
                 ref={inputRef}
                 {...(errorMessage || supportText) && { 'aria-describedby': supportTextId }}
+                {...props}
             />
-            <span className={style.labelText}>{label}{inputProps?.required && '*'}</span>
-        </InteractiveElement>
+        </TextBox.InteractiveContainer>
 
-        {
-            (trailingIcon || errorMessage) &&
-            <TrailingIcon
-                disabled={inputProps?.disabled}
-                error={!!errorMessage}
-                {...trailingIcon}
-            />
-        }
-
-        <SupportText
-            errorMessage={errorMessage}
-            supportText={supportText}
+        <TextBox.SupportText
             id={supportTextId}
-            errorIcon={!!trailingIcon?.onClick}
+            supportText={supportText}
+            errorMessage={errorMessage}
+            errorIcon={!!trailingIconProps?.onClick}
+            required={required}
         />
-    </div>;
+    </TextBox.Root>;
 }
 
 TextField.defaultProps = {
-    type: 'text',
     value: '',
+    type: 'text',
     supportText: undefined,
     errorMessage: undefined,
-    placeholder: undefined,
-    trailingIcon: undefined,
-    leadingIcon: undefined,
+    leadingIconProps: undefined,
+    trailingIconProps: undefined,
     className: '',
+    disabled: false,
+    required: false,
+    placeholder: undefined,
 };
 
 TextField.propTypes = {
@@ -94,9 +94,6 @@ TextField.propTypes = {
 
     /** Function to execute when the value changes, required */
     onChange: PropTypes.func.isRequired,
-
-    /** Label of the input, required */
-    label: PropTypes.string.isRequired,
 
     /** Type of the input, defaults to text */
     type: PropTypes.oneOf([
@@ -107,35 +104,37 @@ TextField.propTypes = {
         'url',
     ]),
 
+    /** Label of the input, required */
+    label: PropTypes.string.isRequired,
+
     /** Text giving more informations about the input */
     supportText: PropTypes.string,
 
     /** Error message. If it is given, then the input value is considered invalid */
     errorMessage: PropTypes.string,
 
-    /** Input placeholder */
-    placeholder: PropTypes.string,
+    /* Object describing the leading icon */
+    leadingIconProps: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        label: PropTypes.string,
+    }),
 
-    /**
-     * Object describing the trailing icon,
-     * additionnal properties are given to the icon,
-     * adding an onClick transforms the icon into a button
-     */
-    trailingIcon: PropTypes.shape({
+    /* Object describing the trailing icon, adding an onClick transforms the icon into a button */
+    trailingIconProps: PropTypes.shape({
         name: PropTypes.string.isRequired,
         label: PropTypes.string,
         onClick: PropTypes.func,
     }),
 
-    /**
-     * Object describing the leading icon,
-     * additionnal properties are given to the icon
-     */
-    leadingIcon: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        label: PropTypes.string,
-    }),
-
     /** Additional class names to add to the container */
     className: PropTypes.string,
+
+    /* Weither the input is disabled or not, defaults to false */
+    disabled: PropTypes.bool,
+
+    /* Weither the input is required or not, defaults to false */
+    required: PropTypes.bool,
+
+    /* Placeholder for the input */
+    placeholder: PropTypes.string,
 };

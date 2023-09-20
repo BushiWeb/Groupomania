@@ -13,7 +13,8 @@
         padding-inline: var(--textarea-padding-inline);
         padding-block: var(--textarea-padding-block);
 
-        border: var(--textarea-border-width, var(--size-1)) solid
+        --textarea-border-width: var(--size-1);
+        border: var(--textarea-border-width) solid
             var(--textarea-border-color, rgb(var(--color-outline)));
         border-radius: var(--border-radius-2);
 
@@ -22,12 +23,13 @@
         display: grid;
         place-content: center stretch;
 
-        background-color: rgb(var(--text-input-bg, var(--color-surface)));
+        --text-input-bg: rgb(var(--color-surface));
+        background-color: var(--text-input-bg);
     }
 
     .labelText {
         color: rgb(var(--color-on-surface-variant));
-        background-color: inherit;
+        background-color: transparent;
 
         position: absolute;
         left: var(--textarea-padding-inline);
@@ -51,7 +53,11 @@
         top: 0;
         translate: 0 -50%;
 
-        background-color: inherit;
+        background-image: linear-gradient(
+            to bottom,
+            transparent 0 calc(50% - var(--textarea-border-width)),
+            var(--text-input-bg) calc(50% - var(--textarea-border-width)) 100%
+        );
 
         font-size: var(--typo-body-small-size);
         font-weight: var(--typo-body-small-weight);

@@ -55,7 +55,7 @@ describe('Checkbox component test suite', () => {
             name: 'favorite',
             label: 'trailing icon',
         };
-        render(<PasswordField {...props} leadingIcon={leadingIcon}/>);
+        render(<PasswordField {...props} leadingIconProps={leadingIcon}/>);
         const leadingIconElt = screen.getByLabelText(leadingIcon.label);
 
         expect(leadingIconElt).toHaveTextContent(leadingIcon.name);
@@ -80,17 +80,15 @@ describe('Checkbox component test suite', () => {
         expect(passwordInputElt).toHaveAttribute('type', 'password');
     });
 
-    it('should give additional props to the input element', () => {
+    it('should be disabled', () => {
         render(<PasswordField {...props} disabled/>);
         const passwordInputElt = screen.getByLabelText(props.label);
         expect(passwordInputElt).toBeDisabled();
     });
 
-    it('should have additional classnames', () => {
-        const className = 'testClass';
-        const { container } = render(<PasswordField {...props} className={className}/>);
-        const widgetElt = container.querySelector('.textField');
-
-        expect(widgetElt).toHaveClass(className);
+    it('should be required', () => {
+        render(<PasswordField {...props} required/>);
+        const passwordInputElt = screen.getByLabelText(`${props.label}*`);
+        expect(passwordInputElt).toBeRequired();
     });
 });
