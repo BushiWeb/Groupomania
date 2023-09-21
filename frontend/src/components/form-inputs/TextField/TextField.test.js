@@ -167,12 +167,6 @@ describe('Textnput component test suite', () => {
         expect(textInputElt).toBeRequired();
     });
 
-    it('should give additional props to the input element', () => {
-        render(<TextField {...props} disabled/>);
-        const textInputElt = screen.getByRole('textbox', { name: props.label });
-        expect(textInputElt).toBeDisabled();
-    });
-
     it('should be disabled and disable the trailing icon button', () => {
         const trailingIcon = {
             name: 'favorite',

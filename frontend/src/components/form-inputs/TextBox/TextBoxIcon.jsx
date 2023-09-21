@@ -13,12 +13,16 @@ export default function TextBoxIcon({
     label,
     onClick,
     disabled,
-    error,
+    position,
     ...props
 }) {
     const darkTheme = useSelector(selectIsDarkTheme);
 
-    if (onClick && name) {
+    if (!name) {
+        return;
+    }
+
+    if (onClick) {
         return <SimpleIconButton
             name={name}
             label={label}
@@ -27,31 +31,16 @@ export default function TextBoxIcon({
                 onClick(e);
             }}
             onMouseDown={e => e.preventDefault()}
-            className={style.textBoxIconButton}
+            className={`${style.textBoxIconButton} ${style[position]}`}
             disabled={disabled}
             {...props}
         />;
     }
 
-    if (error) {
-        return <Icon
-            name="error"
-            label="Error"
-            fill={true}
-            className={style.textBoxIcon}
-            isOnDark={darkTheme}
-            {...props}
-        />;
-    }
-
-    if (!name) {
-        return;
-    }
-
     return <Icon
         name={name}
         label={label}
-        className={style.textBoxIcon}
+        className={`${style.textBoxIcon} ${style[position]}`}
         isOnDark={darkTheme}
         {...props}
     />;
@@ -61,8 +50,8 @@ TextBoxIcon.defaultProps = {
     name: undefined,
     label: '',
     onClick: undefined,
-    error: false,
     disabled: false,
+    position: 'trailing',
 };
 
 TextBoxIcon.propTypes = {
@@ -75,9 +64,9 @@ TextBoxIcon.propTypes = {
     /* Action to execute when clicking on the icon, transforms the icon into a button */
     onClick: PropTypes.func,
 
-    /* Weither the input has an error or not, false by default */
-    error: PropTypes.bool,
-
     /* Weither the button should be disabled, false, by default */
     disabled: PropTypes.bool,
+
+    /* Position of the icon, either leading or trailing (default) */
+    position: PropTypes.oneOf(['leading', 'trailing']),
 };

@@ -5,11 +5,18 @@
         gap: var(--padding-1);
 
         /* Interactive container properties */
-        --input-border-width: var(--size-1);
-        --input-border-color: rgb(var(--color-outline));
+        --border-width: var(--size-1);
+        --border-color: rgb(var(--color-outline));
+        --bg-color: rgb(var(--color-surface));
+        --padding-inline-start: var(--padding-4);
+        --padding-inline-end: var(--padding-4);
+        --padding-block: 0;
+        --height: var(--size-13);
 
         /* Label properties */
-        --label-shift: var(--padding-4);
+        --label-h-shift: var(--padding-4);
+        --label-v-shift: 50%;
+        --label-translate: 0 -50%;
         --label-color: rgb(var(--color-on-surface-variant));
 
         /* Support text properties */
@@ -24,7 +31,7 @@
     }
 
     .interactiveContainer {
-        height: var(--size-13);
+        height: var(--height);
 
         display: flex;
         flex-direction: row;
@@ -32,23 +39,25 @@
         justify-content: flex-start;
         gap: var(--padding-2);
 
-        border: var(--input-border-width) solid var(--input-border-color);
+        border: var(--border-width) solid var(--border-color);
         border-radius: var(--border-radius-2);
-        background-color: rgb(var(--color-surface));
+        background-color: var(--bg-color);
         caret-color: var(--caret-color);
 
-        padding-inline: var(--padding-4);
+        padding-inline-start: var(--padding-inline-start);
+        padding-inline-end: var(--padding-inline-end);
+        padding-block: var(--padding-block);
 
         position: relative;
     }
 
     .interactiveContainer[data-leading-icon] {
-        --label-shift: var(--padding-13);
-        padding-inline-start: var(--padding-1);
+        --label-h-shift: var(--padding-13);
+        --padding-inline-start: var(--padding-1);
     }
 
     .interactiveContainer[data-trailing-icon] {
-        padding-inline-end: var(--padding-1);
+        --padding-inline-end: var(--padding-1);
     }
 
     .labelText {
@@ -56,9 +65,9 @@
         background-color: transparent;
 
         position: absolute;
-        left: var(--label-shift);
-        top: 50%;
-        translate: 0 -50%;
+        left: var(--label-h-shift);
+        top: var(--label-v-shift);
+        translate: var(--label-translate);
 
         font-size: var(--typo-body-large-size);
         font-weight: var(--typo-body-large-weight);
@@ -74,10 +83,15 @@
     .root[data-placeholder] .labelText,
     .root[data-value] .labelText {
         padding-inline: var(--padding-1);
-        left: var(--padding-3);
-        top: 0;
+        --label-h-shift: var(--padding-3);
+        --label-v-shift: 0;
+        --label-translate: 0 -50%;
 
-        background-color: inherit;
+        background-image: linear-gradient(
+            to bottom,
+            transparent 0 calc(50% - var(--border-width)),
+            var(--bg-color) calc(50% - var(--border-width)) 100%
+        );
 
         font-size: var(--typo-body-small-size);
         font-weight: var(--typo-body-small-weight);
@@ -101,17 +115,17 @@
         padding: 0;
     }
 
-    .interactiveContainer[data-leading-icon] .textBoxIcon:nth-of-type(1) {
+    .textBoxIcon.leading {
         color: var(--leading-icon-color);
     }
 
-    .interactiveContainer[data-trailing-icon] .textBoxIcon:nth-of-type(2) {
+    .textBoxIcon.trailing {
         color: var(--trailing-icon-color);
     }
 
     /* Disabled state */
     .root[data-disabled] {
-        --input-border-color: rgb(
+        --border-color: rgb(
             var(--color-on-surface) / var(--state-disabled-bg-opacity)
         );
         --label-color: rgb(
@@ -130,21 +144,21 @@
 
     /* Hovered state */
     .root:not([data-disabled]):hover {
-        --input-border-color: rgb(var(--color-on-surface));
+        --border-color: rgb(var(--color-on-surface));
         --label-color: rgb(var(--color-on-surface));
     }
 
     /* Focus state */
     .root:focus-within,
     .root:hover:focus-within {
-        --input-border-color: rgb(var(--color-primary));
-        --input-border-width: var(--size-2);
+        --border-color: rgb(var(--color-primary));
+        --border-width: var(--size-2);
         --label-color: rgb(var(--color-primary));
     }
 
     /* Error */
     .root[data-error]:not([data-disabled]) {
-        --input-border-color: rgb(var(--color-error));
+        --border-color: rgb(var(--color-error));
         --label-color: rgb(var(--color-error));
         --supportText-color: rgb(var(--color-error));
         --trailing-icon-color: rgb(var(--color-error));
@@ -153,14 +167,14 @@
 
     .root[data-error]:focus-within,
     .root[data-error]:not([data-disabled]):hover:focus-within {
-        --input-border-color: rgb(var(--color-error));
+        --border-color: rgb(var(--color-error));
         --label-color: rgb(var(--color-error));
         --supportText-color: rgb(var(--color-error));
         --trailing-icon-color: rgb(var(--color-error));
     }
 
     .root[data-error]:not([data-disabled]):hover {
-        --input-border-color: rgb(var(--color-on-error-container));
+        --border-color: rgb(var(--color-on-error-container));
         --label-color: rgb(var(--color-on-error-container));
         --supportText-color: rgb(var(--color-error));
         --trailing-icon-color: rgb(var(--color-on-error-container));

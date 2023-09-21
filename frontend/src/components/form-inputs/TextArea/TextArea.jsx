@@ -1,70 +1,80 @@
 import PropTypes from 'prop-types';
-import InteractiveElement from '../../InteractiveElement/InteractiveElement.jsx';
-import { useId, useRef } from 'react';
-import SupportText from './SupportText';
 import style from './TextArea.module.css';
+import { useId, useRef } from 'react';
+import * as TextBox from '../TextBox/index.js';
 
 /**
  * Text area component. It is a controlled component.
- * All additionnal props are given to the input, so passing autoFocus, disabled and such is possible.
  */
 export default function TextArea({
-    onChange, label, supportText, errorMessage, className, value, ...props
+    value,
+    onChange,
+    label,
+    supportText,
+    errorMessage,
+    className,
+    disabled,
+    required,
+    placeholder,
+    rows,
+    ...props
 }) {
     const supportTextId = useId();
     const inputRef = useRef();
+    const inputId = useId();
 
-    if (props?.required) {
-        supportText = `*requis${supportText ? `, ${supportText}` : ''}`;
-    }
-
-    function handleClick(e) {
-        if (inputRef) {
-            inputRef.current.focus();
-        }
-    }
-
-    return <div
-        className={`${style.textareaField} ${className}`}
-        onClick={handleClick}
-        {...props?.disabled && { 'data-disabled': true }}
-        {...errorMessage && { 'data-error': true, 'role': 'alert' }}
+    return <TextBox.Root
+        focusInput={() => inputRef.current?.focus?.()}
+        hasPlaceholder={!!placeholder}
+        hasValue={!!value}
+        isDisabled={disabled}
+        hasError={!!errorMessage}
+        className={`${style.textAreaRoot} ${className}`}
     >
-        <InteractiveElement
-            rootElement="label"
-            active={false}
-            stateLayerColor={false}
-            className={style.labelContainer}
+        <TextBox.InteractiveContainer
+            label={label}
+            inputId={inputId}
+            required={required}
+            className={style.textAreaContainer}
         >
             <textarea
-                className={`${style.textarea} ${value ? style.filledTextarea : ''}`}
-                onChange={onChange}
                 value={value}
-                {...props}
+                onChange={onChange}
+                id={inputId}
+                disabled={disabled}
+                required={required}
+                placeholder={placeholder}
+                className={style.textarea}
                 ref={inputRef}
+                rows={rows}
                 {...(errorMessage || supportText) && { 'aria-describedby': supportTextId }}
+                {...props}
             />
-            <span className={style.labelText}>{label}{props?.required && '*'}</span>
-        </InteractiveElement>
+        </TextBox.InteractiveContainer>
 
-        <SupportText
-            errorMessage={errorMessage}
-            supportText={supportText}
+        <TextBox.SupportText
             id={supportTextId}
+            supportText={supportText}
+            errorMessage={errorMessage}
+            errorIcon={true}
+            required={required}
         />
-    </div>;
+    </TextBox.Root>;
 }
 
 TextArea.defaultProps = {
-    value: undefined,
+    value: '',
     supportText: undefined,
     errorMessage: undefined,
-    placeholder: undefined,
     className: '',
+    disabled: false,
+    required: false,
+    placeholder: undefined,
+    rows: 5,
 };
 
 TextArea.propTypes = {
-    /** Value of the text area */
+    /** Current value of the test input */
     value: PropTypes.string,
 
     /** Function to execute when the value changes, required */
@@ -79,9 +89,18 @@ TextArea.propTypes = {
     /** Error message. If it is given, then the input value is considered invalid */
     errorMessage: PropTypes.string,
 
-    /** Input placeholder */
-    placeholder: PropTypes.string,
-
     /** Additional class names to add to the container */
     className: PropTypes.string,
+
+    /* Weither the input is disabled or not, defaults to false */
+    disabled: PropTypes.bool,
+
+    /* Weither the input is required or not, defaults to false */
+    required: PropTypes.bool,
+
+    /* Placeholder for the input */
+    placeholder: PropTypes.string,
+
+    /* Number of rows for the text area, default to 5 */
+    rows: PropTypes.number,
 };

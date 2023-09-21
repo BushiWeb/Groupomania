@@ -3,7 +3,7 @@
         composes: body-large from '../../../assets/styles/patterns/typography.module.css';
 
         border: none;
-        background-color: inherit;
+        background-color: transparent;
         flex-grow: 1;
         color: rgb(var(--color-on-surface));
     }

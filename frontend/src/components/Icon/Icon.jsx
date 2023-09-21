@@ -5,7 +5,7 @@ import style from './Icon.module.css';
  * Insert a Google Font Icon.
  */
 export default function Icon({
-    name, weight, size, grad, fill, isOnDark, label, className,
+    name, weight, size, grad, fill, isOnDark, label, className, ...props
 }) {
     const elementsProps = {
         className: `material-icon ${style.icon} ${className}`,
@@ -16,6 +16,7 @@ export default function Icon({
             ...size && { '--icon-optical-size': `${size}` },
         },
         ...label ? { 'aria-label': label } : { 'aria-hidden': true },
+        ...props,
     };
 
     return <span {...elementsProps}>{name}</span>;

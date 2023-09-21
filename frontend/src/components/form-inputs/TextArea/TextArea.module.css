@@ -1,83 +1,23 @@
 @layer components {
-    .textareaField {
-        display: flex;
-        flex-direction: column;
-        gap: var(--padding-1);
-
-        position: relative;
-    }
-
-    .labelContainer {
-        --textarea-padding-inline: var(--padding-4);
-        --textarea-padding-block: var(--padding-4);
-        padding-inline: var(--textarea-padding-inline);
-        padding-block: var(--textarea-padding-block);
-
-        --textarea-border-width: var(--size-1);
-        border: var(--textarea-border-width) solid
-            var(--textarea-border-color, rgb(var(--color-outline)));
-        border-radius: var(--border-radius-2);
-
-        position: relative;
-
-        display: grid;
-        place-content: center stretch;
-
-        --text-input-bg: rgb(var(--color-surface));
-        background-color: var(--text-input-bg);
-    }
-
-    .labelText {
-        color: rgb(var(--color-on-surface-variant));
-        background-color: transparent;
-
-        position: absolute;
-        left: var(--textarea-padding-inline);
-        top: var(--textarea-padding-block);
-
-        font-size: var(--typo-label-large-size);
-        font-weight: var(--typo-label-large-weight);
-        line-height: var(--typo-label-large-line-height);
-        letter-spacing: var(--typo-label-large-tracking);
-
-        transition-property: all;
-        transition-duration: var(--motion-duration-4);
-        transition-timing-function: var(--motion-easing-standard-decelerate);
-    }
-
-    .textarea:focus + .labelText,
-    .textarea:placeholder-shown + .labelText,
-    .filledTextarea + .labelText {
-        padding-inline: var(--padding-1);
-        left: var(--padding-3);
-        top: 0;
-        translate: 0 -50%;
-
-        background-image: linear-gradient(
-            to bottom,
-            transparent 0 calc(50% - var(--textarea-border-width)),
-            var(--text-input-bg) calc(50% - var(--textarea-border-width)) 100%
-        );
-
-        font-size: var(--typo-body-small-size);
-        font-weight: var(--typo-body-small-weight);
-        line-height: var(--typo-body-small-line-height);
-        letter-spacing: var(--typo-body-small-tracking);
+    .textAreaRoot {
+        --padding-block: calc(var(--padding-4) - var(--border-width));
+        --height: calc(auto + var(--padding-4));
+        --label-v-shift: var(--padding-block);
+        --label-translate: 0;
     }
 
     .textarea {
         composes: body-large from '../../../assets/styles/patterns/typography.module.css';
 
-        color: rgb(var(--color-on-surface));
-        caret-color: rgb(var(--color-primary));
-        appearance: none;
-        background-color: transparent;
         border: none;
         padding: 0;
+        background-color: transparent;
+        color: rgb(var(--color-on-surface));
+        flex-grow: 1;
+
         resize: none;
         height: auto;
-        width: fit-content;
-        max-width: 100%;
+        width: 100%;
     }
 
     .textarea::placeholder {
@@ -88,88 +28,10 @@
         outline: none;
     }
 
-    .supportText {
-        composes: body-small from '../../../assets/styles/patterns/typography.module.css';
-
-        color: rgb(var(--color-on-surface-variant));
-        padding-inline: var(--padding-4);
-    }
-
     /* Disabled state */
-    .textareaField[data-disabled] .labelContainer {
-        --textarea-border-color: rgb(
-            var(--color-on-surface) / var(--state-disabled-bg-opacity)
-        );
-    }
-
-    .textarea:disabled + .labelText,
-    .textarea:disabled,
-    .textareaField[data-disabled] .supportText {
+    .textarea:disabled {
         color: rgb(
             var(--color-on-surface) / var(--state-disabled-text-opacity)
         );
-    }
-
-    /* Hovered state */
-    .textareaField:not([data-disabled]):hover .labelContainer {
-        --textarea-border-color: rgb(var(--color-on-surface));
-    }
-
-    .textareaField:not([data-disabled]):hover .labelText {
-        color: rgb(var(--color-on-surface));
-    }
-
-    /* Focus state */
-    .labelContainer:focus-within,
-    .textareaField:hover .labelContainer:focus-within {
-        --textarea-border-color: rgb(var(--color-primary));
-        --textarea-border-width: var(--size-2);
-    }
-
-    .labelContainer:focus-within .labelText {
-        color: rgb(var(--color-primary));
-    }
-
-    /* Error */
-    .errorMessage {
-        composes: supportText;
-
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: flex-start;
-        gap: var(--padding-1);
-    }
-
-    .textareaField:not([data-disabled]) .errorMessage {
-        color: rgb(var(--color-error));
-    }
-
-    .errorMessageIcon {
-        --icon-font-size: calc(
-            var(--typo-body-small-size) * var(--typo-body-small-line-height)
-        );
-    }
-
-    .textareaField[data-error]:not([data-disabled]):hover .labelContainer {
-        --textarea-border-color: rgb(var(--color-on-error-container));
-    }
-
-    .textareaField[data-error]:not([data-disabled]):hover .labelText {
-        color: rgb(var(--color-on-error-container));
-    }
-
-    .textareaField[data-error]:not([data-disabled]) .labelContainer,
-    .textareaField[data-error] .labelContainer:focus-within {
-        --textarea-border-color: rgb(var(--color-error));
-    }
-
-    .textareaField[data-error]:not([data-disabled]) .textarea {
-        caret-color: rgb(var(--color-error));
-    }
-
-    .textareaField[data-error]:not([data-disabled]) .labelText,
-    .textareaField[data-error] .labelContainer:focus-within .labelText {
-        color: rgb(var(--color-error));
     }
 }

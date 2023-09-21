@@ -27,12 +27,14 @@ export default function TextField({
     const inputRef = useRef();
     const inputId = useId();
 
-    const leadingIcon = leadingIconProps && <TextBox.TextBoxIcon {...leadingIconProps}/>;
+    const leadingIcon = leadingIconProps && <TextBox.TextBoxIcon {...leadingIconProps} position="leading"/>;
 
     const trailingIcon = (trailingIconProps || errorMessage) && <TextBox.TextBoxIcon
-        {...trailingIconProps}
+        name={errorMessage && !trailingIconProps?.onClick ? 'error' : trailingIconProps.name}
+        label={errorMessage && !trailingIconProps?.onClick ? 'Error' : trailingIconProps.label}
+        onClick={trailingIconProps?.onClick}
         disabled={disabled}
-        error={!!errorMessage}
+        position="trailing"
     />;
 
     return <TextBox.Root

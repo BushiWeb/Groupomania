@@ -39,7 +39,7 @@ export default function CreatePostDialog({ isOpen, setIsOpen }) {
         closeButton={closeButton}
         headline="Titre de ma dialog"
     >
-        <TextArea onChange={(e) => setMessage(e.target.value)} value={message} label={'Test text area'} errorMessage="Support text" required cols={20} rows={10}/>
+        <TextArea onChange={(e) => setMessage(e.target.value)} value={message} label={'Test text area'} supportText="Support text" placeholder="heh" />
 
         <TextField
             value={value}
@@ -51,12 +51,6 @@ export default function CreatePostDialog({ isOpen, setIsOpen }) {
                 name: 'favorite',
                 label: 'favorite',
             }}
-            trailingIconProps={{
-                name: 'favorite',
-                label: 'favorite',
-                onClick: (e) => console.log('favorite'),
-            }}
-            errorMessage="Error message"
         />
     </FullscreenDialog>;
 
