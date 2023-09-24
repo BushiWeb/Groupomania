@@ -19,7 +19,7 @@ export default function generateTextSchema(
                 exists: {
                     errorMessage: 'The text is required.',
                     options: {
-                        checkNull: true,
+                        checkFalsy: true,
                     },
                     bail: true,
                 },

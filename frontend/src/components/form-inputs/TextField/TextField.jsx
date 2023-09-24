@@ -29,13 +29,15 @@ export default function TextField({
 
     const leadingIcon = leadingIconProps && <TextBox.TextBoxIcon {...leadingIconProps} position="leading"/>;
 
-    const trailingIcon = (trailingIconProps || errorMessage) && <TextBox.TextBoxIcon
-        name={errorMessage && !trailingIconProps?.onClick ? 'error' : trailingIconProps.name}
-        label={errorMessage && !trailingIconProps?.onClick ? 'Error' : trailingIconProps.label}
-        onClick={trailingIconProps?.onClick}
-        disabled={disabled}
-        position="trailing"
-    />;
+    const trailingIcon = trailingIconProps || errorMessage ?
+        <TextBox.TextBoxIcon
+            name={errorMessage && !trailingIconProps?.onClick ? 'error' : trailingIconProps.name}
+            label={errorMessage && !trailingIconProps?.onClick ? 'Error' : trailingIconProps.label}
+            onClick={trailingIconProps?.onClick}
+            disabled={disabled}
+            position="trailing"
+        /> :
+        undefined;
 
     return <TextBox.Root
         focusInput={() => inputRef.current?.focus?.()}

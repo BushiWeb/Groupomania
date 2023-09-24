@@ -12,14 +12,25 @@ import { FullscreenDialogContext } from './FullscreenDialogContext';
  * and changes back to a large regular dialog on larger ones.
  */
 export default function FullscreenDialog({
-    open, onClose, onEscape, label, children, acceptButton, dismissButton, closeButton, headline, ...props
+    open,
+    onClose,
+    onEscape,
+    label,
+    children,
+    acceptButton,
+    dismissButton,
+    closeButton,
+    headline,
+    largeScreenClassname,
+    contentClassName,
+    ...props
 }) {
     const largeScreen = useBreakpoint() > 0;
 
     return <FullscreenDialogContext.Provider value={largeScreen}>
         <Dialog
             label={label}
-            className={!largeScreen ? style.fullscreenDialog : ''}
+            className={!largeScreen ? style.fullscreenDialog : `${style.largeScreenDialog} ${largeScreenClassname}`}
             onClose={onClose}
             onEscape={onEscape}
             open={open}
@@ -29,7 +40,7 @@ export default function FullscreenDialog({
                 <FullscreenDialogHeadline>{headline}</FullscreenDialogHeadline>
             </FullscreenDialogHeader>
 
-            <DialogContent>
+            <DialogContent className={`${!largeScreen ? style.content : ''} ${contentClassName}`}>
                 {children}
             </DialogContent>
 
@@ -43,6 +54,8 @@ export default function FullscreenDialog({
 
 FullscreenDialog.defaultProps = {
     open: false,
+    largeScreenClassname: '',
+    contentClassName: '',
 };
 
 FullscreenDialog.propTypes = {
@@ -71,4 +84,10 @@ FullscreenDialog.propTypes = {
      * Function to execute when the user presses the escape key
      */
     onEscape: PropTypes.func,
+
+    /* Classname to give to the dialog when on large screen */
+    largeScreenClassname: PropTypes.string,
+
+    /* ClassName to give to the conent */
+    contentClassName: PropTypes.string,
 };

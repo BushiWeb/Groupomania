@@ -28,7 +28,6 @@
         justify-content: space-between;
         align-items: center;
         gap: var(--padding-2);
-        margin-block-end: var(--size-5);
         padding-inline: var(--padding-6);
         padding-block-start: var(--padding-6);
     }
@@ -41,7 +40,6 @@
     }
 
     .actions {
-        margin-block-start: var(--size-8);
         padding-inline: var(--padding-6);
         padding-block-end: var(--padding-6);
 
@@ -54,5 +52,7 @@
     .content {
         overflow: auto;
         padding-inline: var(--padding-6);
+        padding-block-start: var(--padding-4);
+        padding-block-end: var(--padding-6);
     }
 }
