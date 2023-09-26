@@ -53,6 +53,6 @@
         overflow: auto;
         padding-inline: var(--padding-6);
         padding-block-start: var(--padding-4);
-        padding-block-end: var(--padding-6);
+        margin-block-end: var(--padding-6);
     }
 }

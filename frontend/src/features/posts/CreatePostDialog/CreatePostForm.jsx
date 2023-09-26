@@ -3,11 +3,15 @@ import PropTypes from 'prop-types';
 import { ACTIONS } from './formReducer';
 import TextField from '../../../components/form-inputs/TextField/TextField';
 import TextArea from '../../../components/form-inputs/TextArea/TextArea';
+import ImageField from '../../../components/form-inputs/ImageField/ImageField';
+import { useRef } from 'react';
 
 /** Form to create a post, with or without image */
 export default function CreatePostForm({
     title, titleError, message, messageError, dispatch,
 }) {
+    const imageRef = useRef(null);
+
     return <form className={style.form} aria-label="Formulaire de création de post">
         <TextField
             value={title}
@@ -25,6 +29,8 @@ export default function CreatePostForm({
             required
             rows={5}
         />
+
+        <ImageField ref={imageRef} className={style.imageInput}/>
     </form>;
 }
 

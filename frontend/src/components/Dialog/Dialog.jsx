@@ -7,11 +7,11 @@ import { useDialog } from '../../hooks/useDialog';
  * The dialog can't be dismissed by clicking outside.
  */
 export default function Dialog({
-    open, onClose, label, children, className, onEscape, ...props
+    open, onClose, label, children, className, onCancel, ...props
 }) {
     const dialogRef = useDialog(open);
 
-    return <dialog ref={dialogRef} onClose={onClose} onCancel={onEscape} className={`${style.dialog} ${className}`} aria-label={label} {...props}>
+    return <dialog ref={dialogRef} onClose={onClose} onCancel={onCancel} className={`${style.dialog} ${className}`} aria-label={label} {...props}>
         {children}
     </dialog>;
 }
@@ -31,7 +31,7 @@ Dialog.propTypes = {
     label: PropTypes.string.isRequired,
 
     /**
-     * Function to execute when the user presses the escape key
+     * Function to execute on the cancel event, like when the user presses the escape key
      */
-    onEscape: PropTypes.func,
+    onCancel: PropTypes.func,
 };

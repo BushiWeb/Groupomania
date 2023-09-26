@@ -57,10 +57,10 @@ export default function CreatePostDialog({ isOpen, setIsOpen }) {
     return <>
         <FullscreenDialog
             label="Créer un post"
-            onClose={() => {
+            onClose={(e) => {
                 setIsOpen(false);
             }}
-            onEscape={(e) => {
+            onCancel={(e) => {
                 e.preventDefault();
                 confirm();
             }}

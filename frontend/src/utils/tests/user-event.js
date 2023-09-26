@@ -41,6 +41,12 @@ const userEvent = {
                     await user.click(element);
                 });
             },
+
+            upload: async (element, file) => {
+                await act(async () => {
+                    await user.upload(element, file);
+                });
+            },
         };
     },
 };

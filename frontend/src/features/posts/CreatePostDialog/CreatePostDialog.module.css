@@ -6,6 +6,14 @@
         flex-direction: column;
         align-items: stretch;
         gap: var(--padding-4);
+        height: 100%;
+    }
+
+    .imageInput {
+        margin-top: var(--size-5);
+        align-self: center;
+        max-width: var(--size-25);
+        width: 100%;
     }
 
     .requestLoader {

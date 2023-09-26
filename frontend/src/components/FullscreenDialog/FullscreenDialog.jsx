@@ -14,7 +14,7 @@ import { FullscreenDialogContext } from './FullscreenDialogContext';
 export default function FullscreenDialog({
     open,
     onClose,
-    onEscape,
+    onCancel,
     label,
     children,
     acceptButton,
@@ -32,7 +32,7 @@ export default function FullscreenDialog({
             label={label}
             className={!largeScreen ? style.fullscreenDialog : `${style.largeScreenDialog} ${largeScreenClassname}`}
             onClose={onClose}
-            onEscape={onEscape}
+            onCancel={onCancel}
             open={open}
             {...props}
         >
@@ -81,9 +81,9 @@ FullscreenDialog.propTypes = {
     label: PropTypes.string.isRequired,
 
     /**
-     * Function to execute when the user presses the escape key
+     * Function to execute on the cancel event, like when the user presses the escape key
      */
-    onEscape: PropTypes.func,
+    onCancel: PropTypes.func,
 
     /* Classname to give to the dialog when on large screen */
     largeScreenClassname: PropTypes.string,
