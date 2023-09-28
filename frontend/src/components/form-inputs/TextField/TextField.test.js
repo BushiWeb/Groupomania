@@ -48,23 +48,18 @@ describe('Textnput component test suite', () => {
     it('should have a support text, which describes the input', () => {
         const supportText = 'support text';
         render(<TextField {...props} supportText={supportText}/>);
-        const supportTextElt = screen.getByText(supportText);
-        const inputElt = screen.getByLabelText(props.label);
-
-        expect(inputElt).toHaveAttribute('aria-describedby', supportTextElt.id);
+        screen.getByText(supportText);
+        screen.getByLabelText(supportText);
     });
 
     it('should have an error message and the alert role', () => {
         const errorMessage = 'error message';
         render(<TextField {...props} errorMessage={errorMessage}/>);
-        const errorMessageElt = screen.getByText(errorMessage);
+        screen.getByText(errorMessage);
         screen.getByLabelText('Error');
 
-        const widgetElt = screen.getByRole('alert');
+        const widgetElt = screen.getByRole('alert', { name: errorMessage });
         expect(widgetElt).toHaveClass('root');
-
-        const inputElt = screen.getByLabelText(props.label);
-        expect(inputElt).toHaveAttribute('aria-describedby', errorMessageElt.id);
     });
 
     it('should add an error icon in the support text if there is a trailing icon button', () => {
@@ -81,7 +76,7 @@ describe('Textnput component test suite', () => {
         />);
         screen.getByText(errorMessage);
         screen.getByRole('button', { name: trailingIcon.label });
-        const errorMessageElt = container.querySelector('.supportTextWithIcon');
+        const errorMessageElt = container.querySelector('.supportText');
         getByLabelText(errorMessageElt, 'Error');
     });
 
@@ -89,16 +84,13 @@ describe('Textnput component test suite', () => {
         const errorMessage = 'error message';
         const supportText = 'support text';
         render(<TextField {...props} errorMessage={errorMessage} supportText={supportText}/>);
-        const errorMessageElt = screen.getByText(errorMessage);
+        screen.getByText(errorMessage);
         screen.getByLabelText('Error');
         const widgetElt = screen.getByRole('alert');
         const supportTextElt = screen.queryByText(supportText);
 
-        expect(widgetElt).toHaveClass('root');
+        expect(widgetElt).toHaveClass('root', { name: errorMessage });
         expect(supportTextElt).toBeNull();
-
-        const inputElt = screen.getByLabelText(props.label);
-        expect(inputElt).toHaveAttribute('aria-describedby', errorMessageElt.id);
     });
 
     it('should have a leading icon', () => {

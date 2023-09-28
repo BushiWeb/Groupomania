@@ -8,6 +8,12 @@
         position: relative;
     }
 
+    .inputCommand {
+        display: flex;
+        flex-direction: column;
+        gap: var(--padding-1);
+    }
+
     .previewContainer {
         position: relative;
     }

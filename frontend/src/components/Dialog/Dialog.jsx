@@ -9,7 +9,7 @@ import { useDialog } from '../../hooks/useDialog';
 export default function Dialog({
     open, onClose, label, children, className, onCancel, ...props
 }) {
-    const dialogRef = useDialog(open);
+    const { dialogRef } = useDialog(open);
 
     return <dialog ref={dialogRef} onClose={onClose} onCancel={onCancel} className={`${style.dialog} ${className}`} aria-label={label} {...props}>
         {children}

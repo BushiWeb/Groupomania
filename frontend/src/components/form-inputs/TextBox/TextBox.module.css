@@ -19,9 +19,6 @@
         --label-translate: 0 -50%;
         --label-color: rgb(var(--color-on-surface-variant));
 
-        /* Support text properties */
-        --supportText-color: rgb(var(--color-on-surface-variant));
-
         /* Icon properties */
         --leading-icon-color: rgb(var(--color-on-surface-variant));
         --trailing-icon-color: rgb(var(--color-on-surface-variant));
@@ -99,13 +96,6 @@
         letter-spacing: var(--typo-body-small-tracking);
     }
 
-    .supportText {
-        composes: body-small from '../../../assets/styles/patterns/typography.module.css';
-
-        color: var(--supportText-color);
-        padding-inline: var(--padding-4);
-    }
-
     .textBoxIcon {
         padding: var(--padding-2);
     }
@@ -129,9 +119,6 @@
             var(--color-on-surface) / var(--state-disabled-bg-opacity)
         );
         --label-color: rgb(
-            var(--color-on-surface) / var(--state-disabled-text-opacity)
-        );
-        --supportText-color: rgb(
             var(--color-on-surface) / var(--state-disabled-text-opacity)
         );
         --leading-icon-color: rgb(
@@ -160,7 +147,6 @@
     .root[data-error]:not([data-disabled]) {
         --border-color: rgb(var(--color-error));
         --label-color: rgb(var(--color-error));
-        --supportText-color: rgb(var(--color-error));
         --trailing-icon-color: rgb(var(--color-error));
         --caret-color: rgb(var(--color-error));
     }
@@ -169,30 +155,12 @@
     .root[data-error]:not([data-disabled]):hover:focus-within {
         --border-color: rgb(var(--color-error));
         --label-color: rgb(var(--color-error));
-        --supportText-color: rgb(var(--color-error));
         --trailing-icon-color: rgb(var(--color-error));
     }
 
     .root[data-error]:not([data-disabled]):hover {
         --border-color: rgb(var(--color-on-error-container));
         --label-color: rgb(var(--color-on-error-container));
-        --supportText-color: rgb(var(--color-error));
         --trailing-icon-color: rgb(var(--color-on-error-container));
-    }
-
-    .supportTextWithIcon {
-        composes: supportText;
-
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: flex-start;
-        gap: var(--padding-1);
-    }
-
-    .supportTextIcon {
-        --icon-font-size: calc(
-            var(--typo-body-small-size) * var(--typo-body-small-line-height)
-        );
     }
 }

@@ -38,43 +38,35 @@ describe('Textnput component test suite', () => {
         expect(props.onChange).toHaveBeenCalledTimes(2);
     });
 
-    it('should have a support text, which describes the input', () => {
+    it('should have a support text, which labels the widget', () => {
         const supportText = 'support text';
         render(<TextArea {...props} supportText={supportText}/>);
-        const supportTextElt = screen.getByText(supportText);
-        const inputElt = screen.getByLabelText(props.label);
-
-        expect(inputElt).toHaveAttribute('aria-describedby', supportTextElt.id);
+        screen.getByText(supportText);
+        screen.getByLabelText(supportText);
     });
 
     it('should have an error message and the alert role', () => {
         const errorMessage = 'error message';
         const { container } = render(<TextArea {...props} errorMessage={errorMessage}/>);
-        const errorMessageText = screen.getByText(errorMessage);
-        const errorMessageElt = container.querySelector('.supportTextWithIcon');
+        screen.getByText(errorMessage);
+        const errorMessageElt = container.querySelector('.supportText');
         getByLabelText(errorMessageElt, 'Error');
 
-        const widgetElt = screen.getByRole('alert');
+        const widgetElt = screen.getByRole('alert', { name: errorMessage });
         expect(widgetElt).toHaveClass('root');
-
-        const inputElt = screen.getByLabelText(props.label);
-        expect(inputElt).toHaveAttribute('aria-describedby', errorMessageText.id);
     });
 
     it('should choose the error message over the support text', () => {
         const errorMessage = 'error message';
         const supportText = 'support text';
         render(<TextArea {...props} errorMessage={errorMessage} supportText={supportText}/>);
-        const errorMessageElt = screen.getByText(errorMessage);
+        screen.getByText(errorMessage);
         screen.getByLabelText('Error');
         const widgetElt = screen.getByRole('alert');
         const supportTextElt = screen.queryByText(supportText);
 
-        expect(widgetElt).toHaveClass('root');
+        expect(widgetElt).toHaveClass('root', { name: errorMessage });
         expect(supportTextElt).toBeNull();
-
-        const inputElt = screen.getByLabelText(props.label);
-        expect(inputElt).toHaveAttribute('aria-describedby', errorMessageElt.id);
     });
 
     it('should be required and have an asterix next to the label when required', () => {

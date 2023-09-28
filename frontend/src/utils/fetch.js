@@ -1,7 +1,8 @@
 import { getAntiCSRFToken, handleCSRFToken } from './antiCSRFToken.js';
 
 /**
- *
+ * Wrapper around the fetch function.
+ * Accepts either json data or FormData.
  * @param {{Object}} config
  * @param {string} config.url
  * @param {string} [config.method = 'GET']
@@ -18,15 +19,20 @@ export async function simpleFetch({
     headers,
     antiCSRFToken = true,
 }) {
-    const response = await fetch(url, {
+    const contentType = data && !(data instanceof FormData) ? 'application/json' : undefined;
+    const body = !data || data instanceof FormData ? data : JSON.stringify(data);
+
+    const options = {
         method,
         headers: {
-            ...data && { 'Content-Type': 'application/json' },
+            ...contentType && { 'Content-Type': contentType },
             ...antiCSRFToken && { 'X-CRSF-Token': getAntiCSRFToken() },
             ...headers,
         },
-        ...data && { body: JSON.stringify(data) },
-    });
+        ...body && { body },
+    };
+
+    const response = await fetch(url, options);
 
     handleCSRFToken(response);
 

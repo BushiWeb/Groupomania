@@ -11,22 +11,22 @@ import { useDialog } from '../../hooks/useDialog';
 export default function Lightbox({
     open, onClose, src, alt, ...props
 }) {
-    const dialogRef = useDialog(open);
+    const { dialogRef, ref } = useDialog(open);
     const containerRef = useRef(null);
 
     useClickOutsideModal(containerRef, () => {
-        if (dialogRef.current.open) {
-            dialogRef.current.close();
+        if (ref.current.open) {
+            ref.current.close();
             return;
         }
-    }, dialogRef);
+    }, ref);
 
     return <dialog ref={dialogRef} onClose={onClose} className={style.lightbox} {...props}>
         <div className={style.wrapper} ref={containerRef}>
             <img src={src} alt={alt} className={style.image} tabIndex="-1"/>
             <TonalIconButton
                 label="Fermer la lightbox"
-                onClick={() => dialogRef.current.close()}
+                onClick={() => ref.current.close()}
                 name="close"
                 className={style.closeButton}
             />

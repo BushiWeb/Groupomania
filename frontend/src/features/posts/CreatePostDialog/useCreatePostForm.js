@@ -25,14 +25,16 @@ export function useCreatePostForm(onSuccess) {
             titleError,
             message,
             messageError,
+            image,
+            imageError,
         },
         dispatch,
     ] = useReducer(reducer, initialState);
 
     const { mutate, isLoading } = useMutation({
         mutationFn: async () => {
-            validatePostData({ title: { value: title }, message: { value: message }});
-            return createPostRequest({ title, message });
+            validatePostData({ title: { value: title }, message: { value: message }, image: { value: image }});
+            return createPostRequest({ title, message, image });
         },
         onMutate: () => {
             dispatch({ type: ACTIONS.removeErrors });
@@ -60,6 +62,10 @@ export function useCreatePostForm(onSuccess) {
             if (errorMessages.message) {
                 dispatch({ type: ACTIONS.setMessageError, payload: errorMessages.message });
             }
+
+            if (errorMessages.image) {
+                dispatch({ type: ACTIONS.setImageError, payload: errorMessages.image });
+            }
         },
         onSuccess: () => {
             dispatch({ type: ACTIONS.reset });
@@ -77,6 +83,8 @@ export function useCreatePostForm(onSuccess) {
             titleError,
             message,
             messageError,
+            image,
+            imageError,
         },
     };
 }

@@ -1,8 +1,11 @@
 import PropTypes from 'prop-types';
 import style from './ImageField.module.css';
-import { forwardRef, useState } from 'react';
+import {
+    forwardRef, useEffect, useId, useState,
+} from 'react';
 import OutlinedButton from '../../buttons/OutlinedButton/OutlinedButton';
 import TonalIconButton from '../../icon-button/TonalIconButton/TonalIconButton';
+import SupportText from '../SupportText/SupportText';
 
 /**
  * Image field.
@@ -15,8 +18,19 @@ const ImageField = forwardRef(({
     accept,
     className,
     onChange,
+    errorMessage,
+    supportText,
+    empty,
 }, ref) => {
     const [image, setImage] = useState(null);
+    const supportTextId = useId();
+
+    useEffect(() => {
+        if (empty) {
+            ref.current.value = '';
+            setImage(null);
+        }
+    }, [empty, ref]);
 
     function handleChange(e) {
         if (e.target.files.length === 0) {
@@ -38,12 +52,25 @@ const ImageField = forwardRef(({
         setImage(null);
     }
 
-    return <div className={`${style.container} ${className}`}>
-        <OutlinedButton
-            onClick={(e) => ref.current.click()}
-            className={style.button}
-            {... image && { 'aria-describedby': `Le fichier ${image.name} est actuellement sélectionné` }}
-        >{image ? selectedLabel : emptyLabel}</OutlinedButton>
+    return <div
+        className={`${style.container} ${className}`}
+        {...errorMessage && { 'data-error': true, 'role': 'alert' }}
+        {... (supportText || errorMessage) && { 'aria-labelledby': supportTextId }}
+    >
+        <div className={style.inputCommand}>
+            <OutlinedButton
+                onClick={(e) => ref.current.click()}
+                className={style.button}
+                {... image && { 'aria-describedby': `Le fichier ${image.name} est actuellement sélectionné` }}
+            >{image ? selectedLabel : emptyLabel}</OutlinedButton>
+
+            <SupportText
+                id={supportTextId}
+                errorIcon
+                errorMessage={errorMessage}
+                supportText={supportText}
+            />
+        </div>
 
         <input
             type="file"
@@ -83,6 +110,9 @@ ImageField.defaultProps = {
     emptyLabel: 'Ajouter une image',
     selectedLabel: 'Modifier l\'image',
     className: '',
+    errorMessage: undefined,
+    supportText: undefined,
+    empty: true,
 };
 
 ImageField.propTypes = {
@@ -104,6 +134,15 @@ ImageField.propTypes = {
      * Required
      */
     onChange: PropTypes.func.isRequired,
+
+    /* Error message */
+    errorMessage: PropTypes.string,
+
+    /* Support text */
+    supportText: PropTypes.string,
+
+    /* Weither the field is empty or not, ie the user did not yet choose a file, defaults to true */
+    empty: PropTypes.bool,
 };
 
 export default ImageField;

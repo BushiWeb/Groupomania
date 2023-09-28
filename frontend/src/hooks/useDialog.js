@@ -6,7 +6,8 @@ import { tabbable } from 'tabbable';
 /**
  * Handles controlled opening and closing of a dialog element.
  * @param {boolean} isOpen
- * @returns Returns a ref to give to the dialog element.
+ * @returns Returns an object containing the ref function to give to the element (dialogRef) and
+ *  the ref containing the node (ref).
  */
 export function useDialog(isOpen) {
     const ref = useRef(null);
@@ -81,5 +82,5 @@ export function useDialog(isOpen) {
         ref.current = node;
     }, [tabbableElements, isOpen, mutationObserver]);
 
-    return dialogRef;
+    return { dialogRef, ref };
 }

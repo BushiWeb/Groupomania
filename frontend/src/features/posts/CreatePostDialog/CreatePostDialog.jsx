@@ -29,7 +29,7 @@ export default function CreatePostDialog({ isOpen, setIsOpen }) {
      * Otherwise, close the dialog
      */
     function confirm() {
-        if (data.message === '' && data.title === '') {
+        if (data.message === '' && data.title === '' && data.image === null) {
             return cancel();
         }
         setIsConfirmOpen(true);

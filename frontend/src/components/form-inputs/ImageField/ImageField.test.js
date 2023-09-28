@@ -91,4 +91,28 @@ describe('ImageField component test suite', () => {
             expect(mockOnChange).toHaveBeenCalledWith(null);
         });
     });
+
+    it('should have a support text', () => {
+        const supportText = 'Support text';
+        render(<ImageField {...props} supportText={supportText}/>);
+        screen.getByText(supportText);
+        screen.getByLabelText(supportText);
+    });
+
+    it('should have an error message', () => {
+        const errorMessage = 'Error message';
+        render(<ImageField {...props} errorMessage={errorMessage}/>);
+        screen.getByText(errorMessage);
+        screen.getByRole('alert', { name: errorMessage });
+    });
+
+    it('should prioritize the error message over the support text', () => {
+        const errorMessage = 'Error message';
+        const supportText = 'Support text';
+        render(<ImageField {...props} errorMessage={errorMessage} supportText={supportText}/>);
+        screen.getByText(errorMessage);
+        screen.getByRole('alert', { name: errorMessage });
+        const supportTextElt = screen.queryByText(supportText);
+        expect(supportTextElt).toBeNull();
+    });
 });

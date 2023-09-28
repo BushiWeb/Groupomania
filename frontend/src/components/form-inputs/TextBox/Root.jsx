@@ -14,11 +14,15 @@ export default function Root({
     focusInput,
     className,
     children,
-    props,
+    label,
+    labelId,
+    ...props
 }) {
     return <div
         className={`${style.root} ${className}`}
         onClick={focusInput}
+        aria-label={label}
+        aria-labelledby={labelId}
         {...hasPlaceholder && { 'data-placeholder': true }}
         {...hasValue && { 'data-value': true }}
         {...isDisabled && { 'data-disabled': true }}
@@ -35,6 +39,8 @@ Root.defaultProps = {
     isDisabled: false,
     hasError: false,
     className: '',
+    label: undefined,
+    labelId: undefined,
 };
 
 Root.propTypes = {
@@ -55,4 +61,10 @@ Root.propTypes = {
 
     /* Additionnal classnames for the root element */
     className: PropTypes.string,
+
+    /* Label */
+    label: PropTypes.string,
+
+    /* Id of an element acting as the label */
+    labelId: PropTypes.string,
 };

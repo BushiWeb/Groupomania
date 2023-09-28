@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import style from './TextArea.module.css';
 import { useId, useRef } from 'react';
 import * as TextBox from '../TextBox/index.js';
+import SupportText from '../SupportText/SupportText';
 
 /**
  * Text area component. It is a controlled component.
@@ -30,6 +31,7 @@ export default function TextArea({
         isDisabled={disabled}
         hasError={!!errorMessage}
         className={`${style.textAreaRoot} ${className}`}
+        {... (supportText || errorMessage) && { labelId: supportTextId }}
     >
         <TextBox.InteractiveContainer
             label={label}
@@ -47,17 +49,17 @@ export default function TextArea({
                 className={style.textarea}
                 ref={inputRef}
                 rows={rows}
-                {...(errorMessage || supportText) && { 'aria-describedby': supportTextId }}
                 {...props}
             />
         </TextBox.InteractiveContainer>
 
-        <TextBox.SupportText
+        <SupportText
             id={supportTextId}
             supportText={supportText}
             errorMessage={errorMessage}
             errorIcon={true}
             required={required}
+            disabled={disabled}
         />
     </TextBox.Root>;
 }

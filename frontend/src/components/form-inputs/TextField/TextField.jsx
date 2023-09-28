@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import style from './TextField.module.css';
 import { useId, useRef } from 'react';
 import * as TextBox from '../TextBox/index.js';
+import SupportText from '../SupportText/SupportText';
 
 /**
  * Text field component. It is a controlled component.
@@ -46,6 +47,7 @@ export default function TextField({
         isDisabled={disabled}
         hasError={!!errorMessage}
         className={className}
+        {... (supportText || errorMessage) && { labelId: supportTextId }}
     >
         <TextBox.InteractiveContainer
             label={label}
@@ -64,17 +66,17 @@ export default function TextField({
                 placeholder={placeholder}
                 className={style.input}
                 ref={inputRef}
-                {...(errorMessage || supportText) && { 'aria-describedby': supportTextId }}
                 {...props}
             />
         </TextBox.InteractiveContainer>
 
-        <TextBox.SupportText
+        <SupportText
             id={supportTextId}
             supportText={supportText}
             errorMessage={errorMessage}
             errorIcon={!!trailingIconProps?.onClick}
             required={required}
+            disabled={disabled}
         />
     </TextBox.Root>;
 }

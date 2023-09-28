@@ -23,17 +23,15 @@ export default function ImageWithLighbox({
         <button className={`${style.button} ${className}`} onClick={handleClick}>
             <img src={src} alt={alt} className={style.image}/>
         </button>
-        {
-            isLightboxOpened &&
-            <Lightbox
-                open={isLightboxOpened}
-                onClose={handleClose}
-                alt={alt}
-                src={src}
-                aria-label={lightboxLabel}
-                aria-describedby={lightboxDescription}
-            />
-        }
+
+        <Lightbox
+            open={isLightboxOpened}
+            onClose={handleClose}
+            alt={alt}
+            src={src}
+            aria-label={lightboxLabel}
+            aria-describedby={lightboxDescription}
+        />
     </>;
 }
 

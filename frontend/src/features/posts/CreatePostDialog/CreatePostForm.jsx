@@ -8,7 +8,7 @@ import { useRef } from 'react';
 
 /** Form to create a post, with or without image */
 export default function CreatePostForm({
-    title, titleError, message, messageError, dispatch,
+    title, titleError, message, messageError, image, imageError, dispatch,
 }) {
     const imageRef = useRef(null);
 
@@ -30,7 +30,16 @@ export default function CreatePostForm({
             rows={5}
         />
 
-        <ImageField ref={imageRef} className={style.imageInput}/>
+        <ImageField
+            ref={imageRef}
+            className={style.imageInput}
+            empty={!image}
+            onChange={(file) => {
+                dispatch({ type: ACTIONS.setImage, payload: file });
+                dispatch({ type: ACTIONS.removeImageError });
+            }}
+            errorMessage={imageError}
+        />
     </form>;
 }
 
@@ -39,6 +48,8 @@ CreatePostForm.defaultProps = {
     titleError: '',
     message: '',
     messageError: '',
+    image: null,
+    imageError: '',
 };
 
 CreatePostForm.propTypes = {
@@ -53,6 +64,12 @@ CreatePostForm.propTypes = {
 
     /* Error message for the message field */
     messageError: PropTypes.string,
+
+    /* Value for the image field */
+    image: PropTypes.instanceOf(File),
+
+    /* Image field error message */
+    imageError: PropTypes.string,
 
     /* Function to dispatch new field values, from the formReducer, required */
     dispatch: PropTypes.func.isRequired,
