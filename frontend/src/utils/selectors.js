@@ -23,7 +23,7 @@ export const selectNextSnackbarMessage = (state) => state.snackbar.messages[0] |
 
 export const selectIsAuthenticated = (state) => !!state.user.email;
 
-export const selectIsAdmin = (state) => state.user.roleId === 1;
+export const selectIsAdmin = (state) => state.user?.role?.roleId === 1;
 
 export const selectUserId = (state) => state.user.userId;
 

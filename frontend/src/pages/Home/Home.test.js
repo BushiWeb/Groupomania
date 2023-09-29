@@ -7,7 +7,7 @@ import POSTS from '../../utils/tests/mocks/posts';
 import { act } from 'react-dom/test-utils';
 
 describe('Home test suite', () => {
-    const initialState = { user: { email: 'test@gmail.com', userId: 130, roleId: 1 }};
+    const initialState = { user: { email: 'test@gmail.com', userId: 130, role: { roleId: 1 }}};
     it('should render with one page of articles', async () => {
         render(undefined, { initialEntries: ['/'], preloadedState: initialState });
 

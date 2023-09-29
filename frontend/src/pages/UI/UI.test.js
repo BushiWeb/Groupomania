@@ -4,8 +4,9 @@ import userEvent from '../../utils/tests/user-event';
 import '@testing-library/jest-dom';
 
 describe('UI test suite', () => {
+    const state = { user: { email: 'test', role: { roleId: 2 }}};
     it('should render', async () => {
-        const { container } = render(undefined, { initialEntries: ['/'], preloadedState: { user: { email: 'test' }}});
+        const { container } = render(undefined, { initialEntries: ['/'], preloadedState: state });
 
         await waitFor(() => {
             screen.getByRole('main');
@@ -26,7 +27,7 @@ describe('UI test suite', () => {
 
     it('should log the user out', async () => {
         const user = userEvent.setup();
-        render(undefined, { initialEntries: ['/'], preloadedState: { user: { email: 'test' }}});
+        render(undefined, { initialEntries: ['/'], preloadedState: state });
         const logoutButton = screen.getByRole('button', { name: 'Se déconnecter' });
 
         await user.click(logoutButton);

@@ -45,6 +45,9 @@ describe('PostsList component test suite', () => {
         },
     ];
 
+    const state = { user: { userId: posts[0].writer.writerId, role: { roleId: 2 }}};
+    const stateAdmin = { user: { userId: posts[0].writer.writerId, role: { roleId: 1 }}};
+
     const mockLike = jest.fn();
 
     const props = {
@@ -67,7 +70,7 @@ describe('PostsList component test suite', () => {
     });
 
     it('should allow more action if the user owns the posts', () => {
-        render(<PostsList {...props}/>, { preloadedState: { user: { userId: posts[0].writer.writerId, roleId: 2 }}});
+        render(<PostsList {...props}/>, { preloadedState: state });
 
         const ownedPost = screen.getByRole('article', { name: posts[0].title });
         getByRole(ownedPost, 'button', { name: /Plus/ });
@@ -78,7 +81,7 @@ describe('PostsList component test suite', () => {
     });
 
     it('should allow more actions if the user is an admin', () => {
-        render(<PostsList {...props}/>, { preloadedState: { user: { userId: 666, roleId: 1 }}});
+        render(<PostsList {...props}/>, { preloadedState: stateAdmin });
         const postsElts = screen.getAllByRole('article');
 
         for (const post of postsElts) {
