@@ -9,7 +9,7 @@ import { getAntiCSRFToken, handleCSRFToken } from './antiCSRFToken.js';
  * @param {Object} [config.data]
  * @param {Object} [config.headers]
  * @param {boolean} [config.antiCSRFToken = true]
- * @returns {Response} Returns the response
+ * @returns {Response|null} Returns the response data or null if no data is returned
  * @throws {Response} Throws if the request returns an error
  */
 export async function simpleFetch({
@@ -38,6 +38,10 @@ export async function simpleFetch({
 
     if (!response.ok) {
         throw response;
+    }
+
+    if (response.status === 204) {
+        return null;
     }
 
     return response.json();
