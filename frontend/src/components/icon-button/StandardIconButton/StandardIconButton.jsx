@@ -15,8 +15,7 @@ export default function StandardIconButton({
             onClick={onClick}
             label={label}
             name={name}
-            buttonClassName={style.standardIconButton}
-            className={className}
+            className={`${style.standardIconButton} ${className}`}
             toggle={toggle}
             stateLayerColor={toggle ? 'primary' : 'on-surface-variant'}
             {...other}

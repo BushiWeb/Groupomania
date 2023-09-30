@@ -5,13 +5,15 @@
         display: grid;
         place-content: center;
 
-        position: absolute;
+        position: fixed;
+        top: var(--tooltip-top, 0);
+        left: var(--tooltip-left, 0);
 
         min-height: var(--size-8);
         max-width: min(100vw, var(--size-text-medium));
         width: max-content;
         padding-inline: var(--padding-2);
-        z-index: var(--layer-5);
+        z-index: var(--layer-highest);
 
         text-align: center;
         color: rgb(var(--color-on-inverse-surface));
@@ -20,30 +22,5 @@
 
         border-radius: var(--border-radius-2);
         border-style: none;
-    }
-
-    .hidden {
-        visibility: hidden;
-    }
-
-    .bottom {
-        top: calc(100% + var(--size-3));
-    }
-
-    .top {
-        bottom: calc(100% + var(--size-3));
-    }
-
-    .left {
-        left: 0;
-    }
-
-    .center {
-        left: 50%;
-        translate: -50% 0;
-    }
-
-    .right {
-        right: 0;
     }
 }

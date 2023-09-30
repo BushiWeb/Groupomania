@@ -1,56 +1,33 @@
 import PropTypes from 'prop-types';
 import style from './TooltipLabel.module.css';
-import { useCallback } from 'react';
+import { forwardRef, useCallback, useContext } from 'react';
+import { tooltipContext } from './tooltipContext';
+import useTooltipLabel from './useTooltipLabel';
 
 /**
  * Tooltip box, containing the text
  */
-export default function TooltipLabel({ label, shown }) {
-    /**
-    * Function executed when the DOM component is rendered. It calculates the position of the tooltip to make sure
-    *      it is within the bounds of the screen.
-    */
-    const tooltipRef = useCallback((node) => {
-        if (!node) {
-            return;
-        }
+export default function TooltipLabel() {
+    const {
+        isOpen,
+        value,
+        ref,
+        top,
+        left,
+    } = useTooltipLabel();
 
-        const {
-            x, y, width, height,
-        } = node.getBoundingClientRect();
-
-        if (y + height * 2 > window.innerHeight) {
-            node.classList.remove(style.bottom);
-            node.classList.add(style.top);
-        }
-
-        if (x < 0) {
-            node.classList.remove(style.center);
-            node.classList.add(style.left);
-        } else if (x + width > window.innerWidth) {
-            node.classList.remove(style.center);
-            node.classList.add(style.right);
-        }
-
-        node.classList.remove(style.hidden);
-    }, []);
-
-    if (shown) {
+    if (isOpen) {
         return <div
-            className={`${style.tooltip} ${style.hidden} ${style.bottom} ${style.center}`}
+            className={`${style.tooltip}`}
             role="tooltip"
             aria-hidden={true}
-            ref={tooltipRef}
-        >{label}</div>;
+            ref={ref}
+            style={{
+                '--tooltip-top': `${top}px`,
+                '--tooltip-left': `${left}px`,
+            }}
+        >{value}</div>;
     }
 
     return;
 }
-
-TooltipLabel.propTypes = {
-    /** Label of the tooltip, required */
-    label: PropTypes.string.isRequired,
-
-    /** Weither the tooltip is displayed or not, required */
-    shown: PropTypes.bool.isRequired,
-};

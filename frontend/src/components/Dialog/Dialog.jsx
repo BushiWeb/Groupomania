@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import style from './Dialog.module.css';
 import { useDialog } from '../../hooks/useDialog';
+import TooltipWrapper from '../../features/tooltip/TooltipWrapper';
 
 /**
  * Displays a modal dialog with custom content.
@@ -12,7 +13,9 @@ export default function Dialog({
     const { dialogRef } = useDialog(open);
 
     return <dialog ref={dialogRef} onClose={onClose} onCancel={onCancel} className={`${style.dialog} ${className}`} aria-label={label} {...props}>
-        {children}
+        <TooltipWrapper>
+            {children}
+        </TooltipWrapper>
     </dialog>;
 }
 

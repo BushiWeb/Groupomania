@@ -139,18 +139,6 @@ describe('Checkbox component test suite', () => {
         expect(containerElt).toHaveClass(moreClass);
     });
 
-    it('should have additionnal classnames on tooltip', () => {
-        const { container } = render(<Checkbox
-            name={name}
-            className={moreClass}
-            label={label}
-            onChange={inputHandle}
-        />);
-        const tooltipElt = container.querySelector('.tooltipContainer');
-
-        expect(tooltipElt).toHaveClass(moreClass);
-    });
-
     it('should have all states activated', () => {
         const { container } = render(<Checkbox name={name} label={label} onChange={inputHandle}/>);
         const stateLayerElt = container.querySelector('.interactiveElement');

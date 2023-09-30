@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import UI from './pages/UI/UI.jsx';
 import Home from './pages/Home/Home.jsx';
+import TooltipWrapper from './features/tooltip/TooltipWrapper.jsx';
 //import reportWebVitals from './utils/reportWebVitals.js';
 
 const queryClient = new QueryClient();
@@ -18,16 +19,18 @@ root.render(
     <QueryClientProvider client={queryClient}>
         <Provider store={store}>
             <React.StrictMode>
-                <BrowserRouter>
-                    <Routes>
-                        <Route path='/' element={<UI/>}>
-                            <Route index element={<Home/>} />
-                            <Route path='reseau' element={undefined} />
-                            <Route path='profil' element={undefined} />
-                        </Route>
-                        <Route path='/login' element={<Login/>} />
-                    </Routes>
-                </BrowserRouter>
+                <TooltipWrapper>
+                    <BrowserRouter>
+                        <Routes>
+                            <Route path='/' element={<UI/>}>
+                                <Route index element={<Home/>} />
+                                <Route path='reseau' element={undefined} />
+                                <Route path='profil' element={undefined} />
+                            </Route>
+                            <Route path='/login' element={<Login/>} />
+                        </Routes>
+                    </BrowserRouter>
+                </TooltipWrapper>
             </React.StrictMode>
         </Provider>
         <ReactQueryDevtools initialIsOpen={false}/>

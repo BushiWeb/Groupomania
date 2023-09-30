@@ -15,8 +15,7 @@ export default function OutlinedIconButton({
             onClick={onClick}
             label={label}
             name={name}
-            buttonClassName={style.outlinedIconButton}
-            className={className}
+            className={`${style.outlinedIconButton} ${className}`}
             toggle={toggle}
             stateLayerColor={toggle ? 'on-inverse-surface' : 'on-surface-variant'}
             {...other}

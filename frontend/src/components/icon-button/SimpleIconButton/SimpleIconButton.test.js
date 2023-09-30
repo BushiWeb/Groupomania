@@ -101,13 +101,6 @@ describe('SimpleIconButton component test suite', () => {
         expect(buttonElt).toHaveAttribute('aria-pressed', 'false');
     });
 
-    it('should have additionnal classnames', () => {
-        const additionnalClass = 'test';
-        const { container } = render(<SimpleIconButton name={name} label={label} className={additionnalClass}/>);
-        const iconButtonElt = container.querySelector('.tooltipContainer');
-        expect(iconButtonElt).toHaveClass(additionnalClass);
-    });
-
     it('should have no state layer', () => {
         const { container } = render(<SimpleIconButton name={name} label={label}/>);
         const stateLayerElt = container.querySelector('.stateLayer');

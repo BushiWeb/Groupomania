@@ -15,8 +15,7 @@ export default function SimpleIconButton({
             onClick={onClick}
             label={label}
             name={name}
-            buttonClassName={style.simpleIconButton}
-            className={className}
+            className={`${style.simpleIconButton} ${className}`}
             toggle={toggle}
             stateLayerColor={false}
             {...other}

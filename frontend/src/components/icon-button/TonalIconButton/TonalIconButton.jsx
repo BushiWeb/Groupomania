@@ -15,8 +15,7 @@ export default function TonalIconButton({
             onClick={onClick}
             label={label}
             name={name}
-            buttonClassName={style.tonalIconButton}
-            className={className}
+            className={`${style.tonalIconButton} ${className}`}
             toggle={toggle}
             stateLayerColor={toggle ? 'on-inverse-surface' : 'on-surface-variant'}
             {...other}

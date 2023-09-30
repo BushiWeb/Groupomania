@@ -4,37 +4,37 @@ import Button from '../../buttons/Button/Button.jsx';
 import Icon from '../../Icon/Icon';
 import { useSelector } from 'react-redux';
 import { selectIsDarkTheme } from '../../../utils/selectors';
-import Tooltip from '../../../features/tooltip/Tooltip.jsx';
+import useTooltip from '../../../features/tooltip/useTooltip';
 
 /**
  * Icon button. Should be used as a blueprint to create other stylised button like outlined ones.
  */
 export default function IconButton({
-    disabled, autoFocus, onClick, label, name, className, buttonClassName, toggle, stateLayerColor, ...other
+    disabled, autoFocus, onClick, label, name, className, toggle, stateLayerColor, ...other
 }) {
     const isDarkTheme = useSelector(selectIsDarkTheme);
+    const ref = useTooltip(label);
 
     return (
-        <Tooltip label={label} className={className}>
-            <Button
-                disabled={disabled}
-                autoFocus={autoFocus}
-                onClick={onClick}
-                label={label}
-                classNames={buttonClassName}
-                stateLayerColor={stateLayerColor}
-                aria-pressed={toggle}
-                {...other}
-            >
-                <Icon
-                    name={name}
-                    className={style.icon}
-                    size={24}
-                    fill={toggle}
-                    isOnDark={isDarkTheme}
-                />
-            </Button>
-        </Tooltip>
+        <Button
+            disabled={disabled}
+            autoFocus={autoFocus}
+            onClick={onClick}
+            label={label}
+            classNames={className}
+            stateLayerColor={stateLayerColor}
+            aria-pressed={toggle}
+            ref={ref}
+            {...other}
+        >
+            <Icon
+                name={name}
+                className={style.icon}
+                size={24}
+                fill={toggle}
+                isOnDark={isDarkTheme}
+            />
+        </Button>
     );
 }
 
@@ -43,7 +43,6 @@ IconButton.defaultProps = {
     autoFocus: false,
     onClick: undefined,
     className: '',
-    buttonClassName: '',
     toggle: undefined,
     stateLayerColor: undefined,
 };
@@ -68,9 +67,6 @@ IconButton.propTypes = {
 
     /** Additional class names for the component */
     className: PropTypes.string,
-
-    /** Additional class names for the button element */
-    buttonClassName: PropTypes.string,
 
     /**
      * State of the button.

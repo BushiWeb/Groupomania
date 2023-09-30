@@ -70,15 +70,9 @@ describe('IconButton component test suite', () => {
     });
 
     it('should have additionnal classnames on the button', () => {
-        render(<IconButton name={name} label={label} buttonClassName={additionnalClass}/>);
+        render(<IconButton name={name} label={label} className={additionnalClass}/>);
         const buttonElt = screen.getByRole('button');
         expect(buttonElt).toHaveClass(additionnalClass);
-    });
-
-    it('should have additionnal classnames on the whole element', () => {
-        const { container } = render(<IconButton name={name} label={label} className={additionnalClass}/>);
-        const iconButtonElt = container.querySelector('.tooltipContainer');
-        expect(iconButtonElt).toHaveClass(additionnalClass);
     });
 
     it('should trigger the ripple effect when activated', async () => {

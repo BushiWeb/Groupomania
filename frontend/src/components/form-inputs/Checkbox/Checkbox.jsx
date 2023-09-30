@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import style from './Checkbox.module.css';
 import InteractiveElement from '../../InteractiveElement/InteractiveElement.jsx';
-import Tooltip from '../../../features/tooltip/Tooltip.jsx';
 import { useRef } from 'react';
+import useTooltip from '../../../features/tooltip/useTooltip';
 
 /**
  * Checkbox, with or without label
@@ -11,6 +11,7 @@ export default function Checkbox({
     checked, onChange, disabled, autoFocus, label, className, ...other
 }) {
     const checkboxRef = useRef();
+    const ref = useTooltip(label);
 
     function handleClickTarget(e) {
         checkboxRef.current.focus();
@@ -30,6 +31,7 @@ export default function Checkbox({
         active={!disabled}
         focus={!disabled}
         onClick={!disabled ? handleClickTarget : undefined}
+        {...label && { ref }}
     >
         <input
             type="checkbox"
@@ -44,12 +46,6 @@ export default function Checkbox({
             {...other}
         />
     </InteractiveElement>;
-
-    if (label) {
-        return <Tooltip label={label} className={className}>
-            {checkboxElt}
-        </Tooltip>;
-    }
 
     return checkboxElt;
 }

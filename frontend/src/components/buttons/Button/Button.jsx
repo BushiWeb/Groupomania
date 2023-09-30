@@ -1,15 +1,16 @@
 import PropTypes from 'prop-types';
 import style from './Button.module.css';
 import InteractiveElement from '../../InteractiveElement/InteractiveElement.jsx';
+import { forwardRef } from 'react';
 
 /**
  * Basic button with no secific styling. Should be composed by another button component.
  * Its value is given as the child of the button.
  * All additionnal props are passed to the DOM element.
  */
-export default function Button({
+const Button = forwardRef(({
     children, disabled, autoFocus, onClick, label, classNames, hover, focus, active, stateLayerColor, ...other
-}) {
+}, ref) => {
     return <InteractiveElement
         rootElement="button"
         className={`${style.button} ${classNames}`}
@@ -23,11 +24,12 @@ export default function Button({
         autoFocus={autoFocus}
         onClick={onClick}
         aria-label={label}
+        ref={ref}
         {...other}
     >
         {children}
     </InteractiveElement>;
-}
+});
 
 Button.defaultProps = {
     disabled: false,
@@ -72,3 +74,5 @@ Button.propTypes = {
     /** InteractiveElement's stateLayerColor prop */
     stateLayerColor: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 };
+
+export default Button;

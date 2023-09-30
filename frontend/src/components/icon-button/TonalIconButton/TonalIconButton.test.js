@@ -146,11 +146,4 @@ describe('TonalIconButton component test suite', () => {
         const buttonElt = screen.getByRole('button', { name: label });
         expect(buttonElt).toHaveAttribute('aria-pressed', 'false');
     });
-
-    it('should have additionnal classnamest', () => {
-        const additionnalClass = 'test';
-        const { container } = render(<TonalIconButton name={name} label={label} className={additionnalClass}/>);
-        const iconButtonElt = container.querySelector('.tooltipContainer');
-        expect(iconButtonElt).toHaveClass(additionnalClass);
-    });
 });

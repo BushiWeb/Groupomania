@@ -4,6 +4,7 @@ import Button from '../Button/Button.jsx';
 import Icon from '../../Icon/Icon';
 import { useSelector } from 'react-redux';
 import { selectIsDarkTheme } from '../../../utils/selectors';
+import useTooltip from '../../../features/tooltip/useTooltip';
 
 /**
  * Floating Action Button.
@@ -15,6 +16,7 @@ export default function FAB({
     autoFocus, onClick, label, children, icon, low, ...other
 }) {
     const isDarkTheme = useSelector(selectIsDarkTheme);
+    const ref = useTooltip(label);
 
     const className = `${children ? style.extendedFab : style.fab} ${other.className ? other.className : ''}`;
     delete other.className;
@@ -26,6 +28,7 @@ export default function FAB({
         label={label}
         stateLayerColor="on-secondary-container"
         {...low && { 'data-low': true }}
+        {...!children && { ref: ref }}
         {...other}
     >
         {icon && <Icon name={icon} className={style.icon} size={24} isOnDark={isDarkTheme}/>}
