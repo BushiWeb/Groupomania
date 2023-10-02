@@ -2,7 +2,6 @@ import {
     useCallback, useContext, useEffect, useLayoutEffect, useRef, useState,
 } from 'react';
 import { tooltipContext } from './tooltipContext.js';
-import { ACTIONS, OPEN_CAUSE } from './tooltipReducer.js';
 
 const TOOLTIP_MARGIN = 4;
 
@@ -19,10 +18,29 @@ export default function useTooltipLabel() {
         isOpen,
         anchor,
         value,
-        openCause,
-        dispatch,
     } = useContext(tooltipContext);
     const [{ width, height }, setDimensions] = useState({ width: 0, height: 0 });
+
+    // Controlling the final state of the tooltip and the timing
+    const [labelHover, setLabelHover] = useState(false);
+    const [open, setOpen] = useState(false);
+    const openTimeoutRef = useRef(null);
+    const closeTimeoutRef = useRef(null);
+    const openTimeout = 200;
+    const closeTimeout = 100;
+
+    // Aplying timeout to opening and closing the tooltip
+    useEffect(() => {
+        if (isOpen || labelHover) {
+            clearTimeout(closeTimeoutRef.current);
+            openTimeoutRef.current = setTimeout(() => setOpen(true), openTimeout);
+            return;
+        }
+
+        clearTimeout(openTimeoutRef.current);
+        closeTimeoutRef.current = setTimeout(() => setOpen(false), closeTimeout);
+        return;
+    }, [isOpen, labelHover]);
 
     /* Update tooltip size when changing value */
     useLayoutEffect(() => {
@@ -39,20 +57,13 @@ export default function useTooltipLabel() {
 
     /* Keeps the tooltip visible when hovering the tooltip */
     const handlePointerEnter = useCallback(() => {
-        if (openCause === OPEN_CAUSE.hover) {
-            dispatch({
-                type: ACTIONS.open,
-                payload: { value, anchor, cause: OPEN_CAUSE.hoverTooltip },
-            });
-        }
-    }, [anchor, dispatch, openCause, value]);
+        setLabelHover(true);
+    }, [setLabelHover]);
 
     /* Closes the tooltip when exiting the tooltip */
     const handlePointerLeave = useCallback(() => {
-        if (openCause === OPEN_CAUSE.hoverTooltip) {
-            dispatch({ type: ACTIONS.close });
-        }
-    }, [dispatch, openCause]);
+        setLabelHover(false);
+    }, [setLabelHover]);
 
     /* Creates the ref and adds the event handlers */
     const labelRef = useCallback((node) => {
@@ -75,7 +86,7 @@ export default function useTooltipLabel() {
         ref.current = node;
     }, [handlePointerEnter, handlePointerLeave]);
 
-    if (!isOpen || !anchor) {
+    if (!anchor) {
         return {
             ref: labelRef,
             value,
@@ -105,7 +116,7 @@ export default function useTooltipLabel() {
     return {
         ref: labelRef,
         value,
-        isOpen,
+        open,
         top,
         left,
     };

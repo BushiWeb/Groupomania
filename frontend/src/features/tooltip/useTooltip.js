@@ -20,20 +20,20 @@ export default function useTooltip(value) {
 
     /** Opens the tooltip following an event on the anchor */
     const open = useCallback((cause, newAnchor) => {
-        if (openCause === null || anchor !== newAnchor) {
+        if (!isOpen || anchor !== newAnchor) {
             dispatch({
                 type: ACTIONS.open,
                 payload: { value, anchor: newAnchor, cause },
             });
         }
-    }, [openCause, dispatch, anchor, value]);
+    }, [isOpen, anchor, dispatch, value]);
 
     /** Closes the tooltip following an event on the anchor */
     const close = useCallback((cause) => {
-        if (openCause === cause) {
+        if (isOpen && openCause === cause) {
             dispatch({ type: ACTIONS.close });
         }
-    }, [openCause, dispatch]);
+    }, [isOpen, openCause, dispatch]);
 
     /* Event handlers for the anchor. Opens on Focus and PointerEnter, closes respectively on Blur and PointerLeaver */
     const handleFocus = useCallback((e) => {

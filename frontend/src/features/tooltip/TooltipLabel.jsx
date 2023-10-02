@@ -1,7 +1,4 @@
-import PropTypes from 'prop-types';
 import style from './TooltipLabel.module.css';
-import { forwardRef, useCallback, useContext } from 'react';
-import { tooltipContext } from './tooltipContext';
 import useTooltipLabel from './useTooltipLabel';
 
 /**
@@ -9,14 +6,14 @@ import useTooltipLabel from './useTooltipLabel';
  */
 export default function TooltipLabel() {
     const {
-        isOpen,
+        open,
         value,
         ref,
         top,
         left,
     } = useTooltipLabel();
 
-    if (isOpen) {
+    if (open) {
         return <div
             className={`${style.tooltip}`}
             role="tooltip"

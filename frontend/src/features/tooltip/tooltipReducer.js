@@ -32,7 +32,10 @@ export function reducer(state, action) {
             anchor: action.payload.anchor,
         };
     case ACTIONS.close:
-        return initialState;
+        return {
+            ...state,
+            isOpen: false,
+        };
     default: return state;
     }
 }
