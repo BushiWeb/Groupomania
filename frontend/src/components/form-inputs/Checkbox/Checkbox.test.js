@@ -125,6 +125,7 @@ describe('Checkbox component test suite', () => {
         const checkboxElt = screen.getByRole('checkbox', { name: label });
 
         await user.hover(checkboxElt);
+        fakeTimers.runAllTimers();
         const tooltipLabel = container.querySelector('.tooltip');
         expect(tooltipLabel).not.toBeNull();
         expect(tooltipLabel).toHaveTextContent(label);

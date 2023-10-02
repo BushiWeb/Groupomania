@@ -18,20 +18,28 @@ export default function HiddenNavigationLink({ children, target }) {
         exit(e.target);
     }
 
+    function handleClick(e) {
+        e.preventDefault();
+        const targetElt = document.getElementById(target);
+        targetElt.tabIndex = -1;
+        targetElt.focus();
+    }
+
     return <InteractiveElement
         rootElement={Link}
         className={`sr-only ${style.hiddenLink}`}
         stateLayerColor="on-tertiary"
         focus={false}
-        to={target}
+        to={`#${target}`}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        onClick={handleClick}
     >
         {children}
     </InteractiveElement>;
 }
 
 HiddenNavigationLink.propTypes = {
-    /** Target of the link */
+    /** Id of the target of the link */
     target: PropTypes.string.isRequired,
 };

@@ -121,6 +121,7 @@ describe('TonalIconButton component test suite', () => {
         const buttonElt = screen.getByRole('button', { name: label });
 
         await user.hover(buttonElt);
+        fakeTimers.runAllTimers();
         const tooltipLabel = container.querySelector('.tooltip');
         expect(tooltipLabel).not.toBeNull();
         expect(tooltipLabel).toHaveTextContent(label);

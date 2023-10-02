@@ -45,7 +45,7 @@ export default function MainHeader({ mainContentId, ...props }) {
     const className = `${style.header} ${props.className || ''}`;
 
     return <header className={className}>
-        <HiddenNavigationLink target={`#${mainContentId}`}>Accéder directement au contenu</HiddenNavigationLink>
+        <HiddenNavigationLink target={mainContentId}>Accéder directement au contenu</HiddenNavigationLink>
 
         <div className={style.logo}>
             <Logo label="Retourner à la page d'accueil" target="/"/>
