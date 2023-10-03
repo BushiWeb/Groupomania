@@ -55,12 +55,15 @@ describe('MainHeader component test suite', () => {
 
     it('should link to the main content', async () => {
         const user = userEvent.setup();
-        render(<MainHeader mainContentId={contentId} />);
+        const { container } = render(<>
+            <MainHeader mainContentId={contentId} />
+            <main id={contentId}>Main content</main>
+        </>);
         const hiddenLink = screen.getByRole('link', { name: 'Accéder directement au contenu' });
 
         await user.click(hiddenLink);
-        const anchor = screen.getByTestId('search-anchor').textContent;
-        expect(anchor).toBe(`#${contentId}`);
+        const mainElt = container.querySelector(`#${contentId}`);
+        expect(mainElt).toHaveFocus();
     });
 
     it('should link to the home page', async () => {
