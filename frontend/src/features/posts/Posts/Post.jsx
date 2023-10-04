@@ -1,10 +1,13 @@
 import PropTypes from 'prop-types';
 import StandardIconButton from '../../../components/icon-button/StandardIconButton/StandardIconButton';
 import Divider from '../../../components/Divider/Divider';
-import { useId } from 'react';
+import { useId, useState } from 'react';
 import style from './Post.module.css';
 import { useFocusable } from '../../../hooks/useFocusable';
 import ImageWithLighbox from '../../../components/Image/ImageWithLightbox';
+import Menu from '../../../components/Menu/Menu';
+import MenuItem from '../../../components/Menu/MenuItem';
+import MenuIcon from '../../../components/Menu/MenuIcon';
 
 /** Displays one post data. */
 export default function Post({
@@ -38,6 +41,8 @@ export default function Post({
     });
 
     const postRef = useFocusable(focused);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [menuAnchor, setMenuAnchor] = useState(null);
 
     return <article
         className={imageUrl ? style.imagePost : style.post}
@@ -60,7 +65,15 @@ export default function Post({
                 <span className={liked ? style.likedLikeNumber : style.likeNumber}>{likeNumber}</span>
             </div>
 
-            {hasRights && <StandardIconButton label={'Plus d\'actions'} name="more_vert"/>}
+            {hasRights &&
+            <StandardIconButton
+                label={'Plus d\'actions'}
+                name="more_vert"
+                onClick={(e) => {
+                    setMenuAnchor(e.currentTarget);
+                    setIsMenuOpen(previous => !previous);
+                }}
+            />}
         </header>
 
         <Divider className={style.divider}/>
@@ -78,6 +91,23 @@ export default function Post({
                 lightboxLabel={`Lightbox contenant l'image du post ${title} de ${authorEmail}`}
             />
         }
+        <Menu
+            label="Actions sur le post"
+            open={isMenuOpen}
+            anchor={menuAnchor}
+            onClose={() => setIsMenuOpen(false)}
+        >
+            <MenuItem
+                label="Modifier"
+                leadingIcon={<MenuIcon name="edit"/>}
+                onClick={() => console.log('coucou')}
+            />
+            <MenuItem
+                label="Supprimer"
+                leadingIcon={<MenuIcon name="delete"/>}
+                onClick={() => console.log('coucou')}
+            />
+        </Menu>
     </article>;
 
 }

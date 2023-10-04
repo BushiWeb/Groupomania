@@ -1,25 +1,26 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 /**
  * Detects when the user clicks outside of a given element
  * @param elementRef
  * @param {Function} action - Action to execute when the user clicks outside
- * @param [observerElementRef=window] - Reference containing the element on which to apply the event listener.
+ * @param [observerElementRef] - Reference containing the element on which to apply the event listener,
+ *  contains window by default
  */
-export function useClickOutsideModal(elementRef, action, observerElementRef) {
-    function handleClickOutside(e) {
+export function useClickOutsideModal(elementRef, action, observerElementRef = { current: window }) {
+    const handleClickOutside = useCallback((e) => {
         if (!elementRef.current || elementRef.current.contains(e.target)) {
             return;
         }
         action(e);
-    }
+    }, [action, elementRef]);
 
     useEffect(() => {
         const observerNode = observerElementRef.current;
-        observerNode.addEventListener('click', handleClickOutside);
+        observerNode.addEventListener('click', handleClickOutside, true);
 
         return () => {
-            observerNode.removeEventListener('click', handleClickOutside);
+            observerNode.removeEventListener('click', handleClickOutside, true);
         };
     });
 }
