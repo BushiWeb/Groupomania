@@ -1,47 +1,60 @@
 import PropTypes from 'prop-types';
 import style from './Menu.module.css';
 import useMenu from './useMenu';
-import { menuContext } from './menuContext';
+import MenuItem from './MenuItem';
 
 /**
  * Menu component
  */
 export default function Menu({
-    children,
     label,
     open,
     anchor,
     className,
     onClose,
+    menuItems,
 }) {
     const {
         top,
         left,
         ref,
+        focusId,
+        handleFocus,
     } = useMenu({
         anchor,
         open,
         onClose,
+        items: menuItems,
     });
 
     if (!open) {
         return;
     }
 
-    return <menuContext.Provider value={onClose}>
-        <ul
-            className={`${style.menu} ${className}`}
-            aria-label={label}
-            role="menu"
-            style={{
-                '--menu-top': `${top}px`,
-                '--menu-left': `${left}px`,
-            }}
-            ref={ref}
-        >
-            {children}
-        </ul>
-    </menuContext.Provider>;
+    return <ul
+        className={`${style.menu} ${className}`}
+        aria-label={label}
+        role="menu"
+        style={{
+            '--menu-top': `${top}px`,
+            '--menu-left': `${left}px`,
+        }}
+        ref={ref}
+    >
+        {menuItems.map((value, index) => {
+            const props = {
+                ...value,
+                onClick: () => {
+                    value.onClick();
+                    onClose();
+                },
+                key: `${index}-${value.label}`,
+                focused: focusId === index,
+                onFocus: handleFocus,
+            };
+            return <MenuItem {...props}/>;
+        })}
+    </ul>;
 }
 
 Menu.defaultProps = {
@@ -64,4 +77,12 @@ Menu.propTypes = {
 
     /* Function to execute when closing the menu, required */
     onClose: PropTypes.func.isRequired,
+
+    /* Data to insert menu items, required */
+    menuItems: PropTypes.arrayOf(PropTypes.exact({
+        label: PropTypes.string.isRequired,
+        onClick: PropTypes.func.isRequired,
+        leadingIcon: PropTypes.element,
+        disabled: PropTypes.bool,
+    })).isRequired,
 };

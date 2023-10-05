@@ -6,7 +6,6 @@ import style from './Post.module.css';
 import { useFocusable } from '../../../hooks/useFocusable';
 import ImageWithLighbox from '../../../components/Image/ImageWithLightbox';
 import Menu from '../../../components/Menu/Menu';
-import MenuItem from '../../../components/Menu/MenuItem';
 import MenuIcon from '../../../components/Menu/MenuIcon';
 
 /** Displays one post data. */
@@ -96,18 +95,19 @@ export default function Post({
             open={isMenuOpen}
             anchor={menuAnchor}
             onClose={() => setIsMenuOpen(false)}
-        >
-            <MenuItem
-                label="Modifier"
-                leadingIcon={<MenuIcon name="edit"/>}
-                onClick={() => console.log('coucou')}
-            />
-            <MenuItem
-                label="Supprimer"
-                leadingIcon={<MenuIcon name="delete"/>}
-                onClick={() => console.log('coucou')}
-            />
-        </Menu>
+            menuItems={[
+                {
+                    label: 'Modifier',
+                    leadingIcon: <MenuIcon name="edit"/>,
+                    onClick: () => console.log('coucou'),
+                },
+                {
+                    label: 'Supprimer',
+                    leadingIcon: <MenuIcon name="delete"/>,
+                    onClick: () => console.log('coucou'),
+                },
+            ]}
+        />
     </article>;
 
 }
