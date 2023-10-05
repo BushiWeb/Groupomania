@@ -58,9 +58,17 @@ export default function useMenu({
         const menuBox = ref.current.getBoundingClientRect();
         const anchorBox = anchor.getBoundingClientRect();
 
+        let top = anchorBox.y + anchorBox.height + menuBox.height > window.innerHeight ?
+            Math.max(0, anchorBox.y - menuBox.height) :
+            anchorBox.y + anchorBox.height;
+
+        let left = anchorBox.x < window.innerWidth / 2 ?
+            Math.min(anchorBox.x, window.innerWidth - menuBox.width) :
+            Math.max(0, anchorBox.x - menuBox.width + anchorBox.width);
+
         setPosition({
-            top: anchorBox.y + anchorBox.height,
-            left: anchorBox.x - menuBox.width + anchorBox.width,
+            top,
+            left,
         });
 
     }, [open, anchor]);

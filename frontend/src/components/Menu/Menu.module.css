@@ -1,7 +1,10 @@
 @layer components {
     .menu {
+        --item-height: var(--size-12);
+
         min-width: var(--size-18);
         max-width: var(--size-19);
+        max-height: calc(100svh - var(--item-height));
         padding-block: var(--padding-2);
         padding-inline: 0;
         margin: 0;
@@ -22,10 +25,13 @@
         background-color: rgb(var(--color-surface-container));
 
         box-shadow: var(--elevation-2);
+
+        overflow: auto;
     }
 
     .menuItem {
-        height: var(--size-12);
+        height: var(--item-height);
+        flex-shrink: 0;
     }
 
     .button {
