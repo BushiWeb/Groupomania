@@ -1,12 +1,8 @@
 import PropTypes from 'prop-types';
-import StandardIconButton from '../../../components/icon-button/StandardIconButton/StandardIconButton';
 import Divider from '../../../components/Divider/Divider';
-import { createContext, useId, useState } from 'react';
+import { createContext, useId } from 'react';
 import style from './Post.module.css';
 import { useFocusable } from '../../../hooks/useFocusable';
-import ImageWithLighbox from '../../../components/Image/ImageWithLightbox';
-import Menu from '../../../components/Menu/Menu';
-import MenuIcon from '../../../components/Menu/MenuIcon';
 import PostHeader from './PostHeader';
 import PostContent from './PostContent';
 import PostImage from './PostImage';

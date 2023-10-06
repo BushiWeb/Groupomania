@@ -100,6 +100,9 @@ export default function useMenu({
     }
 
     function handleClickOutside(e) {
+        if (anchor.contains(e.target)) {
+            return;
+        }
         onClose();
     }
 

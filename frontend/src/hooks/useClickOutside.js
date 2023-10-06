@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 
 /**
  * Detects when the user clicks outside of a given element
@@ -8,19 +8,19 @@ import { useCallback, useEffect } from 'react';
  *  contains window by default
  */
 export function useClickOutsideModal(elementRef, action, observerElementRef = { current: window }) {
-    const handleClickOutside = useCallback((e) => {
-        if (!elementRef.current || elementRef.current.contains(e.target)) {
-            return;
-        }
-        action(e);
-    }, [action, elementRef]);
-
     useEffect(() => {
+        function handleClickOutside(e) {
+            if (!elementRef.current || elementRef.current.contains(e.target)) {
+                return;
+            }
+            action(e);
+        }
+
         const observerNode = observerElementRef.current;
-        observerNode.addEventListener('click', handleClickOutside, true);
+        observerNode.addEventListener('click', handleClickOutside);
 
         return () => {
-            observerNode.removeEventListener('click', handleClickOutside, true);
+            observerNode.removeEventListener('click', handleClickOutside);
         };
     });
 }
