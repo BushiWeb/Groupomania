@@ -28,7 +28,6 @@ export default function PostActionsMenu({
             },
         ]}
     />;
-
 }
 
 PostActionsMenu.defaultProps = {

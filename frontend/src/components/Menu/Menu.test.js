@@ -1,161 +1,231 @@
 import Menu from './Menu.jsx';
-import { screen, getByRole, getByText } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { render } from '../../utils/tests/test-wrapper.js';
 import userEvent from '../../utils/tests/user-event.js';
 import '@testing-library/jest-dom';
+import { useState } from 'react';
+import MenuIcon from './MenuIcon.jsx';
 
-describe.skip('List component test suite', () => {
-    const listLabel = 'test list';
-    const testParams = ['test=1', 'test=2'];
-    const listData = [
+describe('Menu component test suite', () => {
+    const menuLabel = 'Menu test';
+    const mockOnClose = jest.fn();
+    const iconName = 'icon name';
+    const menuButtons = [
         {
-            headline: 'Test',
-            supportingText: 'Supporting text Test',
-            link: `/test?${testParams[0]}`,
+            label: 'a',
+            onClick: jest.fn(),
         },
         {
-            headline: 'Test without supporting text',
-            link: `/test?${testParams[1]}`,
+            label: 'b',
+            leadingIcon: <MenuIcon name={iconName}/>,
+            onClick: jest.fn(),
+        },
+        {
+            label: 'c',
+            onClick: jest.fn(),
         },
     ];
 
-    it('should render', () => {
-        render(<Menu label={listLabel} data={listData}/>);
+    function MenuWrapper({
+        open = true,
+    }) {
+        const [anchorRef, setAnchorRef] = useState(null);
+        return <>
+            <div data-testid="anchor" ref={(node) => setAnchorRef(node)}></div>
+            <div data-testid="out"></div>
+            <Menu
+                label={menuLabel}
+                open={open}
+                anchor={anchorRef}
+                onClose={mockOnClose}
+                menuItems={menuButtons}
+            />
+        </>;
+    }
+
+    afterEach(() => {
+        mockOnClose.mockClear();
+        menuButtons[0].onClick.mockClear();
     });
 
-    it('should have the right label and role', () => {
-        render(<Menu label={listLabel} data={listData}/>);
-        screen.getByRole('list', { name: listLabel });
+    it('should render closed', () => {
+        render(<MenuWrapper open={false}/>);
+        expect(screen.queryByRole('menu', { name: menuLabel })).toBeNull();
     });
 
-    it('should have the right headline level', () => {
-        const headingLevel = 5;
-        render(<Menu label={listLabel} data={listData} headlineLevel={headingLevel}/>);
-        const titles = screen.getAllByRole('heading', { level: headingLevel });
-
-        expect(titles).toHaveLength(listData.length);
+    it('should render opened with the right label and actions', () => {
+        render(<MenuWrapper/>);
+        screen.getByRole('menu', { name: menuLabel });
+        const firstButton = screen.getByRole('button', { name: menuButtons[0].label });
+        expect(firstButton).toHaveFocus();
+        screen.getByRole('button', { name: menuButtons[1].label });
+        screen.getByText(iconName);
+        screen.getByRole('button', { name: menuButtons[2].label });
     });
 
-    it('should display the right list items', () => {
-        render(<Menu label={listLabel} data={listData}/>);
-        const listItems = screen.getAllByRole('listitem');
-
-        expect(listItems).toHaveLength(listData.length);
-
-        for (const index in listItems) {
-            const headline = getByRole(listItems[index], 'heading', { level: 2 });
-            expect(headline).toHaveTextContent(listData[index].headline);
-
-            if (listData[index].supportingText) {
-                getByText(listItems[index], listData[index].supportingText);
-            }
-
-            getByRole(listItems[index], 'link', { name: listData[index].headline });
-        }
-    });
-
-    it('should give the focus to the first list item on tab press', async () => {
+    it('should move the focus with the up / down arrows', async () => {
         const user = userEvent.setup();
-        render(<Menu label={listLabel} data={listData}/>);
-        const listItems = screen.getAllByRole('link');
+        render(<MenuWrapper/>);
+        const buttonElts = screen.getAllByRole('button');
 
-        expect(listItems[0]).not.toHaveFocus();
-
-        await user.tab();
-        expect(listItems[0]).toHaveFocus();
-    });
-
-    it('should move the focus with the arrow keys', async () => {
-        const user = userEvent.setup();
-        render(<Menu label={listLabel} data={listData}/>);
-        const listItems = screen.getAllByRole('link');
-
-        expect(listItems[0]).not.toHaveFocus();
-
-        await user.tab();
-        expect(listItems[0]).toHaveFocus();
+        expect(buttonElts[0]).toHaveFocus();
 
         await user.keyboard('{ArrowUp}');
-        expect(listItems[0]).toHaveFocus();
+        expect(buttonElts[0]).toHaveFocus();
 
         await user.keyboard('{ArrowDown}');
-        expect(listItems[0]).not.toHaveFocus();
-        expect(listItems[1]).toHaveFocus();
+        expect(buttonElts[0]).not.toHaveFocus();
+        expect(buttonElts[1]).toHaveFocus();
 
         await user.keyboard('{ArrowDown}');
-        expect(listItems[1]).toHaveFocus();
-    });
+        expect(buttonElts[1]).not.toHaveFocus();
+        expect(buttonElts[2]).toHaveFocus();
 
-    it('should give the focus to the right element event when the first element gains it using a click', async () => {
-        const user = userEvent.setup();
-        render(<Menu label={listLabel} data={listData}/>);
-        const listItems = screen.getAllByRole('link');
-
-        await user.click(listItems[1]);
-        expect(listItems[1]).toHaveFocus();
+        await user.keyboard('{ArrowDown}');
+        expect(buttonElts[2]).toHaveFocus();
 
         await user.keyboard('{ArrowUp}');
-        expect(listItems[0]).toHaveFocus();
+        expect(buttonElts[2]).not.toHaveFocus();
+        expect(buttonElts[1]).toHaveFocus();
+    });
+
+    it('should move the focus with the left / right arrows', async () => {
+        const user = userEvent.setup();
+        render(<MenuWrapper/>);
+        const buttonElts = screen.getAllByRole('button');
+
+        expect(buttonElts[0]).toHaveFocus();
+
+        await user.keyboard('{ArrowLeft}');
+        expect(buttonElts[0]).toHaveFocus();
+
+        await user.keyboard('{ArrowRight}');
+        expect(buttonElts[0]).not.toHaveFocus();
+        expect(buttonElts[1]).toHaveFocus();
+
+        await user.keyboard('{ArrowRight}');
+        expect(buttonElts[1]).not.toHaveFocus();
+        expect(buttonElts[2]).toHaveFocus();
+
+        await user.keyboard('{ArrowRight}');
+        expect(buttonElts[2]).toHaveFocus();
+
+        await user.keyboard('{ArrowLeft}');
+        expect(buttonElts[2]).not.toHaveFocus();
+        expect(buttonElts[1]).toHaveFocus();
+    });
+
+    it('should move the focus with the home / end keys', async () => {
+        const user = userEvent.setup();
+        render(<MenuWrapper/>);
+        const buttonElts = screen.getAllByRole('button');
+
+        expect(buttonElts[0]).toHaveFocus();
+
+        await user.keyboard('{End}');
+        expect(buttonElts[0]).not.toHaveFocus();
+        expect(buttonElts[2]).toHaveFocus();
+
+        await user.keyboard('{Home}');
+        expect(buttonElts[2]).not.toHaveFocus();
+        expect(buttonElts[0]).toHaveFocus();
+    });
+
+    it('should move the focus with the letters keys', async () => {
+        const user = userEvent.setup();
+        render(<MenuWrapper/>);
+        const buttonElts = screen.getAllByRole('button');
+
+        expect(buttonElts[0]).toHaveFocus();
+
+        await user.keyboard(`{${menuButtons[2].label}}`);
+        expect(buttonElts[0]).not.toHaveFocus();
+        expect(buttonElts[2]).toHaveFocus();
+
+        await user.keyboard(`{${menuButtons[1].label}}`);
+        expect(buttonElts[2]).not.toHaveFocus();
+        expect(buttonElts[1]).toHaveFocus();
+
+        await user.keyboard(`{${menuButtons[0].label}}`);
+        expect(buttonElts[1]).not.toHaveFocus();
+        expect(buttonElts[0]).toHaveFocus();
     });
 
     it('should synchronyse between tab focus and arrow focus', async () => {
         const user = userEvent.setup();
-        render(<Menu label={listLabel} data={listData}/>);
-        const listItems = screen.getAllByRole('link');
+        render(<MenuWrapper/>);
+        const buttonElts = screen.getAllByRole('button');
 
-        expect(listItems[0]).not.toHaveFocus();
-
-        await user.tab();
-        expect(listItems[0]).toHaveFocus();
+        expect(buttonElts[0]).toHaveFocus();
 
         await user.tab();
-        expect(listItems[0]).not.toHaveFocus();
-        expect(listItems[1]).toHaveFocus();
+        expect(buttonElts[0]).not.toHaveFocus();
+        expect(buttonElts[1]).toHaveFocus();
 
-        await user.keyboard('{ArrowUp}');
-        expect(listItems[1]).not.toHaveFocus();
-        expect(listItems[0]).toHaveFocus();
-
-        await user.tab();
-        await user.tab();
-        expect(listItems[0]).not.toHaveFocus();
-        expect(listItems[1]).not.toHaveFocus();
-
-        await user.keyboard('{ArrowUp}');
-        expect(listItems[0]).not.toHaveFocus();
-        expect(listItems[1]).not.toHaveFocus();
+        await user.keyboard('{ArrowDown}');
+        expect(buttonElts[1]).not.toHaveFocus();
+        expect(buttonElts[2]).toHaveFocus();
 
         await user.tab({ shift: true });
-        expect(listItems[1]).toHaveFocus();
+        expect(buttonElts[2]).not.toHaveFocus();
+        expect(buttonElts[1]).toHaveFocus();
+
+        await user.keyboard('{ArrowUp}');
+        expect(buttonElts[1]).not.toHaveFocus();
+        expect(buttonElts[0]).toHaveFocus();
     });
 
-    it('should be activated by the enter key', async () => {
+    it('should prevent escaping using tab', async () => {
         const user = userEvent.setup();
-        render(<Menu label={listLabel} data={listData}/>);
-        const listItems = screen.getAllByRole('link');
+        render(<MenuWrapper/>);
+        const buttonElts = screen.getAllByRole('button');
 
-        expect(listItems[0]).not.toHaveFocus();
+        expect(buttonElts[0]).toHaveFocus();
+
+        await user.tab({ shift: true });
+        expect(buttonElts[0]).toHaveFocus();
+
+        await user.keyboard('{End}');
+        expect(buttonElts[0]).not.toHaveFocus();
+        expect(buttonElts[2]).toHaveFocus();
 
         await user.tab();
-        expect(listItems[0]).toHaveFocus();
-
-        await user.keyboard('{Enter}');
-        const testElement = screen.getByTestId('search-param');
-        expect(testElement).toHaveTextContent(testParams[0]);
+        expect(buttonElts[2]).toHaveFocus();
     });
 
-    it('should be activated by the space key', async () => {
+    it('should execute the action and execute onClose when clicking on a button', async () => {
         const user = userEvent.setup();
-        render(<Menu label={listLabel} data={listData}/>);
-        const listItems = screen.getAllByRole('link');
+        render(<MenuWrapper/>);
+        const buttonElt = screen.getByRole('button', { name: menuButtons[0].label });
 
-        expect(listItems[0]).not.toHaveFocus();
+        await user.click(buttonElt);
+        expect(menuButtons[0].onClick).toHaveBeenCalled();
+        expect(mockOnClose).toHaveBeenCalled();
+    });
 
-        await user.tab();
-        expect(listItems[0]).toHaveFocus();
+    it('should execute onClose when pressing Escape', async () => {
+        const user = userEvent.setup();
+        render(<MenuWrapper/>);
 
-        await user.keyboard('{ }');
-        const testElement = screen.getByTestId('search-param');
-        expect(testElement).toHaveTextContent(testParams[0]);
+        await user.keyboard('{Escape}');
+        expect(mockOnClose).toHaveBeenCalled();
+    });
+
+    it('should execute onClose when clicking out', async () => {
+        const user = userEvent.setup();
+        render(<MenuWrapper/>);
+        const outElt = screen.getByTestId('out');
+
+        await user.click(outElt);
+        expect(mockOnClose).toHaveBeenCalled();
+    });
+
+    it('should not execute onClose when clicking the anchor', async () => {
+        const user = userEvent.setup();
+        render(<MenuWrapper/>);
+        const anchorElt = screen.getByTestId('anchor');
+
+        await user.click(anchorElt);
+        expect(mockOnClose).not.toHaveBeenCalled();
     });
 });

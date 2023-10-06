@@ -2,6 +2,16 @@
 import { useRef, useState } from 'react';
 
 export const NO_CONTROL = 'no-control';
+const NAVIGATION_KEYS = [
+    'ArrowDown',
+    'ArrowUp',
+    'ArrowLeft',
+    'ArrowRight',
+    'PageDown',
+    'PageUp',
+    'Home',
+    'End',
+];
 
 /**
  * Allows to use the arrow key navigation within a list of elements.
@@ -94,13 +104,6 @@ export function useArrowNavigation(elements, {
             return;
         }
 
-        if (useFocusTrap && e.key === 'Tab') {
-            if (savedFocusId.current === 0 && e.shiftKey || savedFocusId.current === elementNumber - 1 && !e.shiftKey) {
-                e.preventDefault();
-                return;
-            }
-        }
-
         if (useFirstLetter && Array.isArray(elements) && /^\w$/.test(e.key)) {
             e.preventDefault();
             e.stopPropagation();
@@ -108,6 +111,17 @@ export function useArrowNavigation(elements, {
             savedFocusId.current = elements.findIndex((value) => testRegexp.test(value));
             setFocusId(savedFocusId.current);
             return;
+        }
+
+        if (useFocusTrap && (NAVIGATION_KEYS.includes(e.key) || /^\w$/.test(e.key))) {
+            e.stopPropagation();
+        }
+
+        if (useFocusTrap && e.key === 'Tab') {
+            if (savedFocusId.current === 0 && e.shiftKey || savedFocusId.current === elementNumber - 1 && !e.shiftKey) {
+                e.preventDefault();
+                return;
+            }
         }
     }
 

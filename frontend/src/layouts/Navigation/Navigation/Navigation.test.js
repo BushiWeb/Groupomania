@@ -137,8 +137,6 @@ describe('Navigation component test suite', () => {
         const link1 = screen.getByRole('tab', { name: links[0].label });
         const link2 = screen.getByRole('tab', { name: links[1].label });
 
-        screen.debug();
-
         expect(link1).toHaveAttribute('aria-selected', 'true');
         expect(link2).toHaveAttribute('aria-selected', 'false');
     });
