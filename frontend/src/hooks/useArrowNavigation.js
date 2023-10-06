@@ -15,6 +15,7 @@ export const NO_CONTROL = 'no-control';
  *  if the value is 'no-control' (constant NO_CONTROL), then no need to use the Ctrl key
  * @param {number} [initialFocus=null] - Index of the focused element when the container first renders
  * @param {number} [useFirstLetter=false] - Weither to use the first letter of the elements to navigate
+ * @param {number} [useFocusTrap=false] - Weither to trap the focus in the list, avoiding leaving the element using tab
  * @returns {{handleBlur, handleFocus, handleKeyDown, focusId, setFocusId}} Returns an object containing :
  *  focusId, the id of the focused element,
  *  handleFocus(id), the function to update the focused element, to give to each listItem,
@@ -28,6 +29,7 @@ export function useArrowNavigation(elements, {
     useLeftRight = false,
     initialFocus = null,
     useFirstLetter = false,
+    useFocusTrap = false,
 } = {}) {
     const [focusId, setFocusId] = useState(initialFocus);
     const savedFocusId = useRef(null);
@@ -92,7 +94,14 @@ export function useArrowNavigation(elements, {
             return;
         }
 
-        if (useFirstLetter && Array.isArray(elements)) {
+        if (useFocusTrap && e.key === 'Tab') {
+            if (savedFocusId.current === 0 && e.shiftKey || savedFocusId.current === elementNumber - 1 && !e.shiftKey) {
+                e.preventDefault();
+                return;
+            }
+        }
+
+        if (useFirstLetter && Array.isArray(elements) && /^\w$/.test(e.key)) {
             e.preventDefault();
             e.stopPropagation();
             const testRegexp = new RegExp(`^${e.key}`, 'i');

@@ -8,8 +8,10 @@ describe('Tooltip component test suite', () => {
     const label1 = 'test1', label2 = 'test2';
 
     function TooltipContainer({ label }) {
-        const ref = useTooltip(label);
-        return <div tabIndex={0} ref={ref}>{label} container</div>;
+        const {
+            anchorEventHandlers,
+        } = useTooltip(label);
+        return <div tabIndex={0} {...anchorEventHandlers }>{label} container</div>;
     }
 
     function RenderContainer() {

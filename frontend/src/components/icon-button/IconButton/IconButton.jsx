@@ -13,7 +13,9 @@ export default function IconButton({
     disabled, autoFocus, onClick, label, name, className, toggle, stateLayerColor, ...other
 }) {
     const isDarkTheme = useSelector(selectIsDarkTheme);
-    const ref = useTooltip(label);
+    const {
+        anchorEventHandlers,
+    } = useTooltip(label);
 
     return (
         <Button
@@ -24,7 +26,7 @@ export default function IconButton({
             classNames={className}
             stateLayerColor={stateLayerColor}
             aria-pressed={toggle}
-            ref={ref}
+            {...anchorEventHandlers}
             {...other}
         >
             <Icon

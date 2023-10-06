@@ -11,7 +11,9 @@ export default function Checkbox({
     checked, onChange, disabled, autoFocus, label, className, ...other
 }) {
     const checkboxRef = useRef();
-    const ref = useTooltip(label);
+    const {
+        anchorEventHandlers,
+    } = useTooltip(label);
 
     function handleClickTarget(e) {
         checkboxRef.current.focus();
@@ -31,7 +33,7 @@ export default function Checkbox({
         active={!disabled}
         focus={!disabled}
         onClick={!disabled ? handleClickTarget : undefined}
-        {...label && { ref }}
+        {...label && { ...anchorEventHandlers }}
     >
         <input
             type="checkbox"

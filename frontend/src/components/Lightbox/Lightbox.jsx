@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { useClickOutsideModal } from '../../hooks/useClickOutside';
 import TonalIconButton from '../icon-button/TonalIconButton/TonalIconButton';
 import { useDialog } from '../../hooks/useDialog';
+import TooltipWrapper from '../../features/tooltip/TooltipWrapper';
 
 /**
  * Displays a modal lightbox containing an image with a close icon.
@@ -11,7 +12,11 @@ import { useDialog } from '../../hooks/useDialog';
 export default function Lightbox({
     open, onClose, src, alt, ...props
 }) {
-    const { dialogRef, ref } = useDialog(open);
+    const {
+        dialogRef,
+        ref,
+        dialogEventHandlers,
+    } = useDialog(open);
     const containerRef = useRef(null);
 
     useClickOutsideModal(containerRef, () => {
@@ -21,16 +26,24 @@ export default function Lightbox({
         }
     }, ref);
 
-    return <dialog ref={dialogRef} onClose={onClose} className={style.lightbox} {...props}>
-        <div className={style.wrapper} ref={containerRef}>
-            <img src={src} alt={alt} className={style.image} tabIndex="-1"/>
-            <TonalIconButton
-                label="Fermer la lightbox"
-                onClick={() => ref.current.close()}
-                name="close"
-                className={style.closeButton}
-            />
-        </div>
+    return <dialog
+        ref={dialogRef}
+        onClose={onClose}
+        className={style.lightbox}
+        {...dialogEventHandlers}
+        {...props}
+    >
+        <TooltipWrapper>
+            <div className={style.wrapper} ref={containerRef}>
+                <img src={src} alt={alt} className={style.image} tabIndex="-1"/>
+                <TonalIconButton
+                    label="Fermer la lightbox"
+                    onClick={() => ref.current.close()}
+                    name="close"
+                    className={style.closeButton}
+                />
+            </div>
+        </TooltipWrapper>
     </dialog>;
 }
 

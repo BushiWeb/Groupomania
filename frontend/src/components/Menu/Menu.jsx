@@ -15,11 +15,16 @@ export default function Menu({
     menuItems,
 }) {
     const {
-        top,
-        left,
+        position: {
+            top,
+            left,
+        },
         ref,
         focusId,
-        handleFocus,
+        menuItemsEventHandlers: {
+            handleFocus,
+        },
+        menuEventHandlers,
     } = useMenu({
         anchor,
         open,
@@ -40,17 +45,18 @@ export default function Menu({
             '--menu-left': `${left}px`,
         }}
         ref={ref}
+        {...menuEventHandlers}
     >
         {menuItems.map((value, index) => {
             const props = {
                 ...value,
+                onFocus: handleFocus(index),
                 onClick: () => {
                     value.onClick();
                     onClose();
                 },
                 key: `${index}-${value.label}`,
                 focused: focusId === index,
-                onFocus: handleFocus,
             };
             return <MenuItem {...props}/>;
         })}

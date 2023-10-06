@@ -6,15 +6,21 @@ import { tabbable } from 'tabbable';
 /**
  * Handles controlled opening and closing of a dialog element.
  * @param {boolean} isOpen
- * @returns Returns an object containing the ref function to give to the element (dialogRef) and
- *  the ref containing the node (ref).
+ * @returns {
+ *  ref,
+ *  dialogRef: Function,
+ *  dialogEventHandlers: {
+ *      onKeyDown: Function,
+ *  },
+ * } Returns an object, dialogRef is to be given to the dialog as a ref,
+ *  ref is the reference containing that said dialog.
  */
 export function useDialog(isOpen) {
     const ref = useRef(null);
     const tabbableElements = useRef(null);
 
     // Use the mutation observer to recalculate the tabbable elements when the dialog content changes.
-    function handleDOMUpdate(record) {
+    function handleDOMUpdate() {
         tabbableElements.current = tabbable(ref.current);
     }
     const { current: mutationObserver } = useRef(new MutationObserver(handleDOMUpdate));
@@ -43,7 +49,6 @@ export function useDialog(isOpen) {
     const dialogRef = useCallback(node => {
         if (ref.current) {
             // Removes focus trap
-            ref.current.removeEventListener('keydown', handleTab);
             mutationObserver.disconnect();
         }
 
@@ -58,7 +63,6 @@ export function useDialog(isOpen) {
             // Add focus trap
             if (node.open) {
                 tabbableElements.current = tabbable(node);
-                node.addEventListener('keydown', handleTab);
                 mutationObserver.observe(node, {
                     subtree: true,
                     childList: true,
@@ -82,5 +86,11 @@ export function useDialog(isOpen) {
         ref.current = node;
     }, [tabbableElements, isOpen, mutationObserver]);
 
-    return { dialogRef, ref };
+    return {
+        dialogRef,
+        ref,
+        dialogEventHandlers: {
+            onKeyDown: handleTab,
+        },
+    };
 }

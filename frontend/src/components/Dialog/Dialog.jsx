@@ -10,9 +10,20 @@ import TooltipWrapper from '../../features/tooltip/TooltipWrapper';
 export default function Dialog({
     open, onClose, label, children, className, onCancel, ...props
 }) {
-    const { dialogRef } = useDialog(open);
+    const {
+        dialogRef,
+        dialogEventHandlers,
+    } = useDialog(open);
 
-    return <dialog ref={dialogRef} onClose={onClose} onCancel={onCancel} className={`${style.dialog} ${className}`} aria-label={label} {...props}>
+    return <dialog
+        ref={dialogRef}
+        onClose={onClose}
+        onCancel={onCancel}
+        className={`${style.dialog} ${className}`}
+        aria-label={label}
+        {...dialogEventHandlers}
+        {...props}
+    >
         <TooltipWrapper>
             {children}
         </TooltipWrapper>

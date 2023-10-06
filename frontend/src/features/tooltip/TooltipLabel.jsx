@@ -6,11 +6,14 @@ import useTooltipLabel from './useTooltipLabel';
  */
 export default function TooltipLabel() {
     const {
-        open,
-        value,
         ref,
-        top,
-        left,
+        value,
+        open,
+        position: {
+            top,
+            left,
+        },
+        labelEventHandlers,
     } = useTooltipLabel();
 
     if (open) {
@@ -23,6 +26,7 @@ export default function TooltipLabel() {
                 '--tooltip-top': `${top}px`,
                 '--tooltip-left': `${left}px`,
             }}
+            {...labelEventHandlers}
         >{value}</div>;
     }
 

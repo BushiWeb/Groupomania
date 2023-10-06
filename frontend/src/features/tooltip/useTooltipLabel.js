@@ -1,5 +1,5 @@
 import {
-    useCallback, useContext, useEffect, useLayoutEffect, useRef, useState,
+    useContext, useEffect, useLayoutEffect, useRef, useState,
 } from 'react';
 import { tooltipContext } from './tooltipContext.js';
 
@@ -7,10 +7,19 @@ const TOOLTIP_MARGIN = 4;
 
 /**
  * Handles tooltip label behavior.
- * @returns Returns an object containing:
- *  the value of the tooltip
- *  its state isOpen and its ref
- *  and the value for the top and left css properties.
+ * @returns {
+ *  ref,
+ *  value: string,
+ *  open: boolean,
+ *  position: {
+ *      top: number,
+ *      left: number,
+ *  },
+ *  labelEventHandlers: {
+ *      onPointerEnter: Function,
+ *      onPointerLeave: Function,
+ *  },
+ * }
  */
 export default function useTooltipLabel() {
     const ref = useRef(null);
@@ -19,7 +28,7 @@ export default function useTooltipLabel() {
         anchor,
         value,
     } = useContext(tooltipContext);
-    const [{ width, height }, setDimensions] = useState({ width: 0, height: 0 });
+    const [{ top, left }, setPosition] = useState({ top: 0, left: 0 });
 
     // Controlling the final state of the tooltip and the timing
     const [labelHover, setLabelHover] = useState(false);
@@ -42,82 +51,65 @@ export default function useTooltipLabel() {
         return;
     }, [isOpen, labelHover]);
 
-    /* Update tooltip size when changing value */
+    /* Update tooltip position when opening or changing value */
     useLayoutEffect(() => {
-        const tooltipCoordinates = ref.current?.getBoundingClientRect();
-        if (!tooltipCoordinates) {
+        if (!ref.current) {
             return;
         }
 
-        setDimensions({
-            width: tooltipCoordinates.width,
-            height: tooltipCoordinates.height,
+        if (!anchor) {
+            setPosition({
+                top: 0,
+                left: 0,
+            });
+            return;
+        }
+
+        const tooltipBox = ref.current.getBoundingClientRect();
+        const anchorBox = anchor.getBoundingClientRect();
+
+        // Place the element underneath the anchor except if it overflows
+        let top = anchorBox.y + anchorBox.height + TOOLTIP_MARGIN;
+        if (top + tooltipBox.height * 2 > window.innerHeight) {
+            top = anchorBox.y - tooltipBox.height - TOOLTIP_MARGIN;
+        }
+
+        // Center tooltip on the element but make sure it doesn't overflow from the viewport
+        let left = Math.max(
+            TOOLTIP_MARGIN,
+            Math.min(
+                anchorBox.x + anchorBox.width / 2 - tooltipBox.width / 2,
+                window.innerWidth - TOOLTIP_MARGIN - tooltipBox.width
+            )
+        );
+
+        setPosition({
+            top,
+            left,
         });
-    }, [value]);
+    }, [anchor, value, open]);
 
     /* Keeps the tooltip visible when hovering the tooltip */
-    const handlePointerEnter = useCallback(() => {
+    function handlePointerEnter() {
         setLabelHover(true);
-    }, [setLabelHover]);
+    }
 
     /* Closes the tooltip when exiting the tooltip */
-    const handlePointerLeave = useCallback(() => {
+    function handlePointerLeave() {
         setLabelHover(false);
-    }, [setLabelHover]);
-
-    /* Creates the ref and adds the event handlers */
-    const labelRef = useCallback((node) => {
-        if (ref.current) {
-            ref.current.removeEventListener('pointerenter', handlePointerEnter);
-            ref.current.removeEventListener('pointerleave', handlePointerLeave);
-        }
-
-        if (node) {
-            const tooltipCoordinates = node.getBoundingClientRect();
-            setDimensions({
-                width: tooltipCoordinates.width,
-                height: tooltipCoordinates.height,
-            });
-
-            node.addEventListener('pointerenter', handlePointerEnter);
-            node.addEventListener('pointerleave', handlePointerLeave);
-        }
-
-        ref.current = node;
-    }, [handlePointerEnter, handlePointerLeave]);
-
-    if (!anchor) {
-        return {
-            ref: labelRef,
-            value,
-            isOpen,
-        };
-    }
-
-    // Get the tooltip position
-    let top, left;
-    const {
-        x: ax, y: ay, width: aw, height: ah,
-    } = anchor.getBoundingClientRect();
-
-    top = ay + ah + TOOLTIP_MARGIN;
-    left = ax + aw / 2 - width / 2;
-
-    if (top + height * 2 > window.innerHeight) {
-        top = ay - height - TOOLTIP_MARGIN;
-    }
-
-    if (left < 0) {
-        left = TOOLTIP_MARGIN;
-    } else if (left + width + TOOLTIP_MARGIN > window.innerWidth) {
-        left = window.innerWidth - TOOLTIP_MARGIN - width;
     }
 
     return {
-        ref: labelRef,
+        ref,
         value,
         open,
-        top,
-        left,
+        position: {
+            top,
+            left,
+        },
+        labelEventHandlers: {
+            onPointerEnter: handlePointerEnter,
+            onPointerLeave: handlePointerLeave,
+        },
     };
 }
