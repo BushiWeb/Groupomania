@@ -1,12 +1,17 @@
 import PropTypes from 'prop-types';
 import StandardIconButton from '../../../components/icon-button/StandardIconButton/StandardIconButton';
 import Divider from '../../../components/Divider/Divider';
-import { useId, useState } from 'react';
+import { createContext, useId, useState } from 'react';
 import style from './Post.module.css';
 import { useFocusable } from '../../../hooks/useFocusable';
 import ImageWithLighbox from '../../../components/Image/ImageWithLightbox';
 import Menu from '../../../components/Menu/Menu';
 import MenuIcon from '../../../components/Menu/MenuIcon';
+import PostHeader from './PostHeader';
+import PostContent from './PostContent';
+import PostImage from './PostImage';
+
+export const postContext = createContext();
 
 /** Displays one post data. */
 export default function Post({
@@ -24,91 +29,50 @@ export default function Post({
     onLike,
     ...props
 }) {
-    const headerId = useId();
+    const titleId = useId();
     const messageId = useId();
     const emailId = useId();
     const dateId = useId();
-    const formatedDate = new Date(date).toLocaleString('fr-FR', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        weekday: undefined,
-        hour: '2-digit',
-        minute: '2-digit',
-        second: undefined,
-        timeZoneName: undefined,
-    });
 
     const postRef = useFocusable(focused);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [menuAnchor, setMenuAnchor] = useState(null);
 
-    return <article
-        className={imageUrl ? style.imagePost : style.post}
-        tabIndex={0}
-        ref={postRef}
-        onFocus={props.onFocus}
-        aria-posinset={posinset}
-        aria-setsize={setsize}
-        aria-labelledby={headerId}
-        aria-describedby={`${emailId} ${dateId} ${messageId}`}
-    >
-        <header className={style.header}>
-            <div className={style.postInfo}>
-                <address className={style.author} id={emailId}>{authorEmail}</address>
-                <time className={style.date} dateTime={date} id={dateId}>{formatedDate}</time>
-            </div>
-
-            <div className={style.like}>
-                <StandardIconButton label={`${liked ? 'Ne plus aimer' : 'Aimer'}, ${likeNumber} j'aimes`} name="favorite" toggle={liked} onClick={onLike}/>
-                <span className={liked ? style.likedLikeNumber : style.likeNumber}>{likeNumber}</span>
-            </div>
-
-            {hasRights &&
-            <StandardIconButton
-                label={'Plus d\'actions'}
-                name="more_vert"
-                onClick={(e) => {
-                    setMenuAnchor(e.currentTarget);
-                    setIsMenuOpen(previous => !previous);
-                }}
-            />}
-        </header>
-
-        <Divider className={style.divider}/>
-
-        <div className={style.content}>
-            <h2 className={style.title} id={headerId}>{title}</h2>
-            <p className={style.message} id={messageId}>{message}</p>
-        </div>
-
-        {
-            imageUrl &&
-            <ImageWithLighbox
-                className={style.image}
-                src={imageUrl}
-                lightboxLabel={`Lightbox contenant l'image du post ${title} de ${authorEmail}`}
+    return <postContext.Provider value={{
+        title,
+        titleId,
+        message,
+        messageId,
+        authorEmail,
+        emailId,
+        date,
+        dateId,
+        imageUrl,
+        liked,
+        likeNumber,
+        hasRights,
+    }}>
+        <article
+            className={imageUrl ? style.imagePost : style.post}
+            tabIndex={0}
+            ref={postRef}
+            onFocus={props.onFocus}
+            aria-posinset={posinset}
+            aria-setsize={setsize}
+            aria-labelledby={titleId}
+            aria-describedby={`${emailId} ${dateId} ${messageId}`}
+        >
+            <PostHeader
+                deletePost={(e) => console.log('delete')}
+                updatePost={(e) => console.log('update')}
+                onLike={onLike}
             />
-        }
-        <Menu
-            label="Actions sur le post"
-            open={isMenuOpen}
-            anchor={menuAnchor}
-            onClose={() => setIsMenuOpen(false)}
-            menuItems={[
-                {
-                    label: 'Modifier',
-                    leadingIcon: <MenuIcon name="edit"/>,
-                    onClick: () => console.log('coucou'),
-                },
-                {
-                    label: 'Supprimer',
-                    leadingIcon: <MenuIcon name="delete"/>,
-                    onClick: () => console.log('coucou'),
-                },
-            ]}
-        />
-    </article>;
+
+            <Divider className={style.divider}/>
+
+            <PostContent/>
+
+            <PostImage/>
+        </article>
+    </postContext.Provider>;
 
 }
 
