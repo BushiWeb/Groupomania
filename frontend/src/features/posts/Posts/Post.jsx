@@ -1,16 +1,18 @@
 import PropTypes from 'prop-types';
 import Divider from '../../../components/Divider/Divider';
-import { createContext, useId } from 'react';
+import { createContext, useId, useState } from 'react';
 import style from './Post.module.css';
 import { useFocusable } from '../../../hooks/useFocusable';
 import PostHeader from './PostHeader';
 import PostContent from './PostContent';
 import PostImage from './PostImage';
+import DeletePostDialog from '../DeletePostDialog/DeletePostDialog';
 
 export const postContext = createContext();
 
 /** Displays one post data. */
 export default function Post({
+    postId,
     title,
     message,
     authorEmail,
@@ -31,6 +33,8 @@ export default function Post({
     const dateId = useId();
 
     const postRef = useFocusable(focused);
+
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
     return <postContext.Provider value={{
         title,
@@ -57,7 +61,7 @@ export default function Post({
             aria-describedby={`${emailId} ${dateId} ${messageId}`}
         >
             <PostHeader
-                deletePost={(e) => console.log('delete')}
+                deletePost={(e) => setIsDeleteDialogOpen(true)}
                 updatePost={(e) => console.log('update')}
                 onLike={onLike}
             />
@@ -67,6 +71,14 @@ export default function Post({
             <PostContent/>
 
             <PostImage/>
+
+            <DeletePostDialog
+                onClose={() => setIsDeleteDialogOpen(false)}
+                open={isDeleteDialogOpen}
+                postDate={date}
+                postId={postId}
+                postTitle={title}
+            />
         </article>
     </postContext.Provider>;
 
@@ -82,6 +94,9 @@ Post.defaultProps = {
 };
 
 Post.propTypes = {
+    /** Id of the post, required */
+    postId: PropTypes.number.isRequired,
+
     /** Title of the post */
     title: PropTypes.string.isRequired,
 

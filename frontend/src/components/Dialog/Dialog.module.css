@@ -50,6 +50,8 @@
     }
 
     .content {
+        composes: body-large from '../../assets/styles/patterns/typography.module.css';
+
         overflow: auto;
         padding-inline: var(--padding-6);
         padding-block-start: var(--padding-4);

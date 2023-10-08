@@ -37,6 +37,7 @@ export default function PostsList({
             postId,
         }, index) => {
             const postData = {
+                postId,
                 title,
                 message,
                 authorEmail,
