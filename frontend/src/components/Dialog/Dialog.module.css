@@ -3,7 +3,7 @@
 @layer components {
     .dialog[open] {
         min-width: var(--size-19);
-        max-width: var(--size-35);
+        max-width: min(var(--size-35), 90vw);
         padding: 0;
 
         background-color: rgb(var(--color-surface-container-high));
