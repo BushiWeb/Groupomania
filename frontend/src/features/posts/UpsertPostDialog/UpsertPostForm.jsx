@@ -1,4 +1,4 @@
-import style from './CreatePostDialog.module.css';
+import style from './UpsertPostDialog.module.css';
 import PropTypes from 'prop-types';
 import { ACTIONS } from './formReducer';
 import TextField from '../../../components/form-inputs/TextField/TextField';
@@ -7,7 +7,7 @@ import ImageField from '../../../components/form-inputs/ImageField/ImageField';
 import { useRef } from 'react';
 
 /** Form to create a post, with or without image */
-export default function CreatePostForm({
+export default function UpsertPostForm({
     title, titleError, message, messageError, image, imageError, dispatch,
 }) {
     const imageRef = useRef(null);
@@ -33,7 +33,7 @@ export default function CreatePostForm({
         <ImageField
             ref={imageRef}
             className={style.imageInput}
-            empty={!image}
+            image={image}
             onChange={(file) => {
                 dispatch({ type: ACTIONS.setImage, payload: file });
                 dispatch({ type: ACTIONS.removeImageError });
@@ -43,7 +43,7 @@ export default function CreatePostForm({
     </form>;
 }
 
-CreatePostForm.defaultProps = {
+UpsertPostForm.defaultProps = {
     title: '',
     titleError: '',
     message: '',
@@ -52,7 +52,7 @@ CreatePostForm.defaultProps = {
     imageError: '',
 };
 
-CreatePostForm.propTypes = {
+UpsertPostForm.propTypes = {
     /* Value of the title field*/
     title: PropTypes.string,
 
@@ -65,8 +65,8 @@ CreatePostForm.propTypes = {
     /* Error message for the message field */
     messageError: PropTypes.string,
 
-    /* Value for the image field */
-    image: PropTypes.instanceOf(File),
+    /* Value for the image field, either a file object or a file URL */
+    image: PropTypes.oneOfType([PropTypes.instanceOf(File), PropTypes.string]),
 
     /* Image field error message */
     imageError: PropTypes.string,

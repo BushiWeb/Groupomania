@@ -22,6 +22,18 @@ export const initialState = {
     globalError: undefined,
 };
 
+export function initState(initialArg) {
+    return {
+        title: initialArg?.title || '',
+        titleError: undefined,
+        message: initialArg?.message || '',
+        messageError: undefined,
+        image: initialArg?.imageUrl || null,
+        imageError: undefined,
+        globalError: undefined,
+    };
+}
+
 export function reducer(state, action) {
     switch (action.type) {
     case ACTIONS.setTitle:

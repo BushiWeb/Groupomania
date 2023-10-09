@@ -5,7 +5,7 @@ import {
 } from 'react';
 import InfinitePostFeed from '../../features/posts/InifinitePostFeed/InfinitePostFeed';
 import { fabContext } from '../../context/fabContext';
-import CreatePostDialog from '../../features/posts/CreatePostDialog/CreatePostDialog';
+import UpsertPostDialog from '../../features/posts/UpsertPostDialog/UpsertPostDialog';
 
 /** Home page, inserted within the global UI */
 export default function Home() {
@@ -39,6 +39,6 @@ export default function Home() {
     return <main id={id} className={`${className} ${style.home}`} ref={mainRef}>
         <h1 className={style.heading}>Accueil</h1>
         <InfinitePostFeed containerElt={containerRef} errorClassName={style.error} className={style.posts}/>
-        {isCreatePostOpen && <CreatePostDialog isOpen={isCreatePostOpen} setIsOpen={setIsCreatePostOpen}/>}
+        {isCreatePostOpen && <UpsertPostDialog isOpen={isCreatePostOpen} setIsOpen={setIsCreatePostOpen}/>}
     </main>;
 }

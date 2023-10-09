@@ -18,6 +18,7 @@ describe('ImageField component test suite', () => {
     };
     const fileName = 'testfile.png';
     const file = new File(['test file'], fileName, { type: 'image/png' });
+    const fileUrl = 'https://picsum.photos/200/300';
 
     afterEach(() => {
         mockOnChange.mockClear();
@@ -28,17 +29,20 @@ describe('ImageField component test suite', () => {
         screen.getByRole('button', { name: emptyLabel });
     });
 
-    it('should display the image and have the right label when the user choose an image', async () => {
-        const user = userEvent.setup();
-        render(<ImageField {...props}/>);
-        screen.getByRole('button', { name: emptyLabel });
+    it('should display the image and have the right label when the image is a File', () => {
+        render(<ImageField {...props} image={file}/>);
 
-        await user.upload(fieldRef.current, file);
-        await waitFor(() => {
-            screen.getByRole('button', { name: selectedLabel });
-            screen.getByRole('button', { name: /Supprimer/ });
-            screen.getByAltText(fileName);
-        });
+        screen.getByRole('button', { name: selectedLabel });
+        screen.getByRole('button', { name: /Supprimer/ });
+        screen.getByAltText(fileName);
+    });
+
+    it('should display the image and have the right label when the image is a URL', () => {
+        render(<ImageField {...props} image={fileUrl}/>);
+
+        screen.getByRole('button', { name: selectedLabel });
+        screen.getByRole('button', { name: /Supprimer/ });
+        screen.getByAltText('Image originale');
     });
 
     it('should execute the onChange function with the file when the user chooses an image', async () => {
@@ -53,36 +57,10 @@ describe('ImageField component test suite', () => {
         });
     });
 
-    it('should reset its state when the user deletes the image', async () => {
-        const user = userEvent.setup();
-        render(<ImageField {...props}/>);
-        screen.getByRole('button', { name: emptyLabel });
-
-        await user.upload(fieldRef.current, file);
-        await waitFor(() => {
-            screen.getByAltText(fileName);
-        });
-
-        const deleteButton = screen.getByRole('button', { name: /Supprimer/ });
-        await user.click(deleteButton);
-        await waitFor(() => {
-            screen.getByRole('button', { name: emptyLabel });
-            const deleteButton = screen.queryByRole('button', { name: /Supprimer/ });
-            const previewImage = screen.queryByAltText(fileName);
-            expect(deleteButton).toBeNull();
-            expect(previewImage).toBeNull();
-        });
-    });
-
     it('should execute the onChange function with null when the user deletes the image', async () => {
         const user = userEvent.setup();
-        render(<ImageField {...props}/>);
-        screen.getByRole('button', { name: emptyLabel });
-
-        await user.upload(fieldRef.current, file);
-        await waitFor(() => {
-            screen.getByAltText(fileName);
-        });
+        render(<ImageField {...props} image={file}/>);
+        screen.getByAltText(fileName);
 
         const deleteButton = screen.getByRole('button', { name: /Supprimer/ });
         await user.click(deleteButton);

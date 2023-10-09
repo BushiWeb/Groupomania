@@ -6,11 +6,14 @@ import {
 import OutlinedButton from '../../buttons/OutlinedButton/OutlinedButton';
 import TonalIconButton from '../../icon-button/TonalIconButton/TonalIconButton';
 import SupportText from '../SupportText/SupportText';
+import useImageField from './useImageField';
 
 /**
  * Image field.
  * The field allows to choose an image to submit, and displays the image.
- * This component is uncontrolled.
+ * Althought the file input is uncontrolled, this components still depends on its parent component to handle the
+ *  File chosen with onChange, and alose the displayed file with image. It is to the responsability of the user to make
+ *  make sure the displayed and saved image are the same as the chosen image.
  */
 const ImageField = forwardRef(({
     emptyLabel,
@@ -20,37 +23,14 @@ const ImageField = forwardRef(({
     onChange,
     errorMessage,
     supportText,
-    empty,
+    image,
 }, ref) => {
-    const [image, setImage] = useState(null);
-    const supportTextId = useId();
-
-    useEffect(() => {
-        if (empty) {
-            ref.current.value = '';
-            setImage(null);
-        }
-    }, [empty, ref]);
-
-    function handleChange(e) {
-        if (e.target.files.length === 0) {
-            onChange(null);
-            setImage(null);
-            return;
-        }
-        const objectUrl = URL.createObjectURL(e.target.files[0]);
-        onChange(e.target.files[0]);
-        setImage({
-            src: objectUrl,
-            name: e.target.files[0].name,
-        });
-    }
-
-    function handleDeleteImage() {
-        ref.current.value = '';
-        onChange(null);
-        setImage(null);
-    }
+    const {
+        imageData,
+        supportTextId,
+        handleChange,
+        handleDeleteImage,
+    } = useImageField(image, ref, onChange);
 
     return <div
         className={`${style.container} ${className}`}
@@ -61,8 +41,12 @@ const ImageField = forwardRef(({
             <OutlinedButton
                 onClick={(e) => ref.current.click()}
                 className={style.button}
-                {... image && { 'aria-describedby': `Le fichier ${image.name} est actuellement sélectionné` }}
-            >{image ? selectedLabel : emptyLabel}</OutlinedButton>
+                {... imageData && {
+                    'aria-describedby': imageData.uploaded ?
+                        'Il s\'agit du fichier original du post, vous pouvez le modifier' :
+                        `Le fichier ${imageData.name} est actuellement sélectionné`,
+                }}
+            >{imageData ? selectedLabel : emptyLabel}</OutlinedButton>
 
             <SupportText
                 id={supportTextId}
@@ -84,7 +68,7 @@ const ImageField = forwardRef(({
             onChange={handleChange}
         />
 
-        {image &&
+        {imageData &&
             <div className={style.previewContainer}>
                 <TonalIconButton
                     onClick={handleDeleteImage}
@@ -93,8 +77,8 @@ const ImageField = forwardRef(({
                     className={style.deleteImageButton}
                 />
                 <img
-                    alt={image.name}
-                    src={image.src}
+                    alt={imageData.name}
+                    src={imageData.src}
                     className={style.previewImage}
                     onLoad = {(e) => {
                         URL.revokeObjectURL(e.target.src);
@@ -112,7 +96,7 @@ ImageField.defaultProps = {
     className: '',
     errorMessage: undefined,
     supportText: undefined,
-    empty: true,
+    image: undefined,
 };
 
 ImageField.propTypes = {
@@ -141,8 +125,8 @@ ImageField.propTypes = {
     /* Support text */
     supportText: PropTypes.string,
 
-    /* Weither the field is empty or not, ie the user did not yet choose a file, defaults to true */
-    empty: PropTypes.bool,
+    /* Current image, either a file object or a file URL */
+    image: PropTypes.oneOfType([PropTypes.instanceOf(File), PropTypes.string]),
 };
 
 export default ImageField;

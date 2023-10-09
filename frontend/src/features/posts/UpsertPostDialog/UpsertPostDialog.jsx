@@ -1,54 +1,31 @@
 import { DialogAction, DialogCloseButton } from '../../../components/Dialog';
 import FullscreenDialog from '../../../components/FullscreenDialog/FullscreenDialog';
-import CreatePostForm from './CreatePostForm';
-import { useCreatePostForm } from './useCreatePostForm';
-import { ACTIONS } from './formReducer.js';
+import UpsertPostForm from './UpsertPostForm';
 import ConfirmDialog from './ConfirmDialog';
-import { useState } from 'react';
 import RequestLoader from './RequestLoader';
+import PropTypes from 'prop-types';
+import { useUpsertPostDialog } from './useUpsertPostDialog';
 
 /** Dialog used to create a post */
-export default function CreatePostDialog({ isOpen, setIsOpen }) {
-    // Confirm dialog state
-    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-
-    // Mutation data. When the mutation is successful, close the form
-    function onSuccess() {
-        setIsOpen(false);
-    }
+export default function UpsertPostDialog({
+    isOpen,
+    setIsOpen,
+    post,
+}) {
     const {
+        confirmDialog: {
+            isConfirmOpen,
+            setIsConfirmOpen,
+        },
         isLoading,
-        mutate,
-        dispatch,
         data,
-    } = useCreatePostForm(onSuccess);
-
-    /*
-     * Function executed when attempting to close the form.
-     * If any changes were made, open the confirm dialog.
-     * Otherwise, close the dialog
-     */
-    function confirm() {
-        if (data.message === '' && data.title === '' && data.image === null) {
-            return cancel();
-        }
-        setIsConfirmOpen(true);
-    }
-
-    /*
-     * Cancels the input.
-     * Closes the confirm dialog, the dialog and reset the form
-     */
-    function cancel() {
-        dispatch({ type: ACTIONS.reset });
-        setIsConfirmOpen(false);
-        setIsOpen(false);
-    }
-
-    /* Saves the form */
-    function save() {
-        mutate();
-    }
+        dispatch,
+        dialogActions: {
+            confirm,
+            cancel,
+            save,
+        },
+    } = useUpsertPostDialog(setIsOpen, post);
 
     const acceptButton = <DialogAction onClick={save}>Sauvegarder</DialogAction>;
     const dismissButton = <DialogAction onClick={confirm}>Annuler</DialogAction>;
@@ -73,7 +50,7 @@ export default function CreatePostDialog({ isOpen, setIsOpen }) {
         >
 
             <RequestLoader isLoading={isLoading}/>
-            <CreatePostForm {...data} isLoading={isLoading} dispatch={dispatch}/>
+            <UpsertPostForm {...data} isLoading={isLoading} dispatch={dispatch}/>
         </FullscreenDialog>
 
         <ConfirmDialog
@@ -83,3 +60,23 @@ export default function CreatePostDialog({ isOpen, setIsOpen }) {
         />
     </>;
 }
+
+UpsertPostDialog.defaultProps = {
+    isOpen: false,
+};
+
+UpsertPostDialog.propTypes = {
+    /* Weither the dialog is opened or not, defaults to false */
+    isOpen: PropTypes.bool,
+
+    /* Function to open or close the dialog, takes a boolean as only argument, required */
+    setIsOpen: PropTypes.func.isRequired,
+
+    /* Post data, if present the form will update the post, if absent it will create a new one */
+    post: PropTypes.exact({
+        postId: PropTypes.number.isRequired,
+        title: PropTypes.string.isRequired,
+        message: PropTypes.string.isRequired,
+        imageUrl: PropTypes.string,
+    }),
+};

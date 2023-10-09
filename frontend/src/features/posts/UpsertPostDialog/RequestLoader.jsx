@@ -1,5 +1,5 @@
 import ProgressIndicator from '../../../components/ProgressIndicator/ProgressIndicator';
-import style from './CreatePostDialog.module.css';
+import style from './UpsertPostDialog.module.css';
 import PropTypes from 'prop-types';
 
 export default function RequestLoader({

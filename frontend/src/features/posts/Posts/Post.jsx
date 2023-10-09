@@ -7,6 +7,7 @@ import PostHeader from './PostHeader';
 import PostContent from './PostContent';
 import PostImage from './PostImage';
 import DeletePostDialog from '../DeletePostDialog/DeletePostDialog';
+import UpsertPostDialog from '../UpsertPostDialog/UpsertPostDialog';
 
 export const postContext = createContext();
 
@@ -35,6 +36,7 @@ export default function Post({
     const postRef = useFocusable(focused);
 
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
 
     return <postContext.Provider value={{
         title,
@@ -62,7 +64,7 @@ export default function Post({
         >
             <PostHeader
                 deletePost={(e) => setIsDeleteDialogOpen(true)}
-                updatePost={(e) => console.log('update')}
+                updatePost={(e) => setIsUpdateDialogOpen(true)}
                 onLike={onLike}
             />
 
@@ -72,13 +74,30 @@ export default function Post({
 
             <PostImage/>
 
-            <DeletePostDialog
-                onClose={() => setIsDeleteDialogOpen(false)}
-                open={isDeleteDialogOpen}
-                postDate={date}
-                postId={postId}
-                postTitle={title}
-            />
+            {
+                isDeleteDialogOpen &&
+                <DeletePostDialog
+                    onClose={() => setIsDeleteDialogOpen(false)}
+                    open={isDeleteDialogOpen}
+                    postDate={date}
+                    postId={postId}
+                    postTitle={title}
+                />
+            }
+
+            {
+                isUpdateDialogOpen &&
+                <UpsertPostDialog
+                    isOpen={isUpdateDialogOpen}
+                    setIsOpen={setIsUpdateDialogOpen}
+                    post={{
+                        postId,
+                        title,
+                        message,
+                        imageUrl,
+                    }}
+                />
+            }
         </article>
     </postContext.Provider>;
 
