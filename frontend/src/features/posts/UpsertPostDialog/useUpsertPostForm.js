@@ -1,11 +1,12 @@
 import { useReducer } from 'react';
 import {
-    ACTIONS, initState, reducer,
+    ACTIONS, initState, isPostUpdated, reducer,
 } from './formReducer.js';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
     createPostRequest,
     handleCreatePostRequestError,
+    updatePostRequest,
     validatePostData,
 } from './request.js';
 import { useNavigate } from 'react-router-dom';
@@ -36,7 +37,25 @@ export function useUpsertPostForm(onSuccess, post) {
 
     const { mutate, isLoading } = useMutation({
         mutationFn: async () => {
-            validatePostData({ title: { value: title }, message: { value: message }, image: { value: image }});
+            validatePostData({
+                title: { required: !post, value: title },
+                message: { required: !post, value: message },
+                image: { format: image instanceof File, value: image },
+            });
+
+            if (!isPostUpdated({ title, message, image }, post)) {
+                return;
+            }
+
+            if (post) {
+                return updatePostRequest({
+                    title,
+                    message,
+                    image,
+                    deleteImage: !image && post.imageUrl,
+                }, post.postId);
+            }
+
             return createPostRequest({ title, message, image });
         },
         onMutate: () => {

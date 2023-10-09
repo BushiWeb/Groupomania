@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-operators */
 export const ACTIONS = {
     setTitle: 'set_title',
     setTitleError: 'set_title_error',
@@ -93,4 +94,22 @@ export function reducer(state, action) {
         return initialState;
     default: return state;
     }
+}
+
+/**
+ * Checks weither the post has been updated or not
+ * @param {Object} currentState - The current state, after updating
+ * @param {Object} initialState - The state of the post when the dialog was opened
+ * @returns {boolean} Returns true if the post has been updated
+ */
+export function isPostUpdated(currentState, initialState) {
+    if (!initialState) {
+        return currentState.message !== '' || currentState.title !== '' || currentState.image !== null;
+    }
+    return (
+        currentState.title !== initialState.title ||
+        currentState.message !== initialState.message ||
+        currentState.image instanceof File ||
+        !currentState.image && initialState.imageUrl
+    );
 }

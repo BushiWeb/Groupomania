@@ -47,7 +47,11 @@ export function validatePostData({
 
     if (imageRequired && !image) {
         errors.image = ERROR_MESSAGES.requiredImage;
-    } else if (image && !(image instanceof File && ALLOWED_TYPES.includes(image.type))) {
+    } else if (
+        image &&
+        imageFormat &&
+        !(image instanceof File && ALLOWED_TYPES.includes(image.type))
+    ) {
         errors.image = ERROR_MESSAGES.wrongImageFormat;
     }
 
@@ -57,29 +61,71 @@ export function validatePostData({
 }
 
 /**
- * Sends the create post request
- * If no file is given, send data as JSON.
- * If an image is given, send the data as multipart/form-data.
+ * Generates the data object to send with the request
  * @param {Object} data - Data to send
- * @param {string} data.title
- * @param {string} data.message
- * @param {File} [data.image]
- * @returns Returns the server response in JSON format
- * @throws Throws in case of an error
+ * @param {string} [data.title]
+ * @param {string} [data.message]
+ * @param {File|bool} [data.image] - Either the file to upload, or false if the image needs to be deleted
+ * @param {File|bool} [data.deleteImage] - When updating, weither to delete the image or not.
+ *  Ignored if the image property is given.
+ * @returns {Object|FormData}
  */
-export async function createPostRequest({ title, message, image }) {
-    let data = { title, message };
+function generateRequestData({
+    title, message, image, deleteImage,
+}) {
+    let data = {
+        ...title && { title },
+        ...message && { message },
+    };
 
-    if (image) {
+    if (image instanceof File) {
         const stringifiedData = JSON.stringify(data);
         data = new FormData();
         data.set('post', stringifiedData);
         data.set('image', image);
+    } else if (deleteImage) {
+        data.deleteImage = true;
     }
+
+    return data;
+}
+
+/**
+ * Sends the create post request
+ * If no file is given, send data as JSON.
+ * If an image is given, send the data as multipart/form-data.
+ * @param {Object} rawData - Data to send
+ * @returns Returns the server response in JSON format
+ * @throws Throws in case of an error
+ */
+export async function createPostRequest(rawData) {
+    const data = generateRequestData(rawData);
 
     const response = simpleFetch({
         url: '/data/posts',
         method: 'POST',
+        data,
+    });
+
+    return response;
+}
+
+/**
+ * Sends a request to update the post
+ * If no file is given, send data as JSON.
+ * If an image is given, send the data as multipart/form-data.
+ * If the image value is false, sends data as JSON with the deleteImage property
+ * @param {Object} rawData - Data to send
+ * @param {number} postId
+ * @returns Returns the server response in JSON format
+ * @throws Throws in case of an error
+ */
+export async function updatePostRequest(rawData, postId) {
+    const data = generateRequestData(rawData);
+
+    const response = simpleFetch({
+        url: `/data/posts/${postId}`,
+        method: 'PUT',
         data,
     });
 

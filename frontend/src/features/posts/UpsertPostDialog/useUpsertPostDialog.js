@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ACTIONS } from './formReducer.js';
+import { ACTIONS, isPostUpdated } from './formReducer.js';
 import { useUpsertPostForm } from './useUpsertPostForm.js';
 
 /**
@@ -42,10 +42,10 @@ export function useUpsertPostDialog(setIsOpen, post) {
      * Otherwise, close the dialog
      */
     function confirm() {
-        if (data.message === '' && data.title === '' && data.image === null) {
-            return cancel();
+        if (isPostUpdated(data, post)) {
+            return setIsConfirmOpen(true);
         }
-        setIsConfirmOpen(true);
+        cancel();
     }
 
     /*
