@@ -71,4 +71,15 @@ describe('Post component test suite', () => {
         await user.click(likeButton);
         expect(postInformations.onLike).toHaveBeenCalled();
     });
+
+    it('should open the menu when clicking on the more actions button', async () => {
+        const user = userEvent.setup();
+        render(<Post {...postInformations} hasRights/>);
+        const moreButton = screen.getByRole('button', { name: /actions/ });
+
+        await user.click(moreButton);
+        screen.getByRole('menu', { name: /Actions/ });
+        screen.getByRole('button', { name: 'Modifier' });
+        screen.getByRole('button', { name: 'Supprimer' });
+    });
 });
