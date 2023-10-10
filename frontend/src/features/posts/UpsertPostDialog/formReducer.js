@@ -9,6 +9,8 @@ export const ACTIONS = {
     setImage: 'set_image',
     setImageError: 'set_image_error',
     removeImageError: 'remove_image_error',
+    setGlobalError: 'set_error',
+    removeGlobalError: 'remove_global_error',
     removeErrors: 'remove_errors',
     reset: 'reset',
 };
@@ -81,6 +83,16 @@ export function reducer(state, action) {
         return {
             ...state,
             imageError: undefined,
+        };
+    case ACTIONS.setGlobalError:
+        return {
+            ...state,
+            globalError: action.payload,
+        };
+    case ACTIONS.removeGlobalError:
+        return {
+            ...state,
+            globalError: undefined,
         };
     case ACTIONS.removeErrors:
         return {

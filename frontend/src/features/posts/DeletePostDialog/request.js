@@ -2,7 +2,7 @@ import { simpleFetch } from '../../../utils/fetch.js';
 
 export const ERROR_MESSAGES = {
     forbiddenAction: 'Vous n\'avez pas les droits pour supprimer ce post',
-    notFound: 'Le post que vous souhaitez supprimer ne peut pas être trouvé',
+    notFound: 'Le post que vous souhaitez supprimer ne peut pas être trouvé. Il se peut qu\'il ai déjà été supprimé.',
 };
 
 /**
@@ -29,14 +29,14 @@ export async function deletePostRequest(postId) {
  */
 export async function handleDeletePostRequestError(error) {
     switch (error.status) {
-    case 401:
-        throw new Error('Unauthorized');
     case 400:
         throw new Error('Unhandled 400 error type');
+    case 401:
+        throw new Error('Unauthorized');
     case 403:
         return ERROR_MESSAGES.forbiddenAction;
     case 404:
-        return ERROR_MESSAGES.forbiddenAction;
+        return ERROR_MESSAGES.notFound;
     default:
         throw new Error('Unhandled error status');
     }

@@ -4,15 +4,24 @@ import { ACTIONS } from './formReducer';
 import TextField from '../../../components/form-inputs/TextField/TextField';
 import TextArea from '../../../components/form-inputs/TextArea/TextArea';
 import ImageField from '../../../components/form-inputs/ImageField/ImageField';
-import { useRef } from 'react';
+import { useId, useRef } from 'react';
+import SupportText from '../../../components/form-inputs/SupportText/SupportText';
 
 /** Form to create a post, with or without image */
 export default function UpsertPostForm({
-    title, titleError, message, messageError, image, imageError, dispatch,
+    title, titleError, message, messageError, image, imageError, globalError, dispatch,
 }) {
     const imageRef = useRef(null);
+    const errorMessageId = useId();
 
     return <form className={style.form} aria-label="Formulaire de création de post">
+        <SupportText
+            id={errorMessageId}
+            errorMessage={globalError}
+            errorIcon
+            className={style.supportText}
+        />
+
         <TextField
             value={title}
             onChange={(e) => dispatch({ type: ACTIONS.setTitle, payload: e.target.value })}
@@ -50,6 +59,7 @@ UpsertPostForm.defaultProps = {
     messageError: '',
     image: null,
     imageError: '',
+    globalError: '',
 };
 
 UpsertPostForm.propTypes = {
@@ -70,6 +80,9 @@ UpsertPostForm.propTypes = {
 
     /* Image field error message */
     imageError: PropTypes.string,
+
+    /* Global error message */
+    globalError: PropTypes.string,
 
     /* Function to dispatch new field values, from the formReducer, required */
     dispatch: PropTypes.func.isRequired,

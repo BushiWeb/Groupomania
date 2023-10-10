@@ -31,6 +31,7 @@ export function useUpsertPostForm(onSuccess, post) {
             messageError,
             image,
             imageError,
+            globalError,
         },
         dispatch,
     ] = useReducer(reducer, post, initState);
@@ -88,6 +89,10 @@ export function useUpsertPostForm(onSuccess, post) {
             if (errorMessages.image) {
                 dispatch({ type: ACTIONS.setImageError, payload: errorMessages.image });
             }
+
+            if (errorMessages.global) {
+                dispatch({ type: ACTIONS.setGlobalError, payload: errorMessages.global });
+            }
         },
         onSuccess: () => {
             dispatch({ type: ACTIONS.reset });
@@ -107,6 +112,7 @@ export function useUpsertPostForm(onSuccess, post) {
             messageError,
             image,
             imageError,
+            globalError,
         },
     };
 }

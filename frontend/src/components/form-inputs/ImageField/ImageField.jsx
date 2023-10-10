@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import style from './ImageField.module.css';
-import {
-    forwardRef, useEffect, useId, useState,
-} from 'react';
+import { forwardRef } from 'react';
 import OutlinedButton from '../../buttons/OutlinedButton/OutlinedButton';
 import TonalIconButton from '../../icon-button/TonalIconButton/TonalIconButton';
 import SupportText from '../SupportText/SupportText';

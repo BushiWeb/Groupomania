@@ -26,4 +26,8 @@
         display: grid;
         place-content: center;
     }
+
+    .supportText {
+        padding-inline: 0;
+    }
 }

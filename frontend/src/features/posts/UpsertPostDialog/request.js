@@ -5,6 +5,8 @@ export const ERROR_MESSAGES = {
     requiredMessage: 'Le mot de passe est obligatoire',
     requiredImage: 'L\'image est obligatoire',
     wrongImageFormat: 'Le fichier doit être une image au format png, jpeg, webp ou avif',
+    forbiddenAction: 'Vous n\'avez pas les droits pour modifier ce post',
+    notFound: 'Le post que vous souhaitez modifier ne peut pas être trouvé. Il se peut qu\'il soit supprimé.',
 };
 
 const ALLOWED_TYPES = [
@@ -144,8 +146,6 @@ export async function handleCreatePostRequestError(error) {
     const errorMessages = {};
 
     switch (error.status) {
-    case 401:
-        throw new Error('Unauthorized');
     case 400:
         if (/required file/.test(requestError.error?.message)) {
             return { image: ERROR_MESSAGES.requiredImage };
@@ -154,6 +154,12 @@ export async function handleCreatePostRequestError(error) {
             throw new Error('Unhandled 400 error type');
         }
         break;
+    case 401:
+        throw new Error('Unauthorized');
+    case 403:
+        return { global: ERROR_MESSAGES.forbiddenAction };
+    case 404:
+        return { global: ERROR_MESSAGES.notFound };
     case 415:
         return { image: ERROR_MESSAGES.wrongImageFormat };
     default:

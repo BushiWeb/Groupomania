@@ -5,6 +5,7 @@ import Dialog, {
 import SupportText from '../../../components/form-inputs/SupportText/SupportText';
 import { useDeletePostForm } from './useDeletePostForm';
 import PropTypes from 'prop-types';
+import style from './DeletePostDialog.module.css';
 
 /** Dialog used to create a post */
 export default function DeletePostDialog({
@@ -29,7 +30,14 @@ export default function DeletePostDialog({
     return <Dialog
         open={open}
         onClose={onClose}
-        label="Confirmation de suppression"
+        {
+            ...!error ?
+                { label: 'Confirmation de suppression' } :
+                {
+                    'aria-labelledby': errorMessageId,
+                    role: 'alertdialog',
+                }
+        }
     >
         <DialogHeader>
             <DialogHeadline>Supprimer un post ?</DialogHeadline>
@@ -37,7 +45,7 @@ export default function DeletePostDialog({
 
         <DialogContent>
             Êtes-vous sûr de vouloir supprimer le post <em>{postTitle}</em> créé le {formatedDate} ?
-            <SupportText errorMessage={error} id={errorMessageId} errorIcon/>
+            <SupportText errorMessage={error} id={errorMessageId} errorIcon className={style.supportText}/>
         </DialogContent>
 
         <DialogActions>
