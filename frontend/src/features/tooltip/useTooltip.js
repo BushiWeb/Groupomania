@@ -1,5 +1,5 @@
 import {
-    useContext, useEffect,
+    useContext, useEffect, useRef,
 } from 'react';
 import { tooltipContext } from './tooltipContext.js';
 import { ACTIONS, OPEN_CAUSE } from './tooltipReducer.js';
@@ -24,9 +24,12 @@ export default function useTooltip(value) {
         dispatch,
     } = useContext(tooltipContext);
 
+    const currentAnchor = useRef(false);
+
     /** Opens the tooltip following an event on the anchor */
     function open(cause, newAnchor) {
         if (!isOpen || anchor !== newAnchor) {
+            currentAnchor.current = true;
             dispatch({
                 type: ACTIONS.open,
                 payload: { value, anchor: newAnchor, cause },
@@ -37,6 +40,7 @@ export default function useTooltip(value) {
     /** Closes the tooltip following an event on the anchor */
     function close(cause) {
         if (isOpen && openCause === cause) {
+            currentAnchor.current = false;
             dispatch({ type: ACTIONS.close });
         }
     }
@@ -58,25 +62,22 @@ export default function useTooltip(value) {
         close(OPEN_CAUSE.hover);
     }
 
-    /* Handling Escape press on the window to close the tooltip as well */
-    useEffect(() => {
-        function handleEscape(e) {
-            if (e.key === 'Escape' && isOpen) {
-                dispatch({ type: ACTIONS.close });
-            }
-        }
-
-        window.addEventListener('keydown', handleEscape);
-
-        return () => {
-            window.removeEventListener('keydown', handleEscape);
-        };
-    }, [dispatch, isOpen]);
-
     /* Handling dynamic value changes */
     useEffect(() => {
-        dispatch({ type: ACTIONS.setValue, payload: value });
+        if (currentAnchor.current) {
+            dispatch({ type: ACTIONS.setValue, payload: value });
+        }
     }, [value, dispatch]);
+
+    /* Closing the tooltip on dismount */
+    useEffect(() => {
+        return () => {
+            if (currentAnchor.current) {
+                currentAnchor.current = false;
+                dispatch({ type: ACTIONS.close });
+            }
+        };
+    }, [dispatch]);
 
     return {
         anchorEventHandlers: {

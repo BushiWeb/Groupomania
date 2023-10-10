@@ -3,9 +3,14 @@ import { render } from '../../utils/tests/test-wrapper.js';
 import userEvent from '../../utils/tests/user-event.js';
 import fakeTimers from '../../utils/tests/fake-timers.js';
 import useTooltip from './useTooltip.js';
+import { useState } from 'react';
 
 describe('Tooltip component test suite', () => {
-    const label1 = 'test1', label2 = 'test2';
+    const label1 = 'test1',
+        label1bis = 'bis1',
+        label2 = 'test2',
+        anchorHideButtonLabel = 'Button',
+        labelChangeButtonLabel = 'label';
 
     function TooltipContainer({ label }) {
         const {
@@ -15,9 +20,13 @@ describe('Tooltip component test suite', () => {
     }
 
     function RenderContainer() {
+        const [isContainerVisible, setIsContainerVisible] = useState(true);
+        const [currentLabel, setCurrentLabel] = useState(label1);
         return <>
-            <TooltipContainer label={label1}/>
+            {isContainerVisible && <TooltipContainer label={currentLabel}/>}
             <TooltipContainer label={label2}/>
+            <button onClick={() => setIsContainerVisible(false)}>{anchorHideButtonLabel}</button>
+            <button onClick={() => setCurrentLabel(label1bis)}>{labelChangeButtonLabel}</button>
         </>;
     }
 
@@ -170,6 +179,102 @@ describe('Tooltip component test suite', () => {
         fakeTimers.runAllTimers();
         screen.getByRole('tooltip', { hidden: true });
         expect(tooltipLabel).toHaveTextContent(label1);
+
+        fakeTimers.cleanAndUseRealTimers();
+    });
+
+    it('should close the tooltip when pressing "Escape"', async () => {
+        fakeTimers.useFakeTimers();
+        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
+        render(<RenderContainer/>);
+        const tooltipContainerElt = screen.getByText(`${label1} container`);
+
+        await user.hover(tooltipContainerElt);
+        fakeTimers.runAllTimers();
+        screen.getByRole('tooltip', { hidden: true });
+
+        await user.keyboard('{Escape}');
+        fakeTimers.runAllTimers();
+        const tooltipLabel = screen.queryByRole('tooltip', { hidden: true });
+        expect(tooltipLabel).toBeNull();
+
+        fakeTimers.cleanAndUseRealTimers();
+    });
+
+    it('should close the tooltip when the anchor dismount', async () => {
+        fakeTimers.useFakeTimers();
+        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
+        render(<RenderContainer/>);
+        const tooltipContainerElt = screen.getByText(`${label1} container`);
+        const buttonElt = screen.getByRole('button', { name: anchorHideButtonLabel });
+
+        await user.tab();
+        await user.tab();
+        await user.tab();
+        expect(buttonElt).toHaveFocus();
+
+        await user.hover(tooltipContainerElt);
+        fakeTimers.runAllTimers();
+        screen.getByRole('tooltip', { hidden: true });
+
+        await user.keyboard('{Enter}');
+        expect(screen.queryByText(`${label1} container`)).toBeNull();
+        fakeTimers.runAllTimers();
+        const tooltipLabel = screen.queryByRole('tooltip', { hidden: true });
+        expect(tooltipLabel).toBeNull();
+
+        fakeTimers.cleanAndUseRealTimers();
+    });
+
+    it('should update the tooltip value', async () => {
+        fakeTimers.useFakeTimers();
+        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
+        render(<RenderContainer/>);
+        const tooltipContainerElt = screen.getByText(`${label1} container`);
+        const buttonElt = screen.getByRole('button', { name: labelChangeButtonLabel });
+
+        await user.tab();
+        await user.tab();
+        await user.tab();
+        await user.tab();
+        expect(buttonElt).toHaveFocus();
+
+        await user.hover(tooltipContainerElt);
+        fakeTimers.runAllTimers();
+        const tooltipLabel = screen.getByRole('tooltip', { hidden: true });
+        expect(tooltipLabel).toHaveTextContent(label1);
+
+        await user.keyboard('{Enter}');
+        expect(tooltipContainerElt).toHaveTextContent(new RegExp(label1bis));
+        fakeTimers.runAllTimers();
+        expect(tooltipLabel).toHaveTextContent(label1bis);
+
+        fakeTimers.cleanAndUseRealTimers();
+    });
+
+    it('should not update the tooltip value when the label changes on another potential anchor', async () => {
+        fakeTimers.useFakeTimers();
+        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
+        render(<RenderContainer/>);
+        const tooltipContainer1Elt = screen.getByText(`${label1} container`);
+        const tooltipContainer2Elt = screen.getByText(`${label2} container`);
+        const buttonElt = screen.getByRole('button', { name: labelChangeButtonLabel });
+
+        await user.tab();
+        await user.tab();
+        await user.tab();
+        await user.tab();
+        expect(buttonElt).toHaveFocus();
+
+        await user.hover(tooltipContainer2Elt);
+        fakeTimers.runAllTimers();
+        const tooltipLabel = screen.getByRole('tooltip', { hidden: true });
+        expect(tooltipLabel).toHaveTextContent(label2);
+
+        await user.keyboard('{Enter}');
+        expect(tooltipContainer1Elt).toHaveTextContent(new RegExp(label1bis));
+        fakeTimers.runAllTimers();
+        expect(tooltipLabel).toHaveTextContent(label2);
 
         fakeTimers.cleanAndUseRealTimers();
     });

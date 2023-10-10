@@ -2,6 +2,7 @@ import {
     useContext, useEffect, useLayoutEffect, useRef, useState,
 } from 'react';
 import { tooltipContext } from './tooltipContext.js';
+import { ACTIONS } from './tooltipReducer.js';
 
 const TOOLTIP_MARGIN = 4;
 
@@ -27,6 +28,7 @@ export default function useTooltipLabel() {
         isOpen,
         anchor,
         value,
+        dispatch,
     } = useContext(tooltipContext);
     const [{ top, left }, setPosition] = useState({ top: 0, left: 0 });
 
@@ -37,6 +39,21 @@ export default function useTooltipLabel() {
     const closeTimeoutRef = useRef(null);
     const openTimeout = 200;
     const closeTimeout = 100;
+
+    /* Handling Escape press on the window to close the tooltip */
+    useEffect(() => {
+        function handleEscape(e) {
+            if (e.key === 'Escape' && isOpen) {
+                dispatch({ type: ACTIONS.close });
+            }
+        }
+
+        window.addEventListener('keydown', handleEscape);
+
+        return () => {
+            window.removeEventListener('keydown', handleEscape);
+        };
+    }, [dispatch, isOpen]);
 
     // Aplying timeout to opening and closing the tooltip
     useEffect(() => {
