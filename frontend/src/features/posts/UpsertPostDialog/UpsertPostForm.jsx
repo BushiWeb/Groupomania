@@ -20,6 +20,7 @@ export default function UpsertPostForm({
             errorMessage={globalError}
             errorIcon
             className={style.supportText}
+            role="alert"
         />
 
         <TextField

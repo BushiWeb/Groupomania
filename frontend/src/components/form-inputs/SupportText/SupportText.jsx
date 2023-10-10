@@ -15,6 +15,7 @@ export default function SupportText({
     required,
     disabled,
     className,
+    ...props
 }) {
     const darkTheme = useSelector(selectIsDarkTheme);
     const dataProps = {
@@ -28,14 +29,14 @@ export default function SupportText({
     }
 
     if (errorMessage) {
-        return <p className={computedClassName} {...dataProps}>
+        return <p className={computedClassName} {...dataProps} {...props}>
             {errorIcon && <Icon name="error" label="Error" size={20} grad={50} isOnDark={darkTheme} className={style.supportTextIcon}/>}
             <span id={id}>{errorMessage}</span>
         </p>;
     }
 
     if (supportText) {
-        return <p className={computedClassName} id={id} {...dataProps}>{supportText}</p>;
+        return <p className={computedClassName} id={id} {...dataProps} {...props}>{supportText}</p>;
     }
 
     return;

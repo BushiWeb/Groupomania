@@ -14,7 +14,7 @@ export default function FormFields({
     const darkTheme = useSelector(selectIsDarkTheme);
 
     return <div className={style.inputs}>
-        {globalError && <p className={style.globalError}>
+        {globalError && <p className={style.globalError} role="alert">
             <Icon name="error" label="Error" size={20} grad={50} isOnDark={darkTheme} className={style.globalErrorIcon}/>
             {globalError}
         </p>}

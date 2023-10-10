@@ -66,6 +66,7 @@ export default function TextField({
                 placeholder={placeholder}
                 className={style.input}
                 ref={inputRef}
+                aria-invalid={!!errorMessage}
                 {...props}
             />
         </TextBox.InteractiveContainer>

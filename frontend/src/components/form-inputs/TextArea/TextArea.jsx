@@ -49,6 +49,7 @@ export default function TextArea({
                 className={style.textarea}
                 ref={inputRef}
                 rows={rows}
+                aria-invalid={!!errorMessage}
                 {...props}
             />
         </TextBox.InteractiveContainer>

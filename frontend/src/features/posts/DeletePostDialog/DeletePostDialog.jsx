@@ -45,7 +45,7 @@ export default function DeletePostDialog({
 
         <DialogContent>
             Êtes-vous sûr de vouloir supprimer le post <em>{postTitle}</em> créé le {formatedDate} ?
-            <SupportText errorMessage={error} id={errorMessageId} errorIcon className={style.supportText}/>
+            <SupportText errorMessage={error} id={errorMessageId} errorIcon className={style.supportText} role="alert"/>
         </DialogContent>
 
         <DialogActions>
