@@ -21,7 +21,6 @@
             padding-block-end: var(--size-16);
             width: var(--size-16);
             height: 100%;
-            background-color: rgb(var(--color-surface));
 
             display: flex;
             flex-direction: column-reverse;
@@ -42,9 +41,6 @@
             padding-block: var(--padding-4);
 
             width: var(--size-22);
-
-            background-color: rgb(var(--color-surface));
-            border-radius: 0 var(--border-radius-5) var(--border-radius-5) 0;
 
             align-items: stretch;
             gap: var(--size-13);

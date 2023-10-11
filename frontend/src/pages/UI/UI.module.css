@@ -27,6 +27,7 @@
     .main {
         grid-area: main;
         overflow: auto;
+        background-color: rgb(var(--color-surface));
     }
 
     @media bp-medium {

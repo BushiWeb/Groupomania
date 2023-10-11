@@ -2,7 +2,7 @@
 
 @layer components {
     .header {
-        background-color: rgb(var(--color-surface));
+        background-color: rgb(var(--color-surface-container-low));
 
         height: var(--size-14);
         padding-inline-start: var(--padding-4);
@@ -34,6 +34,7 @@
         .header {
             padding-inline-start: var(--padding-6);
             padding-inline-end: var(--padding-4);
+            background-color: rgb(var(--color-surface-container));
         }
     }
 }
