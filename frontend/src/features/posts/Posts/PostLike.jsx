@@ -6,7 +6,7 @@ import { useContext } from 'react';
 
 /** Displays one post data. */
 export default function PostLike({
-    onLike,
+    onClick,
 }) {
     const {
         liked,
@@ -18,13 +18,13 @@ export default function PostLike({
             label={`${liked ? 'Ne plus aimer' : 'Aimer'}, ${likeNumber} j'aimes`}
             name="favorite"
             toggle={liked}
-            onClick={onLike}
+            onClick={onClick}
         />
         <span className={liked ? style.likedLikeNumber : style.likeNumber}>{likeNumber}</span>
     </div>;
 }
 
 PostLike.propTypes = {
-    /** Function to execute when a user clicks on the like button */
-    onLike: PropTypes.func.isRequired,
+    /** Function to execute when a user clicks, required */
+    onClick: PropTypes.func.isRequired,
 };

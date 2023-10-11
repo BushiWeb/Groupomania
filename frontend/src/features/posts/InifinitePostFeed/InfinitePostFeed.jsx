@@ -3,6 +3,10 @@ import { useInfiniteScroll } from './useInfiniteScroll';
 import PropTypes from 'prop-types';
 import { useLikePost } from './useLikePost';
 import { useHandleRequestError } from '../../../hooks/useHandleRequestError';
+import { useState } from 'react';
+import PostActionsMenu from './PostActionsMenu';
+import UpsertPostDialog from '../UpsertPostDialog/UpsertPostDialog';
+import DeletePostDialog from '../DeletePostDialog/DeletePostDialog';
 
 /**
  * Allows the insertion of an infinite scrolling post list.
@@ -27,10 +31,38 @@ export default function InfinitePostFeed({ containerElt, errorClassName, classNa
     useHandleRequestError(isPostError, postError);
     useHandleRequestError(isLikeError, likeError);
 
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [menuAnchor, setMenuAnchor] = useState(null);
+    const [targetPost, setTargetPost] = useState({
+        postId: undefined,
+        title: undefined,
+        message: undefined,
+        imageUrl: undefined,
+        date: undefined,
+    });
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
+
     function handleLike(postId, liked) {
         return () => {
             likeMutate({ postId, likeAction: !liked });
         };
+    }
+
+    function handleMoreActions(post) {
+        return (e) => {
+            setMenuAnchor(e.currentTarget);
+            setTargetPost(post);
+            setIsMenuOpen(previous => !previous);
+        };
+    }
+
+    function onDeletePost(e) {
+        setIsDeleteDialogOpen(true);
+    }
+
+    function onUpdatePost(e) {
+        setIsUpdateDialogOpen(true);
     }
 
     if (isPostError) {
@@ -40,12 +72,48 @@ export default function InfinitePostFeed({ containerElt, errorClassName, classNa
         </p>;
     }
 
-    return <PostsList
-        posts={posts}
-        className={className}
-        busy={isFetchingPostNextPage || isLoadingPost}
-        handleLike={handleLike}
-    />;
+    return <>
+        <PostsList
+            posts={posts}
+            className={className}
+            busy={isFetchingPostNextPage || isLoadingPost}
+            handleLike={handleLike}
+            handleMoreActions={handleMoreActions}
+        />
+
+        {isMenuOpen &&
+            <PostActionsMenu
+                open={isMenuOpen}
+                onClose={() => setIsMenuOpen(false)}
+                anchor={menuAnchor}
+                deletePost={onDeletePost}
+                updatePost={onUpdatePost}
+            />
+        }
+
+        {isDeleteDialogOpen &&
+            <DeletePostDialog
+                onClose={() => setIsDeleteDialogOpen(false)}
+                open={isDeleteDialogOpen}
+                postDate={targetPost.date}
+                postId={targetPost.postId}
+                postTitle={targetPost.title}
+            />
+        }
+
+        {isUpdateDialogOpen &&
+            <UpsertPostDialog
+                isOpen={isUpdateDialogOpen}
+                setIsOpen={setIsUpdateDialogOpen}
+                post={{
+                    postId: targetPost.postId,
+                    title: targetPost.title,
+                    message: targetPost.message,
+                    imageUrl: targetPost.imageUrl,
+                }}
+            />
+        }
+    </>;
 }
 
 InfinitePostFeed.propTypes = {

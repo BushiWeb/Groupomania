@@ -8,8 +8,7 @@ import { postContext } from './Post';
 /** Post header, with the email, the date, the like button and the more actions button */
 export default function PostHeader({
     onLike,
-    deletePost,
-    updatePost,
+    onMoreActions,
 }) {
     const {
         authorEmail,
@@ -36,12 +35,11 @@ export default function PostHeader({
         </div>
 
         <PostLike
-            onLike={onLike}
+            onClick={onLike}
         />
 
         <PostActions
-            deletePost={deletePost}
-            updatePost={updatePost}
+            onClick={onMoreActions}
         />
     </header>;
 
@@ -51,9 +49,6 @@ PostHeader.propTypes = {
     /** Function to execute when a user clicks on the like button */
     onLike: PropTypes.func.isRequired,
 
-    /* Function to delete the post, required */
-    deletePost: PropTypes.func.isRequired,
-
-    /* Function to update the post, required */
-    updatePost: PropTypes.func.isRequired,
+    /** Function to execute when a user clicks on the more actions button */
+    onMoreActions: PropTypes.func.isRequired,
 };

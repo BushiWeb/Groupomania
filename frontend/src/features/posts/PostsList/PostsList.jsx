@@ -8,7 +8,7 @@ import ProgressIndicator from '../../../components/ProgressIndicator/ProgressInd
 
 /** List of posts */
 export default function PostsList({
-    posts, busy, handleLike, ...props
+    posts, busy, handleLike, handleMoreActions, ...props
 }) {
     const { isAdmin, userId } = useSelector(selectRighInfos);
     const {
@@ -53,6 +53,9 @@ export default function PostsList({
                 focused={index === focusId}
                 onFocus={handleFocus(index)}
                 onLike={handleLike(postId, postData.liked)}
+                onMoreActions={handleMoreActions({
+                    postId, title, message, imageUrl, date,
+                })}
             />;
         })}
 
@@ -88,4 +91,7 @@ PostsList.propTypes = {
     /** Function taking the post id and weither the user likes the post or not,
      * and returns the function to be executed to handle the like action. */
     handleLike: PropTypes.func.isRequired,
+
+    /** Function to excute when the user clicks the more actions button. */
+    handleMoreActions: PropTypes.func.isRequired,
 };

@@ -6,6 +6,7 @@ import '@testing-library/jest-dom';
 
 describe('Post component test suite', () => {
     const postInformations = {
+        postId: 13,
         title: 'Test post',
         message: 'Irure sunt laborum et ea aliquip do duis ea ipsum.',
         authorEmail: 'test@email.com',
@@ -14,10 +15,12 @@ describe('Post component test suite', () => {
         posinset: 3,
         setsize: 10,
         onLike: jest.fn(),
+        onMoreActions: jest.fn(),
     };
 
     beforeEach(() => {
         postInformations.onLike.mockClear();
+        postInformations.onMoreActions.mockClear();
     });
 
     it('should render', () => {
@@ -72,14 +75,12 @@ describe('Post component test suite', () => {
         expect(postInformations.onLike).toHaveBeenCalled();
     });
 
-    it('should open the menu when clicking on the more actions button', async () => {
+    it('should execute the onMoreActions functions when clicking on the more actions button', async () => {
         const user = userEvent.setup();
         render(<Post {...postInformations} hasRights/>);
         const moreButton = screen.getByRole('button', { name: /actions/ });
 
         await user.click(moreButton);
-        screen.getByRole('menu', { name: /Actions/ });
-        screen.getByRole('button', { name: 'Modifier' });
-        screen.getByRole('button', { name: 'Supprimer' });
+        expect(postInformations.onMoreActions).toHaveBeenCalled();
     });
 });

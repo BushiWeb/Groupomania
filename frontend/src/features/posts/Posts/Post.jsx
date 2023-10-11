@@ -1,13 +1,11 @@
 import PropTypes from 'prop-types';
 import Divider from '../../../components/Divider/Divider';
-import { createContext, useId, useState } from 'react';
+import { createContext, useId } from 'react';
 import style from './Post.module.css';
 import { useFocusable } from '../../../hooks/useFocusable';
 import PostHeader from './PostHeader';
 import PostContent from './PostContent';
 import PostImage from './PostImage';
-import DeletePostDialog from '../DeletePostDialog/DeletePostDialog';
-import UpsertPostDialog from '../UpsertPostDialog/UpsertPostDialog';
 
 export const postContext = createContext();
 
@@ -26,6 +24,7 @@ export default function Post({
     hasRights,
     focused,
     onLike,
+    onMoreActions,
     ...props
 }) {
     const titleId = useId();
@@ -34,9 +33,6 @@ export default function Post({
     const dateId = useId();
 
     const postRef = useFocusable(focused);
-
-    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-    const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
 
     return <postContext.Provider value={{
         title,
@@ -63,9 +59,8 @@ export default function Post({
             aria-describedby={`${emailId} ${dateId} ${messageId}`}
         >
             <PostHeader
-                deletePost={(e) => setIsDeleteDialogOpen(true)}
-                updatePost={(e) => setIsUpdateDialogOpen(true)}
                 onLike={onLike}
+                onMoreActions={onMoreActions}
             />
 
             <Divider className={style.divider}/>
@@ -73,31 +68,6 @@ export default function Post({
             <PostContent/>
 
             <PostImage/>
-
-            {
-                isDeleteDialogOpen &&
-                <DeletePostDialog
-                    onClose={() => setIsDeleteDialogOpen(false)}
-                    open={isDeleteDialogOpen}
-                    postDate={date}
-                    postId={postId}
-                    postTitle={title}
-                />
-            }
-
-            {
-                isUpdateDialogOpen &&
-                <UpsertPostDialog
-                    isOpen={isUpdateDialogOpen}
-                    setIsOpen={setIsUpdateDialogOpen}
-                    post={{
-                        postId,
-                        title,
-                        message,
-                        imageUrl,
-                    }}
-                />
-            }
         </article>
     </postContext.Provider>;
 
@@ -151,4 +121,7 @@ Post.propTypes = {
 
     /** Function to execute when a user clicks on the like button */
     onLike: PropTypes.func.isRequired,
+
+    /** Function to execute when a user clicks on the more actions button */
+    onMoreActions: PropTypes.func.isRequired,
 };

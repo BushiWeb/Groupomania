@@ -49,14 +49,17 @@ describe('PostsList component test suite', () => {
     const stateAdmin = { user: { userId: posts[0].writer.writerId, role: { roleId: 1 }}};
 
     const mockLike = jest.fn();
+    const mockMoreActions = jest.fn();
 
     const props = {
         posts,
         handleLike: () => mockLike,
+        handleMoreActions: () => mockMoreActions,
     };
 
     beforeEach(() => {
         mockLike.mockClear();
+        mockMoreActions.mockClear();
     });
 
     it('should render', () => {
@@ -168,5 +171,16 @@ describe('PostsList component test suite', () => {
 
         await user.click(likeButton);
         expect(mockLike).toHaveBeenCalled();
+    });
+
+    it('should pass the handleMoreActions function to the individual posts', async () => {
+        const user = userEvent.setup();
+        render(<PostsList {...props}/>, { preloadedState: state });
+
+        const postsElts = screen.getAllByRole('article');
+        const likeButton = getByRole(postsElts[0], 'button', { name: /actions/ });
+
+        await user.click(likeButton);
+        expect(mockMoreActions).toHaveBeenCalled();
     });
 });

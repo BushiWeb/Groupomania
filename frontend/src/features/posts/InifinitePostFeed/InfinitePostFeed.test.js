@@ -20,7 +20,7 @@ describe('InfinitePostFeed test suite', () => {
         </div>;
     }
 
-    const initialState = { user: { email: 'test@gmail.com', userId: 130, roleId: 1 }};
+    const initialState = { user: { email: POSTS[0].writer.email, userId: POSTS[0].writer.writerId, roleId: 1 }};
 
     beforeEach(() => {
         sessionStorage.clear();
@@ -182,5 +182,20 @@ describe('InfinitePostFeed test suite', () => {
             const path = screen.getByTestId('search-path').textContent;
             expect(path).toBe('/error');
         });
+    });
+
+    it('should open the menu when clicking on the More Actions button of a post', async () => {
+        const user = userEvent.setup();
+        render(<TestComponent/>, { preloadedState: initialState });
+        await waitFor(() => {
+            screen.getAllByRole('article');
+        });
+
+        const moreButton = screen.getByRole('button', { name: /actions/ });
+
+        await user.click(moreButton);
+        screen.getByRole('menu', { name: /Actions/ });
+        screen.getByRole('button', { name: 'Modifier' });
+        screen.getByRole('button', { name: 'Supprimer' });
     });
 });
