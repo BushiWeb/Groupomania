@@ -31,9 +31,11 @@ export default function UpsertPostDialog({
     const dismissButton = <DialogAction onClick={confirm}>Annuler</DialogAction>;
     const closeButton = <DialogCloseButton label="Annuler la création" onClick={confirm}/>;
 
+    const headline = post ? 'Modifier le post' : 'Créer un post';
+
     return <>
         <FullscreenDialog
-            label="Créer un post"
+            label={headline}
             onClose={(e) => {
                 setIsOpen(false);
             }}
@@ -45,7 +47,7 @@ export default function UpsertPostDialog({
             acceptButton={acceptButton}
             dismissButton={dismissButton}
             closeButton={closeButton}
-            headline="Créer un post"
+            headline={headline}
             {...isLoading && { inert: 'true' }}
         >
 

@@ -56,5 +56,6 @@
         padding-inline: var(--padding-6);
         padding-block-start: var(--padding-4);
         margin-block-end: var(--padding-6);
+        color: rgb(var(--color-on-surface-variant));
     }
 }
