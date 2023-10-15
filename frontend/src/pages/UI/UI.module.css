@@ -28,6 +28,7 @@
         grid-area: main;
         overflow: auto;
         background-color: rgb(var(--color-surface));
+        scroll-behavior: smooth;
     }
 
     @media bp-medium {

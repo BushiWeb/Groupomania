@@ -1,5 +1,6 @@
 import { rest } from 'msw';
 import POSTS from './posts';
+import USERS from './users';
 
 export const handlers = [
     rest.post('/data/login', async (req, res, ctx) => {
@@ -292,6 +293,63 @@ export const handlers = [
 
         const response = { message: 'done, or not' };
 
+        return res(
+            ctx.delay(),
+            ctx.status(200),
+            ctx.set('X-Crsf-Token', 'testToken'),
+            ctx.json(response)
+        );
+    }),
+
+    rest.get('/data/users', async (req, res, ctx) => {
+        if (sessionStorage.getItem('inputError')) {
+            return res(
+                ctx.delay(),
+                ctx.status(400),
+                ctx.set('X-Crsf-Token', 'testToken'),
+                ctx.json({
+                    error: {
+                        type: 'UserInputValidationError',
+                        statusCode: 400,
+                    },
+                })
+            );
+        }
+
+        if (sessionStorage.getItem('serverError')) {
+            return res(
+                ctx.delay(),
+                ctx.status(500),
+                ctx.set('X-Crsf-Token', 'testToken'),
+                ctx.json({
+                    error: {
+                        type: 'ServerError',
+                        statusCode: 500,
+                    },
+                })
+            );
+        }
+
+        if (sessionStorage.getItem('networkError')) {
+            return res.networkError();
+        }
+
+        if (sessionStorage.getItem('authError')) {
+            return res(
+                ctx.delay(),
+                ctx.status(401),
+                ctx.set('X-Crsf-Token', 'testToken'),
+                ctx.json({
+                    error: {
+                        type: 'UnauthorizedError',
+                        statusCode: 401,
+                    },
+                })
+            );
+        }
+
+        const page = req.url.searchParams.get('page');
+        const response = page === '1' ? USERS.slice(0, 5) : USERS.slice(5);
         return res(
             ctx.delay(),
             ctx.status(200),

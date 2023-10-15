@@ -17,9 +17,14 @@
 
         display: flex;
         flex-direction: row;
-        justify-content: space-around;
+        justify-content: flex-start;
         align-items: center;
         gap: var(--size-5);
+    }
+
+    .content {
+        flex-grow: 1;
+        overflow: hidden;
     }
 
     .link:focus-visible {
@@ -29,6 +34,9 @@
 
     .headline {
         composes: body-large from '../../assets/styles/patterns/typography.module.css';
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     .supportingText {

@@ -1,4 +1,3 @@
-import Home from './Home';
 import { getByRole, screen, waitFor } from '@testing-library/react';
 import { render } from '../../utils/tests/test-wrapper';
 import userEvent from '../../utils/tests/user-event';
@@ -62,5 +61,21 @@ describe('Home test suite', () => {
             const newLabel = likeButton.getAttribute('aria-label');
             expect(newLabel).not.toBe(previousLabel);
         });
+    });
+
+    it('should give the focus to the main content when clicking the hidden link', async () => {
+        const user = userEvent.setup();
+        sessionStorage.setItem('userId', initialState.user.userId);
+        render(undefined, { initialEntries: ['/'], preloadedState: initialState });
+
+        await waitFor(() => {
+            screen.getAllByRole('article');
+        });
+
+        await user.tab();
+        expect(screen.getByRole('link', { name: /Accéder/ })).toHaveFocus();
+
+        await user.keyboard('{Enter}');
+        expect(screen.getByRole('main')).toHaveFocus();
     });
 });

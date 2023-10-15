@@ -1,0 +1,71 @@
+@value extra-large as bp-extra-large, expanded as bp-expanded, medium as bp-medium from "../../assets/styles/variables/breakpoints.module.css";
+
+@layer components {
+    .network {
+        padding: var(--padding-4);
+    }
+
+    .heading {
+        composes: headline-large from '../../assets/styles/patterns/typography.module.css';
+        margin-block-end: var(--padding-4);
+        color: rgb(var(--color-on-surface));
+    }
+
+    .error {
+        composes: body-large from '../../assets/styles/patterns/typography.module.css';
+        color: rgb(var(--color-on-surface));
+    }
+
+    .users,
+    .heading,
+    .error {
+        width: 100%;
+    }
+
+    @media bp-medium {
+        .network {
+            padding-block: var(--padding-8);
+            padding-inline: var(--padding-12);
+        }
+
+        .heading {
+            margin-block-end: var(--padding-8);
+        }
+
+        .users,
+        .heading,
+        .error {
+            max-width: var(--size-34);
+            margin-inline: auto;
+        }
+    }
+
+    @media bp-expanded {
+        .network {
+            padding-block: var(--padding-8);
+            padding-inline: var(--padding-10);
+        }
+
+        .users,
+        .heading,
+        .error {
+            max-width: none;
+        }
+    }
+
+    @media bp-extra-large {
+        .network {
+            padding-inline: var(--padding-12);
+        }
+
+        .heading {
+            margin-block-end: var(--padding-12);
+        }
+
+        .users,
+        .heading,
+        .error {
+            max-width: var(--size-68);
+        }
+    }
+}

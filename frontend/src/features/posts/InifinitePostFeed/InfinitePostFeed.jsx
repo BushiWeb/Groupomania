@@ -1,12 +1,9 @@
 import PostsList from '../PostsList/PostsList';
-import { useInfiniteScroll } from './useInfiniteScroll';
 import PropTypes from 'prop-types';
-import { useLikePost } from './useLikePost';
-import { useHandleRequestError } from '../../../hooks/useHandleRequestError';
-import { useState } from 'react';
 import PostActionsMenu from './PostActionsMenu';
 import UpsertPostDialog from '../UpsertPostDialog/UpsertPostDialog';
 import DeletePostDialog from '../DeletePostDialog/DeletePostDialog';
+import { useInfinitePostFeed } from './useInfinitePostFeed';
 
 /**
  * Allows the insertion of an infinite scrolling post list.
@@ -16,54 +13,23 @@ import DeletePostDialog from '../DeletePostDialog/DeletePostDialog';
  */
 export default function InfinitePostFeed({ containerElt, errorClassName, className }) {
     const {
-        posts,
-        isFetchingNextPage: isFetchingPostNextPage,
-        isLoading: isLoadingPost,
-        isError: isPostError,
-        error: postError,
-    } = useInfiniteScroll(containerElt);
-    const {
-        mutate: likeMutate,
-        isError: isLikeError,
-        error: likeError,
-    } = useLikePost();
-
-    useHandleRequestError(isPostError, postError);
-    useHandleRequestError(isLikeError, likeError);
-
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [menuAnchor, setMenuAnchor] = useState(null);
-    const [targetPost, setTargetPost] = useState({
-        postId: undefined,
-        title: undefined,
-        message: undefined,
-        imageUrl: undefined,
-        date: undefined,
-    });
-    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-    const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
-
-    function handleLike(postId, liked) {
-        return () => {
-            likeMutate({ postId, likeAction: !liked });
-        };
-    }
-
-    function handleMoreActions(post) {
-        return (e) => {
-            setMenuAnchor(e.currentTarget);
-            setTargetPost(post);
-            setIsMenuOpen(previous => !previous);
-        };
-    }
-
-    function onDeletePost(e) {
-        setIsDeleteDialogOpen(true);
-    }
-
-    function onUpdatePost(e) {
-        setIsUpdateDialogOpen(true);
-    }
+        data,
+        isFetchingPostNextPage,
+        isLoadingPost,
+        isPostError,
+        isMenuOpen,
+        menuAnchor,
+        targetPost,
+        isDeleteDialogOpen,
+        isUpdateDialogOpen,
+        handleLike,
+        handleMoreActions,
+        onDeletePost,
+        onUpdatePost,
+        setIsMenuOpen,
+        setIsDeleteDialogOpen,
+        setIsUpdateDialogOpen,
+    } = useInfinitePostFeed(containerElt);
 
     if (isPostError) {
         return <p className={errorClassName}>
@@ -74,7 +40,7 @@ export default function InfinitePostFeed({ containerElt, errorClassName, classNa
 
     return <>
         <PostsList
-            posts={posts}
+            posts={data}
             className={className}
             busy={isFetchingPostNextPage || isLoadingPost}
             handleLike={handleLike}

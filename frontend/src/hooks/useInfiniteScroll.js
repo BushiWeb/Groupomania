@@ -1,22 +1,23 @@
 import { useEffect } from 'react';
-import { useScrollThreshold } from '../../../hooks/useScrollThreshold.js';
+import { useScrollThreshold } from './useScrollThreshold.js';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { simpleFetch } from '../../../utils/fetch.js';
 import { useSelector } from 'react-redux';
-import { selectIsAuthenticated } from '../../../utils/selectors.js';
+import { selectIsAuthenticated } from '../utils/selectors.js';
 
 /**
  * Hooks allowing for infinite scroll.
  * @param scrollElt - Element to be scrolled
+ * @param queryKey - React query key for the request
+ * @param queryFn - React query queryFn function
  * @returns {{
- *  posts,
+ *  data,
  *  isFetching,
  *  isFetchingNextPage,
  *  isError,
  *  error
  * }}
  */
-export function useInfiniteScroll(scrollElt) {
+export function useInfiniteScroll(scrollElt, queryKey, queryFn) {
     const shouldLoadMore = useScrollThreshold(1000, scrollElt, true);
     const isAuthenticated = useSelector(selectIsAuthenticated);
 
@@ -28,11 +29,8 @@ export function useInfiniteScroll(scrollElt) {
         isLoading,
         isFetchingNextPage,
     } = useInfiniteQuery({
-        queryKey: ['posts'],
-        queryFn: async ({ pageParam = 1 }) => {
-            const data = await simpleFetch({ url: `data/posts?page=${pageParam}` });
-            return { data, pageParam };
-        },
+        queryKey: queryKey,
+        queryFn: queryFn,
         getNextPageParam: (lastPage) => lastPage.data.length === 0 ? undefined : lastPage.pageParam + 1,
     });
 
@@ -42,10 +40,10 @@ export function useInfiniteScroll(scrollElt) {
         }
     }, [shouldLoadMore, fetchNextPage, isAuthenticated]);
 
-    const posts = data?.pages?.reduce((acc, curr) => acc.concat(curr.data), []);
+    const flattenedData = data?.pages?.reduce((acc, curr) => acc.concat(curr.data), []);
 
     return {
-        posts,
+        data: flattenedData,
         isLoading,
         isFetchingNextPage,
         isError,

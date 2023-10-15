@@ -10,6 +10,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import UI from './pages/UI/UI.jsx';
 import Home from './pages/Home/Home.jsx';
 import TooltipWrapper from './features/tooltip/TooltipWrapper.jsx';
+import Network from './pages/Network/Network.jsx';
 //import reportWebVitals from './utils/reportWebVitals.js';
 
 const queryClient = new QueryClient();
@@ -24,7 +25,7 @@ root.render(
                         <Routes>
                             <Route path='/' element={<UI/>}>
                                 <Route index element={<Home/>} />
-                                <Route path='reseau' element={undefined} />
+                                <Route path='reseau' element={<Network/>} />
                                 <Route path='profil' element={undefined} />
                             </Route>
                             <Route path='/login' element={<Login/>} />

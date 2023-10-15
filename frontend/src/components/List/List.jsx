@@ -6,19 +6,22 @@ import { useArrowNavigation } from '../../hooks/useArrowNavigation';
 /**
  * List.
  */
-export default function List({ headlineLevel, data, label }) {
+export default function List({
+    headlineLevel, data, label, className, ...props
+}) {
     const {
         handleBlur,
         handleFocus,
         handleKeyDown,
         focusId,
-    } = useArrowNavigation(data.length);
+    } = useArrowNavigation(data.length, { usePageKeys: true, useHomeEnd: true });
 
     return <ul
-        className={style.list}
+        className={`${style.list} ${className}`}
         aria-label={label}
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
+        {...props}
     >
         {data.map((listItemData, index) =>
             <ListItem
@@ -34,6 +37,7 @@ export default function List({ headlineLevel, data, label }) {
 
 List.defaultProps = {
     headlineLevel: 2,
+    className: '',
 };
 
 List.propTypes = {
@@ -49,4 +53,7 @@ List.propTypes = {
 
     /** Label of the list */
     label: PropTypes.string.isRequired,
+
+    /** Additionnal class names */
+    className: PropTypes.string,
 };

@@ -84,6 +84,60 @@ describe('List component test suite', () => {
 
         await user.keyboard('{ArrowDown}');
         expect(listItems[1]).toHaveFocus();
+
+        await user.keyboard('{ArrowUp}');
+        expect(listItems[1]).not.toHaveFocus();
+        expect(listItems[0]).toHaveFocus();
+    });
+
+    it('should move the focus with the page keys', async () => {
+        const user = userEvent.setup();
+        render(<List label={listLabel} data={listData}/>);
+        const listItems = screen.getAllByRole('link');
+
+        expect(listItems[0]).not.toHaveFocus();
+
+        await user.tab();
+        expect(listItems[0]).toHaveFocus();
+
+        await user.keyboard('{PageUp}');
+        expect(listItems[0]).toHaveFocus();
+
+        await user.keyboard('{PageDown}');
+        expect(listItems[0]).not.toHaveFocus();
+        expect(listItems[1]).toHaveFocus();
+
+        await user.keyboard('{PageDown}');
+        expect(listItems[1]).toHaveFocus();
+
+        await user.keyboard('{PageUp}');
+        expect(listItems[1]).not.toHaveFocus();
+        expect(listItems[0]).toHaveFocus();
+    });
+
+    it('should move the focus with the home and end keys', async () => {
+        const user = userEvent.setup();
+        render(<List label={listLabel} data={[...listData, ...listData]}/>);
+        const listItems = screen.getAllByRole('link');
+
+        expect(listItems[0]).not.toHaveFocus();
+
+        await user.tab();
+        expect(listItems[0]).toHaveFocus();
+
+        await user.keyboard('{Control>}{Home}{/Control}');
+        expect(listItems[0]).toHaveFocus();
+
+        await user.keyboard('{Control>}{End}{/Control}');
+        expect(listItems[0]).not.toHaveFocus();
+        expect(listItems[3]).toHaveFocus();
+
+        await user.keyboard('{Control>}{End}{/Control}');
+        expect(listItems[3]).toHaveFocus();
+
+        await user.keyboard('{Control>}{Home}{/Control}');
+        expect(listItems[3]).not.toHaveFocus();
+        expect(listItems[0]).toHaveFocus();
     });
 
     it('should give the focus to the right element event when the first element gains it using a click', async () => {

@@ -1,0 +1,18 @@
+@value expanded as bp-expanded, medium as bp-medium from "../../../assets/styles/variables/breakpoints.module.css";
+
+@layer components {
+    .usersList {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .list {
+        max-width: var(--size-25);
+        width: 100%;
+    }
+
+    .busy {
+        align-self: center;
+    }
+}

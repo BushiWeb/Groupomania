@@ -12,6 +12,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import UI from '../../pages/UI/UI.jsx';
 import Home from '../../pages/Home/Home.jsx';
 import TooltipWrapper from '../../features/tooltip/TooltipWrapper.jsx';
+import Network from '../../pages/Network/Network.jsx';
 
 export function render(ui, {
     preloadedState,
@@ -63,7 +64,7 @@ export function render(ui, {
                             <Routes>
                                 <Route path='/' element={<UI/>}>
                                     <Route index element={<Home/>} />
-                                    <Route path='reseau' element={undefined} />
+                                    <Route path='reseau' element={<Network/>} />
                                     <Route path='profil' element={undefined} />
                                 </Route>
                                 <Route path='/login' element={<Login/>} />

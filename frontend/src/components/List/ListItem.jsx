@@ -31,7 +31,7 @@ export default function ListItem({
             className={`${style.link}`}
             ref={linkRef}
         >
-            <div>
+            <div className={style.content}>
                 <Heading id={headingId} className={style.headline}>{headline}</Heading>
                 {supportingText && <p className={style.supportingText}>{supportingText}</p>}
             </div>
