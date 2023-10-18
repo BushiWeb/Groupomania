@@ -1,16 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './assets/styles/global.module.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './utils/store.js';
-import Login from './pages/Login/Login.jsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import UI from './pages/UI/UI.jsx';
-import Home from './pages/Home/Home.jsx';
 import TooltipWrapper from './features/tooltip/TooltipWrapper.jsx';
-import Network from './pages/Network/Network.jsx';
+import ResponsiveRoutes from './routes.jsx';
 //import reportWebVitals from './utils/reportWebVitals.js';
 
 const queryClient = new QueryClient();
@@ -22,14 +19,7 @@ root.render(
             <React.StrictMode>
                 <TooltipWrapper>
                     <BrowserRouter>
-                        <Routes>
-                            <Route path='/' element={<UI/>}>
-                                <Route index element={<Home/>} />
-                                <Route path='reseau' element={<Network/>} />
-                                <Route path='profil' element={undefined} />
-                            </Route>
-                            <Route path='/login' element={<Login/>} />
-                        </Routes>
+                        <ResponsiveRoutes/>
                     </BrowserRouter>
                 </TooltipWrapper>
             </React.StrictMode>

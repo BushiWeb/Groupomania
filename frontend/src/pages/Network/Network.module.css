@@ -56,10 +56,27 @@
     @media bp-extra-large {
         .network {
             padding-inline: var(--padding-12);
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            grid-template-rows: 1fr 1fr;
+            grid-template-areas:
+                'heading user'
+                'users user';
+            grid-gap: var(--padding-12) var(--padding-6);
         }
 
         .heading {
-            margin-block-end: var(--padding-12);
+            grid-area: heading;
+            margin: 0;
+        }
+
+        .error,
+        .users {
+            grid-area: users;
+        }
+
+        .user {
+            grid-area: user;
         }
 
         .users,

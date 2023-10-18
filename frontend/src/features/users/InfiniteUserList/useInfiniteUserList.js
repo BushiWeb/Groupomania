@@ -24,7 +24,7 @@ export function useInfiniteUserList(containerElt) {
         containerElt,
         ['users'],
         async ({ pageParam = 1 }) => {
-            const data = await simpleFetch({ url: `data/users?page=${pageParam}` });
+            const data = await simpleFetch({ url: `/data/users?page=${pageParam}` });
             return { data, pageParam };
         }
     );

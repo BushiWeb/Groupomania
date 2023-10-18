@@ -1,4 +1,4 @@
-import { useOutletContext } from 'react-router-dom';
+import { Outlet, useOutletContext } from 'react-router-dom';
 import style from './Network.module.css';
 import { useState } from 'react';
 import InfiniteUserList from '../../features/users/InfiniteUserList/InfiniteUserList';
@@ -18,5 +18,6 @@ export default function Network() {
     return <main id={id} className={`${className} ${style.network}`} ref={mainRef}>
         <h1 className={style.heading}>Réseau</h1>
         <InfiniteUserList containerElt={containerRef} errorClassName={style.error} className={style.users}/>
+        <Outlet context={{ className: style.user }}/>
     </main>;
 }

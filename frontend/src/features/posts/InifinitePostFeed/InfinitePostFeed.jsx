@@ -11,7 +11,9 @@ import { useInfinitePostFeed } from './useInfinitePostFeed';
  * When a user clicks on a like button, optimistic UI is used to make the app more responsive.
  * Use an ErrorBoundary to handle errors.
  */
-export default function InfinitePostFeed({ containerElt, errorClassName, className }) {
+export default function InfinitePostFeed({
+    containerElt, errorClassName, className, userId,
+}) {
     const {
         data,
         isFetchingPostNextPage,
@@ -29,7 +31,7 @@ export default function InfinitePostFeed({ containerElt, errorClassName, classNa
         setIsMenuOpen,
         setIsDeleteDialogOpen,
         setIsUpdateDialogOpen,
-    } = useInfinitePostFeed(containerElt);
+    } = useInfinitePostFeed(containerElt, userId);
 
     if (isPostError) {
         return <p className={errorClassName}>
@@ -91,4 +93,7 @@ InfinitePostFeed.propTypes = {
 
     /** ClassName to give to the error message */
     errorClassName: PropTypes.string,
+
+    /** User id filter */
+    userId: PropTypes.number,
 };

@@ -1,0 +1,7 @@
+@value extra-large as bp-extra-large, expanded as bp-expanded, medium as bp-medium from "../../assets/styles/variables/breakpoints.module.css";
+
+@layer components {
+    .user {
+        overflow: auto;
+    }
+}

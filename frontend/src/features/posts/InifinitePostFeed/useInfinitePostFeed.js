@@ -7,6 +7,7 @@ import { useHandleRequestError } from '../../../hooks/useHandleRequestError.js';
 /**
  * Hooks for the InfinitePostFeed logic
  * @param containerElt - Element that will receive the scrolling event
+ * @param {number} [userId] - user id filter
  * @return {{
  *       data,
  *       isFetchingPostNextPage,
@@ -26,7 +27,7 @@ import { useHandleRequestError } from '../../../hooks/useHandleRequestError.js';
  *       setIsUpdateDialogOpen,
  *   }}
  */
-export function useInfinitePostFeed(containerElt) {
+export function useInfinitePostFeed(containerElt, userId) {
     const {
         data,
         isFetchingNextPage: isFetchingPostNextPage,
@@ -37,7 +38,7 @@ export function useInfinitePostFeed(containerElt) {
         containerElt,
         ['posts'],
         async ({ pageParam = 1 }) => {
-            const data = await simpleFetch({ url: `data/posts?page=${pageParam}` });
+            const data = await simpleFetch({ url: `/data/posts?page=${pageParam}${userId ? `&userId=${userId}` : ''}` });
             return { data, pageParam };
         }
     );
