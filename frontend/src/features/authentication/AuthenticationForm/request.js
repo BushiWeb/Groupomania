@@ -1,4 +1,4 @@
-import { simpleFetch } from '../../utils/fetch.js';
+import { simpleFetch } from '../../../utils/fetch.js';
 import isEmail from 'validator/lib/isEmail.js';
 import isStrongPassword from 'validator/lib/isStrongPassword.js';
 

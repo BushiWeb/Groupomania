@@ -1,5 +1,5 @@
-import FilledButton from '../../components/buttons/FilledButton/FilledButton';
-import TonalButton from '../../components/buttons/TonalButton/TonalButton';
+import FilledButton from '../../../components/buttons/FilledButton/FilledButton';
+import TonalButton from '../../../components/buttons/TonalButton/TonalButton';
 import style from './AuthenticationForm.module.css';
 import PropTypes from 'prop-types';
 

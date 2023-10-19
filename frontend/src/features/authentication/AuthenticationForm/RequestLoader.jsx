@@ -1,4 +1,4 @@
-import ProgressIndicator from '../../components/ProgressIndicator/ProgressIndicator';
+import ProgressIndicator from '../../../components/ProgressIndicator/ProgressIndicator';
 import style from './AuthenticationForm.module.css';
 import PropTypes from 'prop-types';
 

@@ -1,7 +1,7 @@
 import AuthenticationForm from './AuthenticationForm.jsx';
 import { screen, waitFor } from '@testing-library/react';
-import { render } from '../../utils/tests/test-wrapper.js';
-import userEvent from '../../utils/tests/user-event.js';
+import { render } from '../../../utils/tests/test-wrapper.js';
+import userEvent from '../../../utils/tests/user-event.js';
 import { ERROR_MESSAGES } from './request.js';
 import '@testing-library/jest-dom';
 

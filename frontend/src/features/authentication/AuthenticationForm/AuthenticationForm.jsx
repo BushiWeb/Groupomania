@@ -1,5 +1,5 @@
 import style from './AuthenticationForm.module.css';
-import Logo from '../../components/Logo/Logo';
+import Logo from '../../../components/Logo/Logo';
 import FormFields from './FormFields';
 import FormButtons from './FormButtons';
 import RequestLoader from './RequestLoader';

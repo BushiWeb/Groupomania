@@ -1,10 +1,10 @@
 import { useSelector } from 'react-redux';
 import style from './AuthenticationForm.module.css';
-import { selectIsDarkTheme } from '../../utils/selectors';
-import Icon from '../../components/Icon/Icon';
-import TextField from '../../components/form-inputs/TextField/TextField';
-import PasswordField from '../../components/form-inputs/PasswordField/PasswordField';
-import CheckboxLabel from '../../components/form-inputs/Checkbox/CheckboxLabel';
+import { selectIsDarkTheme } from '../../../utils/selectors';
+import Icon from '../../../components/Icon/Icon';
+import TextField from '../../../components/form-inputs/TextField/TextField';
+import PasswordField from '../../../components/form-inputs/PasswordField/PasswordField';
+import CheckboxLabel from '../../../components/form-inputs/Checkbox/CheckboxLabel';
 import { ACTIONS } from './formReducer';
 import PropTypes from 'prop-types';
 

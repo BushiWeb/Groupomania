@@ -1,4 +1,4 @@
-@value medium as bp-medium from "../../assets/styles/variables/breakpoints.module.css";
+@value medium as bp-medium from "../../../assets/styles/variables/breakpoints.module.css";
 
 @layer components {
     .form {
@@ -38,7 +38,7 @@
     }
 
     .globalError {
-        composes: body-medium from '../../assets/styles/patterns/typography.module.css';
+        composes: body-medium from '../../../assets/styles/patterns/typography.module.css';
 
         margin-block-end: var(--padding-4);
         padding-inline: var(--padding-2);

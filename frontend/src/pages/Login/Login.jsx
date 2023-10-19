@@ -1,4 +1,4 @@
-import AuthenticationForm from '../../features/authentication/AuthenticationForm';
+import AuthenticationForm from '../../features/authentication/AuthenticationForm/AuthenticationForm';
 import style from './Login.module.css';
 import ProgressIndicator from '../../components/ProgressIndicator/ProgressIndicator';
 import { useAutoLogin } from './useAutoLogin';

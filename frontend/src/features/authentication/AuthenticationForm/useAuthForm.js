@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import {
     authRequest, handleAuthRequestError, validateAuthData,
 } from './request.js';
-import { login } from './user.slice.js';
+import { login } from '../user.slice.js';
 
 /**
  * Hook handling form validation, submission and request errors.

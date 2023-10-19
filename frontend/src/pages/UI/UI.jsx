@@ -1,24 +1,17 @@
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import MainHeader from '../../layouts/MainHeader/MainHeader';
 import NavigationSection from '../../layouts/Navigation/NavigationSection';
 import style from './UI.module.css';
-import { useEffect, useId, useState } from 'react';
+import { useId, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../../utils/selectors';
 import { fabContext } from '../../context/fabContext';
 
 /** Global UI, containing the main pages */
 export default function UI() {
-    const redirect = useNavigate();
     const isAuthenticated = useSelector(selectIsAuthenticated);
     const mainId = useId();
     const [fab, setFab] = useState(undefined);
-
-    useEffect(() => {
-        if (!isAuthenticated) {
-            return redirect('/login');
-        }
-    }, [isAuthenticated, redirect]);
 
     return <fabContext.Provider value={{ fab, setFab }}>
         <div className={style.container}>
