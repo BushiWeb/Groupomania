@@ -12,17 +12,6 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-
-        z-index: var(--layer-4);
-
-        transition: background-color var(--motion-duration-12)
-            var(--motion-easing-emphasized);
-    }
-
-    .scrolledHeader {
-        composes: header;
-
-        background-color: rgb(var(--color-surface-container));
     }
 
     .logo {

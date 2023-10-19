@@ -1,74 +1,98 @@
 import UserHeader from './UserHeader';
 import { screen } from '@testing-library/react';
 import { render } from '../../utils/tests/test-wrapper';
-import userEvent from '@testing-library/user-event';
+import userEvent from '../../utils/tests/user-event';
 import '@testing-library/jest-dom';
 
-describe.skip('MainHeader component test suite', () => {
-    const heading = 'test@email.com', subheading = 'admin';
+describe('MainHeader component test suite', () => {
+    const email = 'test@email.com';
+    const mainContentId = 'main-content';
+    const userId = 102;
+    const props = {
+        email,
+        mainContentId,
+        userId,
+    };
+
+    const preloadedState = {
+        user: {
+            userId,
+            email,
+            role: {
+                roleId: 2,
+                name: 'user',
+            },
+        },
+    };
+    const adminPreloadedState = {
+        user: {
+            userId: 1,
+            email: 'admin@example.com',
+            role: {
+                roleId: 1,
+                name: 'admin',
+            },
+        },
+    };
 
     it('should render', () => {
-        render(<UserHeader heading={heading}/>);
+        render(<UserHeader {...props}/>);
     });
 
-    it('should render the right title and subtitle', () => {
-        render(<UserHeader heading={heading} subheading={subheading}/>);
-        screen.getByRole('heading', { name: heading, level: 1 });
-        screen.getByText(subheading, { selector: 'p' });
+    it('should render the right email', () => {
+        render(<UserHeader {...props}/>);
+        screen.getByRole('heading', { name: email, level: 1 });
     });
 
-    it('should display the update user button', async () => {
+    it('should render the admin subtitle', () => {
+        render(<UserHeader {...props} admin/>);
+        screen.getByText('admin', { selector: 'p' });
+    });
+
+    it('should display the navigate back button to return to the list', async () => {
         const user = userEvent.setup();
-        render(<UserHeader heading={heading} updateProfile={true}/>);
-        const updateUserButton = screen.getByRole('button', { name: 'Mettre à jour le profil' });
+        render(<UserHeader {...props} backArrow/>, { preloadedState });
+        const backArrow = screen.getByRole('button', { name: 'Retourner à la liste' });
 
-        await user.click(updateUserButton);
+        await user.click(backArrow);
+        expect(screen.getByTestId('search-path').textContent).toMatch('reseau');
     });
 
-    it('should display the delete user button', async () => {
+    it('should display the logout and theme buttons, and have a hidden link', async () => {
         const user = userEvent.setup();
-        render(<UserHeader heading={heading} deleteUser={true}/>);
-        const deleteUserButton = screen.getByRole('button', { name: 'Supprimer le compte' });
+        render(<UserHeader {...props} topLevelHeader/>);
+        screen.getByRole('button', { name: 'Se déconnecter' });
+        screen.getByRole('link', { name: 'Accéder directement au contenu' });
 
-        await user.click(deleteUserButton);
+        const themeButton = screen.getByRole('button', { name: 'Passer au mode sombre' });
+        await user.click(themeButton);
+        expect(document.body).toHaveClass('dark');
+        expect(themeButton).toHaveAccessibleName('Passer au mode clair');
+        await user.click(themeButton);
+        expect(document.body).toHaveClass('light');
+        expect(themeButton).toHaveAccessibleName('Passer au mode sombre');
     });
 
-    it('should display the update user role button', async () => {
-        const user = userEvent.setup();
-        render(<UserHeader heading={heading} updateRole={true}/>);
-        const updateRoleButton = screen.getByRole('button', { name: 'Modifier le rôle de l\'utilisateur' });
-
-        await user.click(updateRoleButton);
+    it('should display the update user button and the delete user button', () => {
+        render(<UserHeader {...props}/>, { preloadedState });
+        screen.getByRole('button', { name: 'Modifier le profil' });
+        screen.getByRole('button', { name: 'Supprimer le profil' });
     });
 
-    it('should return to the previous page', async () => {
-        const user = userEvent.setup();
-        render(<UserHeader heading={heading}/>, { initialEntries: ['/', 'test']});
-        const navigationButton = screen.getByRole('button', { name: 'Page précédente' });
-
-        await user.click(navigationButton);
-        const path = screen.getByTestId('search-path').textContent;
-        expect(path).toBe('/');
+    it('should display the update role button and the delete user button', () => {
+        render(<UserHeader {...props}/>, { preloadedState: adminPreloadedState });
+        screen.getByRole('button', { name: 'Modifier le role de l\'utilisateur' });
+        screen.getByRole('button', { name: 'Supprimer le profil' });
     });
 
-    it('should focus the elements in the right order', async () => {
+    it('should display the actions in a menu when usong it as top level header', async () => {
         const user = userEvent.setup();
-        render(<UserHeader heading={heading} updateRole={true} updateProfile={true} deleteUser={true}/>);
-        const navigationButton = screen.getByRole('button', { name: 'Page précédente' });
-        const updateUserButton = screen.getByRole('button', { name: 'Mettre à jour le profil' });
-        const deleteUserButton = screen.getByRole('button', { name: 'Supprimer le compte' });
-        const updateRoleButton = screen.getByRole('button', { name: 'Modifier le rôle de l\'utilisateur' });
+        render(<UserHeader {...props} topLevelHeader/>, { preloadedState });
+        const moreActionsButton = screen.getByRole('button', { name: 'Plus d\'actions' });
 
-        await user.tab();
-        expect(navigationButton).toHaveFocus();
-
-        await user.tab();
-        expect(updateUserButton).toHaveFocus();
-
-        await user.tab();
-        expect(deleteUserButton).toHaveFocus();
-
-        await user.tab();
-        expect(updateRoleButton).toHaveFocus();
+        await user.click(moreActionsButton);
+        screen.getByRole('menu', { name: /Actions/ });
+        screen.getByRole('button', { name: 'Modifier le profil' });
+        screen.getByRole('button', { name: 'Supprimer le profil' });
     });
 });

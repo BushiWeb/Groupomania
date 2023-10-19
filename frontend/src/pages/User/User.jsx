@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import style from './User.module.css';
 import { useState } from 'react';
 import InfinitePostFeed from '../../features/posts/InifinitePostFeed/InfinitePostFeed';
+import UserHeader from '../../layouts/UserHeader/UserHeader';
 
 /**
  * User page.
@@ -20,12 +21,20 @@ export default function User() {
         }
     };
 
-    return <main className={`${style.user}`} ref={ref}>
+    return <div className={`${style.user}`} ref={ref}>
+        <UserHeader
+            email="test@gmail.com"
+            admin
+            userId={3}
+            backArrow
+            topLevelHeader
+            mainContentId="test"
+        />
         <InfinitePostFeed
             containerElt={containerRef}
             errorClassName={style.error}
             className={style.posts}
             userId={parseInt(userId)}
         />
-    </main>;
+    </div>;
 }

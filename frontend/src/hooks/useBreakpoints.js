@@ -39,7 +39,7 @@ export function useBreakpoint() {
         return () => {
             window.removeEventListener('resize', eventListener);
         };
-    });
+    }, []);
 
     return breakpoint;
 }
