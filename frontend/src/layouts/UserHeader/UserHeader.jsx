@@ -10,7 +10,7 @@ import { simpleFetch } from '../../utils/fetch';
 import { logout } from '../../features/authentication/user.slice';
 import { THEMES_NAMES, themeToggle } from '../../features/theme/theme.slice';
 import Menu from '../../components/Menu/Menu';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Icon from '../../components/Icon/Icon';
 
 /**
@@ -83,15 +83,6 @@ export default function UserHeader({
     function handleLogoutClick(e) {
         mutate();
     }
-
-    useEffect(() => {
-        document.body.classList.forEach((value) => {
-            if (THEMES_NAMES[value]) {
-                document.body.classList.remove(value);
-            }
-        });
-        document.body.classList.add(theme);
-    }, [theme]);
 
     return <header className={small ? style.smallHeader : style.header}>
         {topLevelHeader && <HiddenNavigationLink target={mainContentId}>

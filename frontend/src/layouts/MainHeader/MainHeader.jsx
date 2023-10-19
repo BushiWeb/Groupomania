@@ -4,7 +4,6 @@ import Logo from '../../components/Logo/Logo.jsx';
 import { useSelector, useStore } from 'react-redux';
 import { selectTheme } from '../../utils/selectors.js';
 import { THEMES_NAMES, themeToggle } from '../../features/theme/theme.slice';
-import { useEffect } from 'react';
 import HiddenNavigationLink from '../../components/HiddenNavigationLink/HiddenNavigationLink.jsx';
 import PropTypes from 'prop-types';
 import { useMutation } from '@tanstack/react-query';
@@ -32,15 +31,6 @@ export default function MainHeader({ mainContentId, ...props }) {
     function handleLogoutClick(e) {
         mutate();
     }
-
-    useEffect(() => {
-        document.body.classList.forEach((value) => {
-            if (THEMES_NAMES[value]) {
-                document.body.classList.remove(value);
-            }
-        });
-        document.body.classList.add(theme);
-    }, [theme]);
 
     const className = `${style.header} ${props.className || ''}`;
 

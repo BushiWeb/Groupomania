@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import TooltipWrapper from './features/tooltip/TooltipWrapper.jsx';
 import ResponsiveRoutes from './routes.jsx';
+import ThemeSwitcher from './features/theme/ThemeSwitcher.jsx';
 //import reportWebVitals from './utils/reportWebVitals.js';
 
 const queryClient = new QueryClient();
@@ -18,9 +19,11 @@ root.render(
         <Provider store={store}>
             <React.StrictMode>
                 <TooltipWrapper>
-                    <BrowserRouter>
-                        <ResponsiveRoutes/>
-                    </BrowserRouter>
+                    <ThemeSwitcher>
+                        <BrowserRouter>
+                            <ResponsiveRoutes/>
+                        </BrowserRouter>
+                    </ThemeSwitcher>
                 </TooltipWrapper>
             </React.StrictMode>
         </Provider>
