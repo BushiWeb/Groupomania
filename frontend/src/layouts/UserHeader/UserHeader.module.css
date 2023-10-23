@@ -1,34 +1,6 @@
 @value expanded as bp-expanded, medium as bp-medium from "../../assets/styles/variables/breakpoints.module.css";
 
 @layer components {
-    .header {
-        background-color: rgb(var(--color-surface-container-low));
-
-        min-height: var(--size-18);
-        padding-inline-start: var(--padding-1);
-        padding-inline-end: var(--padding-1);
-        padding-block-start: var(--padding-5);
-        padding-block-end: var(--padding-6);
-
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-        align-content: space-between;
-        align-items: center;
-        column-gap: var(--padding-2);
-    }
-
-    .navigation {
-        flex-grow: 1;
-    }
-
-    .headingGroup {
-        order: 1;
-        flex-basis: 100%;
-        padding-inline-start: var(--padding-3);
-    }
-
     .heading {
         composes: headline-small from '../../assets/styles/patterns/typography.module.css';
         color: rgb(var(--color-on-surface));
@@ -37,26 +9,5 @@
     .subHeading {
         composes: title-small from '../../assets/styles/patterns/typography.module.css';
         color: rgb(var(--color-on-surface-variant));
-    }
-
-    .smallHeader {
-        composes: header;
-
-        flex-wrap: nowrap;
-
-        min-height: var(--size-14);
-        padding-block-start: 0;
-        padding-block-end: 0;
-        align-items: center;
-    }
-
-    .smallHeader .headingGroup {
-        order: 0;
-        flex-basis: auto;
-        flex-grow: 1;
-    }
-
-    .smallHeader .navigation {
-        flex-grow: 0;
     }
 }

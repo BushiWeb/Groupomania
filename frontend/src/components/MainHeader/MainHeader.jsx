@@ -1,12 +1,14 @@
-import Logo from '../../components/Logo/Logo.jsx';
+import style from './MainHeader.module.css';
+import StandardIconButton from '../icon-button/StandardIconButton/StandardIconButton.jsx';
+import Logo from '../Logo/Logo.jsx';
 import { useSelector, useStore } from 'react-redux';
 import { selectTheme } from '../../utils/selectors.js';
 import { THEMES_NAMES, themeToggle } from '../../features/theme/theme.slice';
+import HiddenNavigationLink from '../HiddenNavigationLink/HiddenNavigationLink.jsx';
 import PropTypes from 'prop-types';
 import { useMutation } from '@tanstack/react-query';
 import { simpleFetch } from '../../utils/fetch';
 import { logout } from '../../features/authentication/user.slice';
-import TopAppBar from '../../components/TopAppBar/TopAppBar';
 
 /**
  * Main header off the application, used for the top level pages.
@@ -30,24 +32,21 @@ export default function MainHeader({ mainContentId, ...props }) {
         mutate();
     }
 
-    return <TopAppBar
-        hiddenLinkTargetId={mainContentId}
-        actions={[
-            {
-                label: theme === THEMES_NAMES.dark ? 'Passer au mode clair' : 'Passer au mode sombre',
-                onClick: () => dispatch(themeToggle()),
-                icon: theme === THEMES_NAMES.dark ? 'light_mode' : 'dark_mode',
-            },
-            {
-                label: 'Se déconnecter',
-                onClick: handleLogoutClick,
-                icon: 'logout',
-            },
-        ]}
-        className={props.className || ''}
-    >
-        <Logo label="Retourner à la page d'accueil" target="/"/>
-    </TopAppBar>;
+    const className = `${style.header} ${props.className || ''}`;
+
+    return <header className={className}>
+        <HiddenNavigationLink target={mainContentId}>Accéder directement au contenu</HiddenNavigationLink>
+
+        <div className={style.logo}>
+            <Logo label="Retourner à la page d'accueil" target="/"/>
+        </div>
+
+        <StandardIconButton name={theme === THEMES_NAMES.dark ? 'light_mode' : 'dark_mode'} onClick={() => {
+            dispatch(themeToggle());
+        }} label={theme === THEMES_NAMES.dark ? 'Passer au mode clair' : 'Passer au mode sombre'} />
+
+        <StandardIconButton name="logout" onClick={handleLogoutClick} label="Se déconnecter" />
+    </header>;
 }
 
 MainHeader.propTypes = {

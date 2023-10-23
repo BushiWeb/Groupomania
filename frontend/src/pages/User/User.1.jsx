@@ -1,8 +1,7 @@
-import { useParams } from 'react-router-dom';
+import { useOutletContext, useParams } from 'react-router-dom';
 import style from './User.module.css';
 import { useState } from 'react';
 import InfinitePostFeed from '../../features/posts/InifinitePostFeed/InfinitePostFeed';
-import UserHeader from '../../layouts/UserHeader/UserHeader';
 
 /**
  * User page.
@@ -12,6 +11,7 @@ import UserHeader from '../../layouts/UserHeader/UserHeader';
  */
 export default function User() {
     const { userId } = useParams();
+    const { className } = useOutletContext();
 
     // Get the ref for the container element but rerender the children when the ref changes
     const [containerRef, setContainerRef] = useState(null);
@@ -21,15 +21,7 @@ export default function User() {
         }
     };
 
-    return <div className={`${style.user}`} ref={ref}>
-        <UserHeader
-            email="test@gmail.com"
-            admin
-            userId={1}
-            backArrow
-            topLevelHeader
-            mainContentId="test"
-        />
+    return <div className={`${className} ${style.user}`} ref={ref}>
         <InfinitePostFeed
             containerElt={containerRef}
             errorClassName={style.error}
