@@ -32,11 +32,18 @@ export function useMainHeaderActions() {
         dispatch(themeToggle());
     }
 
+    let themeLabel = 'Passer au mode sombre', themeIcon = 'dark_mode';
+
+    if (theme === THEMES_NAMES.dark) {
+        themeLabel = 'Passer au mode clair';
+        themeIcon = 'light_mode';
+    }
+
     return [
         {
-            label: theme === THEMES_NAMES.dark ? 'Passer au mode clair' : 'Passer au mode sombre',
+            label: themeLabel,
             onClick: handleThemeClick,
-            icon: theme === THEMES_NAMES.dark ? 'light_mode' : 'dark_mode',
+            icon: themeIcon,
         },
         {
             label: 'Se déconnecter',

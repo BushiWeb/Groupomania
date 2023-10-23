@@ -64,13 +64,14 @@ describe('MainHeader component test suite', () => {
         screen.getByRole('button', { name: 'Se déconnecter' });
         screen.getByRole('link', { name: 'Accéder directement au contenu' });
 
-        const themeButton = screen.getByRole('button', { name: 'Passer au mode sombre' });
+        let themeButton = screen.getByRole('button', { name: 'Passer au mode sombre' });
         await user.click(themeButton);
+        themeButton = screen.getByRole('button', { name: 'Passer au mode clair' });
         expect(document.body).toHaveClass('dark');
-        expect(themeButton).toHaveAccessibleName('Passer au mode clair');
+
         await user.click(themeButton);
+        screen.getByRole('button', { name: 'Passer au mode sombre' });
         expect(document.body).toHaveClass('light');
-        expect(themeButton).toHaveAccessibleName('Passer au mode sombre');
     });
 
     it('should display the update user button and the delete user button', () => {

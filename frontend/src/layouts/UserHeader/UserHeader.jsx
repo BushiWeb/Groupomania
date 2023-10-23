@@ -22,7 +22,7 @@ export default function UserHeader({
     return <TopAppBar
         type={small ? 'small' : 'medium'}
         {...topLevelHeader && mainContentId && { hiddenLinkTargetId: mainContentId }}
-        {...backArrow && { navigationArrowTarget: '/reseau' }}
+        {...backArrow && { navigationArrowTarget: '/reseau', navigationArrowLabel: 'Retourner à la liste' }}
         actions={actions}
         className={props.className || ''}
     >
