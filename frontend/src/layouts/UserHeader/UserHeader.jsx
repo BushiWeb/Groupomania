@@ -1,12 +1,7 @@
 import PropTypes from 'prop-types';
 import style from './UserHeader.module.css';
-import { useSelector, useStore } from 'react-redux';
-import { selectRighInfos, selectTheme } from '../../utils/selectors';
-import { useMutation } from '@tanstack/react-query';
-import { simpleFetch } from '../../utils/fetch';
-import { logout } from '../../features/authentication/user.slice';
-import { THEMES_NAMES, themeToggle } from '../../features/theme/theme.slice';
 import TopAppBar from '../../components/TopAppBar/TopAppBar';
+import { useUserHeader } from './useUserHeader';
 
 /**
  * User header.
@@ -22,74 +17,7 @@ export default function UserHeader({
     small,
     ...props
 }) {
-    const theme = useSelector(selectTheme);
-
-    // Action buttons to display
-    const { isAdmin, userId: currentUserId } = useSelector(selectRighInfos);
-    const deleteButton = isAdmin || currentUserId === userId,
-        editButton = currentUserId === userId,
-        editRoleButton = isAdmin;
-    const { dispatch } = useStore();
-    const { mutate } = useMutation({
-        mutationFn: async () => {
-            return simpleFetch({
-                url: '/data/logout',
-                method: 'POST',
-            });
-        },
-        onSettled: () => {
-            dispatch(logout());
-        },
-    });
-
-    function handleLogoutClick(e) {
-        mutate();
-    }
-
-
-    const actions = [
-        ...topLevelHeader ?
-            [
-                {
-                    label: theme === THEMES_NAMES.dark ? 'Passer au mode clair' : 'Passer au mode sombre',
-                    onClick: () => dispatch(themeToggle()),
-                    icon: theme === THEMES_NAMES.dark ? 'light_mode' : 'dark_mode',
-                },
-                {
-                    label: 'Se déconnecter',
-                    onClick: handleLogoutClick,
-                    icon: 'logout',
-                },
-            ] :
-            [],
-        ...editButton ?
-            [
-                {
-                    label: 'Modifier le profil',
-                    onClick: () => console.log('Modification du profil'),
-                    icon: 'edit',
-                },
-            ] :
-            [],
-        ...deleteButton ?
-            [
-                {
-                    label: 'Supprimer le profil',
-                    onClick: () => console.log('Suppression du profil'),
-                    icon: 'delete_forever',
-                },
-            ] :
-            [],
-        ...editRoleButton ?
-            [
-                {
-                    label: 'Modifier le role de l\'utilisateur',
-                    onClick: () => console.log('Modification du role'),
-                    icon: 'admin_panel_settings',
-                },
-            ] :
-            [],
-    ];
+    const actions = useUserHeader(userId, topLevelHeader);
 
     return <TopAppBar
         type={small ? 'small' : 'medium'}
