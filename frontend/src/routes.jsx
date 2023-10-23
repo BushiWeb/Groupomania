@@ -31,7 +31,7 @@ export default function ResponsiveRoutes({ test }) {
             {(breakpoint === 2 || breakpoint === 1) && <Route path='reseau/:userId' element={<User/>}/>}
             <Route path='profil' element={undefined} />
         </Route>
-        {breakpoint === 0 && <Route path='/reseau/:userId' element={isAuthenticated ? <User/> : <Navigate to='/login'/>}/>}
+        {breakpoint === 0 && <Route path='/reseau/:userId' element={isAuthenticated ? <User topLevelPage/> : <Navigate to='/login'/>}/>}
 
         <Route path='/login' element={<Login/>} />
 

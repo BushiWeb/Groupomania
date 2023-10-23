@@ -1,81 +1,93 @@
-import { getAllByRole, screen, waitFor } from '@testing-library/react';
+import {
+    getAllByRole, getByLabelText, getByRole, queryByRole, screen, waitFor,
+} from '@testing-library/react';
 import { render } from '../../utils/tests/test-wrapper';
 import userEvent from '../../utils/tests/user-event';
 import '@testing-library/jest-dom';
 import USERS from '../../utils/tests/mocks/users';
 import { act } from 'react-dom/test-utils';
+import { changeViewportWidth } from '../../utils/tests/changeViewportWidth';
 
-describe('Network page test suite', () => {
-    const initialState = { user: { email: 'test@gmail.com', userId: 130, role: { roleId: 1 }}};
-    const initialEntries = ['/reseau'];
-    const renderOptions = { preloadedState: initialState, initialEntries };
+describe('User page test suite', () => {
+    const userId = 2;
+    const initialEntries = [`/reseau/${userId}`];
+    const initialAdminState = { user: { email: 'test@gmail.com', userId: 130, role: { roleId: 1 }}};
+    const initialOwnerState = { user: { email: 'test@gmail.com', userId, role: { roleId: 2 }}};
+    const initialState = { user: { email: 'test@gmail.com', userId: 130, role: { roleId: 2 }}};
 
-    it('should render with one page of users', async () => {
-        render(undefined, renderOptions);
+    function renderOptions(preloadedState = initialState) {
+        return { preloadedState, initialEntries };
+    }
 
-        await waitFor(() => {
-            const listElt = screen.getByRole('list', { name: 'Liste des utilisateurs' });
-            const userElts = getAllByRole(listElt, 'listitem');
-            expect(userElts).toHaveLength(USERS.length / 2);
-        });
+    it('should render the content within the network page on large devices', () => {
+        changeViewportWidth(300);
+        const { container } = render(undefined, renderOptions());
+
+        const mainElt = screen.getByRole('main');
+        expect(mainElt.querySelector('.userHeader')).toBeNull();
+        getByRole(mainElt, 'feed');
+
+        const headerElt = container.querySelector('.userHeader');
+        expect(headerElt).not.toBeNull();
+        getByRole(headerElt, 'link', { name: 'Accéder directement au contenu' });
+        getByRole(headerElt, 'button', { name: 'Se déconnecter' });
+        getByRole(headerElt, 'button', { name: 'Passer au mode sombre' });
+        getByRole(headerElt, 'button', { name: 'Retourner à la liste' });
     });
 
-    it('should load more users on scroll', async () => {
-        render(undefined, renderOptions);
+    it('should render the content in the UI on medium sized devices', () => {
+        changeViewportWidth(900);
+        render(undefined, renderOptions());
 
-        await waitFor(() => {
-            const listElt = screen.getByRole('list', { name: 'Liste des utilisateurs' });
-            const userElts = getAllByRole(listElt, 'listitem');
-            expect(userElts).toHaveLength(USERS.length / 2);
-        });
+        const mainElt = screen.getByRole('main');
+        const headerElt = mainElt.querySelector('.userHeader');
+        expect(headerElt).not.toBeNull();
+        getByRole(mainElt, 'feed');
 
-        const mainElement = screen.getByRole('main');
-        mainElement.scrollTop = 5000;
-        const scrollEvent = new Event('scroll');
-        await act(() => {
-            mainElement.dispatchEvent(scrollEvent);
-        });
-
-        await waitFor(() => {
-            screen.getByLabelText(/Chargement/);
-        });
-
-        await waitFor(() => {
-            const listElt = screen.getByRole('list', { name: 'Liste des utilisateurs' });
-            const userElts = getAllByRole(listElt, 'listitem');
-            expect(userElts).toHaveLength(USERS.length);
-        });
+        expect(queryByRole(headerElt, 'link', { name: 'Accéder directement au contenu' })).toBeNull();
+        expect(queryByRole(headerElt, 'button', { name: 'Se déconnecter' })).toBeNull();
+        expect(queryByRole(headerElt, 'button', { name: 'Passer au mode sombre' })).toBeNull();
+        getByRole(headerElt, 'button', { name: 'Retourner à la liste' });
     });
 
-    it('should navigate to the user\'s page', async () => {
+    it('should render the page at the top level on small devices', () => {
+        changeViewportWidth(1500);
+        render(undefined, renderOptions());
+
+        const mainElt = screen.getByRole('main');
+        const sectionElt = getByLabelText(mainElt, /Utilisateur/);
+        const headerElt = sectionElt.querySelector('.userHeader');
+        expect(headerElt).not.toBeNull();
+        getByRole(sectionElt, 'feed');
+
+        expect(queryByRole(headerElt, 'link', { name: 'Accéder directement au contenu' })).toBeNull();
+        expect(queryByRole(headerElt, 'button', { name: 'Se déconnecter' })).toBeNull();
+        expect(queryByRole(headerElt, 'button', { name: 'Passer au mode sombre' })).toBeNull();
+        expect(queryByRole(headerElt, 'button', { name: 'Retourner à la liste' })).toBeNull();
+    });
+
+    it('should focus the main content', async () => {
         const user = userEvent.setup();
-        render(undefined, renderOptions);
-        let userElt;
+        changeViewportWidth(300);
+        render(undefined, renderOptions());
 
-        await waitFor(() => {
-            userElt = screen.getByRole('link', { name: USERS[0].email });
-        });
+        const mainElt = screen.getByRole('main');
+        const linkElt = screen.getByRole('link', { name: 'Accéder directement au contenu' });
 
-        await user.click(userElt);
-        await waitFor(() => {
-            const path = screen.getByTestId('search-path').textContent;
-            expect(path).toBe(`/reseau/${USERS[0].userId}`);
-        });
+        await user.click(linkElt);
+        expect(mainElt).toHaveFocus();
     });
 
-    it('should give the focus to the main content when clicking the hidden link', async () => {
+    it('should log the user out', async () => {
         const user = userEvent.setup();
-        sessionStorage.setItem('userId', initialState.user.userId);
-        render(undefined, { initialEntries: ['/'], preloadedState: initialState });
+        changeViewportWidth(300);
+        render(undefined, renderOptions());
+        const logoutButton = screen.getByRole('button', { name: 'Se déconnecter' });
 
+        await user.click(logoutButton);
         await waitFor(() => {
-            screen.getAllByRole('article');
+            const path = screen.getByTestId('search-path');
+            expect(path).toHaveTextContent('/login');
         });
-
-        await user.tab();
-        expect(screen.getByRole('link', { name: /Accéder/ })).toHaveFocus();
-
-        await user.keyboard('{Enter}');
-        expect(screen.getByRole('main')).toHaveFocus();
     });
 });

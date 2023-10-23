@@ -3,11 +3,7 @@ import { render } from '../../utils/tests/test-wrapper.js';
 import userEvent from '../../utils/tests/user-event.js';
 import '@testing-library/jest-dom';
 import NavigationSection from './NavigationSection.jsx';
-
-const changeViewportWidth = (w) => {
-    window.innerWidth = w;
-    window.dispatchEvent(new Event('resize'));
-};
+import { changeViewportWidth } from '../../utils/tests/changeViewportWidth.js';
 
 describe('NavigationSection component test suite', () => {
     it('should render with a navigation bar on small screens', () => {

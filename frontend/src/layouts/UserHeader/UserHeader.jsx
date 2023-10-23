@@ -15,6 +15,7 @@ export default function UserHeader({
     topLevelHeader,
     mainContentId,
     small,
+    className,
     ...props
 }) {
     const actions = useUserHeader(userId, topLevelHeader);
@@ -24,7 +25,7 @@ export default function UserHeader({
         {...topLevelHeader && mainContentId && { hiddenLinkTargetId: mainContentId }}
         {...backArrow && { navigationArrowTarget: '/reseau', navigationArrowLabel: 'Retourner à la liste' }}
         actions={actions}
-        className={props.className || ''}
+        className={className}
     >
         <h1 className={style.heading}>{email}</h1>
         {admin && <p className={style.subHeading}>admin</p>}
@@ -36,6 +37,7 @@ UserHeader.defaultProps = {
     topLevelHeader: false,
     backArrow: false,
     small: false,
+    className: '',
 };
 
 UserHeader.propTypes = {
@@ -64,4 +66,7 @@ UserHeader.propTypes = {
 
     /** If true, the header will be thiner */
     small: PropTypes.bool,
+
+    /** Additionnal class names */
+    className: PropTypes.string,
 };

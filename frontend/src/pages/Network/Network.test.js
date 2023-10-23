@@ -1,4 +1,3 @@
-import Network from './Network';
 import { getAllByRole, screen, waitFor } from '@testing-library/react';
 import { render } from '../../utils/tests/test-wrapper';
 import userEvent from '../../utils/tests/user-event';

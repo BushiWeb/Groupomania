@@ -1,11 +1,5 @@
 import Logo from '../../components/Logo/Logo.jsx';
-import { useSelector, useStore } from 'react-redux';
-import { selectTheme } from '../../utils/selectors.js';
-import { THEMES_NAMES, themeToggle } from '../../features/theme/theme.slice';
 import PropTypes from 'prop-types';
-import { useMutation } from '@tanstack/react-query';
-import { simpleFetch } from '../../utils/fetch';
-import { logout } from '../../features/authentication/user.slice';
 import TopAppBar from '../../components/TopAppBar/TopAppBar';
 import { useMainHeaderActions } from '../../hooks/useMainHeaderActions.js';
 
