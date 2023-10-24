@@ -83,4 +83,10 @@ describe('Post component test suite', () => {
         await user.click(moreButton);
         expect(postInformations.onMoreActions).toHaveBeenCalled();
     });
+
+    it('should be vertical', () => {
+        render(<Post {...postInformations} liked={true} vertical/>);
+        const post = screen.getByRole('article');
+        expect(post).toHaveAttribute('data-vertical');
+    });
 });

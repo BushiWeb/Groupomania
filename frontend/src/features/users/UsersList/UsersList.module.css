@@ -4,11 +4,10 @@
     .usersList {
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: stretch;
     }
 
     .list {
-        max-width: var(--size-25);
         width: 100%;
     }
 

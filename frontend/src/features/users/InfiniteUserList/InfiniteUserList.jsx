@@ -1,6 +1,7 @@
 import UsersList from '../UsersList/UsersList';
 import PropTypes from 'prop-types';
 import { useInfiniteUserList } from './useInfiniteUserList';
+import { forwardRef } from 'react';
 
 /**
  * Allows the insertion of an infinite scrolling post list.
@@ -8,7 +9,14 @@ import { useInfiniteUserList } from './useInfiniteUserList';
  * When a user clicks on a like button, optimistic UI is used to make the app more responsive.
  * Use an ErrorBoundary to handle errors.
  */
-export default function InfiniteUserList({ containerElt, errorClassName, className }) {
+const InfiniteUserList = forwardRef((
+    {
+        containerElt,
+        errorClassName,
+        className,
+    },
+    ref
+) => {
     const {
         data,
         isFetchingNextPage,
@@ -27,8 +35,9 @@ export default function InfiniteUserList({ containerElt, errorClassName, classNa
         users={data}
         className={className}
         busy={isFetchingNextPage || isLoading}
+        ref={ref}
     />;
-}
+});
 
 InfiniteUserList.propTypes = {
     /** Container reference */
@@ -40,3 +49,5 @@ InfiniteUserList.propTypes = {
     /** ClassName to give to the error message */
     errorClassName: PropTypes.string,
 };
+
+export default InfiniteUserList;

@@ -25,6 +25,7 @@ export default function Post({
     focused,
     onLike,
     onMoreActions,
+    vertical,
     ...props
 }) {
     const titleId = useId();
@@ -57,6 +58,7 @@ export default function Post({
             aria-setsize={setsize}
             aria-labelledby={titleId}
             aria-describedby={`${emailId} ${dateId} ${messageId}`}
+            {...vertical && { 'data-vertical': true }}
         >
             <PostHeader
                 onLike={onLike}
@@ -80,6 +82,7 @@ Post.defaultProps = {
     hasRights: false,
     setsize: -1,
     focused: false,
+    vertical: false,
 };
 
 Post.propTypes = {
@@ -124,4 +127,7 @@ Post.propTypes = {
 
     /** Function to execute when a user clicks on the more actions button */
     onMoreActions: PropTypes.func.isRequired,
+
+    /** Weither the post should only be vertical and not respond to viewport size, defaults to false */
+    vertical: PropTypes.bool,
 };

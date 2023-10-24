@@ -12,7 +12,7 @@ import { useInfinitePostFeed } from './useInfinitePostFeed';
  * Use an ErrorBoundary to handle errors.
  */
 export default function InfinitePostFeed({
-    containerElt, errorClassName, className, userId,
+    containerElt, errorClassName, className, userId, vertical,
 }) {
     const {
         data,
@@ -47,6 +47,7 @@ export default function InfinitePostFeed({
             busy={isFetchingPostNextPage || isLoadingPost}
             handleLike={handleLike}
             handleMoreActions={handleMoreActions}
+            vertical={vertical}
         />
 
         {isMenuOpen &&
@@ -96,4 +97,7 @@ InfinitePostFeed.propTypes = {
 
     /** User id filter */
     userId: PropTypes.number,
+
+    /** Weither the post should only be vertical */
+    vertical: PropTypes.bool,
 };

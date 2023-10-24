@@ -5,10 +5,13 @@ const BREAKPOINTS = {
     medium: 601,
     expanded: 841,
     extraLarge: 1024,
+    xxl: 1200,
 };
 
 function getBreakpoint() {
-    if (window.innerWidth >= BREAKPOINTS.extraLarge) {
+    if (window.innerWidth >= BREAKPOINTS.xxl) {
+        return 4;
+    } else if (window.innerWidth >= BREAKPOINTS.extraLarge) {
         return 3;
     } else if (window.innerWidth >= BREAKPOINTS.expanded) {
         return 2;
@@ -25,6 +28,7 @@ function getBreakpoint() {
  * 1 is the medium format.
  * 2 is the expanded format.
  * 3 is the extra large format.
+ * 4 is beyond extra large.
  */
 export function useBreakpoint() {
     const [breakpoint, setBreakpoint] = useState(getBreakpoint());

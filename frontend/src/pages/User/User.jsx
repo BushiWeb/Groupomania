@@ -48,9 +48,9 @@ export default function User({ topLevelPage }) {
             email={email}
             admin
             userId={1}
-            backArrow={topLevelPage || !!outletContext?.id}
+            backArrow={Wrapper !== 'section'}
             topLevelHeader={topLevelPage}
-            {...topLevelPage && !outletContext?.id && { mainContentId: mainId }}
+            {...Content === 'main' && { mainContentId: mainId }}
             className={style.userHeader}
         />
 
@@ -60,6 +60,7 @@ export default function User({ topLevelPage }) {
                 errorClassName={style.error}
                 className={style.posts}
                 userId={parseInt(userId)}
+                vertical={Wrapper === 'section'}
             />
         </Content>
     </Wrapper>;

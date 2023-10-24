@@ -8,7 +8,7 @@ import InfinitePostFeed from './InfinitePostFeed';
 import { useState } from 'react';
 
 describe('InfinitePostFeed test suite', () => {
-    function TestComponent() {
+    function TestComponent({ ...props }) {
         const [containerRef, setContainerRef] = useState(null);
         const mainRef = (node) => {
             if (node) {
@@ -16,7 +16,7 @@ describe('InfinitePostFeed test suite', () => {
             }
         };
         return <div data-testid="container" ref={mainRef}>
-            <InfinitePostFeed containerElt={containerRef}/>
+            <InfinitePostFeed containerElt={containerRef} {...props}/>
         </div>;
     }
 
@@ -197,5 +197,15 @@ describe('InfinitePostFeed test suite', () => {
         screen.getByRole('menu', { name: /Actions/ });
         screen.getByRole('button', { name: 'Modifier' });
         screen.getByRole('button', { name: 'Supprimer' });
+    });
+
+    it('should have vertical posts', async () => {
+        render(<TestComponent vertical/>, { preloadedState: initialState });
+        await waitFor(() => {
+            const posts = screen.getAllByRole('article');
+            for (const post of posts) {
+                expect(post).toHaveAttribute('data-vertical');
+            }
+        });
     });
 });

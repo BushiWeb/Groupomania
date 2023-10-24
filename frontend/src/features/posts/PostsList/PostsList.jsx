@@ -8,7 +8,7 @@ import ProgressIndicator from '../../../components/ProgressIndicator/ProgressInd
 
 /** List of posts */
 export default function PostsList({
-    posts, busy, handleLike, handleMoreActions, ...props
+    posts, busy, handleLike, handleMoreActions, vertical, ...props
 }) {
     const { isAdmin, userId } = useSelector(selectRighInfos);
     const {
@@ -56,6 +56,7 @@ export default function PostsList({
                 onMoreActions={handleMoreActions({
                     postId, title, message, imageUrl, date,
                 })}
+                vertical={vertical}
             />;
         })}
 
@@ -94,4 +95,7 @@ PostsList.propTypes = {
 
     /** Function to excute when the user clicks the more actions button. */
     handleMoreActions: PropTypes.func.isRequired,
+
+    /** Weither the post should only be vertical */
+    vertical: PropTypes.bool,
 };

@@ -140,19 +140,15 @@
     }
 
     @media bp-expanded {
-        .post {
+        .post:not([data-vertical]) {
             display: grid;
             grid-template-columns: 1fr;
             grid-template-rows: auto auto 1fr;
-            grid-template-areas:
-                'header'
-                'divider'
-                'content';
 
             max-width: calc(var(--size-text-large) * 2);
         }
 
-        .imagePost {
+        .imagePost:not([data-vertical]) {
             grid-template-columns: 1fr 1fr;
             grid-template-rows: auto auto 1fr;
             grid-template-areas:
@@ -161,7 +157,7 @@
                 'content image';
         }
 
-        .image {
+        .imagePost:not([data-vertical]) .image {
             aspect-ratio: unset;
             place-self: stretch;
             border-radius: 0 var(--border-radius-4) var(--border-radius-4) 0;

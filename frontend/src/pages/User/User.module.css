@@ -2,6 +2,55 @@
 
 @layer components {
     .user {
+        flex-grow: 1;
+        height: 100%;
+
+        overflow: hidden;
+
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+
+        background-color: rgb(var(--color-surface));
+    }
+
+    .content {
         overflow: auto;
+        scroll-behavior: smooth;
+        padding-inline: var(--padding-4);
+        padding-block: var(--padding-6);
+    }
+
+    .posts {
+        max-width: var(--size-34);
+        margin-inline: auto;
+    }
+
+    @media bp-medium {
+        .userHeader {
+            background-color: rgb(var(--color-surface));
+        }
+
+        .content {
+            padding-inline: var(--padding-12);
+            padding-block: var(--padding-8);
+        }
+    }
+
+    @media bp-expanded {
+        .posts {
+            max-width: var(--size-60);
+        }
+    }
+
+    @media bp-extra-large {
+        .content {
+            padding-inline: var(--padding-4);
+            padding-block: var(--padding-6);
+        }
+
+        .posts {
+            max-width: var(--size-34);
+        }
     }
 }

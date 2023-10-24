@@ -183,4 +183,12 @@ describe('PostsList component test suite', () => {
         await user.click(likeButton);
         expect(mockMoreActions).toHaveBeenCalled();
     });
+
+    it('should have vertical posts', () => {
+        render(<PostsList {...props} vertical/>);
+        const posts = screen.getAllByRole('article');
+        for (const post of posts) {
+            expect(post).toHaveAttribute('data-vertical');
+        }
+    });
 });
