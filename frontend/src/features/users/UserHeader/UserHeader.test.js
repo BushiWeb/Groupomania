@@ -1,7 +1,7 @@
 import UserHeader from './UserHeader';
 import { screen } from '@testing-library/react';
-import { render } from '../../utils/tests/test-wrapper';
-import userEvent from '../../utils/tests/user-event';
+import { render } from '../../../utils/tests/test-wrapper';
+import userEvent from '../../../utils/tests/user-event';
 import '@testing-library/jest-dom';
 
 describe('MainHeader component test suite', () => {
@@ -95,5 +95,16 @@ describe('MainHeader component test suite', () => {
         screen.getByRole('menu', { name: /Actions/ });
         screen.getByRole('button', { name: 'Modifier le profil' });
         screen.getByRole('button', { name: 'Supprimer le profil' });
+    });
+
+    it('should display a loader', async () => {
+        render(<UserHeader {...props} busy/>, { preloadedState });
+        screen.getByLabelText('Chargement des données de l\'utilisateur');
+    });
+
+    it('should display an error', async () => {
+        const errorMessage = 'lorem ipsum';
+        render(<UserHeader {...props} errorMessage={errorMessage}/>, { preloadedState });
+        screen.getByText(errorMessage);
     });
 });

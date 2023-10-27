@@ -10,4 +10,15 @@
         composes: title-small from '../../../assets/styles/patterns/typography.module.css';
         color: rgb(var(--color-on-surface-variant));
     }
+
+    .errorMessage {
+        composes: body-large from '../../../assets/styles/patterns/typography.module.css';
+        color: rgb(var(--color-on-surface));
+    }
+
+    .loader {
+        width: 100%;
+        display: grid;
+        place-content: center;
+    }
 }

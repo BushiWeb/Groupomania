@@ -90,6 +90,7 @@ export function useUpdateUserForm(onSuccess, user) {
         onSuccess: () => {
             dispatch({ type: ACTIONS.reset });
             queryClient.invalidateQueries({ queryKey: ['users']});
+            queryClient.invalidateQueries({ queryKey: ['users', user.userId]});
             onSuccess();
         },
     });

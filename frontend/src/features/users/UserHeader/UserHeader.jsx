@@ -3,6 +3,7 @@ import style from './UserHeader.module.css';
 import TopAppBar from '../../../components/TopAppBar/TopAppBar';
 import { useUserHeader } from './useUserHeader';
 import UpdateUserDialog from '../UpdateUser/UpdateUserDialog';
+import ProgressIndicator from '../../../components/ProgressIndicator/ProgressIndicator';
 
 /**
  * User header.
@@ -17,6 +18,8 @@ export default function UserHeader({
     mainContentId,
     small,
     className,
+    busy,
+    errorMessage,
     ...props
 }) {
     const {
@@ -24,6 +27,38 @@ export default function UserHeader({
         isUpdateUserOpen,
         setIsUpdateUserOpen,
     } = useUserHeader(userId, topLevelHeader);
+
+    if (busy) {
+        return (
+            <>
+                <TopAppBar
+                    type={small ? 'small' : 'medium'}
+                    {...topLevelHeader && mainContentId && { hiddenLinkTargetId: mainContentId }}
+                    {...backArrow && { navigationArrowTarget: '/reseau', navigationArrowLabel: 'Retourner à la liste' }}
+                    className={className}
+                >
+                    <div className={style.loader}>
+                        <ProgressIndicator label="Chargement des données de l'utilisateur" circular/>
+                    </div>
+                </TopAppBar>
+            </>
+        );
+    }
+
+    if (errorMessage) {
+        return (
+            <>
+                <TopAppBar
+                    type={small ? 'small' : 'medium'}
+                    {...topLevelHeader && mainContentId && { hiddenLinkTargetId: mainContentId }}
+                    {...backArrow && { navigationArrowTarget: '/reseau', navigationArrowLabel: 'Retourner à la liste' }}
+                    className={className}
+                >
+                    <p className={errorMessage}>{errorMessage}</p>
+                </TopAppBar>
+            </>
+        );
+    }
 
     return (
         <>
@@ -54,6 +89,7 @@ UserHeader.defaultProps = {
     backArrow: false,
     small: false,
     className: '',
+    busy: false,
 };
 
 UserHeader.propTypes = {
@@ -85,4 +121,10 @@ UserHeader.propTypes = {
 
     /** Additionnal class names */
     className: PropTypes.string,
+
+    /** Weither the header should display a loading state, defaults to false */
+    busy: PropTypes.bool,
+
+    /** Error message to display */
+    errorMessage: PropTypes.string,
 };

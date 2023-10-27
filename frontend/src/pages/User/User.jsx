@@ -4,6 +4,9 @@ import { useId, useState } from 'react';
 import InfinitePostFeed from '../../features/posts/InifinitePostFeed/InfinitePostFeed';
 import UserHeader from '../../features/users/UserHeader/UserHeader';
 import PropTypes from 'prop-types';
+import { useQuery } from '@tanstack/react-query';
+import { simpleFetch } from '../../utils/fetch';
+import { useHandleRequestError } from '../../hooks/useHandleRequestError';
 
 /**
  * User page.
@@ -12,20 +15,12 @@ import PropTypes from 'prop-types';
  *  inserted in the network page on desktop.
  */
 export default function User({ topLevelPage }) {
-    const { userId } = useParams();
+    const { userId: stringUserId } = useParams();
+    const userId = parseInt(stringUserId);
     const outletContext = useOutletContext();
     const mainId = useId();
 
-    const email = 'test@gmail.com';
-
-    // Get the ref for the container element but rerender the children when the ref changes
-    const [containerRef, setContainerRef] = useState(null);
-    const ref = (node) => {
-        if (node) {
-            setContainerRef(node);
-        }
-    };
-
+    // Choose the layout, depending on the nesting of the pages
     let Wrapper, Content;
 
     if (topLevelPage) {
@@ -39,19 +34,50 @@ export default function User({ topLevelPage }) {
         Content = 'div';
     }
 
+    // User request and header
+    const {
+        data,
+        isLoading,
+        isError,
+        error,
+    } = useQuery({
+        queryKey: ['users', userId],
+        queryFn: async () => simpleFetch({ url: `/data/users/${userId}` }),
+    });
+
+    useHandleRequestError(isError, error);
+
+    // Get the ref for the container element but rerender the children when the ref changes
+    const [containerRef, setContainerRef] = useState(null);
+    const ref = (node) => {
+        if (node) {
+            setContainerRef(node);
+        }
+    };
+
     return <Wrapper
         id={outletContext?.id}
         className={`${style.user} ${outletContext?.className || ''}`}
-        aria-label={Wrapper === 'section' ? `Utilisateur ${email}` : undefined}
+        {...Wrapper === 'section' &&
+        {
+            'aria-label': isLoading || isError ?
+                'Profil de l\'utilisateur' :
+                `Profil de l'utilisateur ${data.email}`,
+        }
+        }
     >
         <UserHeader
-            email={email}
-            admin
-            userId={1}
+            email={data?.email}
+            admin={data?.role.roleId === 1}
+            userId={userId}
             backArrow={Wrapper !== 'section'}
             topLevelHeader={topLevelPage}
             {...Content === 'main' && { mainContentId: mainId }}
             className={style.userHeader}
+            busy={isLoading}
+            errorMessage={isError ?
+                'Une erreur est survenue lors du chargement des données. Vous pouvez essayer de recharger la page. Si le problème persiste, n\'hésitez pas à vous rapprocher d\'un administrateur.' :
+                undefined}
         />
 
         <Content className={style.content} ref={ref} {...topLevelPage && !outletContext?.id && { id: mainId }}>
