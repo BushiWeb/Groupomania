@@ -7,7 +7,7 @@ import Dialog, {
 } from '../../../components/Dialog';
 import PropTypes from 'prop-types';
 
-/** Dialog used to confirm the cancellation of the upsert */
+/** Dialog used to confirm the cancellation of the update */
 export default function ConfirmDialog({
     close, open, onAccept,
 }) {
@@ -21,11 +21,11 @@ export default function ConfirmDialog({
         </DialogHeader>
 
         <DialogContent>
-            <p>Voulez-vous annuler les changements apportés au post?</p>
+            <p>Voulez-vous annuler la mise à jour du profil?</p>
         </DialogContent>
 
         <DialogActions>
-            <DialogAction onClick={close}>Non, continuer</DialogAction>
+            <DialogAction onClick={close}>Non, revenir à la mise à jour</DialogAction>
             <DialogAction onClick={onAccept}>Oui, annuler</DialogAction>
         </DialogActions>
     </Dialog>;

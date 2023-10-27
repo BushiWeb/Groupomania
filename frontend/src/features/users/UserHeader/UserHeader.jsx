@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import style from './UserHeader.module.css';
-import TopAppBar from '../../components/TopAppBar/TopAppBar';
+import TopAppBar from '../../../components/TopAppBar/TopAppBar';
 import { useUserHeader } from './useUserHeader';
+import UpdateUserDialog from '../UpdateUser/UpdateUserDialog';
 
 /**
  * User header.
@@ -18,18 +19,33 @@ export default function UserHeader({
     className,
     ...props
 }) {
-    const actions = useUserHeader(userId, topLevelHeader);
+    const {
+        actions,
+        isUpdateUserOpen,
+        setIsUpdateUserOpen,
+    } = useUserHeader(userId, topLevelHeader);
 
-    return <TopAppBar
-        type={small ? 'small' : 'medium'}
-        {...topLevelHeader && mainContentId && { hiddenLinkTargetId: mainContentId }}
-        {...backArrow && { navigationArrowTarget: '/reseau', navigationArrowLabel: 'Retourner à la liste' }}
-        actions={actions}
-        className={className}
-    >
-        <h1 className={style.heading}>{email}</h1>
-        {admin && <p className={style.subHeading}>admin</p>}
-    </TopAppBar>;
+    return (
+        <>
+            <TopAppBar
+                type={small ? 'small' : 'medium'}
+                {...topLevelHeader && mainContentId && { hiddenLinkTargetId: mainContentId }}
+                {...backArrow && { navigationArrowTarget: '/reseau', navigationArrowLabel: 'Retourner à la liste' }}
+                actions={actions}
+                className={className}
+            >
+                <h1 className={style.heading}>{email}</h1>
+                {admin && <p className={style.subHeading}>admin</p>}
+            </TopAppBar>
+            {isUpdateUserOpen &&
+            <UpdateUserDialog
+                isOpen={isUpdateUserOpen}
+                setIsOpen={setIsUpdateUserOpen}
+                userId={userId}
+                userEmail={email}
+            />}
+        </>
+    );
 }
 
 UserHeader.defaultProps = {

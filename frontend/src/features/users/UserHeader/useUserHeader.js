@@ -1,15 +1,23 @@
 import { useSelector } from 'react-redux';
-import { useMainHeaderActions } from '../../hooks/useMainHeaderActions.js';
-import { selectRighInfos } from '../../utils/selectors.js';
+import { useMainHeaderActions } from '../../../hooks/useMainHeaderActions.js';
+import { selectRighInfos } from '../../../utils/selectors.js';
+import { useState } from 'react';
 
 /**
  * Returns the actions needed in the user page header.
  * @param {number} userId
  * @param {boolean} topLevelHeader
- * @returns {Array}
+ * @returns {{
+ * isUpdateUserOpen: boolean,
+ * setIsUpdateUserOpen: Function,
+ * actions: Array
+ * }}
  */
 export function useUserHeader(userId, topLevelHeader) {
     const mainActions = useMainHeaderActions();
+
+    // Update user dialog state
+    const [isUpdateUserOpen, setIsUpdateUserOpen] = useState(false);
 
     // Action buttons to display
     const { isAdmin, userId: currentUserId } = useSelector(selectRighInfos);
@@ -17,7 +25,7 @@ export function useUserHeader(userId, topLevelHeader) {
         editButton = currentUserId === userId,
         editRoleButton = isAdmin;
 
-    return [
+    const actions = [
         ...topLevelHeader ?
             mainActions :
             [],
@@ -26,7 +34,7 @@ export function useUserHeader(userId, topLevelHeader) {
             [
                 {
                     label: 'Modifier le profil',
-                    onClick: () => console.log('Modification du profil'),
+                    onClick: () => setIsUpdateUserOpen(true),
                     icon: 'edit',
                 },
             ] :
@@ -52,4 +60,10 @@ export function useUserHeader(userId, topLevelHeader) {
             ] :
             [],
     ];
+
+    return {
+        isUpdateUserOpen,
+        setIsUpdateUserOpen,
+        actions,
+    };
 }

@@ -2,7 +2,7 @@ import { useOutletContext, useParams } from 'react-router-dom';
 import style from './User.module.css';
 import { useId, useState } from 'react';
 import InfinitePostFeed from '../../features/posts/InifinitePostFeed/InfinitePostFeed';
-import UserHeader from '../../layouts/UserHeader/UserHeader';
+import UserHeader from '../../features/users/UserHeader/UserHeader';
 import PropTypes from 'prop-types';
 
 /**
