@@ -24,7 +24,7 @@ export default function UpdateUserForm({
         <PasswordField
             value={oldPassword}
             onChange={(e) => dispatch({ type: ACTIONS.setOldPassword, payload: e.target.value })}
-            label="Ancien mot de passe"
+            label="Mot de passe"
             errorMessage={oldPasswordError}
             required
         />
@@ -32,7 +32,7 @@ export default function UpdateUserForm({
         <TextField
             value={email}
             onChange={(e) => dispatch({ type: ACTIONS.setEmail, payload: e.target.value })}
-            label="Nouvel email"
+            label="Email"
             errorMessage={emailError}
         />
 

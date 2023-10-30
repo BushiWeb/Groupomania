@@ -8,7 +8,7 @@ export const ERROR_MESSAGES = {
     requiredOldPassword: 'L\'ancien mot de passe est obligatoire pour confirmer votre identité',
     wrongOldPassword: 'L\'ancien mot de passe est invalide',
     forbiddenAction: 'Vous n\'avez pas les droits pour modifier cet utilisateur',
-    notFound: 'Le post que vous souhaitez modifier ne peut pas être trouvé. Il se peut qu\'il soit supprimé.',
+    notFound: 'L\'utilisateur que vous souhaitez modifier ne peut pas être trouvé. Il se peut qu\'il soit supprimé.',
     existingAccount: 'Un compte avec cet email existe déjà, veuillez choisir un nouvel email',
 };
 
@@ -103,7 +103,7 @@ export async function handleUpdateUserRequestError(error) {
         } else if (fieldError.param === 'password') {
             errorMessages.newPassword = ERROR_MESSAGES.wrongPasswordFormat;
         } else if (fieldError.param === 'currentPassword') {
-            errorMessages.newPassword = ERROR_MESSAGES.requiredOldPassword;
+            errorMessages.oldPassword = ERROR_MESSAGES.requiredOldPassword;
         }
     }
     return errorMessages;

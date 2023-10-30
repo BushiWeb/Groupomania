@@ -94,7 +94,7 @@ UserHeader.defaultProps = {
 
 UserHeader.propTypes = {
     /** UserEmail. Required */
-    email: PropTypes.string.isRequired,
+    email: PropTypes.string,
 
     /** Weither the user is admin or not, defaults to false */
     admin: PropTypes.bool,

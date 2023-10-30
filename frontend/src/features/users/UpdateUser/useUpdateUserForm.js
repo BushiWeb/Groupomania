@@ -40,17 +40,21 @@ export function useUpdateUserForm(onSuccess, user) {
 
     const { mutate, isLoading } = useMutation({
         mutationFn: async () => {
+            if (!isUserUpdated({ email, oldPassword, newPassword }, user)) {
+                return;
+            }
+
             validatePostData({
                 email,
                 newPassword,
                 oldPassword,
             });
 
-            if (!isUserUpdated({ email, oldPassword, newPassword }, user)) {
-                return;
-            }
-
-            return updateUserRequest({ email, password: newPassword, currentPassword: oldPassword });
+            return updateUserRequest({
+                ...email !== user.email && { email },
+                ...newPassword && { password: newPassword },
+                currentPassword: oldPassword,
+            }, user.userId);
         },
         onMutate: () => {
             dispatch({ type: ACTIONS.removeErrors });
@@ -72,7 +76,7 @@ export function useUpdateUserForm(onSuccess, user) {
             }
 
             if (errorMessages.email) {
-                dispatch({ type: ACTIONS.setEmailError, payload: errorMessages.title });
+                dispatch({ type: ACTIONS.setEmailError, payload: errorMessages.email });
             }
 
             if (errorMessages.oldPassword) {
