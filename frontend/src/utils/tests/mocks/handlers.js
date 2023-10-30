@@ -357,4 +357,75 @@ export const handlers = [
             ctx.json(response)
         );
     }),
+
+    rest.get('/data/users/:userId', async (req, res, ctx) => {
+        if (isNaN(parseInt(req.params.userId))) {
+            return res(
+                ctx.delay(),
+                ctx.status(400),
+                ctx.set('X-Crsf-Token', 'testToken'),
+                ctx.json({
+                    error: {
+                        type: 'UserInputValidationError',
+                        statusCode: 400,
+                    },
+                })
+            );
+        }
+
+        if (sessionStorage.getItem('serverError')) {
+            return res(
+                ctx.delay(),
+                ctx.status(500),
+                ctx.set('X-Crsf-Token', 'testToken'),
+                ctx.json({
+                    error: {
+                        type: 'ServerError',
+                        statusCode: 500,
+                    },
+                })
+            );
+        }
+
+        if (sessionStorage.getItem('networkError')) {
+            return res.networkError();
+        }
+
+        if (sessionStorage.getItem('authError')) {
+            return res(
+                ctx.delay(),
+                ctx.status(401),
+                ctx.set('X-Crsf-Token', 'testToken'),
+                ctx.json({
+                    error: {
+                        type: 'UnauthorizedError',
+                        statusCode: 401,
+                    },
+                })
+            );
+        }
+
+        const response = USERS.find((value) => value.userId === parseInt(req.params.userId));
+
+        if (!response) {
+            return res(
+                ctx.delay(),
+                ctx.status(404),
+                ctx.set('X-Crsf-Token', 'testToken'),
+                ctx.json({
+                    error: {
+                        type: 'NotFoundError',
+                        statusCode: 404,
+                    },
+                })
+            );
+        }
+
+        return res(
+            ctx.delay(),
+            ctx.status(200),
+            ctx.set('X-Crsf-Token', 'testToken'),
+            ctx.json(response)
+        );
+    }),
 ];

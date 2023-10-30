@@ -45,7 +45,7 @@ export default function User({ topLevelPage }) {
         queryFn: async () => simpleFetch({ url: `/data/users/${userId}` }),
     });
 
-    useHandleRequestError(isError, error);
+    const status = useHandleRequestError(isError, error);
 
     // Get the ref for the container element but rerender the children when the ref changes
     const [containerRef, setContainerRef] = useState(null);
@@ -76,7 +76,9 @@ export default function User({ topLevelPage }) {
             className={style.userHeader}
             busy={isLoading}
             errorMessage={isError ?
-                'Une erreur est survenue lors du chargement des données. Vous pouvez essayer de recharger la page. Si le problème persiste, n\'hésitez pas à vous rapprocher d\'un administrateur.' :
+                status === 404 ?
+                    'L\'utilisateur recherché ne peut pas être trouvé. Il se peut qu\'il ai été supprimé.' :
+                    'Une erreur est survenue lors du chargement des données. Vous pouvez essayer de recharger la page. Si le problème persiste, n\'hésitez pas à vous rapprocher d\'un administrateur.' :
                 undefined}
         />
 

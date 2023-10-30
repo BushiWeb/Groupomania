@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useStore } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../features/authentication/user.slice.js';
@@ -9,10 +9,12 @@ import { logout } from '../features/authentication/user.slice.js';
  * In case of an unauthorised error, log the user out.
  * @param {boolean} isError
  * @param error
+ * @return {number} Returns an error status
  */
 export function useHandleRequestError(isError, error) {
     const redirect = useNavigate();
     const { dispatch } = useStore();
+    const [errorStatus, setErrorStatus] = useState(undefined);
 
     useEffect(() => {
         if (!isError) {
@@ -35,10 +37,18 @@ export function useHandleRequestError(isError, error) {
             return;
         }
 
+        // Handling 404 error
+        if (error.status === 404) {
+            setErrorStatus(404);
+            return;
+        }
+
         // Handling authentication error
         if (error.status === 401) {
             dispatch(logout());
             return;
         }
     }, [error, isError, redirect, dispatch]);
+
+    return errorStatus;
 }
