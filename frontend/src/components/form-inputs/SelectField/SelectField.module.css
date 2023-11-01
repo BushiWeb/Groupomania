@@ -1,0 +1,25 @@
+@layer components {
+    .input {
+        composes: body-large from '../../../assets/styles/patterns/typography.module.css';
+
+        border: none;
+        background-color: transparent;
+        flex-grow: 1;
+        color: rgb(var(--color-on-surface));
+    }
+
+    .input:focus-visible {
+        outline: none;
+    }
+
+    input::placeholder {
+        color: rgb(var(--color-on-surface-variant));
+    }
+
+    /* Disabled state */
+    .input:disabled {
+        color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+    }
+}

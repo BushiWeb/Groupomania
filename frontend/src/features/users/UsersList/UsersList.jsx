@@ -3,6 +3,7 @@ import style from './UsersList.module.css';
 import ProgressIndicator from '../../../components/ProgressIndicator/ProgressIndicator';
 import List from '../../../components/List/List';
 import { forwardRef } from 'react';
+import { isAdmin } from '../../../utils/roles.js';
 
 /** List of posts */
 const UsersList = forwardRef((
@@ -33,7 +34,7 @@ const UsersList = forwardRef((
                             },
                         }) => ({
                             headline: email,
-                            ...roleId === 1 && { supportingText: name },
+                            ...isAdmin(roleId) && { supportingText: 'Administrateur' },
                             link: `${userId}`,
                         })) :
                         []

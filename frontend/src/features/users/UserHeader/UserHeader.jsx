@@ -4,6 +4,8 @@ import TopAppBar from '../../../components/TopAppBar/TopAppBar';
 import { useUserHeader } from './useUserHeader';
 import UpdateUserDialog from '../UpdateUser/UpdateUserDialog';
 import ProgressIndicator from '../../../components/ProgressIndicator/ProgressIndicator';
+import UpdateUserRoleDialog from '../UpdateUserRole/UpdateUserRoleDialog';
+import { isAdmin } from '../../../utils/roles';
 
 /**
  * User header.
@@ -11,8 +13,8 @@ import ProgressIndicator from '../../../components/ProgressIndicator/ProgressInd
  */
 export default function UserHeader({
     email,
-    admin,
     userId,
+    roleId,
     backArrow,
     topLevelHeader,
     mainContentId,
@@ -26,6 +28,8 @@ export default function UserHeader({
         actions,
         isUpdateUserOpen,
         setIsUpdateUserOpen,
+        isUpdateUserRoleOpen,
+        setIsUpdateUserRoleOpen,
     } = useUserHeader(userId, topLevelHeader);
 
     if (busy) {
@@ -70,7 +74,7 @@ export default function UserHeader({
                 className={className}
             >
                 <h1 className={style.heading}>{email}</h1>
-                {admin && <p className={style.subHeading}>admin</p>}
+                {isAdmin(roleId) && <p className={style.subHeading}>Administrateur</p>}
             </TopAppBar>
             {isUpdateUserOpen &&
             <UpdateUserDialog
@@ -79,12 +83,19 @@ export default function UserHeader({
                 userId={userId}
                 userEmail={email}
             />}
+            {isUpdateUserRoleOpen &&
+            <UpdateUserRoleDialog
+                isOpen={isUpdateUserRoleOpen}
+                setIsOpen={setIsUpdateUserRoleOpen}
+                userId={userId}
+                userEmail={email}
+                userRoleId={roleId}
+            />}
         </>
     );
 }
 
 UserHeader.defaultProps = {
-    admin: false,
     topLevelHeader: false,
     backArrow: false,
     small: false,
@@ -95,9 +106,6 @@ UserHeader.defaultProps = {
 UserHeader.propTypes = {
     /** UserEmail. Required */
     email: PropTypes.string,
-
-    /** Weither the user is admin or not, defaults to false */
-    admin: PropTypes.bool,
 
     /**
      * If the header is a top level header,
@@ -115,6 +123,9 @@ UserHeader.propTypes = {
 
     /** Displayed user id, required */
     userId: PropTypes.number.isRequired,
+
+    /** Id of the user's role */
+    roleId: PropTypes.number,
 
     /** If true, the header will be thiner */
     small: PropTypes.bool,

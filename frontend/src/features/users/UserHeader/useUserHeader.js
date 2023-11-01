@@ -10,6 +10,8 @@ import { useState } from 'react';
  * @returns {{
  * isUpdateUserOpen: boolean,
  * setIsUpdateUserOpen: Function,
+ * isUpdateUserRoleOpen: boolean,
+ * setIsUpdateUserRoleOpen: Function,
  * actions: Array
  * }}
  */
@@ -18,6 +20,9 @@ export function useUserHeader(userId, topLevelHeader) {
 
     // Update user dialog state
     const [isUpdateUserOpen, setIsUpdateUserOpen] = useState(false);
+
+    // Update user's role dialog state
+    const [isUpdateUserRoleOpen, setIsUpdateUserRoleOpen] = useState(false);
 
     // Action buttons to display
     const { isAdmin, userId: currentUserId } = useSelector(selectRighInfos);
@@ -54,7 +59,7 @@ export function useUserHeader(userId, topLevelHeader) {
             [
                 {
                     label: 'Modifier le role de l\'utilisateur',
-                    onClick: () => console.log('Modification du role'),
+                    onClick: () => setIsUpdateUserRoleOpen(true),
                     icon: 'admin_panel_settings',
                 },
             ] :
@@ -64,6 +69,8 @@ export function useUserHeader(userId, topLevelHeader) {
     return {
         isUpdateUserOpen,
         setIsUpdateUserOpen,
+        isUpdateUserRoleOpen,
+        setIsUpdateUserRoleOpen,
         actions,
     };
 }

@@ -2,12 +2,12 @@ import { useReducer } from 'react';
 import {
     ACTIONS,
     initState,
-    isUserUpdated,
+    isUserRoleUpdated,
     reducer,
 } from './formReducer.js';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-    updateUserRequest,
+    updateUserRoleRequest,
     handleUpdateUserRequestError,
     validatePostData,
 } from './request.js';
@@ -16,23 +16,21 @@ import { useStore } from 'react-redux';
 import { logout } from '../../authentication/user.slice.js';
 
 /**
- * Hook handling form validation, submission and request errors for the post creation form
+ * Hook handling form validation, submission and request errors for the user role update form
  * @param {Function} onSuccess - Function to execute on success
- * @param {{userId: number, email: string}} [user]
+ * @param {{userId: number, roleId: number}} [user]
  * @returns {Object} Returns the form data, the loading state, as well as the mutate and dispatch function.
  */
-export function useUpdateUserForm(onSuccess, user) {
+export function useUpdateUserRoleForm(onSuccess, user) {
     const redirect = useNavigate();
     const { dispatch: globalDispatch } = useStore();
     const queryClient = useQueryClient();
     const [
         {
-            email,
-            emailError,
-            oldPassword,
-            oldPasswordError,
-            newPassword,
-            newPasswordError,
+            roleId,
+            roleError,
+            password,
+            passwordError,
             globalError,
         },
         dispatch,
@@ -40,21 +38,16 @@ export function useUpdateUserForm(onSuccess, user) {
 
     const { mutate, isLoading } = useMutation({
         mutationFn: async () => {
-            if (!isUserUpdated({ email, oldPassword, newPassword }, user)) {
+            if (!isUserRoleUpdated({ roleId }, user)) {
                 return;
             }
 
             validatePostData({
-                email,
-                newPassword,
-                oldPassword,
+                password,
+                roleId,
             });
 
-            return updateUserRequest({
-                ...email !== user.email && { email },
-                ...newPassword && { password: newPassword },
-                currentPassword: oldPassword,
-            }, user.userId);
+            return updateUserRoleRequest({ roleId, currentPassword: password }, user.userId);
         },
         onMutate: () => {
             dispatch({ type: ACTIONS.removeErrors });
@@ -75,27 +68,18 @@ export function useUpdateUserForm(onSuccess, user) {
                 return redirect('/error');
             }
 
-            if (errorMessages.email) {
-                dispatch({ type: ACTIONS.setEmailError, payload: errorMessages.email });
+            if (errorMessages.role) {
+                dispatch({ type: ACTIONS.setEmailError, payload: errorMessages.role });
             }
 
-            if (errorMessages.oldPassword) {
-                dispatch({ type: ACTIONS.setOldPasswordError, payload: errorMessages.oldPassword });
-            }
-
-            if (errorMessages.newPassword) {
-                dispatch({ type: ACTIONS.setNewPasswordError, payload: errorMessages.newPassword });
-            }
-
-            if (errorMessages.global) {
-                dispatch({ type: ACTIONS.setGlobalError, payload: errorMessages.global });
+            if (errorMessages.password) {
+                dispatch({ type: ACTIONS.setPasswordError, payload: errorMessages.password });
             }
         },
         onSuccess: () => {
             dispatch({ type: ACTIONS.reset });
             queryClient.invalidateQueries({ queryKey: ['users']});
             queryClient.invalidateQueries({ queryKey: ['users', user.userId]});
-            queryClient.invalidateQueries({ queryKey: ['posts']});
             onSuccess();
         },
     });
@@ -105,12 +89,10 @@ export function useUpdateUserForm(onSuccess, user) {
         mutate,
         dispatch,
         data: {
-            email,
-            emailError,
-            oldPassword,
-            oldPasswordError,
-            newPassword,
-            newPasswordError,
+            roleId,
+            roleError,
+            password,
+            passwordError,
             globalError,
         },
     };

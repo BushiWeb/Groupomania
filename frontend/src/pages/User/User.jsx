@@ -68,8 +68,8 @@ export default function User({ topLevelPage }) {
     >
         <UserHeader
             email={data?.email}
-            admin={data?.role.roleId === 1}
             userId={userId}
+            roleId={data?.role.roleId}
             backArrow={Wrapper !== 'section'}
             topLevelHeader={topLevelPage}
             {...Content === 'main' && { mainContentId: mainId }}
