@@ -8,6 +8,10 @@
         background-color: rgb(var(--color-surface));
     }
 
+    .usersList[data-busy] {
+        padding-block-end: var(--padding-4);
+    }
+
     .list {
         width: 100%;
     }

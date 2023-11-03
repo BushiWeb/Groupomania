@@ -119,7 +119,7 @@ describe('User page test suite', () => {
 
         await waitFor(() => {
             const headerElt = container.querySelector('.userHeader');
-            getByText(headerElt, 'admin');
+            getByText(headerElt, 'Administrateur');
         });
     });
 

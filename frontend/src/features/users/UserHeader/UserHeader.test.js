@@ -4,7 +4,7 @@ import { render } from '../../../utils/tests/test-wrapper';
 import userEvent from '../../../utils/tests/user-event';
 import '@testing-library/jest-dom';
 
-describe('MainHeader component test suite', () => {
+describe('UserHeader component test suite', () => {
     const email = 'test@email.com';
     const mainContentId = 'main-content';
     const userId = 102;
@@ -12,6 +12,7 @@ describe('MainHeader component test suite', () => {
         email,
         mainContentId,
         userId,
+        roleId: 2,
     };
 
     const preloadedState = {
@@ -45,8 +46,8 @@ describe('MainHeader component test suite', () => {
     });
 
     it('should render the admin subtitle', () => {
-        render(<UserHeader {...props} admin/>);
-        screen.getByText('admin', { selector: 'p' });
+        render(<UserHeader {...{ ...props, roleId: 1 }}/>);
+        screen.getByText('Administrateur', { selector: 'p' });
     });
 
     it('should display the navigate back button to return to the list', async () => {
@@ -86,7 +87,7 @@ describe('MainHeader component test suite', () => {
         screen.getByRole('button', { name: 'Supprimer le profil' });
     });
 
-    it('should display the actions in a menu when usong it as top level header', async () => {
+    it('should display the actions in a menu when using it as top level header', async () => {
         const user = userEvent.setup();
         render(<UserHeader {...props} topLevelHeader/>, { preloadedState });
         const moreActionsButton = screen.getByRole('button', { name: 'Plus d\'actions' });

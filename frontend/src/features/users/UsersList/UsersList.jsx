@@ -17,31 +17,33 @@ const UsersList = forwardRef((
     return (
         <section
             className={`${props.className || ''} ${style.usersList}`}
+            {...busy && { 'data-busy': true }}
             ref={ref}
         >
-            {busy ?
-                <ProgressIndicator label="Chargement d'anciens posts" circular className={style.busy}/> :
-                <List
-                    label="Liste des utilisateurs"
-                    className={style.list}
-                    aria-busy={busy}
-                    data={
-                        users ?
-                            users.map(({
-                                userId,
-                                email,
-                                role: {
-                                    name,
-                                    roleId,
-                                },
-                            }) => ({
-                                headline: email,
-                                ...isAdmin(roleId) && { supportingText: 'Administrateur' },
-                                link: `${userId}`,
-                            })) :
-                            []
-                    }
-                />
+            <List
+                label="Liste des utilisateurs"
+                className={style.list}
+                aria-busy={busy}
+                data={
+                    users ?
+                        users.map(({
+                            userId,
+                            email,
+                            role: {
+                                name,
+                                roleId,
+                            },
+                        }) => ({
+                            headline: email,
+                            ...isAdmin(roleId) && { supportingText: 'Administrateur' },
+                            link: `${userId}`,
+                        })) :
+                        []
+                }
+            />
+
+            {busy &&
+                <ProgressIndicator label="Chargement d'anciens posts" circular className={style.busy}/>
             }
         </section>
     );

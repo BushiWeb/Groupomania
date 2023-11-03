@@ -47,16 +47,28 @@ export function useArrowNavigation(elements, {
 
     const elementNumber = Array.isArray(elements) ? elements.length : elements;
 
+    /**
+     * Changes the focus and calls the callback
+     */
     function changeFocus(index) {
         setFocusId(index);
         callback?.(index);
     }
 
+    /**
+     * Handles blur event on the container.
+     * Resets the focused element.
+     * Do not use if the focused element should be saved.
+     */
     function handleBlur() {
         savedFocusId.current = null;
         changeFocus(null);
     }
 
+    /**
+     * Handles focus event on the items.
+     * Sets the focused item, and handles focusing elements within the item.
+     */
     function handleFocus(id) {
         return (e) => {
             savedFocusId.current = id;
@@ -69,60 +81,67 @@ export function useArrowNavigation(elements, {
         };
     }
 
+    /**
+     * Utility function to react to the key pressed
+     * @param {number} index
+     * @param {Event} e
+     */
+    function executeShortcut(index, e) {
+        e.preventDefault();
+        e.stopPropagation();
+        savedFocusId.current = index;
+        changeFocus(savedFocusId.current);
+    }
+
+    /**
+     * Handles keydown event on the focused element.
+     */
     function handleKeyDown(e) {
+        // Next element
         if (
             e.key === 'ArrowDown' ||
             usePageKeys && e.key === 'PageDown' ||
             useLeftRight && e.key === 'ArrowRight'
         ) {
-            e.preventDefault();
-            e.stopPropagation();
-            savedFocusId.current = Math.min(elementNumber - 1, ++savedFocusId.current);
-            changeFocus(savedFocusId.current);
+            executeShortcut(Math.min(elementNumber - 1, ++savedFocusId.current), e);
             return;
         }
 
+        // Previous element
         if (
             e.key === 'ArrowUp' ||
             usePageKeys && e.key === 'PageUp' ||
             useLeftRight && e.key === 'ArrowLeft'
         ) {
-            e.preventDefault();
-            e.stopPropagation();
-            savedFocusId.current = Math.max(0, --savedFocusId.current);
-            changeFocus(savedFocusId.current);
+            executeShortcut(Math.max(0, --savedFocusId.current), e);
             return;
         }
 
+        // First element
         if (e.key === 'Home' && (useHomeEnd && e.ctrlKey || useHomeEnd === NO_CONTROL)) {
-            e.preventDefault();
-            e.stopPropagation();
-            savedFocusId.current = 0;
-            changeFocus(savedFocusId.current);
+            executeShortcut(0, e);
             return;
         }
 
+        // Last element
         if (e.key === 'End' && (useHomeEnd && e.ctrlKey || useHomeEnd === NO_CONTROL)) {
-            e.preventDefault();
-            e.stopPropagation();
-            savedFocusId.current = elementNumber - 1;
-            changeFocus(savedFocusId.current);
+            executeShortcut(elementNumber - 1, e);
             return;
         }
 
+        // Letter matching
         if (useFirstLetter && Array.isArray(elements) && /^\w$/.test(e.key)) {
-            e.preventDefault();
-            e.stopPropagation();
             const testRegexp = new RegExp(`^${e.key}`, 'i');
-            savedFocusId.current = elements.findIndex((value) => testRegexp.test(value));
-            changeFocus(savedFocusId.current);
+            executeShortcut(elements.findIndex((value) => testRegexp.test(value)), e);
             return;
         }
 
+        // Preventing other actions to be executed when the focus is trapped
         if (useFocusTrap && (NAVIGATION_KEYS.includes(e.key) || /^\w$/.test(e.key))) {
             e.stopPropagation();
         }
 
+        // Preventing leaving the list with tabulations
         if (useFocusTrap && e.key === 'Tab') {
             if (savedFocusId.current === 0 && e.shiftKey || savedFocusId.current === elementNumber - 1 && !e.shiftKey) {
                 e.preventDefault();
