@@ -1,14 +1,15 @@
-export const ROLES = [
-    {
-        id: 1,
-        name: 'admin',
+export const ROLES = {
+    1: {
+        name: 'Administrateur',
         admin: true,
     },
-    {
-        id: 2,
-        name: 'user',
+    2: {
+        name: 'Utilisateur',
     },
-];
+    3: {
+        name: 'Test',
+    },
+};
 
 /**
  * Allows to check if a role id corresponds to the amdmin role
@@ -16,7 +17,7 @@ export const ROLES = [
  * @returns {boolean}
  */
 export function isAdmin(roleId) {
-    return ROLES.find((value) => value.admin).id === roleId;
+    return !!ROLES[roleId].admin;
 }
 
 /**
@@ -25,5 +26,5 @@ export function isAdmin(roleId) {
  * @returns {string}
  */
 export function getRoleName(roleId) {
-    return ROLES.find((value) => value.id === roleId);
+    return ROLES[roleId].name;
 }

@@ -46,6 +46,10 @@
         --state-layer-opacity: var(--state-focused-opacity);
     }
 
+    .interactiveElement[data-selected] {
+        --state-layer-opacity: var(--state-focused-opacity);
+    }
+
     .interactiveElement[data-state-active]:active:not(:disabled) {
         --state-layer-opacity: var(--state-pressed-opacity);
     }

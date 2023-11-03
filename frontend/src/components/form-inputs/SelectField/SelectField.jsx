@@ -1,99 +1,136 @@
 import PropTypes from 'prop-types';
 import style from './SelectField.module.css';
-import { useId, useRef } from 'react';
-import * as TextBox from '../TextBox/index.js';
-import SupportText from '../SupportText/SupportText';
+import {
+    useId, useRef, useState,
+} from 'react';
+import SelectButton from './SelectButton';
+import Listbox from './Listbox';
+import { NO_CONTROL, useArrowNavigation } from '../../../hooks/useArrowNavigation';
+import ListboxOption from './ListboxOption';
 
 /**
  * Dropdown list selection field.
  */
 export default function SelectField({
     value,
+    valueCollection,
     onChange,
-    label,
+    required,
+    leadingIconProps,
+    disabled,
     supportText,
     errorMessage,
-    leadingIconProps,
-    trailingIconProps,
     className,
-    disabled,
-    required,
-    children,
-    ...props
 }) {
+    const comboboxRef = useRef(null);
+    const wrapperRef = useRef(null);
+
+    // Listbox related informations
+    const listboxId = useId();
+    const [isPopupOpened, setIsPopupOpened] = useState(false);
+    const [popupAnchor, setPopupAnchor] = useState(false);
+    const stringComparator = new Intl.Collator('fr');
+    const orderedValueCollection = valueCollection.map(({ value, label }, index) => ({
+        value,
+        label,
+        id: `${listboxId}-${index}-${value}-${label}`,
+    })).toSorted((a, b) => stringComparator.compare(a.label, b.label));
+
+    // Keyboard intractions
+    const {
+        handleKeyDown,
+        focusId: selectedId,
+        setFocusId: setSelectedId,
+    } = useArrowNavigation(
+        orderedValueCollection.map(({ label }) => label),
+        {
+            initialFocus: orderedValueCollection.findIndex(({ value: optionValue }) => optionValue === value),
+            useHomeEnd: NO_CONTROL,
+            useFirstLetter: true,
+        },
+        (index) => index === null ? onChange(undefined) : onChange(orderedValueCollection[index].value)
+    );
+
+    function handleKeyboardInteraction(e) {
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsPopupOpened(false);
+            return;
+        }
+
+        if (e.key === 'ArrowDown' && e.altKey) {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsPopupOpened(true);
+            return;
+        }
+
+        if (e.key === 'ArrowUp' && e.altKey) {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsPopupOpened(false);
+            return;
+        }
+
+        handleKeyDown(e);
+    }
+
     return (
-        <select
-            value={value}
-            onChange={onChange}
-            disabled={disabled}
-            required={required}
-            {...props}
+        <div
+            onBlur={(e) => setIsPopupOpened(false)}
+            ref={wrapperRef}
         >
-            {children}
-        </select>
+            <SelectButton
+                value={orderedValueCollection[selectedId].label || ''}
+                required={required}
+                disabled={disabled}
+                leadingIconProps={leadingIconProps}
+                supportText={supportText}
+                errorMessage={errorMessage}
+                isPopupOpened={isPopupOpened}
+                setIsPopupOpened={setIsPopupOpened}
+                listboxId={listboxId}
+                {...isPopupOpened &&
+                    selectedId >= 0 &&
+                    selectedId !== null &&
+                    { selectedOptionId: orderedValueCollection[selectedId].id }}
+                className={className}
+                onClick={(e) => {
+                    setIsPopupOpened(previous => !previous);
+                    setPopupAnchor(e.currentTarget);
+                }}
+                onKeyDown={handleKeyboardInteraction}
+                ref={comboboxRef}
+            />
+
+            {isPopupOpened &&
+            <Listbox
+                open={isPopupOpened}
+                anchor={popupAnchor}
+            >
+                {orderedValueCollection.map(({ label, id }, index) =>
+                    <ListboxOption
+                        label={label}
+                        selected={selectedId === index}
+                        onClick={(e) => {
+                            setSelectedId(index);
+                            onChange(orderedValueCollection[index].value);
+                            comboboxRef.current?.focus?.();
+                            setIsPopupOpened(false);
+                        }}
+                        onMouseDown={(e) => e.preventDefault()}
+                        id={id}
+                        key={id}
+                    />)}
+            </Listbox>
+            }
+        </div>
     );
 }
 
 SelectField.defaultProps = {
-    value: undefined,
-    type: 'text',
-    supportText: undefined,
-    errorMessage: undefined,
-    leadingIconProps: undefined,
-    trailingIconProps: undefined,
-    className: '',
-    disabled: false,
-    required: false,
-    placeholder: undefined,
 };
 
 SelectField.propTypes = {
-    /** Current value of the test input */
-    value: PropTypes.number,
-
-    /** Function to execute when the value changes, required */
-    onChange: PropTypes.func.isRequired,
-
-    /** Type of the input, defaults to text */
-    type: PropTypes.oneOf([
-        'text',
-        'password',
-        'email',
-        'tel',
-        'url',
-    ]),
-
-    /** Label of the input, required */
-    label: PropTypes.string.isRequired,
-
-    /** Text giving more informations about the input */
-    supportText: PropTypes.string,
-
-    /** Error message. If it is given, then the input value is considered invalid */
-    errorMessage: PropTypes.string,
-
-    /* Object describing the leading icon */
-    leadingIconProps: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        label: PropTypes.string,
-    }),
-
-    /* Object describing the trailing icon, adding an onClick transforms the icon into a button */
-    trailingIconProps: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        label: PropTypes.string,
-        onClick: PropTypes.func,
-    }),
-
-    /** Additional class names to add to the container */
-    className: PropTypes.string,
-
-    /* Weither the input is disabled or not, defaults to false */
-    disabled: PropTypes.bool,
-
-    /* Weither the input is required or not, defaults to false */
-    required: PropTypes.bool,
-
-    /* Placeholder for the input */
-    placeholder: PropTypes.string,
 };

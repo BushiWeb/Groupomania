@@ -26,6 +26,7 @@ const NAVIGATION_KEYS = [
  * @param {number} [initialFocus=null] - Index of the focused element when the container first renders
  * @param {number} [useFirstLetter=false] - Weither to use the first letter of the elements to navigate
  * @param {number} [useFocusTrap=false] - Weither to trap the focus in the list, avoiding leaving the element using tab
+ * @param {Function} [callback] - Callback to execute when changing the focus. Receives the new index as an argument.
  * @returns {{handleBlur, handleFocus, handleKeyDown, focusId, setFocusId}} Returns an object containing :
  *  focusId, the id of the focused element,
  *  handleFocus(id), the function to update the focused element, to give to each listItem,
@@ -40,15 +41,20 @@ export function useArrowNavigation(elements, {
     initialFocus = null,
     useFirstLetter = false,
     useFocusTrap = false,
-} = {}) {
+} = {}, callback) {
     const [focusId, setFocusId] = useState(initialFocus);
-    const savedFocusId = useRef(null);
+    const savedFocusId = useRef(initialFocus);
 
     const elementNumber = Array.isArray(elements) ? elements.length : elements;
 
+    function changeFocus(index) {
+        setFocusId(index);
+        callback?.(index);
+    }
+
     function handleBlur() {
         savedFocusId.current = null;
-        setFocusId(null);
+        changeFocus(null);
     }
 
     function handleFocus(id) {
@@ -56,9 +62,9 @@ export function useArrowNavigation(elements, {
             savedFocusId.current = id;
 
             if (e.target === e.currentTarget) {
-                setFocusId(id);
+                changeFocus(id);
             } else {
-                setFocusId(null);
+                changeFocus(null);
             }
         };
     }
@@ -72,7 +78,7 @@ export function useArrowNavigation(elements, {
             e.preventDefault();
             e.stopPropagation();
             savedFocusId.current = Math.min(elementNumber - 1, ++savedFocusId.current);
-            setFocusId(savedFocusId.current);
+            changeFocus(savedFocusId.current);
             return;
         }
 
@@ -84,7 +90,7 @@ export function useArrowNavigation(elements, {
             e.preventDefault();
             e.stopPropagation();
             savedFocusId.current = Math.max(0, --savedFocusId.current);
-            setFocusId(savedFocusId.current);
+            changeFocus(savedFocusId.current);
             return;
         }
 
@@ -92,7 +98,7 @@ export function useArrowNavigation(elements, {
             e.preventDefault();
             e.stopPropagation();
             savedFocusId.current = 0;
-            setFocusId(savedFocusId.current);
+            changeFocus(savedFocusId.current);
             return;
         }
 
@@ -100,7 +106,7 @@ export function useArrowNavigation(elements, {
             e.preventDefault();
             e.stopPropagation();
             savedFocusId.current = elementNumber - 1;
-            setFocusId(savedFocusId.current);
+            changeFocus(savedFocusId.current);
             return;
         }
 
@@ -109,7 +115,7 @@ export function useArrowNavigation(elements, {
             e.stopPropagation();
             const testRegexp = new RegExp(`^${e.key}`, 'i');
             savedFocusId.current = elements.findIndex((value) => testRegexp.test(value));
-            setFocusId(savedFocusId.current);
+            changeFocus(savedFocusId.current);
             return;
         }
 

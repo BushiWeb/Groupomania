@@ -15,6 +15,7 @@ const InteractiveElement = forwardRef(function InteractiveElement({
     hover,
     focus,
     active,
+    selected,
     rippleDuration,
     stateLayerColor,
     onPointerDown,
@@ -41,6 +42,7 @@ const InteractiveElement = forwardRef(function InteractiveElement({
         {... (rippleDuration > 0 || onKeyDown) && { onKeyDown: handleKeyDown }}
         {...rootProps}
         ref={ref}
+        {...selected && { 'data-selected': true }}
     >
         <div className={style.targetLayer}></div>
         {stateLayerColor && <div
@@ -59,6 +61,7 @@ InteractiveElement.defaultProps = {
     hover: true,
     focus: true,
     active: true,
+    selected: false,
     rippleDuration: 0,
     stateLayerColor: 'on-surface',
     onPointerDown: undefined,
@@ -83,6 +86,9 @@ InteractiveElement.propTypes = {
 
     /** Weither the element should react to the pressed event or not. Defaults to true */
     active: PropTypes.bool,
+
+    /** Weither the element is selected and should display its selected state. Defaults to false */
+    selected: PropTypes.bool,
 
     /** Duration of the ripple effect. To prevent the effect from running, give the value 0. Defaults to 0 */
     rippleDuration: PropTypes.number,

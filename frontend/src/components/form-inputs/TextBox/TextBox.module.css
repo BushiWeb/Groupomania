@@ -113,6 +113,14 @@
         color: var(--trailing-icon-color);
     }
 
+    .buttonContent {
+        composes: body-large from '../../../assets/styles/patterns/typography.module.css';
+
+        flex-grow: 1;
+        text-align: start;
+        color: rgb(var(--color-on-surface));
+    }
+
     /* Disabled state */
     .root[data-disabled] {
         --border-color: rgb(

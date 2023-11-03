@@ -19,29 +19,30 @@ const UsersList = forwardRef((
             className={`${props.className || ''} ${style.usersList}`}
             ref={ref}
         >
-            <List
-                label="Liste des utilisateurs"
-                className={style.list}
-                aria-busy={busy}
-                data={
-                    users ?
-                        users.map(({
-                            userId,
-                            email,
-                            role: {
-                                name,
-                                roleId,
-                            },
-                        }) => ({
-                            headline: email,
-                            ...isAdmin(roleId) && { supportingText: 'Administrateur' },
-                            link: `${userId}`,
-                        })) :
-                        []
-                }
-            />
-
-            {busy && <ProgressIndicator label="Chargement d'anciens posts" circular className={style.busy}/>}
+            {busy ?
+                <ProgressIndicator label="Chargement d'anciens posts" circular className={style.busy}/> :
+                <List
+                    label="Liste des utilisateurs"
+                    className={style.list}
+                    aria-busy={busy}
+                    data={
+                        users ?
+                            users.map(({
+                                userId,
+                                email,
+                                role: {
+                                    name,
+                                    roleId,
+                                },
+                            }) => ({
+                                headline: email,
+                                ...isAdmin(roleId) && { supportingText: 'Administrateur' },
+                                link: `${userId}`,
+                            })) :
+                            []
+                    }
+                />
+            }
         </section>
     );
 });

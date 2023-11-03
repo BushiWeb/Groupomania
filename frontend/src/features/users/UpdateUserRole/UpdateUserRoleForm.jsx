@@ -6,7 +6,6 @@ import { useId } from 'react';
 import SupportText from '../../../components/form-inputs/SupportText/SupportText';
 import PasswordField from '../../../components/form-inputs/PasswordField/PasswordField';
 import SelectField from '../../../components/form-inputs/SelectField/SelectField';
-import Option from '../../../components/form-inputs/SelectField/Option';
 
 /** Form to create a post, with or without image */
 export default function UpdateUserRoleForm({
@@ -33,13 +32,14 @@ export default function UpdateUserRoleForm({
 
         <SelectField
             value={roleId}
-            onChange={(e) => dispatch({ type: ACTIONS.setRole, payload: parseInt(e.target.value) })}
+            onChange={(value) => dispatch({ type: ACTIONS.setRole, payload: value })}
             required
             errorMessage={roleError}
             label="Role"
-        >
-            {ROLES.map(value => <Option value={value.id} key={`${value.id}-${value.name}`}>{value.name}</Option>) }
-        </SelectField>
+            valueCollection={
+                Object.entries(ROLES).map(([key, value]) => ({ value: parseInt(key), label: value.name }))
+            }
+        />
     </form>;
 }
 
