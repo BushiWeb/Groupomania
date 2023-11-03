@@ -132,7 +132,27 @@ export function useArrowNavigation(elements, {
         // Letter matching
         if (useFirstLetter && Array.isArray(elements) && /^\w$/.test(e.key)) {
             const testRegexp = new RegExp(`^${e.key}`, 'i');
-            executeShortcut(elements.findIndex((value) => testRegexp.test(value)), e);
+            let index = null;
+            for (let i = 0; i < elements.length; i++) {
+                if (!testRegexp.test(elements[i])) {
+                    continue;
+                }
+
+                if (i > savedFocusId.current) {
+                    index = i;
+                    break;
+                }
+
+                if (index === null) {
+                    index = i;
+                }
+            }
+
+            if (index === null) {
+                return;
+            }
+
+            executeShortcut(index, e);
             return;
         }
 

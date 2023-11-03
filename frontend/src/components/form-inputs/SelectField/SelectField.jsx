@@ -34,7 +34,7 @@ export default function SelectField({
         value,
         label,
         id: `${listboxId}-${index}-${value}-${label}`,
-    })).toSorted((a, b) => stringComparator.compare(a.label, b.label));
+    }))/* .toSorted((a, b) => stringComparator.compare(a.label, b.label)) */;
 
     // Keyboard intractions
     const {
