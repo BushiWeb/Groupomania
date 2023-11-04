@@ -1,19 +1,19 @@
 import {
-    getAllByRole, getByLabelText, getByRole, getByTestId, getByText, queryByRole, screen, waitFor,
+    getByLabelText, getByRole, getByText, queryByRole, screen, waitFor,
 } from '@testing-library/react';
 import { render } from '../../utils/tests/test-wrapper';
 import userEvent from '../../utils/tests/user-event';
 import '@testing-library/jest-dom';
 import USERS from '../../utils/tests/mocks/users';
-import { act } from 'react-dom/test-utils';
 import { changeViewportWidth } from '../../utils/tests/changeViewportWidth';
+import POSTS from '../../utils/tests/mocks/posts';
 
 beforeEach(() => {
     sessionStorage.clear();
 });
 
 describe('User page test suite', () => {
-    const userId = 2;
+    const userId = 1;
     const initialAdminState = { user: { email: 'test@gmail.com', userId: 130, role: { roleId: 1 }}};
     const initialOwnerState = { user: { email: 'test@gmail.com', userId, role: { roleId: 2 }}};
     const initialState = { user: { email: 'test@gmail.com', userId: 130, role: { roleId: 2 }}};
@@ -142,6 +142,21 @@ describe('User page test suite', () => {
         await waitFor(() => {
             screen.getByRole('button', { name: 'Modifier le role de l\'utilisateur' });
             screen.getByRole('button', { name: 'Supprimer le profil' });
+        });
+    });
+
+    it('should get the user\'s posts', async () => {
+        changeViewportWidth(300);
+        render(undefined, renderOptions());
+        screen.getByLabelText('Chargement d\'anciens posts');
+        const userEmail = POSTS.find((value) => value.writer.writerId === userId).writer.email;
+
+        await waitFor(() => {
+            screen.getByRole('feed');
+            const postElts = screen.getAllByRole('article');
+            for (const post of postElts) {
+                getByText(post, userEmail);
+            }
         });
     });
 

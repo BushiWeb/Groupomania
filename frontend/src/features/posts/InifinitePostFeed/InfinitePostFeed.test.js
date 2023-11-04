@@ -1,4 +1,6 @@
-import { getByRole, screen, waitFor } from '@testing-library/react';
+import {
+    getByRole, getByText, screen, waitFor,
+} from '@testing-library/react';
 import { render } from '../../../utils/tests/test-wrapper';
 import userEvent from '../../../utils/tests/user-event';
 import '@testing-library/jest-dom';
@@ -33,6 +35,18 @@ describe('InfinitePostFeed test suite', () => {
             screen.getByRole('feed', { name: 'Liste des posts' });
             const postElts = screen.getAllByRole('article');
             expect(postElts).toHaveLength(POSTS.length / 2);
+        });
+    });
+
+    it('should render with filtered articles', async () => {
+        render(<TestComponent userId={POSTS[0].writer.writerId}/>, { preloadedState: initialState });
+
+        await waitFor(() => {
+            screen.getByRole('feed', { name: 'Liste des posts' });
+            const postElts = screen.getAllByRole('article');
+            for (const post of postElts) {
+                getByText(post, POSTS[0].writer.email);
+            }
         });
     });
 

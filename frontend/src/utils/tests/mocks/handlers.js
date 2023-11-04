@@ -222,8 +222,14 @@ export const handlers = [
             );
         }
 
-        const page = req.url.searchParams.get('page');
-        const response = page === '1' ? POSTS.slice(0, 2) : POSTS.slice(2);
+        let response;
+        if (req.url.searchParams.get('userId')) {
+            response = POSTS.filter((value) => value.writer.writerId === parseInt(req.url.searchParams.get('userId')));
+        } else {
+            const page = req.url.searchParams.get('page');
+            response = page === '1' ? POSTS.slice(0, 2) : POSTS.slice(2);
+        }
+
         return res(
             ctx.delay(),
             ctx.status(200),

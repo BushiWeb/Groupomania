@@ -96,6 +96,7 @@ export function useUpdateUserForm(onSuccess, user) {
             queryClient.invalidateQueries({ queryKey: ['users']});
             queryClient.invalidateQueries({ queryKey: ['users', user.userId]});
             queryClient.invalidateQueries({ queryKey: ['posts']});
+            queryClient.invalidateQueries({ queryKey: ['posts', user.userId]});
             onSuccess();
         },
     });
