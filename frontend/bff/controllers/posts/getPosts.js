@@ -12,7 +12,7 @@ const getPostsControllerLogger = createLoggerNamespace('groupomania:bff:controll
 export default async function getPostsController(req, res, next) {
     getPostsControllerLogger.verbose('Get posts controller starting');
     try {
-        const postsData = await getPostsRequest(req.query.page, true, req.session.user);
+        const postsData = await getPostsRequest(req.query.page, true, req.session.user, req.query.userId);
         res.status(200).json(postsData);
     } catch (error) {
         next(error);

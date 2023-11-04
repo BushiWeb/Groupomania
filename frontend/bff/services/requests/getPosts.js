@@ -11,14 +11,15 @@ const requestServiceLogger = createLoggerNamespace('groupomania:bff:service:requ
  * @param {{accessToken: string, refreshToken: string}} sessionAuth - Session object containing the authentication
  *  tokens. Used to get the tokens.
  *  It may be modified by side effects if the tokens are refreshed.
+ * @param {string} [userId] - User id to filter the requested post by user
  * @returns {Promise} Returns a promise resolved with the request response data.
  * @throws Throws if the request returns an error.
  */
-export default async function getPostsRequest(page, userInfos, sessionAuth) {
+export default async function getPostsRequest(page, userInfos, sessionAuth, userId) {
     requestServiceLogger.debug('Get posts request service starting');
 
     const response = await apiRequest({
-        path: `/posts?userInfo=${userInfos}&likeInfo=true&limit=${config.get('pagination.posts')}&page=${page}`,
+        path: `/posts?userInfo=${userInfos}&likeInfo=true&limit=${config.get('pagination.posts')}&page=${page}${userId !== undefined ? `&userId=${userId}` : ''}`,
         method: 'get',
         accessToken: sessionAuth.accessToken,
         refreshToken: sessionAuth.refreshToken,

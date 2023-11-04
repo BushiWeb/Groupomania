@@ -1,3 +1,4 @@
+import generateIdSchema from './atoms/id.js';
 import generatePaginationSchema from './atoms/pagination.js';
 
 /**
@@ -5,6 +6,7 @@ import generatePaginationSchema from './atoms/pagination.js';
  */
 const getPosts = {
     page: generatePaginationSchema({ required: true }),
+    userId: generateIdSchema({ required: false }, ['query']),
 };
 
 export default getPosts;
