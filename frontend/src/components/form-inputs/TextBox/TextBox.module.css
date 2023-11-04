@@ -137,6 +137,12 @@
         );
     }
 
+    .root[data-disabled] .buttonContent {
+        color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+    }
+
     /* Hovered state */
     .root:not([data-disabled]):hover {
         --border-color: rgb(var(--color-on-surface));

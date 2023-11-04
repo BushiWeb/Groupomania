@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-import style from './Listbox.module.css';
+import style from './SelectField.module.css';
 import InteractiveElement from '../../InteractiveElement/InteractiveElement';
 
 /**
- * Item of a list, used within the List component.
+ * Item of a listbox
  */
 export default function ListboxOption({
     label,
@@ -36,24 +36,19 @@ export default function ListboxOption({
 }
 
 ListboxOption.defaultProps = {
+    selected: false,
 };
 
 ListboxOption.propTypes = {
     /* Label of the button, required */
     label: PropTypes.string.isRequired,
 
-    /* Action to execute when clicking on the button, required */
+    /* Weither the menu item is selected or not, default to false */
+    selected: PropTypes.bool,
+
+    /* Function to execute when the element is clicked, required */
     onClick: PropTypes.func.isRequired,
 
-    /* Leading icon */
-    leadingIcon: PropTypes.element,
-
-    /* Weither the menu item is disabled or not, default to false */
-    disabled: PropTypes.bool,
-
-    /* Weither the menu item is focused or not, default to false */
-    focused: PropTypes.bool,
-
-    /* Function to execute when the element gains focus */
-    onFocus: PropTypes.func,
+    /** Id of the element, required */
+    id: PropTypes.string.isRequired,
 };

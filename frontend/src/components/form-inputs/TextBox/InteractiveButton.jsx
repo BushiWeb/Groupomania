@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import style from './TextBox.module.css';
 import InteractiveElement from '../../InteractiveElement/InteractiveElement.jsx';
-import { forwardRef } from 'react';
+import { forwardRef, useId } from 'react';
 
 /**
  * Similar to Interactive Container, but includes a button.
@@ -17,6 +17,8 @@ const InteractiveButton = forwardRef(({
     onClick,
     ...props
 }, ref) => {
+    const labelId = useId();
+
     return <InteractiveElement
         rootElement='button'
         type='button'
@@ -27,10 +29,11 @@ const InteractiveButton = forwardRef(({
         {...leadingIcon && { 'data-leading-icon': true }}
         {...trailingIcon && { 'data-trailing-icon': true }}
         ref={ref}
+        aria-labelledby={labelId}
         {...props}
     >
         {leadingIcon}
-        <span className={style.labelText}>{label}{required && '*'}</span>
+        <span className={style.labelText} id={labelId}>{label}{required && '*'}</span>
         <span className={style.buttonContent}>{children}</span>
         {trailingIcon}
     </InteractiveElement>;

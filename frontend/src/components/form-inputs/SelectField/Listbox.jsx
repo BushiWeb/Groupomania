@@ -1,26 +1,27 @@
 import PropTypes from 'prop-types';
-import style from './Listbox.module.css';
-import { forwardRef } from 'react';
+import style from './SelectField.module.css';
+import useListbox from './useListbox';
 
 /**
  * Listbox component, to be used within a select
  */
-const Listbox = forwardRef(({
+export default function Listbox({
     open,
     anchor,
     className,
     children,
-}, ref) => {
-    /* const {
+}) {
+    const {
         position: {
             top,
             left,
+            width,
         },
         ref,
     } = useListbox({
         anchor,
         open,
-    }); */
+    });
 
     if (!open) {
         return;
@@ -29,16 +30,16 @@ const Listbox = forwardRef(({
     return <ul
         className={`${style.listbox} ${className}`}
         role="listbox"
-
-        /* style={{
-            '--menu-top': `${top}px`,
-            '--menu-left': `${left}px`,
-        }} */
+        style={{
+            '--listbox-top': `${top}px`,
+            '--listbox-left': `${left}px`,
+            ...width !== null && { '--listbox-width': `${width}px` },
+        }}
         ref={ref}
     >
         {children}
     </ul>;
-});
+}
 
 Listbox.defaultProps = {
     open: false,
@@ -46,14 +47,12 @@ Listbox.defaultProps = {
 };
 
 Listbox.propTypes = {
-    /* Weither the menu is opened or not, default to false */
+    /* Weither the listbox is opened or not, default to false */
     open: PropTypes.bool,
 
-    /* Element to anchor the menu to */
+    /* Element to anchor the listbox to */
     anchor: PropTypes.instanceOf(HTMLElement),
 
     /* Additional classnames */
     className: PropTypes.string,
 };
-
-export default Listbox;

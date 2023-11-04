@@ -35,7 +35,7 @@ export default function UpdateUserRoleForm({
             onChange={(value) => dispatch({ type: ACTIONS.setRole, payload: value })}
             required
             errorMessage={roleError}
-            label="Role"
+            label="Rôle"
             valueCollection={
                 Object.entries(ROLES).map(([key, value]) => ({ value: parseInt(key), label: value.name }))
             }

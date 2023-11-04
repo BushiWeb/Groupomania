@@ -51,6 +51,7 @@ export function useArrowNavigation(elements, {
      * Changes the focus and calls the callback
      */
     function changeFocus(index) {
+        savedFocusId.current = index;
         setFocusId(index);
         callback?.(index);
     }
@@ -61,7 +62,6 @@ export function useArrowNavigation(elements, {
      * Do not use if the focused element should be saved.
      */
     function handleBlur() {
-        savedFocusId.current = null;
         changeFocus(null);
     }
 
@@ -71,12 +71,11 @@ export function useArrowNavigation(elements, {
      */
     function handleFocus(id) {
         return (e) => {
-            savedFocusId.current = id;
-
             if (e.target === e.currentTarget) {
                 changeFocus(id);
             } else {
                 changeFocus(null);
+                savedFocusId.current = id;
             }
         };
     }
@@ -89,8 +88,7 @@ export function useArrowNavigation(elements, {
     function executeShortcut(index, e) {
         e.preventDefault();
         e.stopPropagation();
-        savedFocusId.current = index;
-        changeFocus(savedFocusId.current);
+        changeFocus(index);
     }
 
     /**
@@ -175,6 +173,6 @@ export function useArrowNavigation(elements, {
         handleFocus,
         handleKeyDown,
         focusId,
-        setFocusId,
+        setFocusId: changeFocus,
     };
 }

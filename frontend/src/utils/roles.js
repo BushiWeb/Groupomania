@@ -6,15 +6,6 @@ export const ROLES = {
     2: {
         name: 'Utilisateur',
     },
-    3: {
-        name: 'Test',
-    },
-    4: {
-        name: 'Union',
-    },
-    5: {
-        name: 'United',
-    },
 };
 
 /**

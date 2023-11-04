@@ -1,17 +1,14 @@
 import PropTypes from 'prop-types';
-import style from './SelectField.module.css';
-import {
-    useId, useRef, useState,
-} from 'react';
 import SelectButton from './SelectButton';
 import Listbox from './Listbox';
-import { NO_CONTROL, useArrowNavigation } from '../../../hooks/useArrowNavigation';
 import ListboxOption from './ListboxOption';
+import useSelectField from './useSelectField';
 
 /**
  * Dropdown list selection field.
  */
 export default function SelectField({
+    label,
     value,
     valueCollection,
     onChange,
@@ -22,67 +19,33 @@ export default function SelectField({
     errorMessage,
     className,
 }) {
-    const comboboxRef = useRef(null);
-    const wrapperRef = useRef(null);
-
-    // Listbox related informations
-    const listboxId = useId();
-    const [isPopupOpened, setIsPopupOpened] = useState(false);
-    const [popupAnchor, setPopupAnchor] = useState(false);
-    const stringComparator = new Intl.Collator('fr');
-    const orderedValueCollection = valueCollection.map(({ value, label }, index) => ({
-        value,
-        label,
-        id: `${listboxId}-${index}-${value}-${label}`,
-    }))/* .toSorted((a, b) => stringComparator.compare(a.label, b.label)) */;
-
-    // Keyboard intractions
     const {
-        handleKeyDown,
-        focusId: selectedId,
-        setFocusId: setSelectedId,
-    } = useArrowNavigation(
-        orderedValueCollection.map(({ label }) => label),
-        {
-            initialFocus: orderedValueCollection.findIndex(({ value: optionValue }) => optionValue === value),
-            useHomeEnd: NO_CONTROL,
-            useFirstLetter: true,
-        },
-        (index) => index === null ? onChange(undefined) : onChange(orderedValueCollection[index].value)
-    );
-
-    function handleKeyboardInteraction(e) {
-        if (e.key === 'Escape') {
-            e.preventDefault();
-            e.stopPropagation();
-            setIsPopupOpened(false);
-            return;
-        }
-
-        if (e.key === 'ArrowDown' && e.altKey) {
-            e.preventDefault();
-            e.stopPropagation();
-            setIsPopupOpened(true);
-            return;
-        }
-
-        if (e.key === 'ArrowUp' && e.altKey) {
-            e.preventDefault();
-            e.stopPropagation();
-            setIsPopupOpened(false);
-            return;
-        }
-
-        handleKeyDown(e);
-    }
+        wrapperRef,
+        comboboxRef,
+        handleKeyboardInteraction,
+        handleButtonClick,
+        handleContainerBlur,
+        handleOptionClick,
+        orderedValueCollection,
+        listboxId,
+        selectedId,
+        isPopupOpened,
+        setIsPopupOpened,
+        popupAnchor,
+    } = useSelectField({
+        value,
+        valueCollection,
+        onChange,
+    });
 
     return (
         <div
-            onBlur={(e) => setIsPopupOpened(false)}
+            onBlur={handleContainerBlur}
             ref={wrapperRef}
         >
             <SelectButton
-                value={orderedValueCollection[selectedId].label || ''}
+                label={label}
+                value={orderedValueCollection[selectedId]?.label || ''}
                 required={required}
                 disabled={disabled}
                 leadingIconProps={leadingIconProps}
@@ -96,10 +59,7 @@ export default function SelectField({
                     selectedId !== null &&
                     { selectedOptionId: orderedValueCollection[selectedId].id }}
                 className={className}
-                onClick={(e) => {
-                    setIsPopupOpened(previous => !previous);
-                    setPopupAnchor(e.currentTarget);
-                }}
+                onClick={handleButtonClick}
                 onKeyDown={handleKeyboardInteraction}
                 ref={comboboxRef}
             />
@@ -113,12 +73,7 @@ export default function SelectField({
                     <ListboxOption
                         label={label}
                         selected={selectedId === index}
-                        onClick={(e) => {
-                            setSelectedId(index);
-                            onChange(orderedValueCollection[index].value);
-                            comboboxRef.current?.focus?.();
-                            setIsPopupOpened(false);
-                        }}
+                        onClick={handleOptionClick(index)}
                         onMouseDown={(e) => e.preventDefault()}
                         id={id}
                         key={id}
@@ -130,7 +85,45 @@ export default function SelectField({
 }
 
 SelectField.defaultProps = {
+    required: false,
+    disabled: false,
+    className: '',
 };
 
 SelectField.propTypes = {
+    /** Label of the field, required */
+    label: PropTypes.string.isRequired,
+
+    /** Value of the field */
+    value: PropTypes.any,
+
+    /** List of possible values and their labels, required */
+    valueCollection: PropTypes.arrayOf(PropTypes.exact({
+        value: PropTypes.any.isRequired,
+        label: PropTypes.string.isRequired,
+    })).isRequired,
+
+    /** Function to execute when the value changes, required */
+    onChange: PropTypes.func.isRequired,
+
+    /** Weither the field is required or not */
+    required: PropTypes.bool,
+
+    /** Icons to add before the label */
+    leadingIconProps: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        label: PropTypes.string,
+    }),
+
+    /** Weither the field is disabled or not */
+    disabled: PropTypes.bool,
+
+    /** Text giving more informations about the field */
+    supportText: PropTypes.string,
+
+    /** Error message for the field */
+    errorMessage: PropTypes.string,
+
+    /** Additional class names */
+    className: PropTypes.string,
 };

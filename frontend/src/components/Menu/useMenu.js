@@ -41,7 +41,6 @@ export default function useMenu({
         handleFocus,
         handleKeyDown,
         focusId,
-        setFocusId,
     } = useArrowNavigation(items.map(({ label }) => label), {
         initialFocus: 0,
         useHomeEnd: NO_CONTROL,
@@ -49,12 +48,6 @@ export default function useMenu({
         useFirstLetter: true,
         useFocusTrap: true,
     });
-
-    useEffect(() => {
-        if (open) {
-            setFocusId(0);
-        }
-    }, [open, setFocusId]);
 
     /* Get position when opening */
     useLayoutEffect(() => {
