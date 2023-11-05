@@ -5,7 +5,7 @@
         display: flex;
         flex-direction: column;
         align-items: stretch;
-        gap: var(--padding-4);
+        gap: var(--padding-8);
         height: 100%;
     }
 

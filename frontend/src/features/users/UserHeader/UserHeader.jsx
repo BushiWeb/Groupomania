@@ -6,6 +6,7 @@ import UpdateUserDialog from '../UpdateUser/UpdateUserDialog';
 import ProgressIndicator from '../../../components/ProgressIndicator/ProgressIndicator';
 import UpdateUserRoleDialog from '../UpdateUserRole/UpdateUserRoleDialog';
 import { isAdmin } from '../../../utils/roles';
+import DeleteUserDialog from '../DeleteUser/DeleteUserDialog';
 
 /**
  * User header.
@@ -30,6 +31,8 @@ export default function UserHeader({
         setIsUpdateUserOpen,
         isUpdateUserRoleOpen,
         setIsUpdateUserRoleOpen,
+        isDeleteUserOpen,
+        setIsDeleteUserOpen,
     } = useUserHeader(userId, topLevelHeader);
 
     if (busy) {
@@ -58,7 +61,7 @@ export default function UserHeader({
                     {...backArrow && { navigationArrowTarget: '/reseau', navigationArrowLabel: 'Retourner à la liste' }}
                     className={className}
                 >
-                    <p className={errorMessage}>{errorMessage}</p>
+                    <p className={style.errorMessage}>{errorMessage}</p>
                 </TopAppBar>
             </>
         );
@@ -76,6 +79,7 @@ export default function UserHeader({
                 <h1 className={style.heading}>{email}</h1>
                 {isAdmin(roleId) && <p className={style.subHeading}>Administrateur</p>}
             </TopAppBar>
+
             {isUpdateUserOpen &&
             <UpdateUserDialog
                 isOpen={isUpdateUserOpen}
@@ -83,10 +87,20 @@ export default function UserHeader({
                 userId={userId}
                 userEmail={email}
             />}
+
             {isUpdateUserRoleOpen &&
             <UpdateUserRoleDialog
                 isOpen={isUpdateUserRoleOpen}
                 setIsOpen={setIsUpdateUserRoleOpen}
+                userId={userId}
+                userEmail={email}
+                userRoleId={roleId}
+            />}
+
+            {isDeleteUserOpen &&
+            <DeleteUserDialog
+                isOpen={isDeleteUserOpen}
+                setIsOpen={setIsDeleteUserOpen}
                 userId={userId}
                 userEmail={email}
                 userRoleId={roleId}

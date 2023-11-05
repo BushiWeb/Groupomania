@@ -26,6 +26,7 @@ export default function UpdateUserForm({
             onChange={(e) => dispatch({ type: ACTIONS.setOldPassword, payload: e.target.value })}
             label="Mot de passe"
             errorMessage={oldPasswordError}
+            supportText="Veuillez confirmer votre identité avant de continuer."
             required
         />
 

@@ -1,4 +1,4 @@
-import style from './UpdateUserDialog.module.css';
+import style from './DeleteUserDialog.module.css';
 import PropTypes from 'prop-types';
 import { ACTIONS } from './formReducer';
 import { ROLES } from '../../../utils/roles';
@@ -8,12 +8,12 @@ import PasswordField from '../../../components/form-inputs/PasswordField/Passwor
 import SelectField from '../../../components/form-inputs/SelectField/SelectField';
 
 /** Form to create a post, with or without image */
-export default function UpdateUserRoleForm({
-    roleId, roleError, password, passwordError, globalError, dispatch,
+export default function DeleteUserForm({
+    password, passwordError, globalError, dispatch,
 }) {
     const errorMessageId = useId();
 
-    return <form className={style.form} aria-label="Formulaire de mise à jour du role de l'utilisateur">
+    return <form className={style.form} aria-label="Formulaire de suppression d'utilisateur">
         <SupportText
             id={errorMessageId}
             errorMessage={globalError}
@@ -30,28 +30,17 @@ export default function UpdateUserRoleForm({
             supportText="Veuillez confirmer votre identité avant de continuer."
             required
         />
-
-        <SelectField
-            value={roleId}
-            onChange={(value) => dispatch({ type: ACTIONS.setRole, payload: value })}
-            required
-            errorMessage={roleError}
-            label="Rôle"
-            valueCollection={
-                Object.entries(ROLES).map(([key, value]) => ({ value: parseInt(key), label: value.name }))
-            }
-        />
     </form>;
 }
 
-UpdateUserRoleForm.defaultProps = {
+DeleteUserForm.defaultProps = {
     emailError: '',
     password: '',
     passwordError: '',
     globalError: '',
 };
 
-UpdateUserRoleForm.propTypes = {
+DeleteUserForm.propTypes = {
     /* Id of the user's role */
     roleId: PropTypes.number,
 

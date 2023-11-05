@@ -12,6 +12,8 @@ import { useState } from 'react';
  * setIsUpdateUserOpen: Function,
  * isUpdateUserRoleOpen: boolean,
  * setIsUpdateUserRoleOpen: Function,
+ * isDeleteUserOpen: boolean,
+ * setIsDeleteUserOpen: Function,
  * actions: Array
  * }}
  */
@@ -23,6 +25,9 @@ export function useUserHeader(userId, topLevelHeader) {
 
     // Update user's role dialog state
     const [isUpdateUserRoleOpen, setIsUpdateUserRoleOpen] = useState(false);
+
+    // Delete user dialog state
+    const [isDeleteUserOpen, setIsDeleteUserOpen] = useState(false);
 
     // Action buttons to display
     const { isAdmin, userId: currentUserId } = useSelector(selectRighInfos);
@@ -49,7 +54,7 @@ export function useUserHeader(userId, topLevelHeader) {
             [
                 {
                     label: 'Supprimer le profil',
-                    onClick: () => console.log('Suppression du profil'),
+                    onClick: () => setIsDeleteUserOpen(true),
                     icon: 'delete_forever',
                 },
             ] :
@@ -71,6 +76,8 @@ export function useUserHeader(userId, topLevelHeader) {
         setIsUpdateUserOpen,
         isUpdateUserRoleOpen,
         setIsUpdateUserRoleOpen,
+        isDeleteUserOpen,
+        setIsDeleteUserOpen,
         actions,
     };
 }
