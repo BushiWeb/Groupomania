@@ -1,5 +1,5 @@
 import {
-    useEffect, useLayoutEffect, useRef, useState,
+    useLayoutEffect, useRef, useState,
 } from 'react';
 import { useClickOutsideModal } from '../../hooks/useClickOutside.js';
 import { NO_CONTROL, useArrowNavigation } from '../../hooks/useArrowNavigation.js';

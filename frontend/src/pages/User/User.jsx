@@ -7,6 +7,9 @@ import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
 import { simpleFetch } from '../../utils/fetch';
 import { useHandleRequestError } from '../../hooks/useHandleRequestError';
+import { useSetNavigationInfo } from '../../features/navigationInfo/useSetNavigationInfo';
+
+export const PAGE_NAME = 'User';
 
 /**
  * User page.
@@ -17,6 +20,7 @@ import { useHandleRequestError } from '../../hooks/useHandleRequestError';
 export default function User({ topLevelPage }) {
     const { userId: stringUserId } = useParams();
     const userId = parseInt(stringUserId);
+    useSetNavigationInfo(PAGE_NAME, { userId });
     const outletContext = useOutletContext();
     const mainId = useId();
 

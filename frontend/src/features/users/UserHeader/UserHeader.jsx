@@ -72,7 +72,11 @@ export default function UserHeader({
             <TopAppBar
                 type={small ? 'small' : 'medium'}
                 {...topLevelHeader && mainContentId && { hiddenLinkTargetId: mainContentId }}
-                {...backArrow && { navigationArrowTarget: '/reseau', navigationArrowLabel: 'Retourner à la liste' }}
+                {...backArrow && {
+                    navigationArrowTarget: '/reseau',
+                    navigationArrowLabel: 'Retourner à la liste',
+                    navigationArrowState: { userId },
+                }}
                 actions={actions}
                 className={className}
             >

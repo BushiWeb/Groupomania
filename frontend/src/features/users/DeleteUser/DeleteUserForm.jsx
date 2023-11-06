@@ -1,11 +1,9 @@
 import style from './DeleteUserDialog.module.css';
 import PropTypes from 'prop-types';
 import { ACTIONS } from './formReducer';
-import { ROLES } from '../../../utils/roles';
 import { useId } from 'react';
 import SupportText from '../../../components/form-inputs/SupportText/SupportText';
 import PasswordField from '../../../components/form-inputs/PasswordField/PasswordField';
-import SelectField from '../../../components/form-inputs/SelectField/SelectField';
 
 /** Form to create a post, with or without image */
 export default function DeleteUserForm({

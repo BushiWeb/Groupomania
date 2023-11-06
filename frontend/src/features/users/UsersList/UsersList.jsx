@@ -10,6 +10,7 @@ const UsersList = forwardRef((
     {
         users,
         busy,
+        selectedUserId,
         ...props
     },
     ref
@@ -37,13 +38,14 @@ const UsersList = forwardRef((
                             headline: email,
                             ...isAdmin(roleId) && { supportingText: 'Administrateur' },
                             link: `${userId}`,
+                            ...selectedUserId === userId && { selected: true },
                         })) :
                         []
                 }
             />
 
             {busy &&
-                <ProgressIndicator label="Chargement d'anciens posts" circular className={style.busy}/>
+                <ProgressIndicator label="Chargement d'utilisateurs suivants" circular className={style.busy}/>
             }
         </section>
     );
@@ -66,6 +68,9 @@ UsersList.propTypes = {
 
     /** value of aria-busy, should be true if the posts list is being updated */
     busy: PropTypes.bool,
+
+    /** Selected user id, shown or previously shown in the user page */
+    selectedUserId: PropTypes.number,
 };
 
 export default UsersList;

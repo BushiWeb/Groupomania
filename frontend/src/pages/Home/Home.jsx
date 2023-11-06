@@ -6,10 +6,14 @@ import {
 import InfinitePostFeed from '../../features/posts/InifinitePostFeed/InfinitePostFeed';
 import { fabContext } from '../../context/fabContext';
 import UpsertPostDialog from '../../features/posts/UpsertPostDialog/UpsertPostDialog';
+import { useSetNavigationInfo } from '../../features/navigationInfo/useSetNavigationInfo';
+
+export const PAGE_NAME = 'Home';
 
 /** Home page, inserted within the global UI */
 export default function Home() {
     const { id, className } = useOutletContext();
+    useSetNavigationInfo(PAGE_NAME);
 
     // Get the ref for the container element but rerender the children when the ref changes
     const [containerRef, setContainerRef] = useState(null);

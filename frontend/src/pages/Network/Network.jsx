@@ -1,13 +1,23 @@
 import { useState } from 'react';
-import { Outlet, useOutletContext } from 'react-router-dom';
+import {
+    Outlet, useOutletContext, useParams,
+} from 'react-router-dom';
 import InfiniteUserList from '../../features/users/InfiniteUserList/InfiniteUserList';
 import { useBreakpoint } from '../../hooks/useBreakpoints';
 import style from './Network.module.css';
+import { useSetNavigationInfo } from '../../features/navigationInfo/useSetNavigationInfo';
+import { useGetPrevNavigationInfo } from '../../features/navigationInfo/useGetPrevNavigationInfo';
+
+export const PAGE_NAME = 'Network';
 
 /** Net<ork page page, inserted within the global UI */
 export default function Network() {
     const { id, className } = useOutletContext();
     const breakpoint = useBreakpoint();
+    const { userId: paramUserId } = useParams();
+    const { prevState } = useGetPrevNavigationInfo();
+    const userId = paramUserId || prevState?.userId;
+    useSetNavigationInfo(PAGE_NAME);
 
     // Get the ref for the container element but rerender the children when the ref changes
     const [containerRef, setContainerRef] = useState(null);
@@ -24,6 +34,7 @@ export default function Network() {
             errorClassName={style.error}
             className={style.users}
             {...breakpoint >= 4 && { ref: mainRef }}
+            selectedUserId={userId && parseInt(userId)}
         />
         {breakpoint >= 4 && <Outlet context={{ className: style.user }}/>}
     </main>;

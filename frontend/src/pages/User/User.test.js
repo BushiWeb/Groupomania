@@ -222,4 +222,19 @@ describe('User page test suite', () => {
             expect(screen.getByTestId('search-path').textContent).toMatch('error');
         });
     });
+
+    it('should show the selected user in the list on large screens', async () => {
+        changeViewportWidth(1500);
+        const { container } = render(undefined, renderOptions());
+        const user = USERS.find((value) => value.userId === userId);
+
+        await waitFor(() => {
+            const headerElt = container.querySelector('.userHeader');
+            getByText(headerElt, user.email);
+        });
+
+        const list = screen.getByRole('list', { name: 'Liste des utilisateurs' });
+        const selectedListItem = list.querySelector('[data-selected]');
+        expect(selectedListItem).toHaveTextContent(user.email);
+    });
 });

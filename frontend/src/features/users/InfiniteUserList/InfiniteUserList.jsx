@@ -14,6 +14,7 @@ const InfiniteUserList = forwardRef((
         containerElt,
         errorClassName,
         className,
+        selectedUserId,
     },
     ref
 ) => {
@@ -36,6 +37,7 @@ const InfiniteUserList = forwardRef((
         className={className}
         busy={isFetchingNextPage || isLoading}
         ref={ref}
+        selectedUserId={selectedUserId}
     />;
 });
 
@@ -48,6 +50,9 @@ InfiniteUserList.propTypes = {
 
     /** ClassName to give to the error message */
     errorClassName: PropTypes.string,
+
+    /** Selected user id, shown or previously shown in the user page */
+    selectedUserId: PropTypes.number,
 };
 
 export default InfiniteUserList;

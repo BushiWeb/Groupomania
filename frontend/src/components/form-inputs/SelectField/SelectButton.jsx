@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import style from './SelectField.module.css';
 import {
     forwardRef, useId,
 } from 'react';

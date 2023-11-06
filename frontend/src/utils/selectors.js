@@ -21,3 +21,26 @@ export const selectRighInfos = createSelector(
     selectUserId,
     (isAdmin, userId) => ({ isAdmin, userId })
 );
+
+export const selectPreviousLocation = (state) => state.navigationInfo.prevLocation;
+
+export const selectPreviousState = (state) => state.navigationInfo.prevState;
+
+export const selectKey = (state) => state.navigationInfo.locationKey;
+
+export const selectPreviousNavigation = createSelector(
+    selectPreviousLocation,
+    selectPreviousState,
+    selectKey,
+    (prevLocation, prevState, key) => ({ prevLocation, prevState, key })
+);
+
+export const selectLocation = (state) => state.navigationInfo.location;
+
+export const selectState = (state) => state.navigationInfo.state;
+
+export const selectNavigation = createSelector(
+    selectLocation,
+    selectState,
+    (location, state) => ({ location, state })
+);

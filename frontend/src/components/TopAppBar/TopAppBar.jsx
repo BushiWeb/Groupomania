@@ -11,6 +11,7 @@ export default function TopAppBar({
     type,
     navigationArrowTarget,
     navigationArrowLabel,
+    navigationArrowState,
     hiddenLinkTargetId,
     actions,
     className,
@@ -31,7 +32,11 @@ export default function TopAppBar({
         {
             navigationArrowTarget &&
             navigationArrowLabel &&
-            <NavigationArrowButton to={navigationArrowTarget} label={navigationArrowLabel}/>
+            <NavigationArrowButton
+                to={navigationArrowTarget}
+                label={navigationArrowLabel}
+                state={navigationArrowState}
+            />
         }
 
         <div className={style.content}>
@@ -56,6 +61,9 @@ TopAppBar.propTypes = {
 
     /* Label of the navigation arrow, required if the link is given */
     navigationArrowLabel: PropTypes.string,
+
+    /* State given to the new history entry after using the arrow navigation button */
+    navigationArrowState: PropTypes.any,
 
     /* Id of the target of the hidden link, if not specified, the hidden link is removed */
     hiddenLinkTargetId: PropTypes.string,

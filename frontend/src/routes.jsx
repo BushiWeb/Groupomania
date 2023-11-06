@@ -24,7 +24,10 @@ export default function ResponsiveRoutes({ test }) {
     return <Routes>
         <Route path='/' element={isAuthenticated ? <UI/> : <Navigate to='/login'/>}>
             <Route index element={<Home/>} />
-            <Route path='reseau' element={<Network/>}>
+            <Route
+                path='reseau'
+                element={<Network/>}
+            >
                 <Route index element={<EmptyUser/>}/>
                 {breakpoint === 4 && <Route path=':userId' element={<User/>}/>}
             </Route>

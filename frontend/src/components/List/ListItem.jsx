@@ -4,7 +4,7 @@ import Icon from '../Icon/Icon.jsx';
 import { useSelector } from 'react-redux';
 import { selectIsDarkTheme } from '../../utils/selectors';
 import Link from '../Link/Link';
-import { useId } from 'react';
+import { useCallback, useId } from 'react';
 import InteractiveElement from '../InteractiveElement/InteractiveElement';
 import { useFocusable } from '../../hooks/useFocusable';
 
@@ -12,7 +12,7 @@ import { useFocusable } from '../../hooks/useFocusable';
  * Item of a list, used within the List component.
  */
 export default function ListItem({
-    headline, headlineLevel, supportingText, link, focused, onFocus,
+    headline, headlineLevel, supportingText, link, focused, onFocus, selected,
 }) {
     const isDarkTheme = useSelector(selectIsDarkTheme);
 
@@ -20,8 +20,17 @@ export default function ListItem({
     const headingId = useId();
 
     const linkRef = useFocusable(focused);
+    const itemRef = useCallback((node) => {
+        if (node && selected) {
+            node.scrollIntoView?.({
+                behavior: 'instant',
+                block: 'center',
+                inline: 'nearest',
+            });
+        }
+    }, [selected]);
 
-    return <li className={style.listItem} onFocus={onFocus}>
+    return <li className={style.listItem} onFocus={onFocus} ref={itemRef}>
         <InteractiveElement
             rootElement={Link}
             stateLayerColor="on-surface"
@@ -30,6 +39,7 @@ export default function ListItem({
             aria-labelledby={headingId}
             className={`${style.link}`}
             ref={linkRef}
+            selected={selected}
         >
             <div className={style.content}>
                 <Heading id={headingId} className={style.headline}>{headline}</Heading>
@@ -45,6 +55,7 @@ ListItem.defaultProps = {
     supportingText: undefined,
     link: undefined,
     focused: false,
+    selected: false,
 };
 
 ListItem.propTypes = {
@@ -65,4 +76,7 @@ ListItem.propTypes = {
 
     /** Function to execute on focus of the element */
     onFocus: PropTypes.func.isRequired,
+
+    /** Weither the list item is selected or not, defaults to false */
+    selected: PropTypes.bool,
 };

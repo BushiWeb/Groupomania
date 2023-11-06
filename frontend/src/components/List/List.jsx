@@ -49,6 +49,7 @@ List.propTypes = {
         headline: PropTypes.string.isRequired,
         supportingText: PropTypes.string,
         link: PropTypes.string,
+        selected: PropTypes.bool,
     })).isRequired,
 
     /** Label of the list */

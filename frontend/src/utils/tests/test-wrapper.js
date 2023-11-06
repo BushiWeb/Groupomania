@@ -6,6 +6,7 @@ import {
 import themeReducer from '../../features/theme/theme.slice.js';
 import snackbarReducer from '../../features/snackbar/snackbar.slice.js';
 import userReducer from '../../features/authentication/user.slice.js';
+import navigationReducer from '../../features/navigationInfo/navigationInfo.slice.js';
 import { Provider } from 'react-redux';
 import Login from '../../pages/Login/Login.jsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -28,6 +29,7 @@ export function render(ui, {
                 theme: themeReducer,
                 snackbar: snackbarReducer,
                 user: userReducer,
+                navigationInfo: navigationReducer,
             },
             ...preloadedState && { preloadedState },
         });
