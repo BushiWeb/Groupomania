@@ -11,6 +11,7 @@ import { useBreakpoint } from './hooks/useBreakpoints.js';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from './utils/selectors.js';
+import { BP_ID } from './context/BreakpointContext.js';
 
 /**
  * Adds responsive routing.
@@ -29,12 +30,12 @@ export default function ResponsiveRoutes({ test }) {
                 element={<Network/>}
             >
                 <Route index element={<EmptyUser/>}/>
-                {breakpoint === 4 && <Route path=':userId' element={<User/>}/>}
+                {breakpoint === BP_ID.xxl && <Route path=':userId' element={<User/>}/>}
             </Route>
-            {breakpoint >= 1 && breakpoint <= 3 && <Route path='reseau/:userId' element={<User/>}/>}
+            {breakpoint >= BP_ID.medium && breakpoint <= BP_ID.extraLarge && <Route path='reseau/:userId' element={<User/>}/>}
             <Route path='profil' element={undefined} />
         </Route>
-        {breakpoint === 0 && <Route path='/reseau/:userId' element={isAuthenticated ? <User topLevelPage/> : <Navigate to='/login'/>}/>}
+        {breakpoint === BP_ID.compact && <Route path='/reseau/:userId' element={isAuthenticated ? <User topLevelPage/> : <Navigate to='/login'/>}/>}
 
         <Route path='/login' element={<Login/>} />
 

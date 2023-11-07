@@ -9,6 +9,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import TooltipWrapper from './features/tooltip/TooltipWrapper.jsx';
 import ResponsiveRoutes from './routes.jsx';
 import ThemeSwitcher from './features/theme/ThemeSwitcher.jsx';
+import BreakpointContext from './context/BreakpointContext.js';
 //import reportWebVitals from './utils/reportWebVitals.js';
 
 const queryClient = new QueryClient();
@@ -20,9 +21,11 @@ root.render(
             <React.StrictMode>
                 <TooltipWrapper>
                     <ThemeSwitcher>
-                        <BrowserRouter>
-                            <ResponsiveRoutes/>
-                        </BrowserRouter>
+                        <BreakpointContext>
+                            <BrowserRouter>
+                                <ResponsiveRoutes/>
+                            </BrowserRouter>
+                        </BreakpointContext>
                     </ThemeSwitcher>
                 </TooltipWrapper>
             </React.StrictMode>

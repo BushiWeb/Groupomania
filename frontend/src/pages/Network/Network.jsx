@@ -7,6 +7,7 @@ import { useBreakpoint } from '../../hooks/useBreakpoints';
 import style from './Network.module.css';
 import { useSetNavigationInfo } from '../../features/navigationInfo/useSetNavigationInfo';
 import { useGetPrevNavigationInfo } from '../../features/navigationInfo/useGetPrevNavigationInfo';
+import { BP_ID } from '../../context/BreakpointContext';
 
 export const PAGE_NAME = 'Network';
 
@@ -33,9 +34,9 @@ export default function Network() {
             containerElt={containerRef}
             errorClassName={style.error}
             className={style.users}
-            {...breakpoint >= 4 && { ref: mainRef }}
+            {...breakpoint >= BP_ID.xxl && { ref: mainRef }}
             selectedUserId={userId && parseInt(userId)}
         />
-        {breakpoint >= 4 && <Outlet context={{ className: style.user }}/>}
+        {breakpoint >= BP_ID.xxl && <Outlet context={{ className: style.user }}/>}
     </main>;
 }

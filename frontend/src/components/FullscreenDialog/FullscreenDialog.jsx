@@ -6,6 +6,7 @@ import FullscreenDialogActions from './FullscreenDialogActions';
 import { useBreakpoint } from '../../hooks/useBreakpoints';
 import FullscreenDialogHeadline from './FullscreenDialogHeadline';
 import { FullscreenDialogContext } from './FullscreenDialogContext';
+import { BP_ID } from '../../context/BreakpointContext';
 
 /**
  * Displays a modal Fullscreen dialog. The fullscreen dialog is only fullscreen on small screens,
@@ -25,7 +26,7 @@ export default function FullscreenDialog({
     contentClassName,
     ...props
 }) {
-    const largeScreen = useBreakpoint() > 0;
+    const largeScreen = useBreakpoint() > BP_ID.compact;
 
     return <FullscreenDialogContext.Provider value={largeScreen}>
         <Dialog

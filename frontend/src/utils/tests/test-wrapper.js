@@ -16,6 +16,7 @@ import TooltipWrapper from '../../features/tooltip/TooltipWrapper.jsx';
 import Network from '../../pages/Network/Network.jsx';
 import ThemeSwitcher from '../../features/theme/ThemeSwitcher.jsx';
 import ResponsiveRoutes from '../../routes.jsx';
+import BreakpointContext from '../../context/BreakpointContext.js';
 
 export function render(ui, {
     preloadedState,
@@ -65,11 +66,13 @@ export function render(ui, {
                 <Provider store={store}>
                     <TooltipWrapper>
                         <ThemeSwitcher>
-                            <MemoryRouter initialEntries={initialEntries}>
-                                <ResponsiveRoutes test/>
-                                <ShowLocation/>
-                                {children}
-                            </MemoryRouter>
+                            <BreakpointContext>
+                                <MemoryRouter initialEntries={initialEntries}>
+                                    <ResponsiveRoutes test/>
+                                    <ShowLocation/>
+                                    {children}
+                                </MemoryRouter>
+                            </BreakpointContext>
                         </ThemeSwitcher>
                     </TooltipWrapper>
                 </Provider>

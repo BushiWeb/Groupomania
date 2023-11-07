@@ -3,6 +3,7 @@ import Navigation from './Navigation/Navigation';
 import style from './NavigationSection.module.css';
 import PropTypes from 'prop-types';
 import FAB from '../../components/buttons/FAB/FAB';
+import { BP_ID } from '../../context/BreakpointContext';
 
 export default function NavigationSection({ fab, ...props }) {
     const breakpoint = useBreakpoint();
@@ -26,9 +27,9 @@ export default function NavigationSection({ fab, ...props }) {
 
     let type;
 
-    if (breakpoint >= 3) {
+    if (breakpoint >= BP_ID.extraLarge) {
         type = 'drawer';
-    } else if (breakpoint >= 1) {
+    } else if (breakpoint >= BP_ID.medium) {
         type = 'rail';
     } else {
         type = 'bar';

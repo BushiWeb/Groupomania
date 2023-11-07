@@ -3,6 +3,7 @@ import { useGetPrevNavigationInfo } from '../../features/navigationInfo/useGetPr
 import { useBreakpoint } from '../../hooks/useBreakpoints';
 import style from './Network.module.css';
 import { useEffect, useState } from 'react';
+import { BP_ID } from '../../context/BreakpointContext';
 
 /** Net<ork page page, inserted within the global UI */
 export default function EmptyUser() {
@@ -13,7 +14,7 @@ export default function EmptyUser() {
     const [isRedirecting, setIsRedirecting] = useState(true);
 
     useEffect(() => {
-        if (prevState?.userId && breakpoint >= 4 && key === currentKey) {
+        if (prevState?.userId && breakpoint >= BP_ID.xxl && key === currentKey) {
             navigate(`/reseau/${prevState.userId}`, { replace: true });
         } else {
             setIsRedirecting(false);

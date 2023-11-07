@@ -1,26 +1,5 @@
-import { useEffect, useState } from 'react';
-
-const BREAKPOINTS = {
-    compact: 0,
-    medium: 601,
-    expanded: 841,
-    extraLarge: 1024,
-    xxl: 1200,
-};
-
-function getBreakpoint() {
-    if (window.innerWidth >= BREAKPOINTS.xxl) {
-        return 4;
-    } else if (window.innerWidth >= BREAKPOINTS.extraLarge) {
-        return 3;
-    } else if (window.innerWidth >= BREAKPOINTS.expanded) {
-        return 2;
-    } else if (window.innerWidth >= BREAKPOINTS.medium) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
+import { useContext } from 'react';
+import { breakpointContext } from '../context/BreakpointContext.js';
 
 /**
  * Returns an integer corresponding to the current breakpoint.
@@ -31,19 +10,7 @@ function getBreakpoint() {
  * 4 is beyond extra large.
  */
 export function useBreakpoint() {
-    const [breakpoint, setBreakpoint] = useState(getBreakpoint());
-
-    useEffect(() => {
-        const eventListener = () => {
-            setBreakpoint(getBreakpoint());
-        };
-
-        window.addEventListener('resize', eventListener);
-
-        return () => {
-            window.removeEventListener('resize', eventListener);
-        };
-    }, []);
+    const breakpoint = useContext(breakpointContext);
 
     return breakpoint;
 }
