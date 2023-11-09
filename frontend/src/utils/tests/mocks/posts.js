@@ -1,3 +1,5 @@
+import USERS from './users.js';
+
 const POSTS = [
     {
         postId: 1,
@@ -5,12 +7,12 @@ const POSTS = [
         message: 'This is the story of a litle man, so litle that evan I can\'t see him. The end.',
         imageUrl: 'http://groupomania.com/images/small_man31022002.png',
         writer: {
-            writerId: 1,
-            email: 'jane.foster@groupomania.com',
+            writerId: USERS[1].userId,
+            email: USERS[1].email,
         },
         likes: 3,
         usersLiked: [
-            1,
+            13,
             2,
             3,
         ],
@@ -23,8 +25,8 @@ const POSTS = [
         message: 'This is the story of a normal child in a normal house, wearing normal clothes.',
         imageUrl: null,
         writer: {
-            writerId: 3,
-            email: 'john.doe@groupomania.com',
+            writerId: USERS[2].userId,
+            email: USERS[2].email,
         },
         likes: 0,
         usersLiked: [],
@@ -37,8 +39,8 @@ const POSTS = [
         message: 'This is the story of a litle man, so litle that evan I can\'t see him. The end.',
         imageUrl: 'http://groupomania.com/images/small_man31022002.png',
         writer: {
-            writerId: 1,
-            email: 'jane.foster@groupomania.com',
+            writerId: USERS[1].userId,
+            email: USERS[1].email,
         },
         likes: 3,
         usersLiked: [
@@ -55,8 +57,8 @@ const POSTS = [
         message: 'This is the story of a normal child in a normal house, wearing normal clothes.',
         imageUrl: null,
         writer: {
-            writerId: 3,
-            email: 'john.doe@groupomania.com',
+            writerId: USERS[2].userId,
+            email: USERS[2].email,
         },
         likes: 0,
         usersLiked: [],

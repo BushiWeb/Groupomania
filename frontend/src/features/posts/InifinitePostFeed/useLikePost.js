@@ -6,9 +6,10 @@ import { selectUserId } from '../../../utils/selectors.js';
 /**
  * Hooks used for liking a post with optimistic UI
  */
-export function useLikePost() {
+export function useLikePost(userId) {
     const queryClient = useQueryClient();
-    const userId = useSelector(selectUserId);
+    const currentUserId = useSelector(selectUserId);
+    const queryKey = userId ? ['posts', userId] : ['posts'];
 
     const {
         mutate,
@@ -24,10 +25,10 @@ export function useLikePost() {
         },
 
         onMutate: async ({ postId, likeAction }) => {
-            await queryClient.cancelQueries({ queryKey: ['posts']});
-            const previousPosts = queryClient.getQueryData({ queryKey: ['posts']});
+            await queryClient.cancelQueries({ queryKey });
+            const previousPosts = queryClient.getQueryData({ queryKey });
 
-            queryClient.setQueryData(['posts'], (old) => {
+            queryClient.setQueryData(queryKey, (old) => {
                 for (const { data } of old.pages) {
                     for (const post of data) {
                         if (post.postId !== postId) {
@@ -36,10 +37,10 @@ export function useLikePost() {
 
                         if (likeAction) {
                             post.likes++;
-                            post.usersLiked.push(userId);
+                            post.usersLiked.push(currentUserId);
                         } else {
                             post.likes--;
-                            post.usersLiked.splice(post.usersLiked.indexOf(userId), 1);
+                            post.usersLiked.splice(post.usersLiked.indexOf(currentUserId), 1);
                         }
                     }
                 }
@@ -49,11 +50,15 @@ export function useLikePost() {
         },
 
         onError: (error, variables, context) => {
-            queryClient.setQueryData(['posts'], context.previousPosts);
+            queryClient.setQueryData(queryKey, context.previousPosts);
         },
 
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ['posts']});
+            queryClient.invalidateQueries({ queryKey });
+
+            if (userId) {
+                queryClient.invalidateQueries({ queryKey: ['posts']});
+            }
         },
     });
 

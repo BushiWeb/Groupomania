@@ -47,7 +47,7 @@ export function useInfinitePostFeed(containerElt, userId) {
         mutate: likeMutate,
         isError: isLikeError,
         error: likeError,
-    } = useLikePost();
+    } = useLikePost(userId);
 
     useHandleRequestError(isPostError, postError);
     useHandleRequestError(isLikeError, likeError);

@@ -1,5 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { THEMES_NAMES } from '../features/theme/theme.slice.js';
+import { isAdmin } from './roles.js';
 
 export const selectTheme = (state) => state.theme;
 
@@ -12,7 +13,7 @@ export const selectNextSnackbarMessage = (state) => state.snackbar.messages[0] |
 
 export const selectIsAuthenticated = (state) => !!state.user.email;
 
-export const selectIsAdmin = (state) => state.user?.role?.roleId === 1;
+export const selectIsAdmin = (state) => isAdmin(state.user?.role?.roleId);
 
 export const selectUserId = (state) => state.user.userId;
 
@@ -21,6 +22,8 @@ export const selectRighInfos = createSelector(
     selectUserId,
     (isAdmin, userId) => ({ isAdmin, userId })
 );
+
+export const selectUser = (state) => state.user;
 
 export const selectPreviousLocation = (state) => state.navigationInfo.prevLocation;
 

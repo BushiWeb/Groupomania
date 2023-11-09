@@ -96,6 +96,26 @@ describe('InfinitePostFeed test suite', () => {
         });
     });
 
+    it('should like one filtered article', async () => {
+        const user = userEvent.setup();
+        sessionStorage.setItem('userId', initialState.user.userId);
+        render(<TestComponent userId={POSTS[0].writer.writerId}/>, { preloadedState: initialState });
+
+        await waitFor(() => {
+            screen.getAllByRole('article');
+        });
+
+        const postsElts = screen.getAllByRole('article');
+        const likeButton = getByRole(postsElts[0], 'button', { name: /j'aimes/ });
+        const previousLabel = likeButton.getAttribute('aria-label');
+
+        await user.click(likeButton);
+        await waitFor(() => {
+            const newLabel = likeButton.getAttribute('aria-label');
+            expect(newLabel).not.toBe(previousLabel);
+        });
+    });
+
     it('should redirect to the login page if the user is not authenticated when loading more posts', async () => {
         sessionStorage.setItem('authError', 'true');
         render(undefined, { preloadedState: initialState, initialEntries: ['/']});

@@ -222,13 +222,14 @@ export const handlers = [
             );
         }
 
-        let response;
+        let posts = POSTS;
         if (req.url.searchParams.get('userId')) {
-            response = POSTS.filter((value) => value.writer.writerId === parseInt(req.url.searchParams.get('userId')));
-        } else {
-            const page = req.url.searchParams.get('page');
-            response = page === '1' ? POSTS.slice(0, 2) : POSTS.slice(2);
+            posts = POSTS.filter((value) => value.writer.writerId === parseInt(req.url.searchParams.get('userId')));
         }
+
+        const page = req.url.searchParams.get('page');
+        const sliceIndex = posts.length / 2;
+        const response = page === '1' ? posts.slice(0, sliceIndex) : posts.slice(sliceIndex);
 
         return res(
             ctx.delay(),

@@ -14,7 +14,7 @@ export const ROLES = {
  * @returns {boolean}
  */
 export function isAdmin(roleId) {
-    return !!ROLES[roleId].admin;
+    return !!ROLES[roleId]?.admin;
 }
 
 /**
