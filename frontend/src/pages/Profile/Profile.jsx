@@ -8,10 +8,11 @@ import { fabContext } from '../../context/fabContext';
 import UpsertPostDialog from '../../features/posts/UpsertPostDialog/UpsertPostDialog';
 import { useSetNavigationInfo } from '../../features/navigationInfo/useSetNavigationInfo';
 import { useSelector } from 'react-redux';
-import { selectUser } from '../../utils/selectors';
+import { selectUser, selectUserId } from '../../utils/selectors';
 import UserHeader from '../../features/users/UserHeader/UserHeader';
 import { useBreakpoint } from '../../hooks/useBreakpoints';
 import { BP_ID } from '../../context/BreakpointContext';
+import useGetUser from '../../features/users/getUser/useGetUser';
 
 export const PAGE_NAME = 'Profile';
 
@@ -20,13 +21,13 @@ export default function Profile() {
     const { id, className } = useOutletContext();
     useSetNavigationInfo(PAGE_NAME);
     const breakpoint = useBreakpoint();
+    const userId = useSelector(selectUserId);
     const {
-        email,
-        userId,
-        role: {
-            roleId,
-        },
-    } = useSelector(selectUser);
+        data,
+        isLoading,
+        isError,
+        status,
+    } = useGetUser(userId);
 
     // Get the ref for the container element but rerender the children when the ref changes
     const [containerRef, setContainerRef] = useState(null);
@@ -55,11 +56,15 @@ export default function Profile() {
 
     return <main id={id} className={`${className} ${style.profile}`} ref={mainRef}>
         <UserHeader
-            email={email}
+            email={data?.email}
             userId={userId}
-            roleId={roleId}
+            roleId={data?.role.roleId}
             className={style.header}
             {...breakpoint > BP_ID.compact && { small: true }}
+            busy={isLoading}
+            errorMessage={isError ?
+                'Une erreur est survenue lors du chargement des données. Vous pouvez essayer de recharger la page. Si le problème persiste, n\'hésitez pas à vous rapprocher d\'un administrateur.' :
+                undefined}
         />
         <InfinitePostFeed
             containerElt={containerRef}

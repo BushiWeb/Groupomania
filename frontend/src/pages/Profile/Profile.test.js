@@ -29,7 +29,7 @@ describe('Profile test suite', () => {
         });
     });
 
-    it('should render with the user informations', async () => {
+    it('should render with the admin user informations', async () => {
         render(undefined, { initialEntries: ['/profil'], preloadedState: adminInitialState });
 
         const mainElt = screen.getByRole('main');
@@ -40,7 +40,7 @@ describe('Profile test suite', () => {
             getByText(headerElt, 'Administrateur');
             screen.getByRole('button', { name: 'Modifier le profil' });
             screen.getByRole('button', { name: 'Supprimer le profil' });
-            screen.getByRole('button', { name: 'Modifier le rôle de l\'utilisateur' });
+            screen.getByRole('button', { name: 'Modifier le role de l\'utilisateur' });
         });
     });
 
@@ -118,5 +118,32 @@ describe('Profile test suite', () => {
 
         await user.keyboard('{Enter}');
         expect(screen.getByRole('main')).toHaveFocus();
+    });
+
+    it('should redirect to the login page if the user is not authenticated', async () => {
+        sessionStorage.setItem('authError', true);
+        render(undefined, { initialEntries: ['/profil'], preloadedState: initialState });
+
+        await waitFor(() => {
+            expect(screen.getByTestId('search-path').textContent).toMatch('login');
+        });
+    });
+
+    it('should redirect to the error page if there is a server error', async () => {
+        sessionStorage.setItem('serverError', true);
+        render(undefined, { initialEntries: ['/profil'], preloadedState: initialState });
+
+        await waitFor(() => {
+            expect(screen.getByTestId('search-path').textContent).toMatch('error');
+        });
+    });
+
+    it('should redirect to the error page if there is a network error', async () => {
+        sessionStorage.setItem('networkError', true);
+        render(undefined, { initialEntries: ['/profil'], preloadedState: initialState });
+
+        await waitFor(() => {
+            expect(screen.getByTestId('search-path').textContent).toMatch('error');
+        });
     });
 });

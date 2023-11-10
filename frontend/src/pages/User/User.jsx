@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { simpleFetch } from '../../utils/fetch';
 import { useHandleRequestError } from '../../hooks/useHandleRequestError';
 import { useSetNavigationInfo } from '../../features/navigationInfo/useSetNavigationInfo';
+import useGetUser from '../../features/users/getUser/useGetUser';
 
 export const PAGE_NAME = 'User';
 
@@ -43,13 +44,8 @@ export default function User({ topLevelPage }) {
         data,
         isLoading,
         isError,
-        error,
-    } = useQuery({
-        queryKey: ['users', userId],
-        queryFn: async () => simpleFetch({ url: `/data/users/${userId}` }),
-    });
-
-    const status = useHandleRequestError(isError, error);
+        status,
+    } = useGetUser(userId);
 
     // Get the ref for the container element but rerender the children when the ref changes
     const [containerRef, setContainerRef] = useState(null);

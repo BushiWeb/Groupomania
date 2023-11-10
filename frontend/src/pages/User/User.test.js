@@ -13,7 +13,7 @@ beforeEach(() => {
 });
 
 describe('User page test suite', () => {
-    const userId = 1;
+    const userId = POSTS[0].writer.writerId;
     const initialAdminState = { user: { email: 'test@gmail.com', userId: 130, role: { roleId: 1 }}};
     const initialOwnerState = { user: { email: 'test@gmail.com', userId, role: { roleId: 2 }}};
     const initialState = { user: { email: 'test@gmail.com', userId: 130, role: { roleId: 2 }}};
