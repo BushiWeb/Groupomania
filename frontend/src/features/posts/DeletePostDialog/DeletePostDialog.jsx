@@ -14,11 +14,12 @@ export default function DeletePostDialog({
     postTitle,
     postDate,
     postId,
+    writerId,
 }) {
     const {
         mutate,
         error,
-    } = useDeletePostForm(onClose, postId);
+    } = useDeletePostForm(onClose, postId, writerId);
     const errorMessageId = useId();
 
     const formatedDate = new Date(postDate).toLocaleString('fr-FR', {
@@ -75,4 +76,7 @@ DeletePostDialog.propTypes = {
 
     /* Post id, required */
     postId: PropTypes.number.isRequired,
+
+    /* Writer id, required */
+    writerId: PropTypes.number.isRequired,
 };

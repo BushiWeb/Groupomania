@@ -60,13 +60,14 @@ export function useInfinitePostFeed(containerElt, userId) {
         message: undefined,
         imageUrl: undefined,
         date: undefined,
+        writerId: undefined,
     });
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
 
-    function handleLike(postId, liked) {
+    function handleLike(postId, liked, writerId) {
         return () => {
-            likeMutate({ postId, likeAction: !liked });
+            likeMutate({ postId, likeAction: !liked, writerId });
         };
     }
 

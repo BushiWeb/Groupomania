@@ -67,6 +67,7 @@ export default function InfinitePostFeed({
                 postDate={targetPost.date}
                 postId={targetPost.postId}
                 postTitle={targetPost.title}
+                writerId={targetPost.writerId}
             />
         }
 
@@ -79,6 +80,7 @@ export default function InfinitePostFeed({
                     title: targetPost.title,
                     message: targetPost.message,
                     imageUrl: targetPost.imageUrl,
+                    writerId: targetPost.writerId,
                 }}
             />
         }

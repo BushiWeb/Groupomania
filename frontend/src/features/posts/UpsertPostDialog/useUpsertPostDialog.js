@@ -5,7 +5,7 @@ import { useUpsertPostForm } from './useUpsertPostForm.js';
 /**
  * Hook handling form validation, submission and request errors for the post creation form
  * @param {Function} setIsOpen - Function to open or close the dialog
- * @param {{postId: number, title: string, message: string, imageUrl: string}} [post]
+ * @param {{postId: number, title: string, message: string, imageUrl: string, writerId: number}} [post]
  * @returns {
  *  confirmDialog: {
  *      isConfirmOpen,

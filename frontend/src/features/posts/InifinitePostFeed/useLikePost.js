@@ -16,7 +16,7 @@ export function useLikePost(userId) {
         isError,
         error,
     } = useMutation({
-        mutationFn: async ({ postId, likeAction }) => {
+        mutationFn: async ({ postId, likeAction, writerId }) => {
             return simpleFetch({
                 url: `/data/posts/${postId}/like`,
                 method: 'POST',
@@ -24,7 +24,7 @@ export function useLikePost(userId) {
             });
         },
 
-        onMutate: async ({ postId, likeAction }) => {
+        onMutate: async ({ postId, likeAction, ...data }) => {
             await queryClient.cancelQueries({ queryKey });
             const previousPosts = queryClient.getQueryData({ queryKey });
 
@@ -53,12 +53,9 @@ export function useLikePost(userId) {
             queryClient.setQueryData(queryKey, context.previousPosts);
         },
 
-        onSettled: () => {
-            queryClient.invalidateQueries({ queryKey });
-
-            if (userId) {
-                queryClient.invalidateQueries({ queryKey: ['posts']});
-            }
+        onSuccess: (data, { writerId }) => {
+            queryClient.invalidateQueries({ queryKey: ['posts']});
+            queryClient.invalidateQueries({ queryKey: ['posts', writerId]});
         },
     });
 

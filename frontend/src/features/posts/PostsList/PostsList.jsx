@@ -52,9 +52,9 @@ export default function PostsList({
                 key={postId}
                 focused={index === focusId}
                 onFocus={handleFocus(index)}
-                onLike={handleLike(postId, postData.liked)}
+                onLike={handleLike(postId, postData.liked, writerId)}
                 onMoreActions={handleMoreActions({
-                    postId, title, message, imageUrl, date,
+                    postId, title, message, imageUrl, date, writerId,
                 })}
                 vertical={vertical}
             />;

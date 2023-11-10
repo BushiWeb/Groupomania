@@ -80,5 +80,6 @@ UpsertPostDialog.propTypes = {
         title: PropTypes.string.isRequired,
         message: PropTypes.string.isRequired,
         imageUrl: PropTypes.string,
+        writerId: PropTypes.number.isRequired,
     }),
 };
