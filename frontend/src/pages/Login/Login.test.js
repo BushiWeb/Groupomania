@@ -36,6 +36,16 @@ describe('Login page test suite', () => {
         });
     });
 
+    it('should redirect to the previous page if the user is authenticated', async () => {
+        sessionStorage.setItem('user', userEmail);
+        render(undefined, { initialEntries: ['/reseau']});
+
+        await waitFor(() => {
+            const path = screen.getByTestId('search-path');
+            expect(path).toHaveTextContent(/^\/reseau$/);
+        });
+    });
+
     it('should send a login request if the user is not authenticated', async () => {
         sessionStorage.setItem('user', userEmail);
         render(undefined, { initialEntries: ['/login']});

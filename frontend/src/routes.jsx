@@ -1,5 +1,5 @@
 import {
-    Routes, Route, Outlet, Navigate,
+    Routes, Route, Outlet, Navigate, useLocation,
 } from 'react-router-dom';
 import Login from './pages/Login/Login.jsx';
 import UI from './pages/UI/UI.jsx';
@@ -22,9 +22,10 @@ import Profile from './pages/Profile/Profile.jsx';
 export default function ResponsiveRoutes({ test }) {
     const breakpoint = useBreakpoint();
     const isAuthenticated = useSelector(selectIsAuthenticated);
+    const location = useLocation();
 
     return <Routes>
-        <Route path='/' element={isAuthenticated ? <UI/> : <Navigate to='/login'/>}>
+        <Route path='/' element={isAuthenticated ? <UI/> : <Navigate to='/login' state={location}/>}>
             <Route index element={<Home/>} />
             <Route
                 path='reseau'
@@ -36,7 +37,7 @@ export default function ResponsiveRoutes({ test }) {
             {breakpoint >= BP_ID.medium && breakpoint <= BP_ID.extraLarge && <Route path='reseau/:userId' element={<User/>}/>}
             <Route path='profil' element={<Profile/>} />
         </Route>
-        {breakpoint === BP_ID.compact && <Route path='/reseau/:userId' element={isAuthenticated ? <User topLevelPage/> : <Navigate to='/login'/>}/>}
+        {breakpoint === BP_ID.compact && <Route path='/reseau/:userId' element={isAuthenticated ? <User topLevelPage/> : <Navigate to='/login' state={location}/>}/>}
 
         <Route path='/login' element={<Login/>} />
 

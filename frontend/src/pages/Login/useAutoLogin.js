@@ -8,9 +8,10 @@ import { login } from '../../features/authentication/user.slice.js';
 
 /**
  * Hook rederecting the user to the main page if already authenticated, and trying to log the user in if not.
+ * @param {string} target - Redirection target
  * @returns {boolean} Returns weither the login succedeed or not
  */
-export function useAutoLogin() {
+export function useAutoLogin(target) {
     const isAuthenticated = useSelector(selectIsAuthenticated);
     const redirect = useNavigate();
     const store = useStore();
@@ -31,12 +32,12 @@ export function useAutoLogin() {
 
     useEffect(() => {
         if (isAuthenticated) {
-            return redirect('/');
+            return redirect(target);
         }
 
         loginMutate();
 
-    }, [isAuthenticated, redirect, loginMutate]);
+    }, [isAuthenticated, redirect, loginMutate, target]);
 
     return loginError;
 }
