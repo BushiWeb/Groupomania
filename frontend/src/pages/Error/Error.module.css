@@ -5,10 +5,13 @@
         display: grid;
         place-content: center;
         grid-auto-columns: 100%;
+        min-height: 100%;
+        height: unset;
     }
 
     .notFound {
         width: 100%;
+        padding-block-start: var(--padding-6);
 
         --padding-inline: var(--page-margin);
         --content-width: var(--size-text-medium);
@@ -23,6 +26,8 @@
             [content-start] var(--content-column-width) [content-end]
             1fr [fullwidth-end];
         row-gap: var(--padding-4);
+
+        overflow: auto;
     }
 
     .heading {
@@ -41,6 +46,29 @@
         grid-column: content;
     }
 
+    .moreInfo {
+        composes: body-medium from '../../assets/styles/patterns/typography.module.css';
+        color: rgb(var(--color-on-surface-variant));
+        grid-column: content;
+    }
+
+    .moreInfo summary::marker {
+        content: 'expand_more';
+        font-family: 'Material Symbols Rounded';
+        font-style: normal;
+        text-transform: none;
+        letter-spacing: normal;
+        word-wrap: normal;
+        white-space: nowrap;
+        direction: ltr;
+        line-height: 1;
+        font-weight: 700;
+    }
+
+    .moreInfo[open] summary::marker {
+        content: 'expand_less';
+    }
+
     .ctaWrapper {
         background-color: rgb(var(--color-surface-container-highest));
 
@@ -56,6 +84,54 @@
 
     .question {
         composes: title-large from '../../assets/styles/patterns/typography.module.css';
+        grid-column: content;
+    }
+
+    .ctaMessage {
+        composes: body-large from '../../assets/styles/patterns/typography.module.css';
+        color: rgb(var(--color-on-surface));
+        grid-column: content;
+    }
+
+    .ctaMessage ol {
+        --padding-before: var(--padding-12);
+        padding-inline-start: var(--padding-before);
+
+        display: flex;
+        flex-direction: column;
+        gap: var(--padding-3);
+
+        counter-reset: solutions 0;
+        list-style-type: none;
+    }
+
+    .ctaMessage li {
+        counter-increment: solutions 1;
+        position: relative;
+    }
+
+    .ctaMessage li::before {
+        --size: 1.5em;
+
+        content: counter(solutions);
+
+        background-color: rgb(var(--color-tertiary));
+        color: rgb(var(--color-on-tertiary));
+
+        position: absolute;
+        top: 50%;
+        right: calc(100% + var(--padding-before) / 2);
+        translate: 50% -50%;
+
+        width: var(--size);
+        height: var(--size);
+        border-radius: var(--border-radius-7);
+
+        display: grid;
+        place-content: center;
+    }
+
+    .actionList {
         grid-column: content;
     }
 
@@ -79,9 +155,16 @@
         background-color: rgb(var(--color-primary));
     }
 
+    .alternativeAction {
+        composes: label-medium from '../../assets/styles/patterns/typography.module.css';
+        grid-column: content;
+        text-decoration: underline;
+    }
+
     @media bp-medium {
         .notFound {
             --content-width: var(--size-text-large);
+            padding-block-start: var(--padding-8);
         }
         .heading {
             font-size: var(--typo-display-large-size);
@@ -104,7 +187,7 @@
             place-content: center;
 
             background-color: rgb(var(--color-surface));
-            height: 100%;
+            min-height: 100%;
         }
     }
 }

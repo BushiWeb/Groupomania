@@ -1,6 +1,6 @@
 import InteractiveElement from '../../components/InteractiveElement/InteractiveElement';
 import Link from '../../components/Link/Link';
-import style from './Error404.module.css';
+import style from './Error.module.css';
 
 export const PAGE_NAME = 'User';
 
@@ -15,7 +15,7 @@ export default function Error404() {
         </p>
 
         <div className={style.ctaWrapper}>
-            <p className={style.question}>Vous n'êtes pas bien ici ?</p>
+            <h2 className={style.question}>Vous n'êtes pas bien ici ?</h2>
 
             <InteractiveElement
                 rootElement={Link}

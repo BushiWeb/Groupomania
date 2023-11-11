@@ -13,7 +13,8 @@ import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from './utils/selectors.js';
 import { BP_ID } from './context/BreakpointContext.js';
 import Profile from './pages/Profile/Profile.jsx';
-import Error404 from './pages/Error404/Error404.jsx';
+import Error404 from './pages/Error/Error404.jsx';
+import Error from './pages/Error/Error.jsx';
 
 /**
  * Adds responsive routing.
@@ -41,6 +42,7 @@ export default function ResponsiveRoutes({ test }) {
         {breakpoint === BP_ID.compact && <Route path='/reseau/:userId' element={isAuthenticated ? <User topLevelPage/> : <Navigate to='/login' state={location}/>}/>}
 
         <Route path='/login' element={<Login/>} />
+        <Route path='/error' element={<Error/>} />
 
         {test && <Route path='/test' element={<Outlet/>}/>}
 
