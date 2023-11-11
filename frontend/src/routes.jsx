@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from './utils/selectors.js';
 import { BP_ID } from './context/BreakpointContext.js';
 import Profile from './pages/Profile/Profile.jsx';
+import Error404 from './pages/Error404/Error404.jsx';
 
 /**
  * Adds responsive routing.
@@ -42,6 +43,8 @@ export default function ResponsiveRoutes({ test }) {
         <Route path='/login' element={<Login/>} />
 
         {test && <Route path='/test' element={<Outlet/>}/>}
+
+        <Route path='*' element={<Error404/>} />
     </Routes>;
 }
 
