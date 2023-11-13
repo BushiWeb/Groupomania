@@ -8,6 +8,7 @@ import style from './Network.module.css';
 import { useSetNavigationInfo } from '../../features/navigationInfo/useSetNavigationInfo';
 import { useGetPrevNavigationInfo } from '../../features/navigationInfo/useGetPrevNavigationInfo';
 import { BP_ID } from '../../context/BreakpointContext';
+import { useChangePageTitle } from '../../hooks/useChangePageTitle';
 
 export const PAGE_NAME = 'Network';
 
@@ -19,6 +20,8 @@ export default function Network() {
     const { prevState } = useGetPrevNavigationInfo();
     const userId = paramUserId || prevState?.userId;
     useSetNavigationInfo(PAGE_NAME);
+
+    useChangePageTitle('Groupomania - Réseau');
 
     // Get the ref for the container element but rerender the children when the ref changes
     const [containerRef, setContainerRef] = useState(null);

@@ -7,6 +7,7 @@ import InfinitePostFeed from '../../features/posts/InifinitePostFeed/InfinitePos
 import { fabContext } from '../../context/fabContext';
 import UpsertPostDialog from '../../features/posts/UpsertPostDialog/UpsertPostDialog';
 import { useSetNavigationInfo } from '../../features/navigationInfo/useSetNavigationInfo';
+import { useChangePageTitle } from '../../hooks/useChangePageTitle';
 
 export const PAGE_NAME = 'Home';
 
@@ -14,6 +15,8 @@ export const PAGE_NAME = 'Home';
 export default function Home() {
     const { id, className } = useOutletContext();
     useSetNavigationInfo(PAGE_NAME);
+
+    useChangePageTitle('Groupomania - Accueil');
 
     // Get the ref for the container element but rerender the children when the ref changes
     const [containerRef, setContainerRef] = useState(null);

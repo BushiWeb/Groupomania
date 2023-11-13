@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import InteractiveElement from '../../components/InteractiveElement/InteractiveElement';
 import Link from '../../components/Link/Link';
 import style from './Error.module.css';
+import { useChangePageTitle } from '../../hooks/useChangePageTitle';
 
 export const PAGE_NAME = 'User';
 
@@ -10,6 +11,8 @@ export const PAGE_NAME = 'User';
  */
 export default function Error() {
     const navigate = useNavigate();
+
+    useChangePageTitle('Groupomania - Erreur');
 
     return <div className={style.notFound}>
         <h1 className={style.heading}>Une situation inattendue s'est produite.</h1>

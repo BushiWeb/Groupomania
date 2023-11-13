@@ -8,11 +8,12 @@ import { fabContext } from '../../context/fabContext';
 import UpsertPostDialog from '../../features/posts/UpsertPostDialog/UpsertPostDialog';
 import { useSetNavigationInfo } from '../../features/navigationInfo/useSetNavigationInfo';
 import { useSelector } from 'react-redux';
-import { selectUser, selectUserId } from '../../utils/selectors';
+import { selectUserId } from '../../utils/selectors';
 import UserHeader from '../../features/users/UserHeader/UserHeader';
 import { useBreakpoint } from '../../hooks/useBreakpoints';
 import { BP_ID } from '../../context/BreakpointContext';
 import useGetUser from '../../features/users/getUser/useGetUser';
+import { useChangePageTitle } from '../../hooks/useChangePageTitle';
 
 export const PAGE_NAME = 'Profile';
 
@@ -26,8 +27,9 @@ export default function Profile() {
         data,
         isLoading,
         isError,
-        status,
     } = useGetUser(userId);
+
+    useChangePageTitle('Groupomania - Profil');
 
     // Get the ref for the container element but rerender the children when the ref changes
     const [containerRef, setContainerRef] = useState(null);

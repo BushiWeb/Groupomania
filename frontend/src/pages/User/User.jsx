@@ -4,11 +4,9 @@ import { useId, useState } from 'react';
 import InfinitePostFeed from '../../features/posts/InifinitePostFeed/InfinitePostFeed';
 import UserHeader from '../../features/users/UserHeader/UserHeader';
 import PropTypes from 'prop-types';
-import { useQuery } from '@tanstack/react-query';
-import { simpleFetch } from '../../utils/fetch';
-import { useHandleRequestError } from '../../hooks/useHandleRequestError';
 import { useSetNavigationInfo } from '../../features/navigationInfo/useSetNavigationInfo';
 import useGetUser from '../../features/users/getUser/useGetUser';
+import { useChangePageTitle } from '../../hooks/useChangePageTitle';
 
 export const PAGE_NAME = 'User';
 
@@ -24,6 +22,8 @@ export default function User({ topLevelPage }) {
     useSetNavigationInfo(PAGE_NAME, { userId });
     const outletContext = useOutletContext();
     const mainId = useId();
+
+    useChangePageTitle('Groupomania - Utilisateur');
 
     // Choose the layout, depending on the nesting of the pages
     let Wrapper, Content;

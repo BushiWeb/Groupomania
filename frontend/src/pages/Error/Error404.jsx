@@ -1,5 +1,6 @@
 import InteractiveElement from '../../components/InteractiveElement/InteractiveElement';
 import Link from '../../components/Link/Link';
+import { useChangePageTitle } from '../../hooks/useChangePageTitle';
 import style from './Error.module.css';
 
 export const PAGE_NAME = 'User';
@@ -8,6 +9,8 @@ export const PAGE_NAME = 'User';
  * Not found error page
  */
 export default function Error404() {
+    useChangePageTitle('Groupomania - 404');
+
     return <div className={style.notFound}>
         <h1 className={style.heading}>Nous n'avons pas trouvé cette page.</h1>
         <p className={style.message}>
