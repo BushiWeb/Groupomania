@@ -225,8 +225,6 @@ export async function getAllPosts(options = {}) {
         },
     });
 
-    console.log(posts);
-
     postsServicesLogger.debug('Posts fetched');
     return posts;
 }

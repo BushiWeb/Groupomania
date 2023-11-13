@@ -1,6 +1,7 @@
 import { createLoggerNamespace } from '../logger/index.js';
 import Bree from 'bree';
 import Graceful from '@ladjs/graceful';
+import config from '../config/config.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:api:loader:jobs');
 const breeLogger = createLoggerNamespace('groupomania:api:bree');
@@ -22,6 +23,9 @@ export default async function jobsLoader() {
         workerMessageHandler: (message) => {
             const logMessage = `Worker "${message.name}" sent the following message: "${message.message}"`;
             breeLogger.verbose({ message: logMessage, workerInformations: message.worker });
+        },
+        worker: {
+            argv: ['--env', config.get('env')],
         },
     });
 
