@@ -89,6 +89,7 @@
     .question {
         composes: title-large from '../../assets/styles/patterns/typography.module.css';
         grid-column: content;
+        color: rgb(var(--color-on-surface));
     }
 
     .ctaMessage {
@@ -163,6 +164,7 @@
         composes: label-medium from '../../assets/styles/patterns/typography.module.css';
         grid-column: content;
         text-decoration: underline;
+        color: rgb(var(--color-on-surface-variant));
     }
 
     @media bp-medium {

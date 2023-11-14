@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { selectTheme } from '../../utils/selectors.js';
-import { THEMES_NAMES } from './theme.slice';
+import { LOCAL_STORAGE_KEY, THEMES_NAMES } from './theme.slice';
 import { useEffect } from 'react';
 
 /**
@@ -16,6 +16,7 @@ export default function ThemeSwitcher({ children }) {
             }
         });
         document.body.classList.add(theme);
+        localStorage.setItem(LOCAL_STORAGE_KEY, theme);
     }, [theme]);
 
     return children;

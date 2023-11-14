@@ -5,9 +5,13 @@ export const THEMES_NAMES = {
     dark: 'dark',
 };
 
+export const LOCAL_STORAGE_KEY = 'gp_theme';
+
 const { actions, reducer } = createSlice({
     name: 'theme',
-    initialState: THEMES_NAMES.light,
+    initialState: Object.values(THEMES_NAMES).includes(localStorage.getItem(LOCAL_STORAGE_KEY)) ?
+        localStorage.getItem(LOCAL_STORAGE_KEY) :
+        THEMES_NAMES.light,
     reducers: {
         set: (state, action) => action.payload,
         reset: () => THEMES_NAMES.light,
