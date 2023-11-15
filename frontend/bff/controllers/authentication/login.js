@@ -81,6 +81,7 @@ export default async function loginController(req, res, next) {
     loginControllerLogger.verbose('Login controller starting');
     try {
         const crsfToken = req.session.crsfToken;
+        const maxAge = req.session.cookie.maxAge;
 
         // Login or refresh the access token
         let user;
@@ -100,6 +101,7 @@ export default async function loginController(req, res, next) {
             loginControllerLogger.debug('Session regenerated, saving data in the session');
             req.session.user = user;
             req.session.crsfToken = crsfToken;
+            req.session.cookie.maxAge = maxAge;
 
             // Extend the session lifespan if the user wants to be remembered
             if (req.body.rememberMe) {
