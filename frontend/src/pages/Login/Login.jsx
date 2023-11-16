@@ -25,7 +25,7 @@ export default function Login() {
         content = <ProgressIndicator circular label="Tentative de connexion, veuillez patienter" />;
     }
 
-    return <div className={style.login}>
+    return <main className={style.login}>
         {content}
-    </div>;
+    </main>;
 }

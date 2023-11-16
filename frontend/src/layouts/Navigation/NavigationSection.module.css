@@ -18,7 +18,7 @@
     @media bp-medium {
         .container {
             padding-block-start: var(--padding-4);
-            padding-block-end: var(--size-16);
+            padding-block-end: var(--padding-8);
             width: var(--size-16);
             height: 100%;
 
@@ -26,7 +26,14 @@
             flex-direction: column-reverse;
             justify-content: space-between;
             align-items: center;
-            gap: var(--size-13);
+            gap: var(--size-10);
+
+            overflow: hidden;
+        }
+
+        .navigation {
+            overflow: auto;
+            align-self: stretch;
         }
 
         .fab {
@@ -44,8 +51,6 @@
 
             align-items: stretch;
             gap: var(--size-13);
-
-            overflow: auto;
         }
 
         .navigation {

@@ -53,6 +53,7 @@
 
     .content {
         flex-grow: 1;
+        overflow: hidden;
     }
 
     [data-type='medium'] .content {
@@ -62,6 +63,10 @@
 
     [data-navigation][data-type='medium'] .content {
         padding-inline-start: var(--icon-content-padding);
+    }
+
+    [data-actions][data-type='medium'] .content {
+        padding-inline-end: var(--icon-content-padding);
     }
 
     .actions {

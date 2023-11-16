@@ -15,7 +15,7 @@ export default function Error() {
     useChangePageTitle('Groupomania - Erreur');
 
     return <div className={style.container}>
-        <div className={style.error}>
+        <main className={style.error}>
             <h1 className={style.heading}>Une situation inattendue s'est produite.</h1>
             <p className={style.message}>
                 Nous rencontrons quelques problèmes en tentant d'accéder à votre requête.
@@ -56,6 +56,6 @@ export default function Error() {
                     Je préfère revenir à la page d'accueil
                 </Link>
             </div>
-        </div>
+        </main>
     </div>;
 }

@@ -33,6 +33,7 @@ export default function NavigationItem({
         className={`${style.navigationItem} ${className}`}
         {...active && { 'data-active': 'true' }}
         onFocus={onFocus}
+        role="tab"
     >
         <div className={style.activeIndicator}>
             <div className={style.stateLayer} ref={stateLayerRef}/>
@@ -41,7 +42,6 @@ export default function NavigationItem({
         <Link
             to={target}
             className={style.link}
-            role="tab"
             aria-selected={active}
             ref={linkRef}
             onPointerDown={handlePointerDown}

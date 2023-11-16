@@ -19,6 +19,7 @@ export default function PostImage() {
         className={style.image}
         src={imageUrl}
         lightboxLabel={`Lightbox contenant l'image du post ${title} de ${authorEmail}`}
+        label="Agrandir l'image"
     />;
 
 }

@@ -55,6 +55,7 @@ const SelectButton = forwardRef(({
                 aria-autocomplete='none'
                 {...isPopupOpened && { 'aria-controls': listboxId }}
                 aria-activedescendant={selectedOptionId}
+                aria-invalid={!!errorMessage}
             >
                 {value}
             </TextBox.InteractiveButton>

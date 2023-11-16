@@ -7,15 +7,15 @@ export default function FormButtons({
     isLoading, onSignupClick, onLoginClick,
 }) {
     return <div className={style.buttons}>
-        <TonalButton
+        <FilledButton
             className={style.login}
             onClick={isLoading ? undefined : onLoginClick}
-        >Se connecter</TonalButton>
+        >Se connecter</FilledButton>
 
-        <FilledButton
+        <TonalButton
             className={style.signup}
             onClick={isLoading ? undefined : onSignupClick}
-        >S'inscrire</FilledButton>
+        >S'inscrire</TonalButton>
     </div>;
 }
 

@@ -7,7 +7,7 @@ import { useState } from 'react';
  * Displays an image that can be enlarged in a lightbox by clicking.
  */
 export default function ImageWithLighbox({
-    src, alt, className, lightboxLabel, lightboxDescription,
+    src, alt, className, lightboxLabel, lightboxDescription, label,
 }) {
     const [isLightboxOpened, setIsLightboxOpened] = useState(false);
 
@@ -20,7 +20,7 @@ export default function ImageWithLighbox({
     }
 
     return <>
-        <button className={`${style.button} ${className}`} onClick={handleClick}>
+        <button className={`${style.button} ${className}`} onClick={handleClick} aria-label={label}>
             <img src={src} alt={alt} className={style.image}/>
         </button>
 
@@ -55,4 +55,7 @@ ImageWithLighbox.propTypes = {
 
     /* Description for the lightbox */
     lightboxDescription: PropTypes.string,
+
+    /* Label of the button, required if no alt text is provided */
+    label: PropTypes.string,
 };
