@@ -3,6 +3,7 @@ import getRoutesRegexp from '../utils/get-routes.js';
 import HTMLRouter from '../routes/html-router.js';
 import BFFRouter from '../routes/authentication-router.js';
 import express from 'express';
+import expressStaticGzip from 'express-static-gzip';
 
 const loaderLogger = createLoggerNamespace('groupomania:bff:loader:routes');
 
@@ -13,9 +14,17 @@ const loaderLogger = createLoggerNamespace('groupomania:bff:loader:routes');
 export default function routeLoader(app) {
     loaderLogger.verbose('Loading users routes and middlewares');
 
+    // Cache static files for 1 year. These files change their names when updated, so aggressie caching is OK
+    app.use('/static', (req, res, next) => {
+        res.set('Cache-Control', 'max-age: 31536000');
+        next();
+    });
+
     // Add the static routes
-    app.use(express.static('build', {
+    app.use(expressStaticGzip('build', {
+        enableBrotli: true,
         index: false,
+        orderPreference: ['br'],
     }));
     loaderLogger.debug('Build static route added');
 
