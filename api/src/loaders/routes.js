@@ -16,7 +16,14 @@ const loaderLogger = createLoggerNamespace('groupomania:api:loader:routes');
 export default function routeLoader(app) {
     loaderLogger.verbose('Loading users routes and middlewares');
 
-    app.use('/images', express.static(config.get('payload.files.saveFolder'), { fallthrough: false }));
+    app.use(
+        '/images',
+        (req, res, next) => {
+            res.set('Cross-Origin-Resource-Policy', 'cross-origin');
+            next();
+        },
+        express.static(config.get('payload.files.saveFolder'), { fallthrough: false })
+    );
     loaderLogger.debug('Images route added');
 
     app.use('/api/v1/users', UserRouter);
