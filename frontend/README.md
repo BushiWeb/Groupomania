@@ -1,70 +1,121 @@
-# Getting Started with Create React App
+# Groupomania's social network frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project contains all the components to install and run the application.
 
-## Available Scripts
+## Description
 
-In the project directory, you can run:
+The application is made of two parts:
 
-### `npm start`
+- The **frontend**, built with *React*;
+- The **BFF**, built with *Express*.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### BFF
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+On top of serving the frontend page and all other ressources, the BFF acts as a gateway between the application and the API, providing more security and handling all the requests' logic.
 
-### `npm test`
+Thanks to it, the users can identify themselves using sessions and cookies. Although JWT are still used under the hoods by the server, sessions provide more security and a better user experience, since the token are not stored in the browser but the connexion is still maintained between refreshes.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+It also composes request and aggregates data from multiple sources into one request, allowing for example to check the password before a dangerous action.
 
-### `npm run build`
+## Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+After downlading the source code or cloning the repository, simply run
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+npm install
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+All required packages will be installed.
 
-### `npm run eject`
+## Configuration
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Make sure to check the defautl configuration to make sure it suits your needs.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Environment variables
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+You will find a file called **env.example** containing all the required environment variables and some example values.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+You *MUST* rename it **.env** and update any value that needs to be updated. Make sure secrets and token are long enough.
 
-## Learn More
+### Configuration files
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The config folder contains two configuration files:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **development-config.toml** is only used during the development,
+- **config.toml** is the configuration file used in production. It is the one you *SHOULD* check.
 
-### Code Splitting
+To update a parameter:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+1. Uncomment the corresponding table name (`[name]`) by removing the #;
+2. Uncomment the parameter line by removing the #;
+3. Change the parameter value;
 
-### Analyzing the Bundle Size
+***WARNING***: Make sure to update the *cors.origin* parameter if you updated the *BFF_PORT* environment variable.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Launching the application
 
-### Making a Progressive Web App
+**Note**: Make sure the API is available. Otherwise, the application won't work.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+To build the project, run :
 
-### Advanced Configuration
+```
+npm run build
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Once the project is built, you can start the bff server with :
 
-### Deployment
+```
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+**Note**: it is possible to build and start the server at the same time with `npm run build-and-start`.
 
-### `npm run build` fails to minify
+Once the bff server is running, simply use any browser to visit the address of the server and enjoy!
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Scripts
+
+### frontend-dev
+
+Equivalent to the Create React App's script `start`. Run the frontend in development mode and reload the page on changes.
+
+It uses the proxy property from the *package.json* file in order to request from the BFF, so make sure to update the port if you change it.
+
+Running the script in development mode still requires the BFF and the API running.
+
+### frontend-test
+
+Equivalent to the Create React App's script `test`. Run all the react app's tests.
+
+### bff-dev
+
+Run the backend in development mode and restart the server on changes. In development mode, CSRF token are optionnal.
+
+### bff-start
+
+Run the backend in development mode but without restarting it on changes.
+
+### bff-test
+
+Run all the tests of the BFF.
+
+### start
+
+Run the backend in production mode.
+
+### build
+
+Runs the Create React App's `build` script and compresses all static files in the build folder afterward.
+
+### build-and-start
+
+Runs the `build` script and then the `start` script.
+
+### eject
+
+**WARNING**: this operation can be undone. Use it at your own risk.
+
+Equivalent to the Create React App's script `eject`.
+
+### format
+
+Uses *Prettier* and *ESLint* to format and lint BFF and frontend code.

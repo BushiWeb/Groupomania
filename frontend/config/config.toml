@@ -1,5 +1,23 @@
 [session]
-name = "groupomania.sid"
+name = "groupomania.sid" # Name of the session cookie
+# cookieExp = 1200000 # Session cookie max age in ms
+# extendedCookieExp = 2592000000 # Session cookie extended max age in ms
+
+# [payload]
+# maxSize = 10240 # Payload's max size in bytes
+
+# [payload.files]
+# maxFileSize = 5242880 # Max file size in bytes
+# allowedFileTypes = {'image/jpg' = 'jpg', 'image/jpeg' = 'jpg', 'image/png' = 'png', 'image/webp' = 'webp', 'image/avif' = 'avif' } # Allowed image format
+
+# [api]
+# protocol = http # Protocol to connect to the API
+# baseUrl = localhost # Base URL of the API
+# port = 3000 # Port to connect to the API
 
 [cors]
 origin = "http://localhost:8000"
+
+# [pagination]
+# users = 25 # Maximum number of users to display per page
+# posts = 15 # Maximum number of posts to display per page
