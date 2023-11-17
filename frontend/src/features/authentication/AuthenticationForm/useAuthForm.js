@@ -4,7 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { ACTIONS, initialState, reducer } from './formReducer.js';
 import { useMutation } from '@tanstack/react-query';
 import {
-    authRequest, handleAuthRequestError, validateAuthData,
+    authRequest,
+    handleAuthRequestError,
+    validateAuthData,
 } from './request.js';
 import { login } from '../user.slice.js';
 
@@ -16,15 +18,16 @@ export function useAuthForm() {
     const redirect = useNavigate();
     const store = useStore();
     const [
-        {
-            email, emailError, password, passwordError, rememberMe, globalError,
-        },
+        { email, emailError, password, passwordError, rememberMe, globalError },
         dispatch,
     ] = useReducer(reducer, initialState);
 
     const { mutate, isLoading } = useMutation({
         mutationFn: async (action) => {
-            validateAuthData({ email: { value: email }, password: { value: password, format: action === 'signup' }});
+            validateAuthData({
+                email: { value: email },
+                password: { value: password, format: action === 'signup' },
+            });
             return authRequest({ email, password, rememberMe }, action);
         },
         onMutate: () => {
@@ -43,15 +46,24 @@ export function useAuthForm() {
             }
 
             if (errorMessages.email) {
-                dispatch({ type: ACTIONS.setEmailError, payload: errorMessages.email });
+                dispatch({
+                    type: ACTIONS.setEmailError,
+                    payload: errorMessages.email,
+                });
             }
 
             if (errorMessages.password) {
-                dispatch({ type: ACTIONS.setPasswordError, payload: errorMessages.password });
+                dispatch({
+                    type: ACTIONS.setPasswordError,
+                    payload: errorMessages.password,
+                });
             }
 
             if (errorMessages.global) {
-                dispatch({ type: ACTIONS.setGlobalError, payload: errorMessages.global });
+                dispatch({
+                    type: ACTIONS.setGlobalError,
+                    payload: errorMessages.global,
+                });
             }
         },
         onSuccess: (data) => {

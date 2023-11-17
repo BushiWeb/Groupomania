@@ -17,33 +17,42 @@ describe.skip('ImageWithLightbox component test suite', () => {
     };
 
     it('should rendre the image', () => {
-        render(<ImageWithLighbox {...image}/>);
+        render(<ImageWithLighbox {...image} />);
         screen.getByAltText(image.alt);
     });
 
     it('should open the lightbox when clicking on the image', async () => {
         const user = userEvent.setup();
-        render(<ImageWithLighbox {...image} {...lightbox}/>);
+        render(<ImageWithLighbox {...image} {...lightbox} />);
         const imageElt = screen.getByAltText(image.alt);
 
         await user.click(imageElt);
         await waitFor(() => {
-            const dialogElt = screen.getByRole('dialog', { hidden: true, name: lightbox.lightboxLabel });
+            const dialogElt = screen.getByRole('dialog', {
+                hidden: true,
+                name: lightbox.lightboxLabel,
+            });
             expect(dialogElt).toBeVisible();
-            expect(dialogElt).toHaveAttribute('aria-describedby', lightbox.lightboxDescription);
+            expect(dialogElt).toHaveAttribute(
+                'aria-describedby',
+                lightbox.lightboxDescription,
+            );
         });
     });
 
     it('should close the lightbox', async () => {
         const user = userEvent.setup();
-        render(<ImageWithLighbox {...image} {...lightbox}/>);
+        render(<ImageWithLighbox {...image} {...lightbox} />);
         const imageElt = screen.getByAltText(image.alt);
 
         let dialogElt;
 
         await user.click(imageElt);
         await waitFor(() => {
-            dialogElt = screen.getByRole('dialog', { hidden: true, name: lightbox.lightboxLabel });
+            dialogElt = screen.getByRole('dialog', {
+                hidden: true,
+                name: lightbox.lightboxLabel,
+            });
             expect(dialogElt).toBeVisible();
         });
 

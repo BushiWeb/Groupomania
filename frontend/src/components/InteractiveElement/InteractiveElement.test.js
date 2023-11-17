@@ -9,7 +9,7 @@ describe('InteractiveElement component test suite', () => {
     const buttonText = 'Button text';
 
     it('should render', () => {
-        const { container } = render(<InteractiveElement rootElement='div'/>);
+        const { container } = render(<InteractiveElement rootElement="div" />);
         const targetLayer = container.querySelector('.targetLayer');
         const stateLayer = container.querySelector('.stateLayer');
 
@@ -18,7 +18,11 @@ describe('InteractiveElement component test suite', () => {
     });
 
     it('should be rendered as a DOM element', () => {
-        render(<InteractiveElement rootElement='button'>{buttonText}</InteractiveElement>);
+        render(
+            <InteractiveElement rootElement="button">
+                {buttonText}
+            </InteractiveElement>,
+        );
         const buttonElt = screen.getByRole('button');
 
         expect(buttonElt).toHaveTextContent(buttonText);
@@ -29,7 +33,11 @@ describe('InteractiveElement component test suite', () => {
             return <button>{children}</button>;
         }
 
-        render(<InteractiveElement rootElement={Button}>{buttonText}</InteractiveElement>);
+        render(
+            <InteractiveElement rootElement={Button}>
+                {buttonText}
+            </InteractiveElement>,
+        );
         const buttonElt = screen.getByRole('button');
 
         expect(buttonElt).toHaveTextContent(buttonText);
@@ -37,7 +45,11 @@ describe('InteractiveElement component test suite', () => {
 
     it('should receive additionnal classnames', () => {
         const classnames = 'button happy-button';
-        render(<InteractiveElement rootElement='button' className={classnames}>{buttonText}</InteractiveElement>);
+        render(
+            <InteractiveElement rootElement="button" className={classnames}>
+                {buttonText}
+            </InteractiveElement>,
+        );
         const buttonElt = screen.getByRole('button');
 
         expect(buttonElt).toHaveClass('button');
@@ -46,7 +58,11 @@ describe('InteractiveElement component test suite', () => {
     });
 
     it('should have all activated states by default', () => {
-        render(<InteractiveElement rootElement='button'>{buttonText}</InteractiveElement>);
+        render(
+            <InteractiveElement rootElement="button">
+                {buttonText}
+            </InteractiveElement>,
+        );
         const buttonElt = screen.getByRole('button');
 
         expect(buttonElt).toHaveAttribute('data-state-focus', 'true');
@@ -54,8 +70,12 @@ describe('InteractiveElement component test suite', () => {
         expect(buttonElt).toHaveAttribute('data-state-active', 'true');
     });
 
-    it('shouldn\'t have the hover state activated', () => {
-        render(<InteractiveElement rootElement='button' hover={false}>{buttonText}</InteractiveElement>);
+    it("shouldn't have the hover state activated", () => {
+        render(
+            <InteractiveElement rootElement="button" hover={false}>
+                {buttonText}
+            </InteractiveElement>,
+        );
         const buttonElt = screen.getByRole('button');
 
         expect(buttonElt).toHaveAttribute('data-state-focus', 'true');
@@ -63,8 +83,12 @@ describe('InteractiveElement component test suite', () => {
         expect(buttonElt).toHaveAttribute('data-state-active', 'true');
     });
 
-    it('shouldn\'t have the focus state activated', () => {
-        render(<InteractiveElement rootElement='button' focus={false}>{buttonText}</InteractiveElement>);
+    it("shouldn't have the focus state activated", () => {
+        render(
+            <InteractiveElement rootElement="button" focus={false}>
+                {buttonText}
+            </InteractiveElement>,
+        );
         const buttonElt = screen.getByRole('button');
 
         expect(buttonElt).not.toHaveAttribute('data-state-focus');
@@ -72,8 +96,12 @@ describe('InteractiveElement component test suite', () => {
         expect(buttonElt).toHaveAttribute('data-state-active', 'true');
     });
 
-    it('shouldn\'t have the focus state activated', () => {
-        render(<InteractiveElement rootElement='button' active={false}>{buttonText}</InteractiveElement>);
+    it("shouldn't have the focus state activated", () => {
+        render(
+            <InteractiveElement rootElement="button" active={false}>
+                {buttonText}
+            </InteractiveElement>,
+        );
         const buttonElt = screen.getByRole('button');
 
         expect(buttonElt).toHaveAttribute('data-state-focus', 'true');
@@ -82,15 +110,23 @@ describe('InteractiveElement component test suite', () => {
     });
 
     it('should pass any other props to the element', () => {
-        render(<InteractiveElement rootElement='button' type="submit">{buttonText}</InteractiveElement>);
+        render(
+            <InteractiveElement rootElement="button" type="submit">
+                {buttonText}
+            </InteractiveElement>,
+        );
         const buttonElt = screen.getByRole('button');
 
         expect(buttonElt).toHaveAttribute('type', 'submit');
     });
 
-    it('shouldn\'t have the ripple effect', async () => {
+    it("shouldn't have the ripple effect", async () => {
         const user = userEvent.setup();
-        render(<InteractiveElement rootElement='button'>{buttonText}</InteractiveElement>);
+        render(
+            <InteractiveElement rootElement="button">
+                {buttonText}
+            </InteractiveElement>,
+        );
         const buttonElt = screen.getByRole('button');
         const stateLayer = buttonElt.querySelector('.stateLayer');
 
@@ -108,8 +144,14 @@ describe('InteractiveElement component test suite', () => {
 
     it('should have the ripple effect for the right duration', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        render(<InteractiveElement rootElement='button' rippleDuration={500}>{buttonText}</InteractiveElement>);
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
+        render(
+            <InteractiveElement rootElement="button" rippleDuration={500}>
+                {buttonText}
+            </InteractiveElement>,
+        );
         const buttonElt = screen.getByRole('button');
         const stateLayer = buttonElt.querySelector('.stateLayer');
 
@@ -122,7 +164,6 @@ describe('InteractiveElement component test suite', () => {
         expect(stateLayer).toHaveClass('ripple');
         fakeTimers.advanceTimersByTime(500);
         expect(stateLayer).not.toHaveClass('ripple');
-
 
         await user.keyboard('{Enter}');
         expect(stateLayer).toHaveClass('ripple');
@@ -140,7 +181,14 @@ describe('InteractiveElement component test suite', () => {
     it('should execute the on pointer down handler', async () => {
         const mockHandlePointerDown = jest.fn(() => true);
         const user = userEvent.setup();
-        render(<InteractiveElement rootElement='button' onPointerDown={mockHandlePointerDown}>{buttonText}</InteractiveElement>);
+        render(
+            <InteractiveElement
+                rootElement="button"
+                onPointerDown={mockHandlePointerDown}
+            >
+                {buttonText}
+            </InteractiveElement>,
+        );
         const buttonElt = screen.getByRole('button');
 
         await user.click(buttonElt);
@@ -151,7 +199,11 @@ describe('InteractiveElement component test suite', () => {
     it('should execute the on key down handler', async () => {
         const mockOnKeyDown = jest.fn(() => true);
         const user = userEvent.setup();
-        render(<InteractiveElement rootElement='button' onKeyDown={mockOnKeyDown}>{buttonText}</InteractiveElement>);
+        render(
+            <InteractiveElement rootElement="button" onKeyDown={mockOnKeyDown}>
+                {buttonText}
+            </InteractiveElement>,
+        );
         const buttonElt = screen.getByRole('button');
 
         await user.tab();
@@ -162,9 +214,16 @@ describe('InteractiveElement component test suite', () => {
     });
 
     it('should give the right color to the state layer', () => {
-        const { container } = render(<InteractiveElement rootElement='div' stateLayerColor='on-primary'/>);
+        const { container } = render(
+            <InteractiveElement
+                rootElement="div"
+                stateLayerColor="on-primary"
+            />,
+        );
         const stateLayer = container.querySelector('.stateLayer');
 
-        expect(stateLayer).toHaveStyle('--state-layer-color: var(--color-on-primary)');
+        expect(stateLayer).toHaveStyle(
+            '--state-layer-color: var(--color-on-primary)',
+        );
     });
 });

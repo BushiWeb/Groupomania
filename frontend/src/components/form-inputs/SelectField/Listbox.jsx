@@ -5,18 +5,9 @@ import useListbox from './useListbox';
 /**
  * Listbox component, to be used within a select
  */
-export default function Listbox({
-    open,
-    anchor,
-    className,
-    children,
-}) {
+export default function Listbox({ open, anchor, className, children }) {
     const {
-        position: {
-            top,
-            left,
-            width,
-        },
+        position: { top, left, width },
         ref,
     } = useListbox({
         anchor,
@@ -27,18 +18,20 @@ export default function Listbox({
         return;
     }
 
-    return <ul
-        className={`${style.listbox} ${className}`}
-        role="listbox"
-        style={{
-            '--listbox-top': `${top}px`,
-            '--listbox-left': `${left}px`,
-            ...width !== null && { '--listbox-width': `${width}px` },
-        }}
-        ref={ref}
-    >
-        {children}
-    </ul>;
+    return (
+        <ul
+            className={`${style.listbox} ${className}`}
+            role="listbox"
+            style={{
+                '--listbox-top': `${top}px`,
+                '--listbox-left': `${left}px`,
+                ...(width !== null && { '--listbox-width': `${width}px` }),
+            }}
+            ref={ref}
+        >
+            {children}
+        </ul>
+    );
 }
 
 Listbox.defaultProps = {

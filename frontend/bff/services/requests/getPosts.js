@@ -2,7 +2,9 @@ import apiRequest from './apiRequest.js';
 import { createLoggerNamespace } from '../../logger/index.js';
 import config from '../../config/config.js';
 
-const requestServiceLogger = createLoggerNamespace('groupomania:bff:service:requests');
+const requestServiceLogger = createLoggerNamespace(
+    'groupomania:bff:service:requests',
+);
 
 /**
  * Creates a paginated Get posts request to the API.
@@ -15,11 +17,18 @@ const requestServiceLogger = createLoggerNamespace('groupomania:bff:service:requ
  * @returns {Promise} Returns a promise resolved with the request response data.
  * @throws Throws if the request returns an error.
  */
-export default async function getPostsRequest(page, userInfos, sessionAuth, userId) {
+export default async function getPostsRequest(
+    page,
+    userInfos,
+    sessionAuth,
+    userId,
+) {
     requestServiceLogger.debug('Get posts request service starting');
 
     const response = await apiRequest({
-        path: `/posts?userInfo=${userInfos}&likeInfo=true&limit=${config.get('pagination.posts')}&page=${page}${userId !== undefined ? `&userId=${userId}` : ''}`,
+        path: `/posts?userInfo=${userInfos}&likeInfo=true&limit=${config.get(
+            'pagination.posts',
+        )}&page=${page}${userId !== undefined ? `&userId=${userId}` : ''}`,
         method: 'get',
         accessToken: sessionAuth.accessToken,
         refreshToken: sessionAuth.refreshToken,

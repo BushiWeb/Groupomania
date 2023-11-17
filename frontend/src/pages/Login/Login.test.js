@@ -10,10 +10,12 @@ describe('Login page test suite', () => {
     const userEmail = 'test@gmail.com';
 
     it('should render if the user is not authenticated', async () => {
-        render(undefined, { initialEntries: ['/login']});
+        render(undefined, { initialEntries: ['/login'] });
 
         await waitFor(() => {
-            screen.getByRole('form', { name: 'Formulaire d\'inscription et de connection' });
+            screen.getByRole('form', {
+                name: "Formulaire d'inscription et de connection",
+            });
         });
     });
 
@@ -38,7 +40,7 @@ describe('Login page test suite', () => {
 
     it('should redirect to the previous page if the user is authenticated', async () => {
         sessionStorage.setItem('user', userEmail);
-        render(undefined, { initialEntries: ['/reseau']});
+        render(undefined, { initialEntries: ['/reseau'] });
 
         await waitFor(() => {
             const path = screen.getByTestId('search-path');
@@ -48,7 +50,7 @@ describe('Login page test suite', () => {
 
     it('should send a login request if the user is not authenticated', async () => {
         sessionStorage.setItem('user', userEmail);
-        render(undefined, { initialEntries: ['/login']});
+        render(undefined, { initialEntries: ['/login'] });
 
         await waitFor(() => {
             const path = screen.getByTestId('search-path');
@@ -57,10 +59,12 @@ describe('Login page test suite', () => {
     });
 
     it('should update the anti CSRF token', async () => {
-        render(undefined, { initialEntries: ['/login']});
+        render(undefined, { initialEntries: ['/login'] });
 
         await waitFor(() => {
-            const antiCsrfToken = document.querySelector('meta[name="crsf-token"]').getAttribute('content');
+            const antiCsrfToken = document
+                .querySelector('meta[name="crsf-token"]')
+                .getAttribute('content');
             expect(antiCsrfToken).toBe('testToken');
         });
     });

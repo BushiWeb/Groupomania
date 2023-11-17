@@ -38,9 +38,13 @@ export function useInfinitePostFeed(containerElt, userId) {
         containerElt,
         userId ? ['posts', userId] : ['posts'],
         async ({ pageParam = 1 }) => {
-            const data = await simpleFetch({ url: `/data/posts?page=${pageParam}${userId ? `&userId=${userId}` : ''}` });
+            const data = await simpleFetch({
+                url: `/data/posts?page=${pageParam}${
+                    userId ? `&userId=${userId}` : ''
+                }`,
+            });
             return { data, pageParam };
-        }
+        },
     );
 
     const {
@@ -75,7 +79,7 @@ export function useInfinitePostFeed(containerElt, userId) {
         return (e) => {
             setMenuAnchor(e.currentTarget);
             setTargetPost(post);
-            setIsMenuOpen(previous => !previous);
+            setIsMenuOpen((previous) => !previous);
         };
     }
 

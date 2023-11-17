@@ -12,7 +12,7 @@ describe('NavigationItem component test suite', () => {
     };
 
     it('should render with the right content', () => {
-        render(<NavigationItem {...link}/>);
+        render(<NavigationItem {...link} />);
         const linkElt = screen.getByRole('link', { name: link.label });
         const listItemElt = screen.getByRole('tab');
         screen.getByText(link.icon);
@@ -23,26 +23,26 @@ describe('NavigationItem component test suite', () => {
     });
 
     it('should be activated', () => {
-        render(<NavigationItem {...link} active={true}/>);
+        render(<NavigationItem {...link} active={true} />);
         const listItemElt = screen.getByRole('tab');
         expect(listItemElt).toHaveAttribute('aria-selected', 'true');
         expect(listItemElt).toHaveAttribute('data-active');
     });
 
     it('should render as a navigation rail item', () => {
-        render(<NavigationItem {...link} type="rail"/>);
+        render(<NavigationItem {...link} type="rail" />);
         const listItemElt = screen.getByRole('tab');
         expect(listItemElt).toHaveClass('navigationRailItem');
     });
 
     it('should render as a navigation drawer item', () => {
-        render(<NavigationItem {...link} type="drawer"/>);
+        render(<NavigationItem {...link} type="drawer" />);
         const listItemElt = screen.getByRole('tab');
         expect(listItemElt).toHaveClass('navigationDrawerItem');
     });
 
     it('should be focused', async () => {
-        render(<NavigationItem {...link} focused={true}/>);
+        render(<NavigationItem {...link} focused={true} />);
         const linkElt = screen.getByRole('link', { name: link.label });
 
         await waitFor(() => {
@@ -53,8 +53,7 @@ describe('NavigationItem component test suite', () => {
     it('should execute the onFocus function when focused', async () => {
         const user = userEvent.setup();
         const mockOnFocus = jest.fn();
-        render(<NavigationItem {...link} onFocus={mockOnFocus}/>);
-        const linkElt = screen.getByRole('tab', { name: link.label });
+        render(<NavigationItem {...link} onFocus={mockOnFocus} />);
 
         await user.tab();
         expect(mockOnFocus).toHaveBeenCalled();
@@ -62,7 +61,7 @@ describe('NavigationItem component test suite', () => {
 
     it('should redirect when activated with the spacebar', async () => {
         const user = userEvent.setup();
-        render(<NavigationItem {...link}/>, { initialEntries: ['/test']});
+        render(<NavigationItem {...link} />, { initialEntries: ['/test'] });
 
         await user.tab();
         await user.keyboard('{ }');

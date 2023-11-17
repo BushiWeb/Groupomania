@@ -39,10 +39,7 @@ export default function SelectField({
     });
 
     return (
-        <div
-            onBlur={handleContainerBlur}
-            ref={wrapperRef}
-        >
+        <div onBlur={handleContainerBlur} ref={wrapperRef}>
             <SelectButton
                 label={label}
                 value={orderedValueCollection[selectedId]?.label || ''}
@@ -54,32 +51,31 @@ export default function SelectField({
                 isPopupOpened={isPopupOpened}
                 setIsPopupOpened={setIsPopupOpened}
                 listboxId={listboxId}
-                {...isPopupOpened &&
+                {...(isPopupOpened &&
                     selectedId >= 0 &&
-                    selectedId !== null &&
-                    { selectedOptionId: orderedValueCollection[selectedId].id }}
+                    selectedId !== null && {
+                        selectedOptionId: orderedValueCollection[selectedId].id,
+                    })}
                 className={className}
                 onClick={handleButtonClick}
                 onKeyDown={handleKeyboardInteraction}
                 ref={comboboxRef}
             />
 
-            {isPopupOpened &&
-            <Listbox
-                open={isPopupOpened}
-                anchor={popupAnchor}
-            >
-                {orderedValueCollection.map(({ label, id }, index) =>
-                    <ListboxOption
-                        label={label}
-                        selected={selectedId === index}
-                        onClick={handleOptionClick(index)}
-                        onMouseDown={(e) => e.preventDefault()}
-                        id={id}
-                        key={id}
-                    />)}
-            </Listbox>
-            }
+            {isPopupOpened && (
+                <Listbox open={isPopupOpened} anchor={popupAnchor}>
+                    {orderedValueCollection.map(({ label, id }, index) => (
+                        <ListboxOption
+                            label={label}
+                            selected={selectedId === index}
+                            onClick={handleOptionClick(index)}
+                            onMouseDown={(e) => e.preventDefault()}
+                            id={id}
+                            key={id}
+                        />
+                    ))}
+                </Listbox>
+            )}
         </div>
     );
 }
@@ -98,10 +94,12 @@ SelectField.propTypes = {
     value: PropTypes.any,
 
     /** List of possible values and their labels, required */
-    valueCollection: PropTypes.arrayOf(PropTypes.exact({
-        value: PropTypes.any.isRequired,
-        label: PropTypes.string.isRequired,
-    })).isRequired,
+    valueCollection: PropTypes.arrayOf(
+        PropTypes.exact({
+            value: PropTypes.any.isRequired,
+            label: PropTypes.string.isRequired,
+        }),
+    ).isRequired,
 
     /** Function to execute when the value changes, required */
     onChange: PropTypes.func.isRequired,

@@ -14,19 +14,24 @@ export default function InteractiveContainer({
     className,
     children,
 }) {
-    return <InteractiveElement
-        rootElement="div"
-        active={false}
-        stateLayerColor={false}
-        className={`${style.interactiveContainer} ${className}`}
-        {...leadingIcon && { 'data-leading-icon': true }}
-        {...trailingIcon && { 'data-trailing-icon': true }}
-    >
-        {leadingIcon}
-        {children}
-        {trailingIcon}
-        <label className={style.labelText} htmlFor={inputId}>{label}{required && '*'}</label>
-    </InteractiveElement>;
+    return (
+        <InteractiveElement
+            rootElement="div"
+            active={false}
+            stateLayerColor={false}
+            className={`${style.interactiveContainer} ${className}`}
+            {...(leadingIcon && { 'data-leading-icon': true })}
+            {...(trailingIcon && { 'data-trailing-icon': true })}
+        >
+            {leadingIcon}
+            {children}
+            {trailingIcon}
+            <label className={style.labelText} htmlFor={inputId}>
+                {label}
+                {required && '*'}
+            </label>
+        </InteractiveElement>
+    );
 }
 
 InteractiveContainer.defaultProps = {

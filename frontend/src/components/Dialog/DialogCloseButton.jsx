@@ -5,10 +5,15 @@ import StandardIconButton from '../icon-button/StandardIconButton/StandardIconBu
  * Displays a modal dialog with custom content.
  * The dialog can't be dismissed by clicking outside.
  */
-export default function DialogCloseButton({
-    onClick, label, ...props
-}) {
-    return <StandardIconButton onClick={onClick} label={label} name="close" {...props}/>;
+export default function DialogCloseButton({ onClick, label, ...props }) {
+    return (
+        <StandardIconButton
+            onClick={onClick}
+            label={label}
+            name="close"
+            {...props}
+        />
+    );
 }
 
 DialogCloseButton.propTypes = {

@@ -1,7 +1,9 @@
 import apiRequest from './apiRequest.js';
 import { createLoggerNamespace } from '../../logger/index.js';
 
-const requestServiceLogger = createLoggerNamespace('groupomania:bff:service:requests');
+const requestServiceLogger = createLoggerNamespace(
+    'groupomania:bff:service:requests',
+);
 
 /**
  * Creates an update user role request to the API.
@@ -13,7 +15,11 @@ const requestServiceLogger = createLoggerNamespace('groupomania:bff:service:requ
  * @returns {Promise} Returns a promise resolved with true.
  * @throws Throws if the request returns an error.
  */
-export default async function updateUserRoleRequest(roleId, userId, sessionAuth) {
+export default async function updateUserRoleRequest(
+    roleId,
+    userId,
+    sessionAuth,
+) {
     requestServiceLogger.debug('Update user request service starting');
     const response = await apiRequest({
         path: `/users/${userId}/role`,

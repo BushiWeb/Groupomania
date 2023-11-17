@@ -22,7 +22,7 @@ export const normalizePort = (val) => {
     }
 
     throw new Error(
-        'The port value must be a number greater than 0. It should be given as a number or a string.'
+        'The port value must be a number greater than 0. It should be given as a number or a string.',
     );
 };
 
@@ -35,11 +35,11 @@ export const normalizePort = (val) => {
 export const getConnectionInformations = (server, port) => {
     const address = server.address();
 
-    return address === null ?
-        `port: ${port}` :
-        typeof address === 'string' ?
-            `pipe ${address}` :
-            `port: ${address.port}, ${address.family} address: '${address.address}'`;
+    return (
+        address === null ? `port: ${port}`
+        : typeof address === 'string' ? `pipe ${address}`
+        : `port: ${address.port}, ${address.family} address: '${address.address}'`
+    );
 };
 
 /**

@@ -6,7 +6,11 @@ import generatePasswordSchema from './atoms/password.js';
  * Schema for the login request's body.
  */
 const loginBodySchema = {
-    email: generateEmailSchema({ required: false, checkFormat: false, trim: false }),
+    email: generateEmailSchema({
+        required: false,
+        checkFormat: false,
+        trim: false,
+    }),
     password: generatePasswordSchema({ required: false }),
     rememberMe: generateCheckboxSchema({ required: false }),
 };

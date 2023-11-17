@@ -1,6 +1,4 @@
-import {
-    useContext, useEffect, useRef,
-} from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { tooltipContext } from './tooltipContext.js';
 import { ACTIONS, OPEN_CAUSE } from './tooltipReducer.js';
 
@@ -17,12 +15,7 @@ import { ACTIONS, OPEN_CAUSE } from './tooltipReducer.js';
  * } Returns an object containing the event handlers to give to the anchor
  */
 export default function useTooltip(value) {
-    const {
-        isOpen,
-        openCause,
-        anchor,
-        dispatch,
-    } = useContext(tooltipContext);
+    const { isOpen, openCause, anchor, dispatch } = useContext(tooltipContext);
 
     const currentAnchor = useRef(false);
 

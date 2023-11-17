@@ -35,44 +35,44 @@ export default function Post({
 
     const postRef = useFocusable(focused);
 
-    return <postContext.Provider value={{
-        title,
-        titleId,
-        message,
-        messageId,
-        authorEmail,
-        emailId,
-        date,
-        dateId,
-        imageUrl,
-        liked,
-        likeNumber,
-        hasRights,
-    }}>
-        <article
-            className={imageUrl ? style.imagePost : style.post}
-            tabIndex={0}
-            ref={postRef}
-            onFocus={props.onFocus}
-            aria-posinset={posinset}
-            aria-setsize={setsize}
-            aria-labelledby={titleId}
-            aria-describedby={`${emailId} ${dateId} ${messageId}`}
-            {...vertical && { 'data-vertical': true }}
+    return (
+        <postContext.Provider
+            value={{
+                title,
+                titleId,
+                message,
+                messageId,
+                authorEmail,
+                emailId,
+                date,
+                dateId,
+                imageUrl,
+                liked,
+                likeNumber,
+                hasRights,
+            }}
         >
-            <PostHeader
-                onLike={onLike}
-                onMoreActions={onMoreActions}
-            />
+            <article
+                className={imageUrl ? style.imagePost : style.post}
+                tabIndex={0}
+                ref={postRef}
+                onFocus={props.onFocus}
+                aria-posinset={posinset}
+                aria-setsize={setsize}
+                aria-labelledby={titleId}
+                aria-describedby={`${emailId} ${dateId} ${messageId}`}
+                {...(vertical && { 'data-vertical': true })}
+            >
+                <PostHeader onLike={onLike} onMoreActions={onMoreActions} />
 
-            <Divider className={style.divider}/>
+                <Divider className={style.divider} />
 
-            <PostContent/>
+                <PostContent />
 
-            <PostImage/>
-        </article>
-    </postContext.Provider>;
-
+                <PostImage />
+            </article>
+        </postContext.Provider>
+    );
 }
 
 Post.defaultProps = {

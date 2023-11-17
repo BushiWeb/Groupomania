@@ -35,23 +35,31 @@ export default class NotFoundError extends HttpError {
             ...otherData
         },
         cause,
-        headers = {}
+        headers = {},
     ) {
         const statusCode = 404;
         const name = 'NotFoundError';
-        const title = optionnalTitle || 'The ressource you are requesting can\'t be found.';
-        const description = optionnalDescription || 'We can\'t find the ressource you\'re requesting. It may have been deleted, modified, move, or may have never existed. Please, double check your request and try again.';
-        super({
-            message,
-            name,
-            title,
-            description,
-            details,
-            logDetails,
-            statusCode,
-            path,
-            method,
-            ...otherData,
-        }, cause, headers);
+        const title =
+            optionnalTitle ||
+            "The ressource you are requesting can't be found.";
+        const description =
+            optionnalDescription ||
+            "We can't find the ressource you're requesting. It may have been deleted, modified, move, or may have never existed. Please, double check your request and try again.";
+        super(
+            {
+                message,
+                name,
+                title,
+                description,
+                details,
+                logDetails,
+                statusCode,
+                path,
+                method,
+                ...otherData,
+            },
+            cause,
+            headers,
+        );
     }
 }

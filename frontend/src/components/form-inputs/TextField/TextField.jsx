@@ -28,58 +28,71 @@ export default function TextField({
     const inputRef = useRef();
     const inputId = useId();
 
-    const leadingIcon = leadingIconProps && <TextBox.TextBoxIcon {...leadingIconProps} position="leading"/>;
+    const leadingIcon = leadingIconProps && (
+        <TextBox.TextBoxIcon {...leadingIconProps} position="leading" />
+    );
 
-    const trailingIcon = trailingIconProps || errorMessage ?
-        <TextBox.TextBoxIcon
-            name={errorMessage && !trailingIconProps?.onClick ? 'error' : trailingIconProps.name}
-            label={errorMessage && !trailingIconProps?.onClick ? 'Error' : trailingIconProps.label}
-            onClick={trailingIconProps?.onClick}
-            disabled={disabled}
-            position="trailing"
-        /> :
-        undefined;
-
-    return <TextBox.Root
-        focusInput={() => inputRef.current?.focus?.()}
-        hasPlaceholder={!!placeholder}
-        hasValue={!!value}
-        isDisabled={disabled}
-        hasError={!!errorMessage}
-        className={className}
-        {... (supportText || errorMessage) && { labelId: supportTextId }}
-    >
-        <TextBox.InteractiveContainer
-            label={label}
-            leadingIcon={leadingIcon}
-            trailingIcon={trailingIcon}
-            inputId={inputId}
-            required={required}
-        >
-            <input
-                value={value}
-                onChange={onChange}
-                type={type}
-                id={inputId}
+    const trailingIcon =
+        trailingIconProps || errorMessage ?
+            <TextBox.TextBoxIcon
+                name={
+                    errorMessage && !trailingIconProps?.onClick ?
+                        'error'
+                    :   trailingIconProps.name
+                }
+                label={
+                    errorMessage && !trailingIconProps?.onClick ?
+                        'Error'
+                    :   trailingIconProps.label
+                }
+                onClick={trailingIconProps?.onClick}
                 disabled={disabled}
-                required={required}
-                placeholder={placeholder}
-                className={style.input}
-                ref={inputRef}
-                aria-invalid={!!errorMessage}
-                {...props}
+                position="trailing"
             />
-        </TextBox.InteractiveContainer>
+        :   undefined;
 
-        <SupportText
-            id={supportTextId}
-            supportText={supportText}
-            errorMessage={errorMessage}
-            errorIcon={!!trailingIconProps?.onClick}
-            required={required}
-            disabled={disabled}
-        />
-    </TextBox.Root>;
+    return (
+        <TextBox.Root
+            focusInput={() => inputRef.current?.focus?.()}
+            hasPlaceholder={!!placeholder}
+            hasValue={!!value}
+            isDisabled={disabled}
+            hasError={!!errorMessage}
+            className={className}
+            {...((supportText || errorMessage) && { labelId: supportTextId })}
+        >
+            <TextBox.InteractiveContainer
+                label={label}
+                leadingIcon={leadingIcon}
+                trailingIcon={trailingIcon}
+                inputId={inputId}
+                required={required}
+            >
+                <input
+                    value={value}
+                    onChange={onChange}
+                    type={type}
+                    id={inputId}
+                    disabled={disabled}
+                    required={required}
+                    placeholder={placeholder}
+                    className={style.input}
+                    ref={inputRef}
+                    aria-invalid={!!errorMessage}
+                    {...props}
+                />
+            </TextBox.InteractiveContainer>
+
+            <SupportText
+                id={supportTextId}
+                supportText={supportText}
+                errorMessage={errorMessage}
+                errorIcon={!!trailingIconProps?.onClick}
+                required={required}
+                disabled={disabled}
+            />
+        </TextBox.Root>
+    );
 }
 
 TextField.defaultProps = {
@@ -103,13 +116,7 @@ TextField.propTypes = {
     onChange: PropTypes.func.isRequired,
 
     /** Type of the input, defaults to text */
-    type: PropTypes.oneOf([
-        'text',
-        'password',
-        'email',
-        'tel',
-        'url',
-    ]),
+    type: PropTypes.oneOf(['text', 'password', 'email', 'tel', 'url']),
 
     /** Label of the input, required */
     label: PropTypes.string.isRequired,

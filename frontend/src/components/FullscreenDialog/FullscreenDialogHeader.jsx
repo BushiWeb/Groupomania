@@ -8,22 +8,30 @@ import { FullscreenDialogContext } from './FullscreenDialogContext';
  * Fullscreen modal header. Depending on the screen size, changes its content.
  */
 export default function FullscreenDialogHeader({
-    closeButton, actionButton, className, children, ...props
+    closeButton,
+    actionButton,
+    className,
+    children,
+    ...props
 }) {
     const largeScreen = useContext(FullscreenDialogContext);
 
     if (largeScreen) {
-        return <DialogHeader className={className} {...props}>
-            {children}
-            {closeButton}
-        </DialogHeader>;
+        return (
+            <DialogHeader className={className} {...props}>
+                {children}
+                {closeButton}
+            </DialogHeader>
+        );
     }
 
-    return <header className={`${style.header} ${className}`} {...props}>
-        {closeButton}
-        {children}
-        {actionButton}
-    </header>;
+    return (
+        <header className={`${style.header} ${className}`} {...props}>
+            {closeButton}
+            {children}
+            {actionButton}
+        </header>
+    );
 }
 
 FullscreenDialogHeader.defaultProps = {

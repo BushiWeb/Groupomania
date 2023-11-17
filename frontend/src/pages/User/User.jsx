@@ -40,12 +40,7 @@ export default function User({ topLevelPage }) {
     }
 
     // User request and header
-    const {
-        data,
-        isLoading,
-        isError,
-        status,
-    } = useGetUser(userId);
+    const { data, isLoading, isError, status } = useGetUser(userId);
 
     // Get the ref for the container element but rerender the children when the ref changes
     const [containerRef, setContainerRef] = useState(null);
@@ -55,43 +50,51 @@ export default function User({ topLevelPage }) {
         }
     };
 
-    return <Wrapper
-        id={outletContext?.id}
-        className={`${style.user} ${outletContext?.className || ''}`}
-        {...Wrapper === 'section' &&
-        {
-            'aria-label': isLoading || isError ?
-                'Profil de l\'utilisateur' :
-                `Profil de l'utilisateur ${data.email}`,
-        }
-        }
-    >
-        <UserHeader
-            email={data?.email}
-            userId={userId}
-            roleId={data?.role.roleId}
-            backArrow={Wrapper !== 'section'}
-            topLevelHeader={topLevelPage}
-            {...Content === 'main' && { mainContentId: mainId }}
-            className={style.userHeader}
-            busy={isLoading}
-            errorMessage={isError ?
-                status === 404 ?
-                    'L\'utilisateur recherché ne peut pas être trouvé. Il se peut qu\'il ai été supprimé.' :
-                    'Une erreur est survenue lors du chargement des données. Vous pouvez essayer de recharger la page. Si le problème persiste, n\'hésitez pas à vous rapprocher d\'un administrateur.' :
-                undefined}
-        />
+    return (
+        <Wrapper
+            id={outletContext?.id}
+            className={`${style.user} ${outletContext?.className || ''}`}
+            {...(Wrapper === 'section' && {
+                'aria-label':
+                    isLoading || isError ?
+                        "Profil de l'utilisateur"
+                    :   `Profil de l'utilisateur ${data.email}`,
+            })}
+        >
+            <UserHeader
+                email={data?.email}
+                userId={userId}
+                roleId={data?.role.roleId}
+                backArrow={Wrapper !== 'section'}
+                topLevelHeader={topLevelPage}
+                {...(Content === 'main' && { mainContentId: mainId })}
+                className={style.userHeader}
+                busy={isLoading}
+                errorMessage={
+                    isError ?
+                        status === 404 ?
+                            "L'utilisateur recherché ne peut pas être trouvé. Il se peut qu'il ai été supprimé."
+                        :   "Une erreur est survenue lors du chargement des données. Vous pouvez essayer de recharger la page. Si le problème persiste, n'hésitez pas à vous rapprocher d'un administrateur."
 
-        <Content className={style.content} ref={ref} {...topLevelPage && !outletContext?.id && { id: mainId }}>
-            <InfinitePostFeed
-                containerElt={containerRef}
-                errorClassName={style.error}
-                className={style.posts}
-                userId={parseInt(userId)}
-                vertical={Wrapper === 'section'}
+                    :   undefined
+                }
             />
-        </Content>
-    </Wrapper>;
+
+            <Content
+                className={style.content}
+                ref={ref}
+                {...(topLevelPage && !outletContext?.id && { id: mainId })}
+            >
+                <InfinitePostFeed
+                    containerElt={containerRef}
+                    errorClassName={style.error}
+                    className={style.posts}
+                    userId={parseInt(userId)}
+                    vertical={Wrapper === 'section'}
+                />
+            </Content>
+        </Wrapper>
+    );
 }
 
 User.defaultProps = {

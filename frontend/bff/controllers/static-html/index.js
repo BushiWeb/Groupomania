@@ -1,7 +1,9 @@
 import { generateCRSFToken } from '../../services/generateCRSFToken.js';
 import { createLoggerNamespace } from '../../logger/index.js';
 
-const htmlControllerLogger = createLoggerNamespace('groupomania:bff:controllers:html');
+const htmlControllerLogger = createLoggerNamespace(
+    'groupomania:bff:controllers:html',
+);
 
 /**
  * Generates the static HTML page.

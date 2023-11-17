@@ -19,8 +19,8 @@ export default function SupportText({
 }) {
     const darkTheme = useSelector(selectIsDarkTheme);
     const dataProps = {
-        ...disabled && { 'data-disabled': 'true' },
-        ...errorMessage && { 'data-error': 'true' },
+        ...(disabled && { 'data-disabled': 'true' }),
+        ...(errorMessage && { 'data-error': 'true' }),
     };
     const computedClassName = `${style.supportText} ${className}`;
 
@@ -29,14 +29,29 @@ export default function SupportText({
     }
 
     if (errorMessage) {
-        return <p className={computedClassName} {...dataProps} {...props}>
-            {errorIcon && <Icon name="error" label="Error" size={20} grad={50} isOnDark={darkTheme} className={style.supportTextIcon}/>}
-            <span id={id}>{errorMessage}</span>
-        </p>;
+        return (
+            <p className={computedClassName} {...dataProps} {...props}>
+                {errorIcon && (
+                    <Icon
+                        name="error"
+                        label="Error"
+                        size={20}
+                        grad={50}
+                        isOnDark={darkTheme}
+                        className={style.supportTextIcon}
+                    />
+                )}
+                <span id={id}>{errorMessage}</span>
+            </p>
+        );
     }
 
     if (supportText) {
-        return <p className={computedClassName} id={id} {...dataProps} {...props}>{supportText}</p>;
+        return (
+            <p className={computedClassName} id={id} {...dataProps} {...props}>
+                {supportText}
+            </p>
+        );
     }
 
     return;

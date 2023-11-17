@@ -1,7 +1,9 @@
 import helmet from 'helmet';
 import { createLoggerNamespace } from '../../logger/index.js';
 
-const loaderLogger = createLoggerNamespace('groupomania:bff:html-loader:headers');
+const loaderLogger = createLoggerNamespace(
+    'groupomania:bff:html-loader:headers',
+);
 
 /**
  * Add all middleware adding headers.
@@ -14,8 +16,14 @@ export default function htmlHeadersLoader(router) {
         helmet.contentSecurityPolicy({
             useDefaults: false,
             directives: {
-                defaultSrc: ['\'self\'', 'localhost:8000', 'localhost:3000', 'fonts.googleapis.com', 'fonts.gstatic.com'],
-                objectSrc: ['\'none\''],
+                defaultSrc: [
+                    "'self'",
+                    'localhost:8000',
+                    'localhost:3000',
+                    'fonts.googleapis.com',
+                    'fonts.gstatic.com',
+                ],
+                objectSrc: ["'none'"],
                 frameAncestors: ['none'],
             },
         }),
@@ -31,7 +39,7 @@ export default function htmlHeadersLoader(router) {
         }),
         helmet.permittedCrossDomainPolicies({
             permittedPolicies: 'none',
-        })
+        }),
     );
     loaderLogger.verbose('Security headers added');
 }

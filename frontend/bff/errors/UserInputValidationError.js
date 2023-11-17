@@ -35,23 +35,29 @@ export default class UserInputValidationError extends HttpError {
             ...otherData
         },
         cause,
-        headers = {}
+        headers = {},
     ) {
         const statusCode = 400;
         const name = 'UserInputValidationError';
         const title = optionnalTitle || 'The received data are invalid.';
-        const description = optionnalDescription || 'We are having trouble using the data you provided. Please, check your data to make sure they match the constraints.';
-        super({
-            message,
-            name,
-            title,
-            description,
-            details,
-            logDetails,
-            statusCode,
-            path,
-            method,
-            ...otherData,
-        }, cause, headers);
+        const description =
+            optionnalDescription ||
+            'We are having trouble using the data you provided. Please, check your data to make sure they match the constraints.';
+        super(
+            {
+                message,
+                name,
+                title,
+                description,
+                details,
+                logDetails,
+                statusCode,
+                path,
+                method,
+                ...otherData,
+            },
+            cause,
+            headers,
+        );
     }
 }

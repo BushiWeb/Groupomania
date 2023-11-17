@@ -5,15 +5,16 @@ import '@testing-library/jest-dom';
 import { snackbarPushMessage } from './snackbar.slice.js';
 
 describe('Snackbar component test suite', () => {
-    const message1 = 'test', message2 = 'test2';
+    const message1 = 'test',
+        message2 = 'test2';
 
     it('should render', () => {
-        render(<Snackbar/>);
+        render(<Snackbar />);
     });
 
     it('should display each message on after another, in the right order', () => {
         jest.useFakeTimers();
-        const { container, store } = render(<Snackbar/>);
+        const { container, store } = render(<Snackbar />);
 
         let snackbarElt = container.querySelector('div');
         expect(snackbarElt).toBeNull();

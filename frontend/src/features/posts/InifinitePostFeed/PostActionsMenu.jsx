@@ -10,24 +10,26 @@ export default function PostActionsMenu({
     deletePost,
     updatePost,
 }) {
-    return <Menu
-        label="Actions sur le post"
-        open={open}
-        anchor={anchor}
-        onClose={onClose}
-        menuItems={[
-            {
-                label: 'Modifier',
-                leadingIcon: <MenuIcon name="edit"/>,
-                onClick: updatePost,
-            },
-            {
-                label: 'Supprimer',
-                leadingIcon: <MenuIcon name="delete"/>,
-                onClick: deletePost,
-            },
-        ]}
-    />;
+    return (
+        <Menu
+            label="Actions sur le post"
+            open={open}
+            anchor={anchor}
+            onClose={onClose}
+            menuItems={[
+                {
+                    label: 'Modifier',
+                    leadingIcon: <MenuIcon name="edit" />,
+                    onClick: updatePost,
+                },
+                {
+                    label: 'Supprimer',
+                    leadingIcon: <MenuIcon name="delete" />,
+                    onClick: deletePost,
+                },
+            ]}
+        />
+    );
 }
 
 PostActionsMenu.defaultProps = {

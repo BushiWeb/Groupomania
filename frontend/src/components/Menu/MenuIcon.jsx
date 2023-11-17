@@ -7,18 +7,18 @@ import Icon from '../Icon/Icon';
 /**
  * Icon to add to a list item
  */
-export default function MenuIcon({
-    name, ...props
-}) {
+export default function MenuIcon({ name, ...props }) {
     const isDarkTheme = useSelector(selectIsDarkTheme);
 
-    return <Icon
-        name={name}
-        size={24}
-        isOnDark={isDarkTheme}
-        className={style.icon}
-        {...props}
-    />;
+    return (
+        <Icon
+            name={name}
+            size={24}
+            isOnDark={isDarkTheme}
+            className={style.icon}
+            {...props}
+        />
+    );
 }
 
 MenuIcon.propTypes = {

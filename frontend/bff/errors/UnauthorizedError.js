@@ -36,23 +36,29 @@ export default class UnauthorizedError extends HttpError {
             ...otherData
         },
         cause,
-        headers = { 'WWW-Authenticate': 'Bearer' }
+        headers = { 'WWW-Authenticate': 'Bearer' },
     ) {
         const statusCode = 401;
         const name = 'UnauthorizedError';
         const title = optionnalTitle || 'You need to be authenticated.';
-        const description = optionnalDescription || 'You need to be authenticated to access this ressource, but it seems we don\'t know who you are. You may authenticate yourself and try again.';
-        super({
-            message,
-            name,
-            title,
-            description,
-            details,
-            logDetails,
-            statusCode,
-            path,
-            method,
-            ...otherData,
-        }, cause, headers);
+        const description =
+            optionnalDescription ||
+            "You need to be authenticated to access this ressource, but it seems we don't know who you are. You may authenticate yourself and try again.";
+        super(
+            {
+                message,
+                name,
+                title,
+                description,
+                details,
+                logDetails,
+                statusCode,
+                path,
+                method,
+                ...otherData,
+            },
+            cause,
+            headers,
+        );
     }
 }

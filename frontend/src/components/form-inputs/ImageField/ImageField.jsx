@@ -13,84 +13,92 @@ import useImageField from './useImageField';
  *  File chosen with onChange, and alose the displayed file with image. It is to the responsability of the user to make
  *  make sure the displayed and saved image are the same as the chosen image.
  */
-const ImageField = forwardRef(({
-    emptyLabel,
-    selectedLabel,
-    accept,
-    className,
-    onChange,
-    errorMessage,
-    supportText,
-    image,
-}, ref) => {
-    const {
-        imageData,
-        supportTextId,
-        handleChange,
-        handleDeleteImage,
-    } = useImageField(image, ref, onChange);
+const ImageField = forwardRef(
+    (
+        {
+            emptyLabel,
+            selectedLabel,
+            accept,
+            className,
+            onChange,
+            errorMessage,
+            supportText,
+            image,
+        },
+        ref,
+    ) => {
+        const { imageData, supportTextId, handleChange, handleDeleteImage } =
+            useImageField(image, ref, onChange);
 
-    return <div
-        className={`${style.container} ${className}`}
-        {...errorMessage && { 'data-error': true, 'role': 'alert' }}
-        {... (supportText || errorMessage) && { 'aria-labelledby': supportTextId }}
-    >
-        <div className={style.inputCommand}>
-            <OutlinedButton
-                onClick={(e) => ref.current.click()}
-                className={style.button}
-                {... imageData && {
-                    'aria-describedby': imageData.uploaded ?
-                        'Il s\'agit du fichier original du post, vous pouvez le modifier' :
-                        `Le fichier ${imageData.name} est actuellement sélectionné`,
-                }}
-            >{imageData ? selectedLabel : emptyLabel}</OutlinedButton>
+        return (
+            <div
+                className={`${style.container} ${className}`}
+                {...(errorMessage && { 'data-error': true, role: 'alert' })}
+                {...((supportText || errorMessage) && {
+                    'aria-labelledby': supportTextId,
+                })}
+            >
+                <div className={style.inputCommand}>
+                    <OutlinedButton
+                        onClick={(e) => ref.current.click()}
+                        className={style.button}
+                        {...(imageData && {
+                            'aria-describedby':
+                                imageData.uploaded ?
+                                    "Il s'agit du fichier original du post, vous pouvez le modifier"
+                                :   `Le fichier ${imageData.name} est actuellement sélectionné`,
+                        })}
+                    >
+                        {imageData ? selectedLabel : emptyLabel}
+                    </OutlinedButton>
 
-            <SupportText
-                id={supportTextId}
-                errorIcon
-                errorMessage={errorMessage}
-                supportText={supportText}
-            />
-        </div>
+                    <SupportText
+                        id={supportTextId}
+                        errorIcon
+                        errorMessage={errorMessage}
+                        supportText={supportText}
+                    />
+                </div>
 
-        <input
-            type="file"
-            accept={accept}
-            capture="environment"
-            ref={ref}
-            className={style.imageField}
-            aria-hidden="true"
-            tabIndex={-1}
-            onCancel={(e) => e.stopPropagation()}
-            onChange={handleChange}
-        />
-
-        {imageData &&
-            <div className={style.previewContainer}>
-                <TonalIconButton
-                    onClick={handleDeleteImage}
-                    label="Supprimer l'image"
-                    name="delete"
-                    className={style.deleteImageButton}
+                <input
+                    type="file"
+                    accept={accept}
+                    capture="environment"
+                    ref={ref}
+                    className={style.imageField}
+                    aria-hidden="true"
+                    tabIndex={-1}
+                    onCancel={(e) => e.stopPropagation()}
+                    onChange={handleChange}
                 />
-                <img
-                    alt={imageData.name}
-                    src={imageData.src}
-                    className={style.previewImage}
-                    onLoad = {(e) => {
-                        URL.revokeObjectURL(e.target.src);
-                    }}
-                />
+
+                {imageData && (
+                    <div className={style.previewContainer}>
+                        <TonalIconButton
+                            onClick={handleDeleteImage}
+                            label="Supprimer l'image"
+                            name="delete"
+                            className={style.deleteImageButton}
+                        />
+                        <img
+                            alt={imageData.name}
+                            src={imageData.src}
+                            className={style.previewImage}
+                            onLoad={(e) => {
+                                URL.revokeObjectURL(e.target.src);
+                            }}
+                        />
+                    </div>
+                )}
             </div>
-        }
-    </div>;
-});
+        );
+    },
+);
 
 ImageField.defaultProps = {
     accept: '.jpg,.jpeg,.png,.webp,.avif',
     emptyLabel: 'Ajouter une image',
-    selectedLabel: 'Modifier l\'image',
+    selectedLabel: "Modifier l'image",
     className: '',
     errorMessage: undefined,
     supportText: undefined,

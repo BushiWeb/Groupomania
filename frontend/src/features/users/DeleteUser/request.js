@@ -1,10 +1,12 @@
 import { simpleFetch } from '../../../utils/fetch.js';
 
 export const ERROR_MESSAGES = {
-    requiredPassword: 'Le mot de passe est obligatoire pour confirmer votre identité',
+    requiredPassword:
+        'Le mot de passe est obligatoire pour confirmer votre identité',
     wrongPassword: 'Le mot de passe est invalide',
-    forbiddenAction: 'Vous n\'avez pas les droits pour modifier cet utilisateur',
-    notFound: 'L\'utilisateur que vous souhaitez modifier ne peut pas être trouvé. Il se peut qu\'il soit supprimé.',
+    forbiddenAction: "Vous n'avez pas les droits pour modifier cet utilisateur",
+    notFound:
+        "L'utilisateur que vous souhaitez modifier ne peut pas être trouvé. Il se peut qu'il soit supprimé.",
 };
 
 /**
@@ -13,9 +15,7 @@ export const ERROR_MESSAGES = {
  * @param {string} validationData.password
  * @throws Throws if there is an error
  */
-export function validatePostData({
-    password,
-}) {
+export function validatePostData({ password }) {
     const errors = {};
 
     if (!password) {
@@ -56,22 +56,22 @@ export async function handleDeleteUserRequestError(error) {
     const errorMessages = {};
 
     switch (error.status) {
-    case 400:
-        if (!requestError.error?.details) {
-            throw new Error('Unhandled 400 error type');
-        }
-        break;
-    case 401:
-        if (/credentials/.test(requestError.error?.title)) {
-            return { password: ERROR_MESSAGES.wrongPassword };
-        }
-        throw new Error('Unauthorized');
-    case 403:
-        return { global: ERROR_MESSAGES.forbiddenAction };
-    case 404:
-        return { global: ERROR_MESSAGES.notFound };
-    default:
-        throw new Error('Unhandled error status');
+        case 400:
+            if (!requestError.error?.details) {
+                throw new Error('Unhandled 400 error type');
+            }
+            break;
+        case 401:
+            if (/credentials/.test(requestError.error?.title)) {
+                return { password: ERROR_MESSAGES.wrongPassword };
+            }
+            throw new Error('Unauthorized');
+        case 403:
+            return { global: ERROR_MESSAGES.forbiddenAction };
+        case 404:
+            return { global: ERROR_MESSAGES.notFound };
+        default:
+            throw new Error('Unhandled error status');
     }
 
     for (const fieldError of requestError.error.details) {

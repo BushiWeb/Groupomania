@@ -4,9 +4,12 @@ import userEvent from '../../utils/tests/user-event';
 import '@testing-library/jest-dom';
 
 describe('UI test suite', () => {
-    const state = { user: { email: 'test', role: { roleId: 2 }}};
+    const state = { user: { email: 'test', role: { roleId: 2 } } };
     it('should render', async () => {
-        const { container } = render(undefined, { initialEntries: ['/'], preloadedState: state });
+        const { container } = render(undefined, {
+            initialEntries: ['/'],
+            preloadedState: state,
+        });
 
         await waitFor(() => {
             screen.getByRole('main');
@@ -17,7 +20,7 @@ describe('UI test suite', () => {
     });
 
     it('should redirect to the login page if the user is not authenticated', async () => {
-        render(undefined, { initialEntries: ['/']});
+        render(undefined, { initialEntries: ['/'] });
 
         await waitFor(() => {
             const path = screen.getByTestId('search-path');
@@ -28,7 +31,9 @@ describe('UI test suite', () => {
     it('should log the user out', async () => {
         const user = userEvent.setup();
         render(undefined, { initialEntries: ['/'], preloadedState: state });
-        const logoutButton = screen.getByRole('button', { name: 'Se déconnecter' });
+        const logoutButton = screen.getByRole('button', {
+            name: 'Se déconnecter',
+        });
 
         await user.click(logoutButton);
         await waitFor(() => {

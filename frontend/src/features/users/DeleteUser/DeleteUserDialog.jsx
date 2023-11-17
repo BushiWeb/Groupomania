@@ -1,5 +1,9 @@
 import Dialog, {
-    DialogAction, DialogActions, DialogContent, DialogHeader, DialogHeadline,
+    DialogAction,
+    DialogActions,
+    DialogContent,
+    DialogHeader,
+    DialogHeadline,
 } from '../../../components/Dialog';
 import DeleteUserForm from './DeleteUserForm';
 import RequestLoader from './RequestLoader';
@@ -18,10 +22,7 @@ export default function DeleteUserDialog({
         isLoading,
         data,
         dispatch,
-        dialogActions: {
-            cancel,
-            save,
-        },
+        dialogActions: { cancel, save },
     } = useDeleteUserDialog(setIsOpen, { userId });
 
     const acceptButton = <DialogAction onClick={save}>Supprimer</DialogAction>;
@@ -34,15 +35,21 @@ export default function DeleteUserDialog({
                 setIsOpen(false);
             }}
             label={`Supprimer l'utilisateur ${userEmail}`}
-            {...isLoading && { inert: 'true' }}
+            {...(isLoading && { inert: 'true' })}
         >
             <DialogHeader>
                 <DialogHeadline>Supprimer l'utilisateur</DialogHeadline>
             </DialogHeader>
             <DialogContent className={style.content}>
-                <RequestLoader isLoading={isLoading}/>
-                <p>Supprimer l'utilisateur <em>{userEmail}</em></p>
-                <DeleteUserForm {...data} isLoading={isLoading} dispatch={dispatch}/>
+                <RequestLoader isLoading={isLoading} />
+                <p>
+                    Supprimer l'utilisateur <em>{userEmail}</em>
+                </p>
+                <DeleteUserForm
+                    {...data}
+                    isLoading={isLoading}
+                    dispatch={dispatch}
+                />
             </DialogContent>
             <DialogActions>
                 {dismissButton}

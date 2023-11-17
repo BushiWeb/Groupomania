@@ -6,7 +6,14 @@ import IconButton from '../IconButton/IconButton.jsx';
  * Outlined icon button button
  */
 export default function TonalIconButton({
-    disabled, autoFocus, onClick, label, name, toggle, className, ...other
+    disabled,
+    autoFocus,
+    onClick,
+    label,
+    name,
+    toggle,
+    className,
+    ...other
 }) {
     return (
         <IconButton
@@ -17,7 +24,9 @@ export default function TonalIconButton({
             name={name}
             className={`${style.tonalIconButton} ${className}`}
             toggle={toggle}
-            stateLayerColor={toggle ? 'on-inverse-surface' : 'on-surface-variant'}
+            stateLayerColor={
+                toggle ? 'on-inverse-surface' : 'on-surface-variant'
+            }
             {...other}
         />
     );

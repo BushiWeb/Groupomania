@@ -27,14 +27,20 @@ const path = '/test/',
     newAccessToken = '789',
     newRefreshToken = '101112',
     genericError = new AxiosError('Error'),
-    authenticationError = new AxiosError('Authentication error', AxiosError.ERR_BAD_RESPONSE, {}, {}, {
-        status: 401,
-        data: {
-            error: {
-                type: 'AuthenticationError',
+    authenticationError = new AxiosError(
+        'Authentication error',
+        AxiosError.ERR_BAD_RESPONSE,
+        {},
+        {},
+        {
+            status: 401,
+            data: {
+                error: {
+                    type: 'AuthenticationError',
+                },
             },
         },
-    });
+    );
 
 afterEach(() => {
     axios.mockReset();
@@ -58,7 +64,7 @@ describe('apiRequest service test suite', () => {
             method: method,
             data: requestData,
             headers: {
-                'Authorization': `Bearer ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`,
                 'Content-Type': contentType,
             },
         });
@@ -79,7 +85,7 @@ describe('apiRequest service test suite', () => {
             method: method,
             data: null,
             headers: {
-                'Authorization': `Bearer ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`,
                 'Content-Type': null,
             },
         });
@@ -101,7 +107,7 @@ describe('apiRequest service test suite', () => {
             method: method,
             data: requestData,
             headers: {
-                'Authorization': `Bearer ${refreshToken}`,
+                Authorization: `Bearer ${refreshToken}`,
                 'Content-Type': contentType,
             },
         });
@@ -122,7 +128,7 @@ describe('apiRequest service test suite', () => {
             method: method,
             data: requestData,
             headers: {
-                'Authorization': null,
+                Authorization: null,
                 'Content-Type': contentType,
             },
         });
@@ -179,17 +185,17 @@ describe('apiRequest service test suite', () => {
     });
 
     it('should refresh the tokens and return the data and the new tokens after the second try', async () => {
-        axios.
-            mockImplementationOnce(() => {
+        axios
+            .mockImplementationOnce(() => {
                 throw authenticationError;
-            }).
-            mockReturnValueOnce({
+            })
+            .mockReturnValueOnce({
                 data: {
                     refreshToken: newRefreshToken,
                     accessToken: newAccessToken,
                 },
-            }).
-            mockReturnValueOnce(returnedData);
+            })
+            .mockReturnValueOnce(returnedData);
         const result = await apiRequest({
             path,
             method,
@@ -209,17 +215,17 @@ describe('apiRequest service test suite', () => {
     });
 
     it('should refresh the tokens and return the tokens and the error if the second try fails', async () => {
-        axios.
-            mockImplementationOnce(() => {
+        axios
+            .mockImplementationOnce(() => {
                 throw authenticationError;
-            }).
-            mockReturnValueOnce({
+            })
+            .mockReturnValueOnce({
                 data: {
                     refreshToken: newRefreshToken,
                     accessToken: newAccessToken,
                 },
-            }).
-            mockImplementationOnce(() => {
+            })
+            .mockImplementationOnce(() => {
                 throw authenticationError;
             });
         const result = await apiRequest({
@@ -241,11 +247,11 @@ describe('apiRequest service test suite', () => {
     });
 
     it('should return the error if the refresh fails', async () => {
-        axios.
-            mockImplementationOnce(() => {
+        axios
+            .mockImplementationOnce(() => {
                 throw authenticationError;
-            }).
-            mockImplementationOnce(() => {
+            })
+            .mockImplementationOnce(() => {
                 throw genericError;
             });
         const result = await apiRequest({

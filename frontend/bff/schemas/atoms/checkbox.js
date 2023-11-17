@@ -7,12 +7,12 @@
  */
 export default function generateCheckboxSchema(
     { required = true, checkFormat = true } = {},
-    location = ['body']
+    location = ['body'],
 ) {
     return {
         in: location,
 
-        ...required ?
+        ...(required ?
             {
                 exists: {
                     errorMessage: 'The value is required.',
@@ -21,20 +21,20 @@ export default function generateCheckboxSchema(
                     },
                     bail: true,
                 },
-            } :
-            {
+            }
+        :   {
                 optional: {
                     options: { nullable: true },
                 },
-            },
+            }),
 
-        ...checkFormat && {
+        ...(checkFormat && {
             isBoolean: {
                 errorMessage: 'The parameter must be a boolean..',
                 loose: true,
                 bail: true,
             },
-        },
+        }),
 
         toBoolean: true,
     };

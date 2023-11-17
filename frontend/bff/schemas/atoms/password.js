@@ -6,12 +6,12 @@
  */
 export default function generatePasswordSchema(
     { required = true } = {},
-    location = ['body']
+    location = ['body'],
 ) {
     return {
         in: location,
 
-        ...required ?
+        ...(required ?
             {
                 exists: {
                     errorMessage: 'The password is required.',
@@ -20,11 +20,11 @@ export default function generatePasswordSchema(
                     },
                     bail: true,
                 },
-            } :
-            {
+            }
+        :   {
                 optional: {
                     options: { nullable: true },
                 },
-            },
+            }),
     };
 }

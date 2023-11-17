@@ -11,23 +11,39 @@ import { selectIsDarkTheme } from '../../../utils/selectors';
  * All additionnal props are passed to the DOM element.
  */
 export default function TonalButton({
-    disabled, autoFocus, onClick, label, children, icon, className, ...other
+    disabled,
+    autoFocus,
+    onClick,
+    label,
+    children,
+    icon,
+    className,
+    ...other
 }) {
     const classNameButton = icon ? style.tonalButtonIcon : style.tonalButton;
     const isDarkTheme = useSelector(selectIsDarkTheme);
 
-    return <Button
-        classNames={`${classNameButton} ${className}`}
-        disabled={disabled}
-        autoFocus={autoFocus}
-        onClick={onClick}
-        label={label}
-        stateLayerColor="on-secondary-container"
-        {...other}
-    >
-        {icon && <Icon name={icon} className={style.icon} size={20} isOnDark={isDarkTheme}/>}
-        {children}
-    </Button>;
+    return (
+        <Button
+            classNames={`${classNameButton} ${className}`}
+            disabled={disabled}
+            autoFocus={autoFocus}
+            onClick={onClick}
+            label={label}
+            stateLayerColor="on-secondary-container"
+            {...other}
+        >
+            {icon && (
+                <Icon
+                    name={icon}
+                    className={style.icon}
+                    size={20}
+                    isOnDark={isDarkTheme}
+                />
+            )}
+            {children}
+        </Button>
+    );
 }
 
 TonalButton.defaultProps = {

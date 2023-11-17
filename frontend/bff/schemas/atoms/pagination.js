@@ -7,12 +7,12 @@
  */
 export default function generatePaginationSchema(
     { required = false, checkFormat = true } = {},
-    location = ['query']
+    location = ['query'],
 ) {
     return {
         in: location,
 
-        ...required ?
+        ...(required ?
             {
                 exists: {
                     errorMessage: 'The parameter is required.',
@@ -21,21 +21,22 @@ export default function generatePaginationSchema(
                     },
                     bail: true,
                 },
-            } :
-            {
+            }
+        :   {
                 optional: {
                     options: { nullable: true },
                 },
-            },
+            }),
 
-        ...checkFormat && {
+        ...(checkFormat && {
             isInt: {
-                errorMessage: 'The parameter must be an integer greater or equal than 1.',
+                errorMessage:
+                    'The parameter must be an integer greater or equal than 1.',
                 options: {
                     min: 1,
                 },
             },
-        },
+        }),
 
         toInt: true,
     };

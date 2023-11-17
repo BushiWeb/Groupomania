@@ -1,7 +1,9 @@
 import { createLoggerNamespace } from '../../logger/index.js';
 import getUsersRequest from '../../services/requests/getUsers.js';
 
-const getUsersControllerLogger = createLoggerNamespace('groupomania:bff:controller:get-users');
+const getUsersControllerLogger = createLoggerNamespace(
+    'groupomania:bff:controller:get-users',
+);
 
 /**
  * Get users controller.
@@ -12,7 +14,10 @@ const getUsersControllerLogger = createLoggerNamespace('groupomania:bff:controll
 export default async function getUsersController(req, res, next) {
     getUsersControllerLogger.verbose('Get users controller starting');
     try {
-        const usersData = await getUsersRequest(req.query.page, req.session.user);
+        const usersData = await getUsersRequest(
+            req.query.page,
+            req.session.user,
+        );
         res.status(200).json(usersData);
     } catch (error) {
         next(error);

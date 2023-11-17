@@ -14,7 +14,7 @@ describe.skip('Lightbox component test suite', () => {
     const mockOnClose = jest.fn();
 
     it('should render the image and the close button when opened', async () => {
-        render(<Lightbox {...image} onClose={mockOnClose} open/>);
+        render(<Lightbox {...image} onClose={mockOnClose} open />);
 
         await waitFor(() => {
             const dialogElt = screen.getByRole('dialog', { hidden: true });
@@ -25,7 +25,7 @@ describe.skip('Lightbox component test suite', () => {
     });
 
     it('should render closed', async () => {
-        render(<Lightbox {...image} onClose={mockOnClose}/>);
+        render(<Lightbox {...image} onClose={mockOnClose} />);
 
         await waitFor(() => {
             const dialogElt = screen.getByRole('dialog', { hidden: true });
@@ -35,7 +35,7 @@ describe.skip('Lightbox component test suite', () => {
 
     it('should close on escape and execute the onClose function', async () => {
         const user = userEvent.setup();
-        render(<Lightbox {...image} onClose={mockOnClose} open/>);
+        render(<Lightbox {...image} onClose={mockOnClose} open />);
 
         let dialogElt;
 
@@ -53,7 +53,7 @@ describe.skip('Lightbox component test suite', () => {
 
     it('should close when clicking on the button and execute the onClose function', async () => {
         const user = userEvent.setup();
-        render(<Lightbox {...image} onClose={mockOnClose} open/>);
+        render(<Lightbox {...image} onClose={mockOnClose} open />);
 
         let dialogElt;
 
@@ -73,7 +73,7 @@ describe.skip('Lightbox component test suite', () => {
 
     it('should close when clicking on the backdrop and execute the onClose function', async () => {
         const user = userEvent.setup();
-        render(<Lightbox {...image} onClose={mockOnClose} open/>);
+        render(<Lightbox {...image} onClose={mockOnClose} open />);
 
         let dialogElt;
 

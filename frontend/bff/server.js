@@ -19,7 +19,9 @@ try {
     const defaultPort = 3000;
     port = normalizePort(defaultPort);
     serverLogger.error(error);
-    serverLogger.warn(`The port can't be normalized, use default port ${defaultPort} instead`);
+    serverLogger.warn(
+        `The port can't be normalized, use default port ${defaultPort} instead`,
+    );
 }
 
 app.set('port', port);

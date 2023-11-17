@@ -13,14 +13,14 @@ describe('Checkbox component test suite', () => {
     const inputHandle = jest.fn(() => true);
 
     it('should render', () => {
-        render(<Checkbox name={name} onChange={inputHandle}/>);
+        render(<Checkbox name={name} onChange={inputHandle} />);
         const checkboxElt = screen.getByRole('checkbox');
         expect(checkboxElt).toHaveAttribute('name', name);
         expect(checkboxElt).not.toBeChecked();
     });
 
     it('should render in a checked state', () => {
-        render(<Checkbox name={name} checked={true} onChange={inputHandle}/>);
+        render(<Checkbox name={name} checked={true} onChange={inputHandle} />);
         const checkboxElt = screen.getByRole('checkbox');
         expect(checkboxElt).toBeChecked();
     });
@@ -28,7 +28,7 @@ describe('Checkbox component test suite', () => {
     it('should execute the action when clicked', async () => {
         const user = userEvent.setup();
 
-        render(<Checkbox name={name} onChange={inputHandle}/>);
+        render(<Checkbox name={name} onChange={inputHandle} />);
         const checkbox = screen.getByRole('checkbox');
 
         await user.click(checkbox);
@@ -39,26 +39,42 @@ describe('Checkbox component test suite', () => {
     });
 
     it('should has the initial focus', () => {
-        render(<Checkbox name={name} autoFocus={true} onChange={inputHandle}/>);
+        render(
+            <Checkbox name={name} autoFocus={true} onChange={inputHandle} />,
+        );
         const checkbox = screen.getByRole('checkbox');
         expect(checkbox).toHaveFocus();
     });
 
     it('should be disabled', () => {
-        render(<Checkbox name={name} disabled={true} onChange={inputHandle}/>);
+        render(<Checkbox name={name} disabled={true} onChange={inputHandle} />);
         const checkbox = screen.getByRole('checkbox');
         expect(checkbox).toBeDisabled();
     });
 
     it('should be disabled and checked', () => {
-        render(<Checkbox name={name} disabled={true} checked={true} onChange={inputHandle}/>);
+        render(
+            <Checkbox
+                name={name}
+                disabled={true}
+                checked={true}
+                onChange={inputHandle}
+            />,
+        );
         const checkbox = screen.getByRole('checkbox');
         expect(checkbox).toBeDisabled();
         expect(checkbox).toBeChecked();
     });
 
     it('should be disabled and not focused', () => {
-        render(<Checkbox name={name} autoFocus={true} disabled={true} onChange={inputHandle}/>);
+        render(
+            <Checkbox
+                name={name}
+                autoFocus={true}
+                disabled={true}
+                onChange={inputHandle}
+            />,
+        );
         const checkbox = screen.getByRole('checkbox');
         expect(checkbox).toBeDisabled();
         expect(checkbox).not.toHaveFocus();
@@ -67,7 +83,7 @@ describe('Checkbox component test suite', () => {
     it('should be accessible using keyboard navigation', async () => {
         const user = userEvent.setup();
 
-        render(<Checkbox name={name} onChange={inputHandle}/>);
+        render(<Checkbox name={name} onChange={inputHandle} />);
         const checkbox = screen.getByRole('checkbox');
 
         expect(checkbox).not.toBeChecked();
@@ -83,8 +99,12 @@ describe('Checkbox component test suite', () => {
 
     it('should trigger the ripple effect when activated', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        const { container } = render(<Checkbox name={name} onChange={inputHandle}/>);
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
+        const { container } = render(
+            <Checkbox name={name} onChange={inputHandle} />,
+        );
         const checkboxElt = screen.getByRole('checkbox');
         const stateLayerElt = container.querySelector('.stateLayer');
 
@@ -108,7 +128,9 @@ describe('Checkbox component test suite', () => {
 
     it('should not have the ripple effect when disabled', async () => {
         const user = userEvent.setup();
-        const { container } = render(<Checkbox name={name} disabled={true} onChange={inputHandle}/>);
+        const { container } = render(
+            <Checkbox name={name} disabled={true} onChange={inputHandle} />,
+        );
         const checkboxElt = screen.getByRole('checkbox');
         const stateLayerElt = container.querySelector('.stateLayer');
 
@@ -120,8 +142,12 @@ describe('Checkbox component test suite', () => {
 
     it('should have a label and a tooltip', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        const { container } = render(<Checkbox name={name} label={label} onChange={inputHandle}/>);
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
+        const { container } = render(
+            <Checkbox name={name} label={label} onChange={inputHandle} />,
+        );
         const checkboxElt = screen.getByRole('checkbox', { name: label });
 
         await user.hover(checkboxElt);
@@ -134,14 +160,22 @@ describe('Checkbox component test suite', () => {
     });
 
     it('should have additionnal classnames', () => {
-        const { container } = render(<Checkbox name={name} className={moreClass} onChange={inputHandle}/>);
+        const { container } = render(
+            <Checkbox
+                name={name}
+                className={moreClass}
+                onChange={inputHandle}
+            />,
+        );
         const containerElt = container.querySelector('.checkboxContainer');
 
         expect(containerElt).toHaveClass(moreClass);
     });
 
     it('should have all states activated', () => {
-        const { container } = render(<Checkbox name={name} label={label} onChange={inputHandle}/>);
+        const { container } = render(
+            <Checkbox name={name} label={label} onChange={inputHandle} />,
+        );
         const stateLayerElt = container.querySelector('.interactiveElement');
 
         expect(stateLayerElt).toHaveAttribute('data-state-hover', 'true');
@@ -150,7 +184,14 @@ describe('Checkbox component test suite', () => {
     });
 
     it('should have no state activated if disabled', () => {
-        const { container } = render(<Checkbox name={name} label={label} disabled={true} onChange={inputHandle}/>);
+        const { container } = render(
+            <Checkbox
+                name={name}
+                label={label}
+                disabled={true}
+                onChange={inputHandle}
+            />,
+        );
         const interactiveElt = container.querySelector('.interactiveElement');
 
         expect(interactiveElt).not.toHaveAttribute('data-state-hover', 'true');
@@ -159,7 +200,14 @@ describe('Checkbox component test suite', () => {
     });
 
     it('should have more props added', () => {
-        render(<Checkbox name={name} label={label} aria-describedby="lorem" onChange={inputHandle}/>);
+        render(
+            <Checkbox
+                name={name}
+                label={label}
+                aria-describedby="lorem"
+                onChange={inputHandle}
+            />,
+        );
         const checkboxElt = screen.getByRole('checkbox');
 
         expect(checkboxElt).toHaveAttribute('aria-describedby', 'lorem');

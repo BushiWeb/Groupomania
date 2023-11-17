@@ -19,17 +19,19 @@ export async function simpleFetch({
     headers,
     antiCSRFToken = true,
 }) {
-    const contentType = data && !(data instanceof FormData) ? 'application/json' : undefined;
-    const body = !data || data instanceof FormData ? data : JSON.stringify(data);
+    const contentType =
+        data && !(data instanceof FormData) ? 'application/json' : undefined;
+    const body =
+        !data || data instanceof FormData ? data : JSON.stringify(data);
 
     const options = {
         method,
         headers: {
-            ...contentType && { 'Content-Type': contentType },
-            ...antiCSRFToken && { 'X-CRSF-Token': getAntiCSRFToken() },
+            ...(contentType && { 'Content-Type': contentType }),
+            ...(antiCSRFToken && { 'X-CRSF-Token': getAntiCSRFToken() }),
             ...headers,
         },
-        ...body && { body },
+        ...(body && { body }),
     };
 
     const response = await fetch(url, options);

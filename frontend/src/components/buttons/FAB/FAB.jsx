@@ -13,29 +13,44 @@ import useTooltip from '../../../features/tooltip/useTooltip';
  * All additionnal props are passed to the DOM element.
  */
 export default function FAB({
-    autoFocus, onClick, label, children, icon, low, ...other
+    autoFocus,
+    onClick,
+    label,
+    children,
+    icon,
+    low,
+    ...other
 }) {
     const isDarkTheme = useSelector(selectIsDarkTheme);
-    const {
-        anchorEventHandlers,
-    } = useTooltip(label);
+    const { anchorEventHandlers } = useTooltip(label);
 
-    const className = `${children ? style.extendedFab : style.fab} ${other.className ? other.className : ''}`;
+    const className = `${children ? style.extendedFab : style.fab} ${
+        other.className ? other.className : ''
+    }`;
     delete other.className;
 
-    return <Button
-        classNames={className}
-        autoFocus={autoFocus}
-        onClick={onClick}
-        label={label}
-        stateLayerColor="on-secondary-container"
-        {...low && { 'data-low': true }}
-        {...!children && { ...anchorEventHandlers }}
-        {...other}
-    >
-        {icon && <Icon name={icon} className={style.icon} size={24} isOnDark={isDarkTheme}/>}
-        {children}
-    </Button>;
+    return (
+        <Button
+            classNames={className}
+            autoFocus={autoFocus}
+            onClick={onClick}
+            label={label}
+            stateLayerColor="on-secondary-container"
+            {...(low && { 'data-low': true })}
+            {...(!children && { ...anchorEventHandlers })}
+            {...other}
+        >
+            {icon && (
+                <Icon
+                    name={icon}
+                    className={style.icon}
+                    size={24}
+                    isOnDark={isDarkTheme}
+                />
+            )}
+            {children}
+        </Button>
+    );
 }
 
 FAB.defaultProps = {

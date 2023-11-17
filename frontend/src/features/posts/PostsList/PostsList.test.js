@@ -9,7 +9,8 @@ describe('PostsList component test suite', () => {
         {
             postId: 1,
             title: 'Lorem',
-            message: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda iure alias perspiciatis provident recusandae reprehenderit voluptate ab, suscipit doloribus libero totam cumque voluptatum velit ea id architecto? Quo, at sed.',
+            message:
+                'Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda iure alias perspiciatis provident recusandae reprehenderit voluptate ab, suscipit doloribus libero totam cumque voluptatum velit ea id architecto? Quo, at sed.',
             imageUrl: 'https://picsum.photos/200/300',
             writer: {
                 writerId: 720,
@@ -23,7 +24,8 @@ describe('PostsList component test suite', () => {
         {
             postId: 2,
             title: 'Ipsum',
-            message: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit architecto dolorem in recusandae facilis voluptas culpa, aliquam explicabo voluptatem officiis beatae, quis, ipsam vitae alias perspiciatis inventore quas neque repellendus.',
+            message:
+                'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit architecto dolorem in recusandae facilis voluptas culpa, aliquam explicabo voluptatem officiis beatae, quis, ipsam vitae alias perspiciatis inventore quas neque repellendus.',
             imageUrl: 'https://picsum.photos/150/400',
             writer: {
                 writerId: 1,
@@ -36,7 +38,8 @@ describe('PostsList component test suite', () => {
         {
             postId: 3,
             title: 'Dolor sit',
-            message: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione laudantium sequi ad laboriosam perspiciatis, officia, doloribus aperiam iure qui quos in non saepe? Obcaecati enim animi recusandae quaerat. Aspernatur, ducimus.',
+            message:
+                'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione laudantium sequi ad laboriosam perspiciatis, officia, doloribus aperiam iure qui quos in non saepe? Obcaecati enim animi recusandae quaerat. Aspernatur, ducimus.',
             writer: {
                 writerId: 2,
                 email: 'test2@gmail.com',
@@ -45,8 +48,12 @@ describe('PostsList component test suite', () => {
         },
     ];
 
-    const state = { user: { userId: posts[0].writer.writerId, role: { roleId: 2 }}};
-    const stateAdmin = { user: { userId: posts[0].writer.writerId, role: { roleId: 1 }}};
+    const state = {
+        user: { userId: posts[0].writer.writerId, role: { roleId: 2 } },
+    };
+    const stateAdmin = {
+        user: { userId: posts[0].writer.writerId, role: { roleId: 1 } },
+    };
 
     const mockLike = jest.fn();
     const mockMoreActions = jest.fn();
@@ -63,7 +70,7 @@ describe('PostsList component test suite', () => {
     });
 
     it('should render', () => {
-        render(<PostsList {...props}/>);
+        render(<PostsList {...props} />);
 
         const postsElts = screen.getAllByRole('article');
         expect(postsElts).toHaveLength(posts.length);
@@ -73,18 +80,20 @@ describe('PostsList component test suite', () => {
     });
 
     it('should allow more action if the user owns the posts', () => {
-        render(<PostsList {...props}/>, { preloadedState: state });
+        render(<PostsList {...props} />, { preloadedState: state });
 
         const ownedPost = screen.getByRole('article', { name: posts[0].title });
         getByRole(ownedPost, 'button', { name: /Plus/ });
 
         const otherPost = screen.getByRole('article', { name: posts[1].title });
-        const otherMoreButton = queryByRole(otherPost, 'button', { name: /Plus/ });
+        const otherMoreButton = queryByRole(otherPost, 'button', {
+            name: /Plus/,
+        });
         expect(otherMoreButton).toBeNull();
     });
 
     it('should allow more actions if the user is an admin', () => {
-        render(<PostsList {...props}/>, { preloadedState: stateAdmin });
+        render(<PostsList {...props} />, { preloadedState: stateAdmin });
         const postsElts = screen.getAllByRole('article');
 
         for (const post of postsElts) {
@@ -93,7 +102,7 @@ describe('PostsList component test suite', () => {
     });
 
     it('should be identified as busy', () => {
-        render(<PostsList {...props} busy/>);
+        render(<PostsList {...props} busy />);
         const feedElt = screen.getByRole('feed');
         screen.getByLabelText(/Chargement/);
 
@@ -102,7 +111,7 @@ describe('PostsList component test suite', () => {
 
     it('should be navigable using the keyboard', async () => {
         const user = userEvent.setup();
-        render(<PostsList {...props}/>);
+        render(<PostsList {...props} />);
         const postsElts = screen.getAllByRole('article');
 
         await user.tab();
@@ -141,7 +150,9 @@ describe('PostsList component test suite', () => {
         expect(postsElts[0]).toHaveFocus();
 
         // Focus inside of the elements
-        const likeButtonElt = getByRole(postsElts[0], 'button', { name: /Aimer/ });
+        const likeButtonElt = getByRole(postsElts[0], 'button', {
+            name: /Aimer/,
+        });
         await user.tab();
         expect(likeButtonElt).toHaveFocus();
 
@@ -151,23 +162,31 @@ describe('PostsList component test suite', () => {
     });
 
     it('should have the first post liked by the user', () => {
-        render(<PostsList {...props}/>, { preloadedState: { user: { userId: posts[0].usersLiked[0], roleId: 2 }}});
+        render(<PostsList {...props} />, {
+            preloadedState: {
+                user: { userId: posts[0].usersLiked[0], roleId: 2 },
+            },
+        });
 
         const likedPost = screen.getByRole('article', { name: posts[0].title });
         getByRole(likedPost, 'button', { name: /Ne plus aimer/ });
 
         const otherPost = screen.getByRole('article', { name: posts[1].title });
-        const otherLikeButton = queryByRole(otherPost, 'button', { name: /Ne plus aimer/ });
+        const otherLikeButton = queryByRole(otherPost, 'button', {
+            name: /Ne plus aimer/,
+        });
         expect(otherLikeButton).toBeNull();
         getByRole(otherPost, 'button', { name: /Aimer/ });
     });
 
     it('should pass the like function to the individual posts', async () => {
         const user = userEvent.setup();
-        render(<PostsList {...props}/>);
+        render(<PostsList {...props} />);
 
         const postsElts = screen.getAllByRole('article');
-        const likeButton = getByRole(postsElts[0], 'button', { name: /j'aimes/ });
+        const likeButton = getByRole(postsElts[0], 'button', {
+            name: /j'aimes/,
+        });
 
         await user.click(likeButton);
         expect(mockLike).toHaveBeenCalled();
@@ -175,17 +194,19 @@ describe('PostsList component test suite', () => {
 
     it('should pass the handleMoreActions function to the individual posts', async () => {
         const user = userEvent.setup();
-        render(<PostsList {...props}/>, { preloadedState: state });
+        render(<PostsList {...props} />, { preloadedState: state });
 
         const postsElts = screen.getAllByRole('article');
-        const likeButton = getByRole(postsElts[0], 'button', { name: /actions/ });
+        const likeButton = getByRole(postsElts[0], 'button', {
+            name: /actions/,
+        });
 
         await user.click(likeButton);
         expect(mockMoreActions).toHaveBeenCalled();
     });
 
     it('should have vertical posts', () => {
-        render(<PostsList {...props} vertical/>);
+        render(<PostsList {...props} vertical />);
         const posts = screen.getAllByRole('article');
         for (const post of posts) {
             expect(post).toHaveAttribute('data-vertical');

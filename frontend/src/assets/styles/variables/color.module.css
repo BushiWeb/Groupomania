@@ -59,7 +59,7 @@
     /* Inverse */
     --color-inverse-surface: var(--ref-color-palette-neutral20);
     --color-on-inverse-surface: var(--ref-color-palette-neutral95);
-    --color-inverse-primary:: var(--ref-color-palette-primary80);
+    --color-inverse-primary: var(--ref-color-palette-primary80);
 
     /* Other */
     --color-scrim: var(--ref-color-key-black);
@@ -69,5 +69,5 @@
 
 ::backdrop {
     --color-scrim: var(--ref-color-key-black);
-    --color-scrim-opacity : 0.6;
+    --color-scrim-opacity: 0.6;
 }

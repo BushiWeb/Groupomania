@@ -11,14 +11,20 @@ import { useFocusable } from '../../../hooks/useFocusable';
  * Navigation item for the different navigation elements
  */
 export default function NavigationItem({
-    label, icon, target, active, type, focused, onFocus, ...rest
+    label,
+    icon,
+    target,
+    active,
+    type,
+    focused,
+    onFocus,
+    ...rest
 }) {
     const isOnDark = useSelector(selectIsDarkTheme);
-    const {
-        handlePointerDown,
-        handleKeyDown,
-        stateLayerRef,
-    } = useRipple(350, { onKeyDown: rest.onKeyDown, onPointerDown: rest.onPointerDown });
+    const { handlePointerDown, handleKeyDown, stateLayerRef } = useRipple(350, {
+        onKeyDown: rest.onKeyDown,
+        onPointerDown: rest.onPointerDown,
+    });
 
     const linkRef = useFocusable(focused);
 
@@ -29,30 +35,37 @@ export default function NavigationItem({
         className = style.navigationDrawerItem;
     }
 
-    return <li
-        className={`${style.navigationItem} ${className}`}
-        {...active && { 'data-active': 'true' }}
-        onFocus={onFocus}
-        role="tab"
-        aria-selected={active}
-    >
-        <div className={style.activeIndicator}>
-            <div className={style.stateLayer} ref={stateLayerRef}/>
-        </div>
-
-        <Link
-            to={target}
-            className={style.link}
-            ref={linkRef}
-            onPointerDown={handlePointerDown}
-            onKeyDown={handleKeyDown}
+    return (
+        <li
+            className={`${style.navigationItem} ${className}`}
+            {...(active && { 'data-active': 'true' })}
+            onFocus={onFocus}
+            role="tab"
+            aria-selected={active}
         >
-            <div className={style.icon}>
-                <Icon name={icon} fill={active} isOnDark={isOnDark} size={24}/>
+            <div className={style.activeIndicator}>
+                <div className={style.stateLayer} ref={stateLayerRef} />
             </div>
-            {label}
-        </Link>
-    </li>;
+
+            <Link
+                to={target}
+                className={style.link}
+                ref={linkRef}
+                onPointerDown={handlePointerDown}
+                onKeyDown={handleKeyDown}
+            >
+                <div className={style.icon}>
+                    <Icon
+                        name={icon}
+                        fill={active}
+                        isOnDark={isOnDark}
+                        size={24}
+                    />
+                </div>
+                {label}
+            </Link>
+        </li>
+    );
 }
 
 NavigationItem.defaultProps = {

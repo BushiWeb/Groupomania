@@ -7,8 +7,10 @@
         );
         --icon-fill: var(--icon-font-fill, 0);
 
-        font-variation-settings: 'FILL' var(--icon-fill),
-            'GRAD' var(--icon-grad), 'opsz' var(--icon-optical-size);
+        font-variation-settings:
+            'FILL' var(--icon-fill),
+            'GRAD' var(--icon-grad),
+            'opsz' var(--icon-optical-size);
         font-weight: var(--icon-weight);
 
         font-size: var(--icon-size);

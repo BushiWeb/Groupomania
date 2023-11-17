@@ -23,15 +23,15 @@ root.render(
                     <ThemeSwitcher>
                         <BreakpointContext>
                             <BrowserRouter>
-                                <ResponsiveRoutes/>
+                                <ResponsiveRoutes />
                             </BrowserRouter>
                         </BreakpointContext>
                     </ThemeSwitcher>
                 </TooltipWrapper>
             </React.StrictMode>
         </Provider>
-        <ReactQueryDevtools initialIsOpen={false}/>
-    </QueryClientProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>,
 );
 
 // If you want to start measuring performance in your app, pass a function

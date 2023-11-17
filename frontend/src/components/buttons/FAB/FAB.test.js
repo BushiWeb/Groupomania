@@ -61,7 +61,9 @@ describe('FAB component test suite', () => {
 
     it('should trigger the ripple effect when activated', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
         render(<FAB>{label}</FAB>);
         const buttonElt = screen.getByRole('button');
         const stateLayer = buttonElt.querySelector('.stateLayer');
@@ -75,7 +77,6 @@ describe('FAB component test suite', () => {
         expect(stateLayer).toHaveClass('ripple');
         fakeTimers.runAllTimers();
         expect(stateLayer).not.toHaveClass('ripple');
-
 
         await user.keyboard('{Enter}');
         expect(stateLayer).toHaveClass('ripple');
@@ -131,7 +132,7 @@ describe('FAB component test suite', () => {
     });
 
     it('should have an icon and no text', () => {
-        const { container } = render(<FAB icon="favorite" label={label}/>);
+        const { container } = render(<FAB icon="favorite" label={label} />);
         const iconElt = container.querySelector('span.material-icon');
         const buttonElt = screen.getByRole('button', { name: label });
 
@@ -140,14 +141,14 @@ describe('FAB component test suite', () => {
     });
 
     it('should be lowered', () => {
-        render(<FAB icon="favorite" label={label} low={true}/>);
+        render(<FAB icon="favorite" label={label} low={true} />);
         const buttonElt = screen.getByRole('button', { name: label });
 
         expect(buttonElt).toHaveAttribute('data-low');
     });
 
     it('should not be lowered', () => {
-        render(<FAB icon="favorite" label={label}/>);
+        render(<FAB icon="favorite" label={label} />);
         const buttonElt = screen.getByRole('button', { name: label });
 
         expect(buttonElt).not.toHaveAttribute('data-low');

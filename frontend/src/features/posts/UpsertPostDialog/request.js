@@ -1,12 +1,14 @@
 import { simpleFetch } from '../../../utils/fetch.js';
 
 export const ERROR_MESSAGES = {
-    requiredTitle: 'L\'email est obligatoire',
+    requiredTitle: "L'email est obligatoire",
     requiredMessage: 'Le mot de passe est obligatoire',
-    requiredImage: 'L\'image est obligatoire',
-    wrongImageFormat: 'Le fichier doit être une image au format png, jpeg, webp ou avif',
-    forbiddenAction: 'Vous n\'avez pas les droits pour modifier ce post',
-    notFound: 'Le post que vous souhaitez modifier ne peut pas être trouvé. Il se peut qu\'il soit supprimé.',
+    requiredImage: "L'image est obligatoire",
+    wrongImageFormat:
+        'Le fichier doit être une image au format png, jpeg, webp ou avif',
+    forbiddenAction: "Vous n'avez pas les droits pour modifier ce post",
+    notFound:
+        "Le post que vous souhaitez modifier ne peut pas être trouvé. Il se peut qu'il soit supprimé.",
 };
 
 const ALLOWED_TYPES = [
@@ -35,7 +37,11 @@ const ALLOWED_TYPES = [
 export function validatePostData({
     title: { required: titleRequired = true, value: title },
     message: { required: messageRequired = true, value: message },
-    image: { required: imageRequired = false, format: imageFormat = true, value: image },
+    image: {
+        required: imageRequired = false,
+        format: imageFormat = true,
+        value: image,
+    },
 }) {
     const errors = {};
 
@@ -72,12 +78,10 @@ export function validatePostData({
  *  Ignored if the image property is given.
  * @returns {Object|FormData}
  */
-function generateRequestData({
-    title, message, image, deleteImage,
-}) {
+function generateRequestData({ title, message, image, deleteImage }) {
     let data = {
-        ...title && { title },
-        ...message && { message },
+        ...(title && { title }),
+        ...(message && { message }),
     };
 
     if (image instanceof File) {
@@ -146,24 +150,24 @@ export async function handleCreatePostRequestError(error) {
     const errorMessages = {};
 
     switch (error.status) {
-    case 400:
-        if (/required file/.test(requestError.error?.message)) {
-            return { image: ERROR_MESSAGES.requiredImage };
-        }
-        if (!requestError.error?.details) {
-            throw new Error('Unhandled 400 error type');
-        }
-        break;
-    case 401:
-        throw new Error('Unauthorized');
-    case 403:
-        return { global: ERROR_MESSAGES.forbiddenAction };
-    case 404:
-        return { global: ERROR_MESSAGES.notFound };
-    case 415:
-        return { image: ERROR_MESSAGES.wrongImageFormat };
-    default:
-        throw new Error('Unhandled error status');
+        case 400:
+            if (/required file/.test(requestError.error?.message)) {
+                return { image: ERROR_MESSAGES.requiredImage };
+            }
+            if (!requestError.error?.details) {
+                throw new Error('Unhandled 400 error type');
+            }
+            break;
+        case 401:
+            throw new Error('Unauthorized');
+        case 403:
+            return { global: ERROR_MESSAGES.forbiddenAction };
+        case 404:
+            return { global: ERROR_MESSAGES.notFound };
+        case 415:
+            return { image: ERROR_MESSAGES.wrongImageFormat };
+        default:
+            throw new Error('Unhandled error status');
     }
 
     for (const fieldError of requestError.error.details) {

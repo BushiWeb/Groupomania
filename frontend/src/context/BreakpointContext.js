@@ -55,7 +55,9 @@ export default function BreakpointContext({ children }) {
         };
     }, []);
 
-    return <breakpointContext.Provider value={breakpoint}>
-        {children}
-    </breakpointContext.Provider>;
+    return (
+        <breakpointContext.Provider value={breakpoint}>
+            {children}
+        </breakpointContext.Provider>
+    );
 }

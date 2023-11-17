@@ -16,9 +16,7 @@ export function useAutoLogin(target) {
     const redirect = useNavigate();
     const store = useStore();
 
-    const {
-        mutate: loginMutate, isError: loginError,
-    } = useMutation({
+    const { mutate: loginMutate, isError: loginError } = useMutation({
         mutationFn: async () => {
             return simpleFetch({
                 url: '/data/login',
@@ -36,7 +34,6 @@ export function useAutoLogin(target) {
         }
 
         loginMutate();
-
     }, [isAuthenticated, redirect, loginMutate, target]);
 
     return loginError;

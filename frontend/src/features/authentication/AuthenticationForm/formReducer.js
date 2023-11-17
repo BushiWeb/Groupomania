@@ -23,60 +23,61 @@ export const initialState = {
 
 export function reducer(state, action) {
     switch (action.type) {
-    case ACTIONS.setEmail:
-        return {
-            ...state,
-            email: action.payload,
-        };
-    case ACTIONS.setEmailError:
-        return {
-            ...state,
-            emailError: action.payload,
-        };
-    case ACTIONS.removeEmailError:
-        return {
-            ...state,
-            emailError: undefined,
-        };
-    case ACTIONS.setPassword:
-        return {
-            ...state,
-            password: action.payload,
-        };
-    case ACTIONS.setPasswordError:
-        return {
-            ...state,
-            passwordError: action.payload,
-        };
-    case ACTIONS.removePasswordError:
-        return {
-            ...state,
-            passwordError: undefined,
-        };
-    case ACTIONS.setRememberMe:
-        return {
-            ...state,
-            rememberMe: action.payload,
-        };
-    case ACTIONS.setGlobalError:
-        return {
-            ...state,
-            globalError: action.payload,
-        };
-    case ACTIONS.removeGlobalError:
-        return {
-            ...state,
-            globalError: undefined,
-        };
-    case ACTIONS.removeErrors:
-        return {
-            ...state,
-            globalError: undefined,
-            passwordError: undefined,
-            emailError: undefined,
-        };
-    case ACTIONS.reset:
-        return initialState;
-    default: return state;
+        case ACTIONS.setEmail:
+            return {
+                ...state,
+                email: action.payload,
+            };
+        case ACTIONS.setEmailError:
+            return {
+                ...state,
+                emailError: action.payload,
+            };
+        case ACTIONS.removeEmailError:
+            return {
+                ...state,
+                emailError: undefined,
+            };
+        case ACTIONS.setPassword:
+            return {
+                ...state,
+                password: action.payload,
+            };
+        case ACTIONS.setPasswordError:
+            return {
+                ...state,
+                passwordError: action.payload,
+            };
+        case ACTIONS.removePasswordError:
+            return {
+                ...state,
+                passwordError: undefined,
+            };
+        case ACTIONS.setRememberMe:
+            return {
+                ...state,
+                rememberMe: action.payload,
+            };
+        case ACTIONS.setGlobalError:
+            return {
+                ...state,
+                globalError: action.payload,
+            };
+        case ACTIONS.removeGlobalError:
+            return {
+                ...state,
+                globalError: undefined,
+            };
+        case ACTIONS.removeErrors:
+            return {
+                ...state,
+                globalError: undefined,
+                passwordError: undefined,
+                emailError: undefined,
+            };
+        case ACTIONS.reset:
+            return initialState;
+        default:
+            return state;
     }
 }

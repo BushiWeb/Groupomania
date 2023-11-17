@@ -18,33 +18,34 @@ export default function TopAppBar({
     children,
     ...props
 }) {
-    return <header
-        className={`${style.topAppBar} ${className}`}
-        data-type={type}
-        {...navigationArrowTarget && navigationArrowLabel && { 'data-navigation': true }}
-        {...actions && { 'data-actions': true }}
-        {...props}
-    >
-        {hiddenLinkTargetId && <HiddenNavigationLink target={hiddenLinkTargetId}>
-            Accéder directement au contenu
-        </HiddenNavigationLink>}
+    return (
+        <header
+            className={`${style.topAppBar} ${className}`}
+            data-type={type}
+            {...(navigationArrowTarget &&
+                navigationArrowLabel && { 'data-navigation': true })}
+            {...(actions && { 'data-actions': true })}
+            {...props}
+        >
+            {hiddenLinkTargetId && (
+                <HiddenNavigationLink target={hiddenLinkTargetId}>
+                    Accéder directement au contenu
+                </HiddenNavigationLink>
+            )}
 
-        {
-            navigationArrowTarget &&
-            navigationArrowLabel &&
-            <NavigationArrowButton
-                to={navigationArrowTarget}
-                label={navigationArrowLabel}
-                state={navigationArrowState}
-            />
-        }
+            {navigationArrowTarget && navigationArrowLabel && (
+                <NavigationArrowButton
+                    to={navigationArrowTarget}
+                    label={navigationArrowLabel}
+                    state={navigationArrowState}
+                />
+            )}
 
-        <div className={style.content}>
-            {children}
-        </div>
+            <div className={style.content}>{children}</div>
 
-        {actions && <Actions actions={actions}/>}
-    </header>;
+            {actions && <Actions actions={actions} />}
+        </header>
+    );
 }
 
 TopAppBar.defaultProps = {
@@ -69,11 +70,13 @@ TopAppBar.propTypes = {
     hiddenLinkTargetId: PropTypes.string,
 
     /* Other actions to add, if there is more than 3 actions, the last ones will be in a menu */
-    actions: PropTypes.arrayOf(PropTypes.exact({
-        label: PropTypes.string.isRequired,
-        onClick: PropTypes.func.isRequired,
-        icon: PropTypes.string.isRequired,
-    })),
+    actions: PropTypes.arrayOf(
+        PropTypes.exact({
+            label: PropTypes.string.isRequired,
+            onClick: PropTypes.func.isRequired,
+            icon: PropTypes.string.isRequired,
+        }),
+    ),
 
     /* Additional classnames */
     className: PropTypes.string,

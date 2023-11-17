@@ -11,5 +11,4 @@ export default function loggingMiddelwareLoader(app) {
 
     app.use(morganMiddleware);
     loaderLogger.debug('Morgan logging middleware added');
-
 }

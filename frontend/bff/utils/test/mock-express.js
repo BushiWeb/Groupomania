@@ -6,13 +6,16 @@ function Session() {
     };
 }
 
-export const mockRequest = (body = {}, { contentType, authorization, crsfToken } = {}) => {
+export const mockRequest = (
+    body = {},
+    { contentType, authorization, crsfToken } = {},
+) => {
     const req = {
         body,
         headers: {
-            ...contentType && { 'content-type': contentType },
-            ...authorization && { 'authorization': authorization },
-            ...crsfToken && { 'x-crsf-token': authorization },
+            ...(contentType && { 'content-type': contentType }),
+            ...(authorization && { authorization: authorization }),
+            ...(crsfToken && { 'x-crsf-token': authorization }),
         },
         query: {},
         params: {},

@@ -8,7 +8,8 @@ const stream = {
     write: (message) => httpLogger.http(message),
 };
 
-const logFormat = ':remote-addr - :remote-user [:date[web]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time ms';
+const logFormat =
+    ':remote-addr - :remote-user [:date[web]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time ms';
 
 const morganMiddleware = morgan(logFormat, { stream });
 

@@ -10,7 +10,7 @@ describe('Logo component test suite', () => {
     const target = '/test';
 
     it('should render', () => {
-        render(<Logo/>);
+        render(<Logo />);
     });
 
     it('should have the right label if it is a link', () => {
@@ -25,41 +25,41 @@ describe('Logo component test suite', () => {
     });
 
     it('should render the monochrome logo', () => {
-        render(<Logo/>);
+        render(<Logo />);
         const logo = screen.getByRole('img');
         expect(logo.src).toMatch(/(black|white)/);
     });
 
     it('should render the image with the default dimensions', () => {
-        render(<Logo/>);
+        render(<Logo />);
         const logo = screen.getByRole('img');
         expect(logo.width).toBe(136);
         expect(logo.height).toBe(25);
     });
 
     it('should render the image with the given dimensions', () => {
-        render(<Logo width={100} height={100}/>);
+        render(<Logo width={100} height={100} />);
         const logo = screen.getByRole('img');
         expect(logo.width).toBe(100);
         expect(logo.height).toBe(100);
     });
 
     it('should render the image with the given width and the right proportions', () => {
-        render(<Logo width={100}/>);
+        render(<Logo width={100} />);
         const logo = screen.getByRole('img');
         expect(logo.width).toBe(100);
         expect(logo.height).toBe(18);
     });
 
     it('should render the image with the given width and the right proportions', () => {
-        render(<Logo height={100}/>);
+        render(<Logo height={100} />);
         const logo = screen.getByRole('img');
         expect(logo.height).toBe(100);
         expect(logo.width).toBe(544);
     });
 
     it('should render the right monochrome logo depending on the theme', () => {
-        const { store } = render(<Logo/>);
+        const { store } = render(<Logo />);
         const logo = screen.getByRole('img');
         expect(logo.src).toMatch(/black/);
         act(() => {

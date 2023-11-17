@@ -11,7 +11,7 @@ describe('SimpleIconButton component test suite', () => {
     const name = 'favorite';
 
     it('should render', () => {
-        render(<SimpleIconButton name={name} label={label}/>);
+        render(<SimpleIconButton name={name} label={label} />);
         const buttonElt = screen.getByRole('button', { name: label });
         expect(buttonElt).toHaveTextContent(name);
         expect(buttonElt).not.toHaveAttribute('aria-pressed');
@@ -20,7 +20,13 @@ describe('SimpleIconButton component test suite', () => {
     it('should execute the action when clicked', async () => {
         const buttonAction = jest.fn(() => true);
         const user = userEvent.setup();
-        render(<SimpleIconButton name={name} label={label} onClick={buttonAction}/>);
+        render(
+            <SimpleIconButton
+                name={name}
+                label={label}
+                onClick={buttonAction}
+            />,
+        );
 
         const buttonElt = screen.getByRole('button');
 
@@ -32,7 +38,13 @@ describe('SimpleIconButton component test suite', () => {
     it('should be accessible using the keyboard', async () => {
         const buttonAction = jest.fn(() => true);
         const user = userEvent.setup();
-        render(<SimpleIconButton name={name} label={label} onClick={buttonAction}/>);
+        render(
+            <SimpleIconButton
+                name={name}
+                label={label}
+                onClick={buttonAction}
+            />,
+        );
         const buttonElt = screen.getByRole('button');
 
         expect(buttonElt).not.toHaveFocus();
@@ -50,19 +62,26 @@ describe('SimpleIconButton component test suite', () => {
     });
 
     it('should have the initial focus', () => {
-        render(<SimpleIconButton name={name} label={label} autoFocus={true}/>);
+        render(<SimpleIconButton name={name} label={label} autoFocus={true} />);
         const buttonElt = screen.getByRole('button');
         expect(buttonElt).toHaveFocus();
     });
 
     it('should be disabled', () => {
-        render(<SimpleIconButton name={name} label={label} disabled={true}/>);
+        render(<SimpleIconButton name={name} label={label} disabled={true} />);
         const buttonElt = screen.getByRole('button');
         expect(buttonElt).toBeDisabled();
     });
 
-    it('should be disabled and don\'t have the focus', () => {
-        render(<SimpleIconButton name={name} label={label} disabled={true} autoFocus={true}/>);
+    it("should be disabled and don't have the focus", () => {
+        render(
+            <SimpleIconButton
+                name={name}
+                label={label}
+                disabled={true}
+                autoFocus={true}
+            />,
+        );
         const buttonElt = screen.getByRole('button');
         expect(buttonElt).toBeDisabled();
         expect(buttonElt).not.toHaveFocus();
@@ -70,8 +89,12 @@ describe('SimpleIconButton component test suite', () => {
 
     it('should display a tooltip when hovered', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        const { container } = render(<SimpleIconButton name={name} label={label}/>);
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
+        const { container } = render(
+            <SimpleIconButton name={name} label={label} />,
+        );
         const buttonElt = screen.getByRole('button', { name: label });
 
         await user.hover(buttonElt);
@@ -85,25 +108,33 @@ describe('SimpleIconButton component test suite', () => {
 
     it('should add any other prop passed to it', () => {
         const description = 'lorem';
-        render(<SimpleIconButton name={name} label={label} aria-describedby={description}/>);
+        render(
+            <SimpleIconButton
+                name={name}
+                label={label}
+                aria-describedby={description}
+            />,
+        );
         const buttonElt = screen.getByRole('button');
         expect(buttonElt.getAttribute('aria-describedby')).toBe(description);
     });
 
     it('should be activated', () => {
-        render(<SimpleIconButton name={name} label={label} toggle={true}/>);
+        render(<SimpleIconButton name={name} label={label} toggle={true} />);
         const buttonElt = screen.getByRole('button', { name: label });
         expect(buttonElt).toHaveAttribute('aria-pressed', 'true');
     });
 
     it('should not be activated', () => {
-        render(<SimpleIconButton name={name} label={label} toggle={false}/>);
+        render(<SimpleIconButton name={name} label={label} toggle={false} />);
         const buttonElt = screen.getByRole('button', { name: label });
         expect(buttonElt).toHaveAttribute('aria-pressed', 'false');
     });
 
     it('should have no state layer', () => {
-        const { container } = render(<SimpleIconButton name={name} label={label}/>);
+        const { container } = render(
+            <SimpleIconButton name={name} label={label} />,
+        );
         const stateLayerElt = container.querySelector('.stateLayer');
         expect(stateLayerElt).toBeNull();
     });

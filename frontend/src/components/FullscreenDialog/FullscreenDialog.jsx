@@ -28,29 +28,44 @@ export default function FullscreenDialog({
 }) {
     const largeScreen = useBreakpoint() > BP_ID.compact;
 
-    return <FullscreenDialogContext.Provider value={largeScreen}>
-        <Dialog
-            label={label}
-            className={!largeScreen ? style.fullscreenDialog : `${style.largeScreenDialog} ${largeScreenClassname}`}
-            onClose={onClose}
-            onCancel={onCancel}
-            open={open}
-            {...props}
-        >
-            <FullscreenDialogHeader actionButton={acceptButton} closeButton={closeButton}>
-                <FullscreenDialogHeadline>{headline}</FullscreenDialogHeadline>
-            </FullscreenDialogHeader>
+    return (
+        <FullscreenDialogContext.Provider value={largeScreen}>
+            <Dialog
+                label={label}
+                className={
+                    !largeScreen ?
+                        style.fullscreenDialog
+                    :   `${style.largeScreenDialog} ${largeScreenClassname}`
+                }
+                onClose={onClose}
+                onCancel={onCancel}
+                open={open}
+                {...props}
+            >
+                <FullscreenDialogHeader
+                    actionButton={acceptButton}
+                    closeButton={closeButton}
+                >
+                    <FullscreenDialogHeadline>
+                        {headline}
+                    </FullscreenDialogHeadline>
+                </FullscreenDialogHeader>
 
-            <DialogContent className={`${!largeScreen ? style.content : ''} ${contentClassName}`}>
-                {children}
-            </DialogContent>
+                <DialogContent
+                    className={`${
+                        !largeScreen ? style.content : ''
+                    } ${contentClassName}`}
+                >
+                    {children}
+                </DialogContent>
 
-            <FullscreenDialogActions>
-                {dismissButton}
-                {acceptButton}
-            </FullscreenDialogActions>
-        </Dialog>
-    </FullscreenDialogContext.Provider>;
+                <FullscreenDialogActions>
+                    {dismissButton}
+                    {acceptButton}
+                </FullscreenDialogActions>
+            </Dialog>
+        </FullscreenDialogContext.Provider>
+    );
 }
 
 FullscreenDialog.defaultProps = {

@@ -45,8 +45,9 @@ export default function Snackbar() {
         return;
     }
 
-    return <div
-        className={style.snackbar}
-        role='alert'
-    >{message}</div>;
+    return (
+        <div className={style.snackbar} role="alert">
+            {message}
+        </div>
+    );
 }

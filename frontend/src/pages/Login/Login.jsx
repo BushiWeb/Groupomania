@@ -12,20 +12,23 @@ export const PAGE_NAME = 'Login';
 export default function Login() {
     useSetNavigationInfo(PAGE_NAME);
     const { state } = useLocation();
-    const nextPage = state ? `${state.pathname}${state.search}${state.hash}` : '/';
+    const nextPage =
+        state ? `${state.pathname}${state.search}${state.hash}` : '/';
     const authenticationError = useAutoLogin(nextPage);
     let content;
 
     useChangePageTitle('Groupomania - Login');
 
     if (authenticationError) {
-        content = <AuthenticationForm/>;
-
+        content = <AuthenticationForm />;
     } else {
-        content = <ProgressIndicator circular label="Tentative de connexion, veuillez patienter" />;
+        content = (
+            <ProgressIndicator
+                circular
+                label="Tentative de connexion, veuillez patienter"
+            />
+        );
     }
 
-    return <main className={style.login}>
-        {content}
-    </main>;
+    return <main className={style.login}>{content}</main>;
 }

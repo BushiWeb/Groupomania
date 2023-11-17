@@ -14,20 +14,17 @@ import { simpleFetch } from '../../../utils/fetch.js';
  *   }}
  */
 export function useInfiniteUserList(containerElt) {
-    const {
-        data,
-        isFetchingNextPage,
-        isLoading,
-        isError,
-        error,
-    } = useInfiniteScroll(
-        containerElt,
-        ['users'],
-        async ({ pageParam = 1 }) => {
-            const data = await simpleFetch({ url: `/data/users?page=${pageParam}` });
-            return { data, pageParam };
-        }
-    );
+    const { data, isFetchingNextPage, isLoading, isError, error } =
+        useInfiniteScroll(
+            containerElt,
+            ['users'],
+            async ({ pageParam = 1 }) => {
+                const data = await simpleFetch({
+                    url: `/data/users?page=${pageParam}`,
+                });
+                return { data, pageParam };
+            },
+        );
 
     useHandleRequestError(isError, error);
 
@@ -38,5 +35,4 @@ export function useInfiniteUserList(containerElt) {
         isError,
         error,
     };
-
 }

@@ -1,5 +1,9 @@
 import Dialog, {
-    DialogAction, DialogActions, DialogContent, DialogHeader, DialogHeadline,
+    DialogAction,
+    DialogActions,
+    DialogContent,
+    DialogHeader,
+    DialogHeadline,
 } from '../../../components/Dialog';
 import UpdateUserRoleForm from './UpdateUserRoleForm';
 import RequestLoader from './RequestLoader';
@@ -19,13 +23,12 @@ export default function UpdateUserRoleDialog({
         isLoading,
         data,
         dispatch,
-        dialogActions: {
-            cancel,
-            save,
-        },
+        dialogActions: { cancel, save },
     } = useUpdateUserRoleDialog(setIsOpen, { userId, roleId: userRoleId });
 
-    const acceptButton = <DialogAction onClick={save}>Sauvegarder</DialogAction>;
+    const acceptButton = (
+        <DialogAction onClick={save}>Sauvegarder</DialogAction>
+    );
     const dismissButton = <DialogAction onClick={cancel}>Annuler</DialogAction>;
 
     return (
@@ -35,15 +38,21 @@ export default function UpdateUserRoleDialog({
                 setIsOpen(false);
             }}
             label={`Modifier le role de l'utilisateur ${userEmail}`}
-            {...isLoading && { inert: 'true' }}
+            {...(isLoading && { inert: 'true' })}
         >
             <DialogHeader>
                 <DialogHeadline>Modification du rôle</DialogHeadline>
             </DialogHeader>
             <DialogContent className={style.content}>
-                <RequestLoader isLoading={isLoading}/>
-                <p>Modifier le rôle de l'utilisateur <em>{userEmail}</em></p>
-                <UpdateUserRoleForm {...data} isLoading={isLoading} dispatch={dispatch}/>
+                <RequestLoader isLoading={isLoading} />
+                <p>
+                    Modifier le rôle de l'utilisateur <em>{userEmail}</em>
+                </p>
+                <UpdateUserRoleForm
+                    {...data}
+                    isLoading={isLoading}
+                    dispatch={dispatch}
+                />
             </DialogContent>
             <DialogActions>
                 {dismissButton}

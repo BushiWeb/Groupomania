@@ -14,7 +14,6 @@ import { MulterError } from 'multer';
 
 const errorLogger = createLoggerNamespace('groupomania:bff:error');
 
-
 /**
  * Handles express' http-error normalization.
  * @param err - Express error to normalize.
@@ -28,24 +27,30 @@ function normalizeExpressError(err) {
      * These details will be sent to the user if the status is amongst the 400 errors, and only logged otherwise.
      */
     const details = {
-        ...err.type && { type: err.type },
-        ...err.body && { body: err.body },
-        ...err.charset && { charset: err.charset },
-        ...err.received && { bytesReceivedNb: err.received },
-        ...err.expected && { bytesExpectedNb: err.expected },
-        ...err.limit && { maxSize: err.limit },
-        ...err.length && { bodySize: err.length },
+        ...(err.type && { type: err.type }),
+        ...(err.body && { body: err.body }),
+        ...(err.charset && { charset: err.charset }),
+        ...(err.received && { bytesReceivedNb: err.received }),
+        ...(err.expected && { bytesExpectedNb: err.expected }),
+        ...(err.limit && { maxSize: err.limit }),
+        ...(err.length && { bodySize: err.length }),
     };
 
-    return new HttpError({
-        message: err.message,
-        name: err.name,
-        title: err.expose ? err.message : 'We had a problem while processing your request. You may try again. If the problem persists, don\'t hesitate to contact us.',
-        statusCode: err.statusCode,
-        ...err.statusCode < 500 ? { details } : { logData: details },
-    }, err, err.headers);
+    return new HttpError(
+        {
+            message: err.message,
+            name: err.name,
+            title:
+                err.expose ?
+                    err.message
+                :   "We had a problem while processing your request. You may try again. If the problem persists, don't hesitate to contact us.",
+            statusCode: err.statusCode,
+            ...(err.statusCode < 500 ? { details } : { logData: details }),
+        },
+        err,
+        err.headers,
+    );
 }
-
 
 /**
  * Handles Multer errors normalization.
@@ -56,33 +61,46 @@ function normalizeMulterError(err) {
     errorLogger.debug('MulterError normalization');
 
     if (err.code === 'LIMIT_FIELD_VALUE') {
-        return new PayloadTooLargeError({
-            message: err.message,
-            details: {
-                maxPayloadSize: `${config.get('payload.maxSize')} bytes`,
+        return new PayloadTooLargeError(
+            {
+                message: err.message,
+                details: {
+                    maxPayloadSize: `${config.get('payload.maxSize')} bytes`,
+                },
             },
-        }, err);
+            err,
+        );
     }
 
     if (err.code === 'LIMIT_FILE_SIZE') {
-        return new PayloadTooLargeError({
-            message: err.message,
-            title: 'The file is too large.',
-            description: 'We couldn\'t handle the request because of the file size. Please, reduce compress your file before trying again. The maximum file size is in the details.',
-            details: {
-                maxFileSize: `${config.get('payload.files.maxFileSize')} bytes`,
+        return new PayloadTooLargeError(
+            {
+                message: err.message,
+                title: 'The file is too large.',
+                description:
+                    "We couldn't handle the request because of the file size. Please, reduce compress your file before trying again. The maximum file size is in the details.",
+                details: {
+                    maxFileSize: `${config.get(
+                        'payload.files.maxFileSize',
+                    )} bytes`,
+                },
             },
-        }, err);
+            err,
+        );
     }
 
-    return new UserInputValidationError({
-        message: err.message,
-        title: 'The request\'s body is invalid.',
-        description: 'We are having trouble processing the request\'s body. You will find more informations in the details. Please, fix the issue and try again.',
-        details: {
-            errorDetail: err.message,
+    return new UserInputValidationError(
+        {
+            message: err.message,
+            title: "The request's body is invalid.",
+            description:
+                "We are having trouble processing the request's body. You will find more informations in the details. Please, fix the issue and try again.",
+            details: {
+                errorDetail: err.message,
+            },
         },
-    }, err);
+        err,
+    );
 }
 
 /**
@@ -93,23 +111,32 @@ function normalizeMulterError(err) {
 function normalizeAxiosErrors(err) {
     errorLogger.debug('Axios error normalization');
 
-    if (err.response && [400, 401, 403, 404, 409].includes(err.response.data.error.statusCode)) {
+    if (
+        err.response &&
+        [400, 401, 403, 404, 409].includes(err.response.data.error.statusCode)
+    ) {
         const error = err.response.data.error;
-        return new HttpError({
-            message: error.title,
-            name: error.type,
-            title: error.title,
-            description: error.message,
-            details: error.details,
-            statusCode: error.statusCode,
-        }, err);
+        return new HttpError(
+            {
+                message: error.title,
+                name: error.type,
+                title: error.title,
+                description: error.message,
+                details: error.details,
+                statusCode: error.statusCode,
+            },
+            err,
+        );
     }
 
-    return new InternalServerError({
-        message: err.message,
-        originalName: err.name,
-        ...err.response && { originalError: err.response.data },
-    }, err);
+    return new InternalServerError(
+        {
+            message: err.message,
+            originalName: err.name,
+            ...(err.response && { originalError: err.response.data }),
+        },
+        err,
+    );
 }
 
 /**
@@ -134,30 +161,48 @@ export function errorNormalizer(err, req, res, next) {
 
     // Express' errors handling
     if (createError.isHttpError(err)) {
-        return next(normalizeExpressError(err).setRequestInformations(req.originalUrl, req.method));
+        return next(
+            normalizeExpressError(err).setRequestInformations(
+                req.originalUrl,
+                req.method,
+            ),
+        );
     }
 
     // Axios' errors handling
     if (err instanceof AxiosError) {
-        return next(normalizeAxiosErrors(err).setRequestInformations(req.originalUrl, req.method));
+        return next(
+            normalizeAxiosErrors(err).setRequestInformations(
+                req.originalUrl,
+                req.method,
+            ),
+        );
     }
 
     // Multer's errors handling
     if (err instanceof MulterError) {
-        return next(normalizeMulterError(err).setRequestInformations(req.originalUrl, req.method));
+        return next(
+            normalizeMulterError(err).setRequestInformations(
+                req.originalUrl,
+                req.method,
+            ),
+        );
     }
 
     // Normalize other errors
     errorLogger.debug('Generic error, normalizing');
-    next(new InternalServerError({
-        message: err.message,
-        path: req.originalUrl,
-        method: req.method,
-        originalName: err.name,
-    }, err));
-
+    next(
+        new InternalServerError(
+            {
+                message: err.message,
+                path: req.originalUrl,
+                method: req.method,
+                originalName: err.name,
+            },
+            err,
+        ),
+    );
 }
-
 
 /**
  * Error handler, generates and sends the error response.
@@ -175,17 +220,19 @@ export function errorHandler(err, req, res, next) {
         errorLogger.error(err.getErrorLogInformations());
     } else {
         errorLogger.debug('Unparsed error');
-        const error = new InternalServerError({
-            message: err.message,
-            path: req.originalUrl,
-            method: req.method,
-            originalName: err.name,
-        }, err);
+        const error = new InternalServerError(
+            {
+                message: err.message,
+                path: req.originalUrl,
+                method: req.method,
+                originalName: err.name,
+            },
+            err,
+        );
         res.status(500).json(error.getErrorResponse());
         errorLogger.error(error.getErrorLogInformations());
     }
 }
-
 
 /**
  * Middleware:
@@ -206,20 +253,25 @@ export function unHandledRequestHandler(req, res, next) {
 
     // Test if the route was defined or not
     const routesRegexp = req.app.get('routes-regexp');
-    const unprocessableUrl = routesRegexp.every((regexp) => !regexp.test(originalUrl));
-
+    const unprocessableUrl = routesRegexp.every(
+        (regexp) => !regexp.test(originalUrl),
+    );
 
     let error;
     if (unprocessableUrl) {
-        errorLogger.debug(`The route ${req.originalUrl} is not defined in the application.`);
+        errorLogger.debug(
+            `The route ${req.originalUrl} is not defined in the application.`,
+        );
         error = new NotFoundError({
-            message: 'The request path isn\'t defined in the API.',
-            title: 'The request you sent can\'t be processed.',
-            description: 'We have a problem understanding your request. You may check the documentation to see which path we understand, and try again.',
+            message: "The request path isn't defined in the API.",
+            title: "The request you sent can't be processed.",
+            description:
+                'We have a problem understanding your request. You may check the documentation to see which path we understand, and try again.',
         });
-
     } else {
-        errorLogger.debug(`The method ${req.method} is not accepted with the route ${req.originalUrl}`);
+        errorLogger.debug(
+            `The method ${req.method} is not accepted with the route ${req.originalUrl}`,
+        );
         error = new MethodNotAllowedError({
             message: `The method ${req.method} can't be used on the path ${req.originalUrl}`,
         });

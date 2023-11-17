@@ -35,23 +35,29 @@ export default class InternalServerError extends HttpError {
             ...otherData
         },
         cause,
-        headers = {}
+        headers = {},
     ) {
         const statusCode = 500;
         const name = 'InternalServerError';
         const title = optionnalTitle || 'We encoutered an unexpected error.';
-        const description = optionnalDescription || 'We had a problem while processing your request. You may try again. If the problem persists, don\'t hesitate to contact us.';
-        super({
-            message,
-            name,
-            title,
-            description,
-            details,
-            logDetails,
-            statusCode,
-            path,
-            method,
-            ...otherData,
-        }, cause, headers);
+        const description =
+            optionnalDescription ||
+            "We had a problem while processing your request. You may try again. If the problem persists, don't hesitate to contact us.";
+        super(
+            {
+                message,
+                name,
+                title,
+                description,
+                details,
+                logDetails,
+                statusCode,
+                path,
+                method,
+                ...otherData,
+            },
+            cause,
+            headers,
+        );
     }
 }

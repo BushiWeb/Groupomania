@@ -7,7 +7,9 @@ import { FullscreenDialogContext } from './FullscreenDialogContext';
  * Fullscreen modal actions. Disappear on small screens.
  */
 export default function FullscreenDialogActions({
-    className, children, ...props
+    className,
+    children,
+    ...props
 }) {
     const largeScreen = useContext(FullscreenDialogContext);
 
@@ -15,9 +17,11 @@ export default function FullscreenDialogActions({
         return;
     }
 
-    return <DialogActions className={className} {...props}>
-        {children}
-    </DialogActions>;
+    return (
+        <DialogActions className={className} {...props}>
+            {children}
+        </DialogActions>
+    );
 }
 
 FullscreenDialogActions.defaultProps = {

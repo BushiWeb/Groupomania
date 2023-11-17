@@ -1,8 +1,9 @@
-import {
-    useLayoutEffect, useRef, useState,
-} from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { useClickOutsideModal } from '../../hooks/useClickOutside.js';
-import { NO_CONTROL, useArrowNavigation } from '../../hooks/useArrowNavigation.js';
+import {
+    NO_CONTROL,
+    useArrowNavigation,
+} from '../../hooks/useArrowNavigation.js';
 
 /**
  * Hook providing the logic for the menu
@@ -28,26 +29,20 @@ import { NO_CONTROL, useArrowNavigation } from '../../hooks/useArrowNavigation.j
  * }}
  *  Returns an object containing the position of the menu
  */
-export default function useMenu({
-    anchor,
-    open = false,
-    onClose,
-    items,
-}) {
+export default function useMenu({ anchor, open = false, onClose, items }) {
     const ref = useRef(null);
     const [{ top, left }, setPosition] = useState({ top: 0, left: 0 });
-    const {
-        handleBlur,
-        handleFocus,
-        handleKeyDown,
-        focusId,
-    } = useArrowNavigation(items.map(({ label }) => label), {
-        initialFocus: 0,
-        useHomeEnd: NO_CONTROL,
-        useLeftRight: true,
-        useFirstLetter: true,
-        useFocusTrap: true,
-    });
+    const { handleBlur, handleFocus, handleKeyDown, focusId } =
+        useArrowNavigation(
+            items.map(({ label }) => label),
+            {
+                initialFocus: 0,
+                useHomeEnd: NO_CONTROL,
+                useLeftRight: true,
+                useFirstLetter: true,
+                useFocusTrap: true,
+            },
+        );
 
     /* Get position when opening */
     useLayoutEffect(() => {
@@ -67,20 +62,24 @@ export default function useMenu({
         const anchorBox = anchor.getBoundingClientRect();
 
         // Place the element underneath the anchor except if it overflows
-        let top = anchorBox.y + anchorBox.height + menuBox.height > window.innerHeight ?
-            Math.max(0, anchorBox.y - menuBox.height) :
-            anchorBox.y + anchorBox.height;
+        let top =
+            (
+                anchorBox.y + anchorBox.height + menuBox.height >
+                window.innerHeight
+            ) ?
+                Math.max(0, anchorBox.y - menuBox.height)
+            :   anchorBox.y + anchorBox.height;
 
         // Place the element on the side of the anchor where there's more space, while avoiding overflowing
-        let left = anchorBox.x < window.innerWidth / 2 ?
-            Math.min(anchorBox.x, window.innerWidth - menuBox.width) :
-            Math.max(0, anchorBox.x - menuBox.width + anchorBox.width);
+        let left =
+            anchorBox.x < window.innerWidth / 2 ?
+                Math.min(anchorBox.x, window.innerWidth - menuBox.width)
+            :   Math.max(0, anchorBox.x - menuBox.width + anchorBox.width);
 
         setPosition({
             top,
             left,
         });
-
     }, [open, anchor]);
 
     /* Handles the escape key press */

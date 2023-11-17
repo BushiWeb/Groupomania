@@ -7,7 +7,10 @@
  */
 export default function getRoutesRegexp(layer, prefix) {
     // If the layer is a router or an Express application
-    if (layer._router?.stack || layer.name === 'router' && layer.handle?.stack) {
+    if (
+        layer._router?.stack ||
+        (layer.name === 'router' && layer.handle?.stack)
+    ) {
         const stack = layer._router?.stack || layer.handle.stack;
         let layerRegexp = [];
         let newPrefix = concatPathRegexp(prefix, layer.regexp);
@@ -32,7 +35,6 @@ export default function getRoutesRegexp(layer, prefix) {
     return [];
 }
 
-
 /**
  * Combines two path regular expressions to make a larger path regular expression.
  * The regexp are trimed of the parts that either represents the start or end of the path, and then concatenated.
@@ -55,12 +57,15 @@ function concatPathRegexp(start, end) {
 
     // For the start, remove the first '/', and the ending '/$/i', '/|$)/i' and '/?(?='
     const forbiddenEndingString = ['/$/i', '/|$)/i', '/?(?='];
-    let startStr = start.
-        toString().
-        split('\\').
-        reduceRight((accumulator, currentValue, currentIndex) => {
+    let startStr = start
+        .toString()
+        .split('\\')
+        .reduceRight((accumulator, currentValue, currentIndex) => {
             // If we are at the end and we find forbidden strings
-            if (accumulator === '' && forbiddenEndingString.includes(currentValue)) {
+            if (
+                accumulator === '' &&
+                forbiddenEndingString.includes(currentValue)
+            ) {
                 return accumulator;
             }
 
@@ -71,15 +76,17 @@ function concatPathRegexp(start, end) {
             return currentValue + accumulator;
         }, '');
 
-
     // For the end, remove the last '/i', and the starting '/^'
     const forbiddenStartingString = ['/^'];
-    let endStr = end.
-        toString().
-        split('\\').
-        reduce((accumulator, currentValue, currentIndex, array) => {
+    let endStr = end
+        .toString()
+        .split('\\')
+        .reduce((accumulator, currentValue, currentIndex, array) => {
             // If we are at the start and we find forbidden strings
-            if (accumulator === '' && forbiddenStartingString.includes(currentValue)) {
+            if (
+                accumulator === '' &&
+                forbiddenStartingString.includes(currentValue)
+            ) {
                 return accumulator;
             }
 
@@ -90,10 +97,8 @@ function concatPathRegexp(start, end) {
             return accumulator + currentValue;
         }, '');
 
-
     return RegExp(startStr + endStr, 'i');
 }
-
 
 /**
  * Fuse two arrays containing regexp, so that each regexp is unique.
@@ -104,9 +109,11 @@ function concatPathRegexp(start, end) {
 function concatUniqueRegexpArrays(array1, array2) {
     // Remove the regexp of array2 that are already in array 1
     const filteredArray2 = array2.filter(
-        (array2Value) => !array1.some(
-            (array1Value) => array2Value.toString() === array1Value.toString()
-        )
+        (array2Value) =>
+            !array1.some(
+                (array1Value) =>
+                    array2Value.toString() === array1Value.toString(),
+            ),
     );
 
     return array1.concat(filteredArray2);

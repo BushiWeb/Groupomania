@@ -35,23 +35,31 @@ export default class ForbiddenError extends HttpError {
             ...otherData
         },
         cause,
-        headers = {}
+        headers = {},
     ) {
         const statusCode = 403;
         const name = 'ForbiddenError';
-        const title = optionnalTitle || 'You don\'t have the right to execute this action.';
-        const description = optionnalDescription || 'Sorry, but this action can\'t be executed because you don\'t have the rights to do so. If you are not authenticated, you may login first and try again, but that may not be the cause of the problem.';
-        super({
-            message,
-            name,
-            title,
-            description,
-            details,
-            logDetails,
-            statusCode,
-            path,
-            method,
-            ...otherData,
-        }, cause, headers);
+        const title =
+            optionnalTitle ||
+            "You don't have the right to execute this action.";
+        const description =
+            optionnalDescription ||
+            "Sorry, but this action can't be executed because you don't have the rights to do so. If you are not authenticated, you may login first and try again, but that may not be the cause of the problem.";
+        super(
+            {
+                message,
+                name,
+                title,
+                description,
+                details,
+                logDetails,
+                statusCode,
+                path,
+                method,
+                ...otherData,
+            },
+            cause,
+            headers,
+        );
     }
 }

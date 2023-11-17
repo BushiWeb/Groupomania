@@ -10,12 +10,18 @@ import useTooltip from '../../../features/tooltip/useTooltip';
  * Icon button. Should be used as a blueprint to create other stylised button like outlined ones.
  */
 export default function IconButton({
-    disabled, autoFocus, onClick, label, name, className, toggle, stateLayerColor, ...other
+    disabled,
+    autoFocus,
+    onClick,
+    label,
+    name,
+    className,
+    toggle,
+    stateLayerColor,
+    ...other
 }) {
     const isDarkTheme = useSelector(selectIsDarkTheme);
-    const {
-        anchorEventHandlers,
-    } = useTooltip(label);
+    const { anchorEventHandlers } = useTooltip(label);
 
     return (
         <Button

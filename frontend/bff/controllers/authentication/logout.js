@@ -1,7 +1,9 @@
 import { createLoggerNamespace } from '../../logger/index.js';
 import logoutRequest from '../../services/requests/logout.js';
 
-const logoutControllerLogger = createLoggerNamespace('groupomania:bff:controller:logout');
+const logoutControllerLogger = createLoggerNamespace(
+    'groupomania:bff:controller:logout',
+);
 
 /**
  * Logout controller.
@@ -32,14 +34,15 @@ export default async function logoutController(req, res, next) {
 
             req.session.regenerate((error) => {
                 if (error) {
-                    logoutControllerLogger.debug('Error while regenerating the session');
+                    logoutControllerLogger.debug(
+                        'Error while regenerating the session',
+                    );
                     return next(error);
                 }
 
                 req.session.crsfToken = crsfToken;
                 res.status(204).end();
             });
-
         });
     }
 }

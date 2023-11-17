@@ -1,7 +1,9 @@
 import { createLoggerNamespace } from '../../logger/index.js';
 import deletePostRequest from '../../services/requests/deletePost.js';
 
-const DeletePostControllerLogger = createLoggerNamespace('groupomania:bff:controller:delete-posts');
+const DeletePostControllerLogger = createLoggerNamespace(
+    'groupomania:bff:controller:delete-posts',
+);
 
 /**
  * Delete post controller.
@@ -12,7 +14,11 @@ const DeletePostControllerLogger = createLoggerNamespace('groupomania:bff:contro
 export default async function deletePostController(req, res, next) {
     DeletePostControllerLogger.verbose('Delete post controller starting');
     try {
-        await deletePostRequest(req.body.like, req.params.postId, req.session.user);
+        await deletePostRequest(
+            req.body.like,
+            req.params.postId,
+            req.session.user,
+        );
         res.status(204).end();
     } catch (error) {
         next(error);

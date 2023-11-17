@@ -8,27 +8,25 @@ import Dialog, {
 import PropTypes from 'prop-types';
 
 /** Dialog used to confirm the cancellation of the update */
-export default function ConfirmDialog({
-    close, open, onAccept,
-}) {
-    return <Dialog
-        label="Confirmer l'annulation"
-        onClose={close}
-        open={open}
-    >
-        <DialogHeader>
-            <DialogHeadline>Confirmer l'annulation?</DialogHeadline>
-        </DialogHeader>
+export default function ConfirmDialog({ close, open, onAccept }) {
+    return (
+        <Dialog label="Confirmer l'annulation" onClose={close} open={open}>
+            <DialogHeader>
+                <DialogHeadline>Confirmer l'annulation?</DialogHeadline>
+            </DialogHeader>
 
-        <DialogContent>
-            <p>Voulez-vous annuler la mise à jour du profil?</p>
-        </DialogContent>
+            <DialogContent>
+                <p>Voulez-vous annuler la mise à jour du profil?</p>
+            </DialogContent>
 
-        <DialogActions>
-            <DialogAction onClick={close}>Non, revenir à la mise à jour</DialogAction>
-            <DialogAction onClick={onAccept}>Oui, annuler</DialogAction>
-        </DialogActions>
-    </Dialog>;
+            <DialogActions>
+                <DialogAction onClick={close}>
+                    Non, revenir à la mise à jour
+                </DialogAction>
+                <DialogAction onClick={onAccept}>Oui, annuler</DialogAction>
+            </DialogActions>
+        </Dialog>
+    );
 }
 
 ConfirmDialog.defaultProps = {

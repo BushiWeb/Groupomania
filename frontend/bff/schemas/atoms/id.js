@@ -7,12 +7,12 @@
  */
 export default function generateIdSchema(
     { required = true, checkFormat = true } = {},
-    location = ['params']
+    location = ['params'],
 ) {
     return {
         in: location,
 
-        ...required ?
+        ...(required ?
             {
                 exists: {
                     errorMessage: 'The id is required.',
@@ -21,19 +21,19 @@ export default function generateIdSchema(
                     },
                     bail: true,
                 },
-            } :
-            {
+            }
+        :   {
                 optional: {
                     options: { nullable: true },
                 },
-            },
+            }),
 
-        ...checkFormat && {
+        ...(checkFormat && {
             isInt: {
                 errorMessage: 'The id must be an integer.',
                 bail: true,
             },
-        },
+        }),
 
         toInt: true,
     };

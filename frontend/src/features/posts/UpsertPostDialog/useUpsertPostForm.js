@@ -1,7 +1,5 @@
 import { useReducer } from 'react';
-import {
-    ACTIONS, initState, isPostUpdated, reducer,
-} from './formReducer.js';
+import { ACTIONS, initState, isPostUpdated, reducer } from './formReducer.js';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
     createPostRequest,
@@ -51,12 +49,15 @@ export function useUpsertPostForm(onSuccess, post) {
             }
 
             if (post) {
-                return updatePostRequest({
-                    title,
-                    message,
-                    image,
-                    deleteImage: !image && post.imageUrl,
-                }, post.postId);
+                return updatePostRequest(
+                    {
+                        title,
+                        message,
+                        image,
+                        deleteImage: !image && post.imageUrl,
+                    },
+                    post.postId,
+                );
             }
 
             return createPostRequest({ title, message, image });
@@ -81,28 +82,42 @@ export function useUpsertPostForm(onSuccess, post) {
             }
 
             if (errorMessages.title) {
-                dispatch({ type: ACTIONS.setTitleError, payload: errorMessages.title });
+                dispatch({
+                    type: ACTIONS.setTitleError,
+                    payload: errorMessages.title,
+                });
             }
 
             if (errorMessages.message) {
-                dispatch({ type: ACTIONS.setMessageError, payload: errorMessages.message });
+                dispatch({
+                    type: ACTIONS.setMessageError,
+                    payload: errorMessages.message,
+                });
             }
 
             if (errorMessages.image) {
-                dispatch({ type: ACTIONS.setImageError, payload: errorMessages.image });
+                dispatch({
+                    type: ACTIONS.setImageError,
+                    payload: errorMessages.image,
+                });
             }
 
             if (errorMessages.global) {
-                dispatch({ type: ACTIONS.setGlobalError, payload: errorMessages.global });
+                dispatch({
+                    type: ACTIONS.setGlobalError,
+                    payload: errorMessages.global,
+                });
             }
         },
         onSuccess: () => {
             dispatch({ type: ACTIONS.reset });
-            queryClient.invalidateQueries({ queryKey: ['posts']});
+            queryClient.invalidateQueries({ queryKey: ['posts'] });
             if (post) {
-                queryClient.invalidateQueries({ queryKey: ['posts', post.writerId]});
+                queryClient.invalidateQueries({
+                    queryKey: ['posts', post.writerId],
+                });
             } else {
-                queryClient.invalidateQueries({ queryKey: ['posts', userId]});
+                queryClient.invalidateQueries({ queryKey: ['posts', userId] });
             }
             onSuccess();
         },

@@ -11,23 +11,39 @@ import { selectIsDarkTheme } from '../../../utils/selectors';
  * All additionnal props are passed to the DOM element.
  */
 export default function FilledButton({
-    disabled, autoFocus, onClick, label, children, icon, className, ...other
+    disabled,
+    autoFocus,
+    onClick,
+    label,
+    children,
+    icon,
+    className,
+    ...other
 }) {
     const classNameButton = icon ? style.filledButtonIcon : style.filledButton;
     const isDarkTheme = useSelector(selectIsDarkTheme);
 
-    return <Button
-        classNames={`${classNameButton} ${className}`}
-        disabled={disabled}
-        autoFocus={autoFocus}
-        onClick={onClick}
-        label={label}
-        stateLayerColor="on-primary"
-        {...other}
-    >
-        {icon && <Icon name={icon} className={style.icon} size={20} isOnDark={isDarkTheme}/>}
-        {children}
-    </Button>;
+    return (
+        <Button
+            classNames={`${classNameButton} ${className}`}
+            disabled={disabled}
+            autoFocus={autoFocus}
+            onClick={onClick}
+            label={label}
+            stateLayerColor="on-primary"
+            {...other}
+        >
+            {icon && (
+                <Icon
+                    name={icon}
+                    className={style.icon}
+                    size={20}
+                    isOnDark={isDarkTheme}
+                />
+            )}
+            {children}
+        </Button>
+    );
 }
 
 FilledButton.defaultProps = {

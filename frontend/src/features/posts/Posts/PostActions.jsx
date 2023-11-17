@@ -4,21 +4,20 @@ import { useContext } from 'react';
 import { postContext } from './Post';
 
 /** Displays one post data. */
-export default function PostActions({
-    onClick,
-}) {
+export default function PostActions({ onClick }) {
     const { hasRights } = useContext(postContext);
 
     if (!hasRights) {
         return;
     }
 
-    return <StandardIconButton
-        label={'Plus d\'actions'}
-        name="more_vert"
-        onClick={onClick}
-    />;
-
+    return (
+        <StandardIconButton
+            label={"Plus d'actions"}
+            name="more_vert"
+            onClick={onClick}
+        />
+    );
 }
 
 PostActions.propTypes = {

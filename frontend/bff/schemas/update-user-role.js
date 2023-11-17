@@ -6,7 +6,9 @@ import generateRoleSchema from './atoms/role.js';
  * Schema for the update user role request.
  */
 const updateUserRoleSchema = {
-    roleId: generateRoleSchema({ required: true, allowString: false }, ['body']),
+    roleId: generateRoleSchema({ required: true, allowString: false }, [
+        'body',
+    ]),
     userId: generateIdSchema(),
     currentPassword: generatePasswordSchema(),
 };

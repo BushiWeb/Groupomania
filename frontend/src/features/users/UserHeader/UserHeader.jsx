@@ -40,12 +40,19 @@ export default function UserHeader({
             <>
                 <TopAppBar
                     type={small ? 'small' : 'medium'}
-                    {...topLevelHeader && mainContentId && { hiddenLinkTargetId: mainContentId }}
-                    {...backArrow && { navigationArrowTarget: '/reseau', navigationArrowLabel: 'Retourner à la liste' }}
+                    {...(topLevelHeader &&
+                        mainContentId && { hiddenLinkTargetId: mainContentId })}
+                    {...(backArrow && {
+                        navigationArrowTarget: '/reseau',
+                        navigationArrowLabel: 'Retourner à la liste',
+                    })}
                     className={className}
                 >
                     <div className={style.loader}>
-                        <ProgressIndicator label="Chargement des données de l'utilisateur" circular/>
+                        <ProgressIndicator
+                            label="Chargement des données de l'utilisateur"
+                            circular
+                        />
                     </div>
                 </TopAppBar>
             </>
@@ -57,8 +64,12 @@ export default function UserHeader({
             <>
                 <TopAppBar
                     type={small ? 'small' : 'medium'}
-                    {...topLevelHeader && mainContentId && { hiddenLinkTargetId: mainContentId }}
-                    {...backArrow && { navigationArrowTarget: '/reseau', navigationArrowLabel: 'Retourner à la liste' }}
+                    {...(topLevelHeader &&
+                        mainContentId && { hiddenLinkTargetId: mainContentId })}
+                    {...(backArrow && {
+                        navigationArrowTarget: '/reseau',
+                        navigationArrowLabel: 'Retourner à la liste',
+                    })}
                     className={className}
                 >
                     <p className={style.errorMessage}>{errorMessage}</p>
@@ -71,44 +82,50 @@ export default function UserHeader({
         <>
             <TopAppBar
                 type={small ? 'small' : 'medium'}
-                {...topLevelHeader && mainContentId && { hiddenLinkTargetId: mainContentId }}
-                {...backArrow && {
+                {...(topLevelHeader &&
+                    mainContentId && { hiddenLinkTargetId: mainContentId })}
+                {...(backArrow && {
                     navigationArrowTarget: '/reseau',
                     navigationArrowLabel: 'Retourner à la liste',
                     navigationArrowState: { userId },
-                }}
+                })}
                 actions={actions}
                 className={className}
             >
                 <h1 className={style.heading}>{email}</h1>
-                {isAdmin(roleId) && <p className={style.subHeading}>Administrateur</p>}
+                {isAdmin(roleId) && (
+                    <p className={style.subHeading}>Administrateur</p>
+                )}
             </TopAppBar>
 
-            {isUpdateUserOpen &&
-            <UpdateUserDialog
-                isOpen={isUpdateUserOpen}
-                setIsOpen={setIsUpdateUserOpen}
-                userId={userId}
-                userEmail={email}
-            />}
+            {isUpdateUserOpen && (
+                <UpdateUserDialog
+                    isOpen={isUpdateUserOpen}
+                    setIsOpen={setIsUpdateUserOpen}
+                    userId={userId}
+                    userEmail={email}
+                />
+            )}
 
-            {isUpdateUserRoleOpen &&
-            <UpdateUserRoleDialog
-                isOpen={isUpdateUserRoleOpen}
-                setIsOpen={setIsUpdateUserRoleOpen}
-                userId={userId}
-                userEmail={email}
-                userRoleId={roleId}
-            />}
+            {isUpdateUserRoleOpen && (
+                <UpdateUserRoleDialog
+                    isOpen={isUpdateUserRoleOpen}
+                    setIsOpen={setIsUpdateUserRoleOpen}
+                    userId={userId}
+                    userEmail={email}
+                    userRoleId={roleId}
+                />
+            )}
 
-            {isDeleteUserOpen &&
-            <DeleteUserDialog
-                isOpen={isDeleteUserOpen}
-                setIsOpen={setIsDeleteUserOpen}
-                userId={userId}
-                userEmail={email}
-                userRoleId={roleId}
-            />}
+            {isDeleteUserOpen && (
+                <DeleteUserDialog
+                    isOpen={isDeleteUserOpen}
+                    setIsOpen={setIsDeleteUserOpen}
+                    userId={userId}
+                    userEmail={email}
+                    userRoleId={roleId}
+                />
+            )}
         </>
     );
 }

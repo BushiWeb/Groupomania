@@ -1,6 +1,10 @@
 import { checkSchema, matchedData, validationResult } from 'express-validator';
 import { createLoggerNamespace } from '../logger/index.js';
-import { HttpError, UserInputValidationError, UnsupportedMediaTypeError } from '../errors/index.js';
+import {
+    HttpError,
+    UserInputValidationError,
+    UnsupportedMediaTypeError,
+} from '../errors/index.js';
 import config from '../config/config.js';
 
 const validationLogger = createLoggerNamespace('groupomania:bff:validation');
@@ -22,28 +26,24 @@ const validationLogger = createLoggerNamespace('groupomania:bff:validation');
  * }[]} [error.nestedErrors] - Contains suberrors. These errors have the same structure as the error parameter.
  * @returns Returns the formated error.
  */
-function validationErrorFormatter({
-    param,
-    msg,
-    location,
-    nestedErrors,
-}) {
+function validationErrorFormatter({ param, msg, location, nestedErrors }) {
     let errorObject = {
-        ...param && { param },
-        ...msg && { message: msg },
-        ...location && { location },
+        ...(param && { param }),
+        ...(msg && { message: msg }),
+        ...(location && { location }),
     };
 
     if (nestedErrors) {
         errorObject.nestedErrors = [];
         for (const nestedError of nestedErrors) {
-            errorObject.nestedErrors.push(validationErrorFormatter(nestedError));
+            errorObject.nestedErrors.push(
+                validationErrorFormatter(nestedError),
+            );
         }
     }
 
     return errorObject;
 }
-
 
 /**
  * Middleware handling the validation results.
@@ -59,7 +59,9 @@ function validationHandlingMiddleware(req, res, next) {
     const errors = validationResult(req).formatWith(validationErrorFormatter);
 
     // Search for custom errors
-    const customError = errors.errors?.find(value => value.msg instanceof HttpError);
+    const customError = errors.errors?.find(
+        (value) => value.msg instanceof HttpError,
+    );
     if (customError) {
         validationLogger.debug('Validation unsuccessful with a custom error');
         return next(customError.msg);
@@ -71,7 +73,8 @@ function validationHandlingMiddleware(req, res, next) {
         const validationError = new UserInputValidationError({
             message: 'Errors while validating user inputs.',
             title: 'The received data are invalid.',
-            description: 'We are having trouble processing the data you provided. You may take a look at the details for more informations on how to solve this problem. You may solve the problems and try again.',
+            description:
+                'We are having trouble processing the data you provided. You may take a look at the details for more informations on how to solve this problem. You may solve the problems and try again.',
             details: errors.array(),
         });
         return next(validationError);
@@ -80,14 +83,12 @@ function validationHandlingMiddleware(req, res, next) {
     validationLogger.debug('Validation successful');
 
     // Remove unused properties, that haven't gone through validation
-    req.body = matchedData(req, { locations: ['body']});
-    req.params = matchedData(req, { locations: ['params']});
-    req.query = matchedData(req, { locations: ['query']});
+    req.body = matchedData(req, { locations: ['body'] });
+    req.params = matchedData(req, { locations: ['params'] });
+    req.query = matchedData(req, { locations: ['query'] });
 
     next();
 }
-
-
 
 /**
  * Function returning a middleware checking for files errors.
@@ -95,13 +96,19 @@ function validationHandlingMiddleware(req, res, next) {
  * @returns {Function} Returns the middleware.
  */
 function fileValidation(required = false) {
-    validationLogger.debug(`Creating the file validation middleware, ${required ? 'the file is required' : 'the file is optionnal'}`);
+    validationLogger.debug(
+        `Creating the file validation middleware, ${
+            required ? 'the file is required' : 'the file is optionnal'
+        }`,
+    );
     return function (req, res, next) {
         validationLogger.debug('File validation middleware execution');
 
         // Checking file filter
         if (req.rejectedFile && req.rejectedFile.length > 0) {
-            validationLogger.debug('Error while validating files, throwing an error');
+            validationLogger.debug(
+                'Error while validating files, throwing an error',
+            );
 
             const uploadedFileFormats = [];
             for (const file of req.rejectedFile) {
@@ -112,11 +119,14 @@ function fileValidation(required = false) {
 
             const fileValidationError = new UnsupportedMediaTypeError({
                 message: 'The uploaded file has the wrong type.',
-                title: 'We can\'t accept the uploaded file.',
-                description: 'We don\'t accept this type of file. Please, refer to the details to see which file type are allowed, and try again with an other file format.',
+                title: "We can't accept the uploaded file.",
+                description:
+                    "We don't accept this type of file. Please, refer to the details to see which file type are allowed, and try again with an other file format.",
                 details: {
                     uploadedFileFormats,
-                    allowedFileFormats: config.get('payload.files.allowedFileTypes'),
+                    allowedFileFormats: config.get(
+                        'payload.files.allowedFileTypes',
+                    ),
                 },
             });
 
@@ -128,14 +138,16 @@ function fileValidation(required = false) {
             required &&
             !req.file &&
             (!req.files ||
-                Array.isArray(req.files) && req.files.length === 0 ||
-                typeof req.files === 'object' && Object.keys(req.files).length === 0)
+                (Array.isArray(req.files) && req.files.length === 0) ||
+                (typeof req.files === 'object' &&
+                    Object.keys(req.files).length === 0))
         ) {
             validationLogger.debug('No files sent, throwing an error');
             const fileValidationError = new UserInputValidationError({
                 message: 'Missing required file',
                 title: 'The file is mandatory for this request',
-                description: 'We can\'t find the file. This request needs a file to be processed. Please, try again with a file.',
+                description:
+                    "We can't find the file. This request needs a file to be processed. Please, try again with a file.",
             });
             return next(fileValidationError);
         }
@@ -145,8 +157,6 @@ function fileValidation(required = false) {
     };
 }
 
-
-
 /**
  * Returns all the required middlewares to handle the validation.
  * @param {Object} schema - Validation schema to use.
@@ -154,7 +164,11 @@ function fileValidation(required = false) {
  * @param {boolean} [requiredFiles=false] - If the request accepts files, wether those files are required of not.
  * @returns {Array} Returns an array containing the middleware in the order of execution.
  */
-export default function validationMiddlewares(schema, files = false, requiredFiles = false) {
+export default function validationMiddlewares(
+    schema,
+    files = false,
+    requiredFiles = false,
+) {
     let middlewareList = [checkSchema(schema), validationHandlingMiddleware];
 
     if (files) {
@@ -164,7 +178,4 @@ export default function validationMiddlewares(schema, files = false, requiredFil
     return middlewareList;
 }
 
-export {
-    validationHandlingMiddleware,
-    validationErrorFormatter,
-};
+export { validationHandlingMiddleware, validationErrorFormatter };

@@ -35,23 +35,29 @@ export default class PayloadTooLargeError extends HttpError {
             ...otherData
         },
         cause,
-        headers = {}
+        headers = {},
     ) {
         const statusCode = 413;
         const name = 'PayloadTooLargeError';
         const title = optionnalTitle || 'The payload is to heavy.';
-        const description = optionnalDescription || 'We couldn\'t handle the payload because of its size. Please, reduce the payload weight before trying again.';
-        super({
-            message,
-            name,
-            title,
-            description,
-            details,
-            logDetails,
-            statusCode,
-            path,
-            method,
-            ...otherData,
-        }, cause, headers);
+        const description =
+            optionnalDescription ||
+            "We couldn't handle the payload because of its size. Please, reduce the payload weight before trying again.";
+        super(
+            {
+                message,
+                name,
+                title,
+                description,
+                details,
+                logDetails,
+                statusCode,
+                path,
+                method,
+                ...otherData,
+            },
+            cause,
+            headers,
+        );
     }
 }

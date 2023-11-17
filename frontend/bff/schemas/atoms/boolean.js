@@ -7,12 +7,12 @@
  */
 export default function generateBooleanSchema(
     { required = false, checkFormat = true } = {},
-    location = ['body']
+    location = ['body'],
 ) {
     return {
         in: location,
 
-        ...required ?
+        ...(required ?
             {
                 exists: {
                     errorMessage: 'The value is required.',
@@ -21,20 +21,21 @@ export default function generateBooleanSchema(
                     },
                     bail: true,
                 },
-            } :
-            {
+            }
+        :   {
                 optional: {
                     options: { nullable: true },
                 },
-            },
+            }),
 
-        ...checkFormat && {
+        ...(checkFormat && {
             isBoolean: {
-                errorMessage: 'The value must be a boolean. Accepted values are true, yes, false, no, 0 and 1.',
+                errorMessage:
+                    'The value must be a boolean. Accepted values are true, yes, false, no, 0 and 1.',
                 loose: true,
                 bail: true,
             },
-        },
+        }),
 
         toBoolean: true,
     };

@@ -27,7 +27,8 @@ export default class HttpError extends Error {
         {
             message,
             name = 'HttpError',
-            title, description,
+            title,
+            description,
             details,
             logDetails,
             statusCode = 500,
@@ -36,16 +37,19 @@ export default class HttpError extends Error {
             ...otherData
         },
         cause,
-        headers = {}
+        headers = {},
     ) {
         // Load error informations
-        super(message, { ...cause && { cause }});
+        super(message, { ...(cause && { cause }) });
 
         this.name = name;
         this.title = title;
         this.description = description;
         this.details = !details || Array.isArray(details) ? details : [details];
-        this.logDetails = !logDetails || Array.isArray(logDetails) ? logDetails : [logDetails];
+        this.logDetails =
+            !logDetails || Array.isArray(logDetails) ?
+                logDetails
+            :   [logDetails];
         this.statusCode = statusCode;
         this.path = path;
         this.method = method;
@@ -84,16 +88,15 @@ export default class HttpError extends Error {
             error: {
                 type: this.name,
                 title: this.title || this.message,
-                ...this.description && { message: this.description },
-                ...this.details && { details: this.details },
+                ...(this.description && { message: this.description }),
+                ...(this.details && { details: this.details }),
                 statusCode: this.statusCode,
                 timestamp: this.dateTime,
-                ...this.path && { path: this.path },
-                ...this.method && { method: this.method },
+                ...(this.path && { path: this.path }),
+                ...(this.method && { method: this.method }),
             },
         };
     }
-
 
     /**
      * Returns an object representation of the error to log. The representation shouldn't contain any sensitive
@@ -122,13 +125,14 @@ export default class HttpError extends Error {
         return {
             label: this.name,
             message: this.message,
-            ...this.logDetails && { details: this.logDetails } || this.details && { details: this.details },
+            ...((this.logDetails && { details: this.logDetails }) ||
+                (this.details && { details: this.details })),
             statusCode: this.statusCode,
             errorDate: this.dateTime,
-            ...this.path && { path: this.path },
-            ...this.method && { method: this.method },
+            ...(this.path && { path: this.path }),
+            ...(this.method && { method: this.method }),
             stack: this.stack,
-            ...this.cause?.stack && { originStack: this.cause.stack },
+            ...(this.cause?.stack && { originStack: this.cause.stack }),
             ...this.more,
         };
     }

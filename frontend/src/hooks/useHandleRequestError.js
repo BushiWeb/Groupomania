@@ -23,7 +23,7 @@ export function useHandleRequestError(isError, error) {
 
         // Handling network errors
         if (error instanceof TypeError) {
-            redirect('/error', { state: { type: 'NetworkError' }});
+            redirect('/error', { state: { type: 'NetworkError' } });
             return;
         }
 
@@ -33,7 +33,9 @@ export function useHandleRequestError(isError, error) {
 
         // Handling server errors
         if (error.status >= 500) {
-            redirect('/error', { state: { status: error.status, type: 'ResponseError' }});
+            redirect('/error', {
+                state: { status: error.status, type: 'ResponseError' },
+            });
             return;
         }
 

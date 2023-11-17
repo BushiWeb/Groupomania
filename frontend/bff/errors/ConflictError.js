@@ -35,23 +35,30 @@ export default class ConflictError extends HttpError {
             ...otherData
         },
         cause,
-        headers = {}
+        headers = {},
     ) {
         const statusCode = 409;
         const name = 'ConflictError';
-        const title = optionnalTitle || 'There is a conflict with the target ressource.';
-        const description = optionnalDescription || 'We couldn\'t complete the request due to a conflict with the ressources. Please, solve the conflict before trying again.';
-        super({
-            message,
-            name,
-            title,
-            description,
-            details,
-            logDetails,
-            statusCode,
-            path,
-            method,
-            ...otherData,
-        }, cause, headers);
+        const title =
+            optionnalTitle || 'There is a conflict with the target ressource.';
+        const description =
+            optionnalDescription ||
+            "We couldn't complete the request due to a conflict with the ressources. Please, solve the conflict before trying again.";
+        super(
+            {
+                message,
+                name,
+                title,
+                description,
+                details,
+                logDetails,
+                statusCode,
+                path,
+                method,
+                ...otherData,
+            },
+            cause,
+            headers,
+        );
     }
 }

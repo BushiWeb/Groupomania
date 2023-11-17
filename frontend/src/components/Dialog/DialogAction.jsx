@@ -5,10 +5,12 @@ import TextButton from '../buttons/TextButton/TextButton';
  * Dialog action button, used for acknowledgment, dismiss or acceptance.
  * The value is given as the children.
  */
-export default function DialogAction({
-    onClick, children, ...props
-}) {
-    return <TextButton onClick={onClick} {...props}>{children}</TextButton>;
+export default function DialogAction({ onClick, children, ...props }) {
+    return (
+        <TextButton onClick={onClick} {...props}>
+            {children}
+        </TextButton>
+    );
 }
 
 DialogAction.propTypes = {

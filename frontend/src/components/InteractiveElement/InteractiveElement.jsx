@@ -8,52 +8,62 @@ import { forwardRef } from 'react';
  * Additionnal props are passed as are to the root elements.
  * The root element is given via the prop, and the content is given as children.
  */
-const InteractiveElement = forwardRef(function InteractiveElement({
-    children,
-    rootElement,
-    className,
-    hover,
-    focus,
-    active,
-    selected,
-    rippleDuration,
-    stateLayerColor,
-    onPointerDown,
-    onKeyDown,
-    ...rootProps
-}, ref) {
-    const {
-        handleKeyDown,
-        handlePointerDown,
-        stateLayerRef,
-    } = useRipple(rippleDuration, { onPointerDown, onKeyDown });
+const InteractiveElement = forwardRef(function InteractiveElement(
+    {
+        children,
+        rootElement,
+        className,
+        hover,
+        focus,
+        active,
+        selected,
+        rippleDuration,
+        stateLayerColor,
+        onPointerDown,
+        onKeyDown,
+        ...rootProps
+    },
+    ref,
+) {
+    const { handleKeyDown, handlePointerDown, stateLayerRef } = useRipple(
+        rippleDuration,
+        { onPointerDown, onKeyDown },
+    );
     const Root = rootElement;
     const classNames = `${style.interactiveElement} ${className}`;
     const states = {
-        ...hover && { 'data-state-hover': true },
-        ...focus && { 'data-state-focus': true },
-        ...active && { 'data-state-active': true },
+        ...(hover && { 'data-state-hover': true }),
+        ...(focus && { 'data-state-focus': true }),
+        ...(active && { 'data-state-active': true }),
     };
 
-    return <Root
-        {...states}
-        className={classNames}
-        {... (rippleDuration > 0 || onPointerDown) && { onPointerDown: handlePointerDown }}
-        {... (rippleDuration > 0 || onKeyDown) && { onKeyDown: handleKeyDown }}
-        {...rootProps}
-        ref={ref}
-        {...selected && { 'data-selected': true }}
-    >
-        <div className={style.targetLayer}></div>
-        {stateLayerColor && <div
-            className={style.stateLayer}
-            style={{
-                '--state-layer-color': `var(--color-${stateLayerColor})`,
-            }}
-            ref={stateLayerRef}
-        ></div>}
-        {children}
-    </Root>;
+    return (
+        <Root
+            {...states}
+            className={classNames}
+            {...((rippleDuration > 0 || onPointerDown) && {
+                onPointerDown: handlePointerDown,
+            })}
+            {...((rippleDuration > 0 || onKeyDown) && {
+                onKeyDown: handleKeyDown,
+            })}
+            {...rootProps}
+            ref={ref}
+            {...(selected && { 'data-selected': true })}
+        >
+            <div className={style.targetLayer}></div>
+            {stateLayerColor && (
+                <div
+                    className={style.stateLayer}
+                    style={{
+                        '--state-layer-color': `var(--color-${stateLayerColor})`,
+                    }}
+                    ref={stateLayerRef}
+                ></div>
+            )}
+            {children}
+        </Root>
+    );
 });
 
 InteractiveElement.defaultProps = {
@@ -70,10 +80,8 @@ InteractiveElement.defaultProps = {
 
 InteractiveElement.propTypes = {
     /** Root element to use, either a dom element as a string or a componenent. Required */
-    rootElement: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.elementType,
-    ]).isRequired,
+    rootElement: PropTypes.oneOfType([PropTypes.string, PropTypes.elementType])
+        .isRequired,
 
     /** Class name to give to the root element, on top of the default styling */
     className: PropTypes.string,

@@ -19,15 +19,14 @@ function getCrsfToken(req) {
     if (!crsfToken) {
         throw new ForbiddenError({
             message: 'Missing X-CRSF-Token header',
-            title: 'Can\'t find the header containing the CRSF token',
-            description: 'The request doesn`t contain the CRSF token. If you are the author of the request, please include the CRSF token within the X-CRSF-Token Header.',
+            title: "Can't find the header containing the CRSF token",
+            description:
+                'The request doesn`t contain the CRSF token. If you are the author of the request, please include the CRSF token within the X-CRSF-Token Header.',
         });
     }
 
     return crsfToken;
 }
-
-
 
 /**
  * Checks whether or not the CRSF token is provided and if it is right.
@@ -43,8 +42,9 @@ function checkCRSFToken(req, token) {
     if (!req.session.crsfToken) {
         throw new ForbiddenError({
             message: 'No CRSF token registered',
-            title: 'We don\'t have any CRSF token registered for your session',
-            description: 'You may have provided a CRSF token but we don\'t have any registered or valid token for your session. If you are the author of the request, you must first load the web application before making any request.',
+            title: "We don't have any CRSF token registered for your session",
+            description:
+                "You may have provided a CRSF token but we don't have any registered or valid token for your session. If you are the author of the request, you must first load the web application before making any request.",
         });
     }
 
@@ -52,13 +52,13 @@ function checkCRSFToken(req, token) {
         throw new ForbiddenError({
             message: 'Invalid CRSF token',
             title: 'The CRSF token is not valid',
-            description: 'The provided CRSF token does not match the one stored for your session. If you are the author of the request, please provide the right CRSF token.',
+            description:
+                'The provided CRSF token does not match the one stored for your session. If you are the author of the request, please provide the right CRSF token.',
         });
     }
 
     return true;
 }
-
 
 /**
  * Generates a new CRSF token and stores it inside of the session and the custom header for the response.
@@ -71,7 +71,6 @@ function updateCRSFToken(req, res) {
     res.set('X-CRSF-Token', newToken);
 }
 
-
 /**
  * Extends session expiration.
  * If the cookie expiration is closer than the minimal TTL of the cookie, then prolongate the cookie lifespan.
@@ -82,7 +81,6 @@ function extendSessionTTL(req) {
         req.session.cookie.maxAge = config.get('session.cookieExp');
     }
 }
-
 
 /**
  * Function generating the authentication middleware.
@@ -113,7 +111,8 @@ export default function authenticate(checkAuthentication = true) {
                 throw new UnauthorizedError({
                     message: 'User is not authenticated',
                     title: 'You are not authenticated',
-                    description: 'This request requires you to be authenticated, but we can\'t find your session. Please, login and try again.',
+                    description:
+                        "This request requires you to be authenticated, but we can't find your session. Please, login and try again.",
                 });
             }
         } catch (error) {

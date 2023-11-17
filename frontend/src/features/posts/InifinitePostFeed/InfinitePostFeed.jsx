@@ -12,7 +12,11 @@ import { useInfinitePostFeed } from './useInfinitePostFeed';
  * Use an ErrorBoundary to handle errors.
  */
 export default function InfinitePostFeed({
-    containerElt, errorClassName, className, userId, vertical,
+    containerElt,
+    errorClassName,
+    className,
+    userId,
+    vertical,
 }) {
     const {
         data,
@@ -34,57 +38,62 @@ export default function InfinitePostFeed({
     } = useInfinitePostFeed(containerElt, userId);
 
     if (isPostError) {
-        return <p className={errorClassName}>
-            Une erreur est survenue lors du chargement des données. Vous pouvez essayer de recharger la page.
-            Si le problème persiste, n'hésitez pas à vous rapprocher d'un administrateur.
-        </p>;
+        return (
+            <p className={errorClassName}>
+                Une erreur est survenue lors du chargement des données. Vous
+                pouvez essayer de recharger la page. Si le problème persiste,
+                n'hésitez pas à vous rapprocher d'un administrateur.
+            </p>
+        );
     }
 
-    return <>
-        <PostsList
-            posts={data}
-            className={className}
-            busy={isFetchingPostNextPage || isLoadingPost}
-            handleLike={handleLike}
-            handleMoreActions={handleMoreActions}
-            vertical={vertical}
-        />
-
-        {isMenuOpen &&
-            <PostActionsMenu
-                open={isMenuOpen}
-                onClose={() => setIsMenuOpen(false)}
-                anchor={menuAnchor}
-                deletePost={onDeletePost}
-                updatePost={onUpdatePost}
+    return (
+        <>
+            <PostsList
+                posts={data}
+                className={className}
+                busy={isFetchingPostNextPage || isLoadingPost}
+                handleLike={handleLike}
+                handleMoreActions={handleMoreActions}
+                vertical={vertical}
             />
-        }
 
-        {isDeleteDialogOpen &&
-            <DeletePostDialog
-                onClose={() => setIsDeleteDialogOpen(false)}
-                open={isDeleteDialogOpen}
-                postDate={targetPost.date}
-                postId={targetPost.postId}
-                postTitle={targetPost.title}
-                writerId={targetPost.writerId}
-            />
-        }
+            {isMenuOpen && (
+                <PostActionsMenu
+                    open={isMenuOpen}
+                    onClose={() => setIsMenuOpen(false)}
+                    anchor={menuAnchor}
+                    deletePost={onDeletePost}
+                    updatePost={onUpdatePost}
+                />
+            )}
 
-        {isUpdateDialogOpen &&
-            <UpsertPostDialog
-                isOpen={isUpdateDialogOpen}
-                setIsOpen={setIsUpdateDialogOpen}
-                post={{
-                    postId: targetPost.postId,
-                    title: targetPost.title,
-                    message: targetPost.message,
-                    imageUrl: targetPost.imageUrl,
-                    writerId: targetPost.writerId,
-                }}
-            />
-        }
-    </>;
+            {isDeleteDialogOpen && (
+                <DeletePostDialog
+                    onClose={() => setIsDeleteDialogOpen(false)}
+                    open={isDeleteDialogOpen}
+                    postDate={targetPost.date}
+                    postId={targetPost.postId}
+                    postTitle={targetPost.title}
+                    writerId={targetPost.writerId}
+                />
+            )}
+
+            {isUpdateDialogOpen && (
+                <UpsertPostDialog
+                    isOpen={isUpdateDialogOpen}
+                    setIsOpen={setIsUpdateDialogOpen}
+                    post={{
+                        postId: targetPost.postId,
+                        title: targetPost.title,
+                        message: targetPost.message,
+                        imageUrl: targetPost.imageUrl,
+                        writerId: targetPost.writerId,
+                    }}
+                />
+            )}
+        </>
+    );
 }
 
 InfinitePostFeed.propTypes = {

@@ -29,12 +29,10 @@ export function useUpsertPostDialog(setIsOpen, post) {
     function onSuccess() {
         setIsOpen(false);
     }
-    const {
-        isLoading,
-        mutate,
-        dispatch,
-        data,
-    } = useUpsertPostForm(onSuccess, post);
+    const { isLoading, mutate, dispatch, data } = useUpsertPostForm(
+        onSuccess,
+        post,
+    );
 
     /*
      * Function executed when attempting to close the form.

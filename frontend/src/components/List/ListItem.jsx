@@ -12,7 +12,13 @@ import { useFocusable } from '../../hooks/useFocusable';
  * Item of a list, used within the List component.
  */
 export default function ListItem({
-    headline, headlineLevel, supportingText, link, focused, onFocus, selected,
+    headline,
+    headlineLevel,
+    supportingText,
+    link,
+    focused,
+    onFocus,
+    selected,
 }) {
     const isDarkTheme = useSelector(selectIsDarkTheme);
 
@@ -20,34 +26,49 @@ export default function ListItem({
     const headingId = useId();
 
     const linkRef = useFocusable(focused);
-    const itemRef = useCallback((node) => {
-        if (node && selected) {
-            node.scrollIntoView?.({
-                behavior: 'instant',
-                block: 'center',
-                inline: 'nearest',
-            });
-        }
-    }, [selected]);
+    const itemRef = useCallback(
+        (node) => {
+            if (node && selected) {
+                node.scrollIntoView?.({
+                    behavior: 'instant',
+                    block: 'center',
+                    inline: 'nearest',
+                });
+            }
+        },
+        [selected],
+    );
 
-    return <li className={style.listItem} onFocus={onFocus} ref={itemRef}>
-        <InteractiveElement
-            rootElement={Link}
-            stateLayerColor="on-surface"
-            rippleDuration={350}
-            to={link}
-            aria-labelledby={headingId}
-            className={`${style.link}`}
-            ref={linkRef}
-            selected={selected}
-        >
-            <div className={style.content}>
-                <Heading id={headingId} className={style.headline}>{headline}</Heading>
-                {supportingText && <p className={style.supportingText}>{supportingText}</p>}
-            </div>
-            {link && <Icon className={style.icon} name="arrow_right" isOnDark={isDarkTheme}/>}
-        </InteractiveElement>
-    </li>;
+    return (
+        <li className={style.listItem} onFocus={onFocus} ref={itemRef}>
+            <InteractiveElement
+                rootElement={Link}
+                stateLayerColor="on-surface"
+                rippleDuration={350}
+                to={link}
+                aria-labelledby={headingId}
+                className={`${style.link}`}
+                ref={linkRef}
+                selected={selected}
+            >
+                <div className={style.content}>
+                    <Heading id={headingId} className={style.headline}>
+                        {headline}
+                    </Heading>
+                    {supportingText && (
+                        <p className={style.supportingText}>{supportingText}</p>
+                    )}
+                </div>
+                {link && (
+                    <Icon
+                        className={style.icon}
+                        name="arrow_right"
+                        isOnDark={isDarkTheme}
+                    />
+                )}
+            </InteractiveElement>
+        </li>
+    );
 }
 
 ListItem.defaultProps = {

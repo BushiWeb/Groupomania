@@ -7,28 +7,41 @@ import PasswordField from '../../../components/form-inputs/PasswordField/Passwor
 
 /** Form to create a post, with or without image */
 export default function DeleteUserForm({
-    password, passwordError, globalError, dispatch,
+    password,
+    passwordError,
+    globalError,
+    dispatch,
 }) {
     const errorMessageId = useId();
 
-    return <form className={style.form} aria-label="Formulaire de suppression d'utilisateur">
-        <SupportText
-            id={errorMessageId}
-            errorMessage={globalError}
-            errorIcon
-            className={style.supportText}
-            role="alert"
-        />
+    return (
+        <form
+            className={style.form}
+            aria-label="Formulaire de suppression d'utilisateur"
+        >
+            <SupportText
+                id={errorMessageId}
+                errorMessage={globalError}
+                errorIcon
+                className={style.supportText}
+                role="alert"
+            />
 
-        <PasswordField
-            value={password}
-            onChange={(e) => dispatch({ type: ACTIONS.setPassword, payload: e.target.value })}
-            label="Mot de passe"
-            errorMessage={passwordError}
-            supportText="Veuillez confirmer votre identité avant de continuer."
-            required
-        />
-    </form>;
+            <PasswordField
+                value={password}
+                onChange={(e) =>
+                    dispatch({
+                        type: ACTIONS.setPassword,
+                        payload: e.target.value,
+                    })
+                }
+                label="Mot de passe"
+                errorMessage={passwordError}
+                supportText="Veuillez confirmer votre identité avant de continuer."
+                required
+            />
+        </form>
+    );
 }
 
 DeleteUserForm.defaultProps = {

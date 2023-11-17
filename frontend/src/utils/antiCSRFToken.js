@@ -3,7 +3,9 @@
  * @returns {string}
  */
 export const getAntiCSRFToken = () => {
-    return document.querySelector('meta[name="crsf-token"]')?.getAttribute('content');
+    return document
+        .querySelector('meta[name="crsf-token"]')
+        ?.getAttribute('content');
 };
 
 /**

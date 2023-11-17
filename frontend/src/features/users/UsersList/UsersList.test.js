@@ -7,7 +7,7 @@ import USERS from '../../../utils/tests/mocks/users.js';
 
 describe('UsersList component test suite', () => {
     it('should render', () => {
-        render(<UsersList users={USERS}/>);
+        render(<UsersList users={USERS} />);
 
         const usersElts = screen.getAllByRole('listitem');
         expect(usersElts).toHaveLength(USERS.length);
@@ -17,7 +17,7 @@ describe('UsersList component test suite', () => {
     });
 
     it('should be identified as busy', () => {
-        render(<UsersList users={USERS} busy/>);
+        render(<UsersList users={USERS} busy />);
         const listElt = screen.getByRole('list');
         screen.getByLabelText(/Chargement/);
 
@@ -26,7 +26,7 @@ describe('UsersList component test suite', () => {
 
     it('should be navigable using the keyboard', async () => {
         const user = userEvent.setup();
-        render(<UsersList users={USERS}/>);
+        render(<UsersList users={USERS} />);
         const usersElts = screen.getAllByRole('link');
 
         await user.tab();

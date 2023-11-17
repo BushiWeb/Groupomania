@@ -4,19 +4,27 @@ import style from './AuthenticationForm.module.css';
 import PropTypes from 'prop-types';
 
 export default function FormButtons({
-    isLoading, onSignupClick, onLoginClick,
+    isLoading,
+    onSignupClick,
+    onLoginClick,
 }) {
-    return <div className={style.buttons}>
-        <FilledButton
-            className={style.login}
-            onClick={isLoading ? undefined : onLoginClick}
-        >Se connecter</FilledButton>
+    return (
+        <div className={style.buttons}>
+            <FilledButton
+                className={style.login}
+                onClick={isLoading ? undefined : onLoginClick}
+            >
+                Se connecter
+            </FilledButton>
 
-        <TonalButton
-            className={style.signup}
-            onClick={isLoading ? undefined : onSignupClick}
-        >S'inscrire</TonalButton>
-    </div>;
+            <TonalButton
+                className={style.signup}
+                onClick={isLoading ? undefined : onSignupClick}
+            >
+                S'inscrire
+            </TonalButton>
+        </div>
+    );
 }
 
 FormButtons.defaultProps = {

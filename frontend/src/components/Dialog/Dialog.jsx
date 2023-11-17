@@ -8,26 +8,29 @@ import TooltipWrapper from '../../features/tooltip/TooltipWrapper';
  * The dialog can't be dismissed by clicking outside.
  */
 export default function Dialog({
-    open, onClose, label, children, className, onCancel, ...props
+    open,
+    onClose,
+    label,
+    children,
+    className,
+    onCancel,
+    ...props
 }) {
-    const {
-        dialogRef,
-        dialogEventHandlers,
-    } = useDialog(open);
+    const { dialogRef, dialogEventHandlers } = useDialog(open);
 
-    return <dialog
-        ref={dialogRef}
-        onClose={onClose}
-        onCancel={onCancel}
-        className={`${style.dialog} ${className}`}
-        aria-label={label}
-        {...dialogEventHandlers}
-        {...props}
-    >
-        <TooltipWrapper>
-            {children}
-        </TooltipWrapper>
-    </dialog>;
+    return (
+        <dialog
+            ref={dialogRef}
+            onClose={onClose}
+            onCancel={onCancel}
+            className={`${style.dialog} ${className}`}
+            aria-label={label}
+            {...dialogEventHandlers}
+            {...props}
+        >
+            <TooltipWrapper>{children}</TooltipWrapper>
+        </dialog>
+    );
 }
 
 Dialog.defaultProps = {

@@ -1,6 +1,4 @@
-import {
-    useCallback, useRef,
-} from 'react';
+import { useCallback, useRef } from 'react';
 import { tabbable } from 'tabbable';
 
 /**
@@ -23,7 +21,9 @@ export function useDialog(isOpen) {
     function handleDOMUpdate() {
         tabbableElements.current = tabbable(ref.current);
     }
-    const { current: mutationObserver } = useRef(new MutationObserver(handleDOMUpdate));
+    const { current: mutationObserver } = useRef(
+        new MutationObserver(handleDOMUpdate),
+    );
 
     // Creates the focus trap.
     function handleTab(e) {
@@ -32,59 +32,68 @@ export function useDialog(isOpen) {
         }
 
         // Focus the last element if Shift+Tab is pressed while on the first element
-        if (e.shiftKey && document.activeElement === tabbableElements.current[0]) {
+        if (
+            e.shiftKey &&
+            document.activeElement === tabbableElements.current[0]
+        ) {
             e.preventDefault();
             tabbableElements.current.at?.(-1)?.focus();
             return;
         }
 
         // Focus the first element if Tab is pressed while on the last element
-        if (!e.shiftKey && document.activeElement === tabbableElements.current.at?.(-1)) {
+        if (
+            !e.shiftKey &&
+            document.activeElement === tabbableElements.current.at?.(-1)
+        ) {
             e.preventDefault();
             tabbableElements.current[0]?.focus();
             return;
         }
     }
 
-    const dialogRef = useCallback(node => {
-        if (ref.current) {
-            // Removes focus trap
-            mutationObserver.disconnect();
-        }
-
-        if (node) {
-            // Handles state
-            if (node.open && !isOpen) {
-                node.close();
-            } else if (!node.open && isOpen) {
-                node.showModal();
+    const dialogRef = useCallback(
+        (node) => {
+            if (ref.current) {
+                // Removes focus trap
+                mutationObserver.disconnect();
             }
 
-            // Add focus trap
-            if (node.open) {
-                tabbableElements.current = tabbable(node);
-                mutationObserver.observe(node, {
-                    subtree: true,
-                    childList: true,
-                    attributes: true,
-                    attributeFilter: [
-                        'style',
-                        'hidden',
-                        'inert',
-                        'disabled',
-                        'tabindex',
-                        'controls',
-                        'contenteditable',
-                        'class',
-                        'type',
-                        'href',
-                    ],
-                });
-            }
-        }
+            if (node) {
+                // Handles state
+                if (node.open && !isOpen) {
+                    node.close();
+                } else if (!node.open && isOpen) {
+                    node.showModal();
+                }
 
-        ref.current = node;
-    }, [tabbableElements, isOpen, mutationObserver]);
+                // Add focus trap
+                if (node.open) {
+                    tabbableElements.current = tabbable(node);
+                    mutationObserver.observe(node, {
+                        subtree: true,
+                        childList: true,
+                        attributes: true,
+                        attributeFilter: [
+                            'style',
+                            'hidden',
+                            'inert',
+                            'disabled',
+                            'tabindex',
+                            'controls',
+                            'contenteditable',
+                            'class',
+                            'type',
+                            'href',
+                        ],
+                    });
+                }
+            }
+
+            ref.current = node;
+        },
+        [tabbableElements, isOpen, mutationObserver],
+    );
 
     return {
         dialogRef,

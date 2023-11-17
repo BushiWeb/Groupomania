@@ -31,7 +31,8 @@ export function useInfiniteScroll(scrollElt, queryKey, queryFn) {
     } = useInfiniteQuery({
         queryKey: queryKey,
         queryFn: queryFn,
-        getNextPageParam: (lastPage) => lastPage.data.length === 0 ? undefined : lastPage.pageParam + 1,
+        getNextPageParam: (lastPage) =>
+            lastPage.data.length === 0 ? undefined : lastPage.pageParam + 1,
     });
 
     useEffect(() => {
@@ -40,7 +41,10 @@ export function useInfiniteScroll(scrollElt, queryKey, queryFn) {
         }
     }, [shouldLoadMore, fetchNextPage, isAuthenticated]);
 
-    const flattenedData = data?.pages?.reduce((acc, curr) => acc.concat(curr.data), []);
+    const flattenedData = data?.pages?.reduce(
+        (acc, curr) => acc.concat(curr.data),
+        [],
+    );
 
     return {
         data: flattenedData,

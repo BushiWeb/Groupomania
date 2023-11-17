@@ -32,7 +32,11 @@ describe('Link component test suite', () => {
     it('should not be activated by the space bar', async () => {
         const user = userEvent.setup();
 
-        render(<Link to={to} useSpaceBar={false}>{label}</Link>);
+        render(
+            <Link to={to} useSpaceBar={false}>
+                {label}
+            </Link>,
+        );
         const linkElt = screen.getByRole('link', { name: label });
 
         expect(linkElt).not.toHaveFocus();
@@ -49,7 +53,11 @@ describe('Link component test suite', () => {
         const user = userEvent.setup();
 
         const mockOnClick = jest.fn((e) => e.preventDefault());
-        render(<Link to={to} useSpaceBar={false} onClick={mockOnClick}>{label}</Link>);
+        render(
+            <Link to={to} useSpaceBar={false} onClick={mockOnClick}>
+                {label}
+            </Link>,
+        );
         const linkElt = screen.getByRole('link', { name: label });
 
         await user.click(linkElt);
@@ -62,7 +70,11 @@ describe('Link component test suite', () => {
         const user = userEvent.setup();
 
         const mockOnKeyDown = jest.fn((e) => e.preventDefault());
-        render(<Link to={to} useSpaceBar={false} onKeyDown={mockOnKeyDown}>{label}</Link>);
+        render(
+            <Link to={to} useSpaceBar={false} onKeyDown={mockOnKeyDown}>
+                {label}
+            </Link>,
+        );
         const linkElt = screen.getByRole('link', { name: label });
 
         await user.tab();

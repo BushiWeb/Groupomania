@@ -12,7 +12,7 @@ describe('IconButton component test suite', () => {
     const name = 'favorite';
 
     it('should render', () => {
-        render(<IconButton name={name} label={label}/>);
+        render(<IconButton name={name} label={label} />);
         const buttonElt = screen.getByRole('button', { name: label });
         expect(buttonElt).toHaveTextContent(name);
         expect(buttonElt).not.toHaveAttribute('aria-pressed');
@@ -21,7 +21,7 @@ describe('IconButton component test suite', () => {
     it('should execute the action when clicked', async () => {
         const buttonAction = jest.fn(() => true);
         const user = userEvent.setup();
-        render(<IconButton name={name} label={label} onClick={buttonAction}/>);
+        render(<IconButton name={name} label={label} onClick={buttonAction} />);
 
         const buttonElt = screen.getByRole('button');
 
@@ -33,7 +33,7 @@ describe('IconButton component test suite', () => {
     it('should be accessible using the keyboard', async () => {
         const buttonAction = jest.fn(() => true);
         const user = userEvent.setup();
-        render(<IconButton name={name} label={label} onClick={buttonAction}/>);
+        render(<IconButton name={name} label={label} onClick={buttonAction} />);
         const buttonElt = screen.getByRole('button');
 
         expect(buttonElt).not.toHaveFocus();
@@ -51,34 +51,55 @@ describe('IconButton component test suite', () => {
     });
 
     it('should have the initial focus', () => {
-        render(<IconButton name={name} label={label} autoFocus={true}/>);
+        render(<IconButton name={name} label={label} autoFocus={true} />);
         const buttonElt = screen.getByRole('button');
         expect(buttonElt).toHaveFocus();
     });
 
     it('should be disabled', () => {
-        render(<IconButton name={name} label={label} disabled={true}/>);
+        render(<IconButton name={name} label={label} disabled={true} />);
         const buttonElt = screen.getByRole('button');
         expect(buttonElt).toBeDisabled();
     });
 
-    it('should be disabled and don\'t have the focus', () => {
-        render(<IconButton name={name} label={label} disabled={true} autoFocus={true}/>);
+    it("should be disabled and don't have the focus", () => {
+        render(
+            <IconButton
+                name={name}
+                label={label}
+                disabled={true}
+                autoFocus={true}
+            />,
+        );
         const buttonElt = screen.getByRole('button');
         expect(buttonElt).toBeDisabled();
         expect(buttonElt).not.toHaveFocus();
     });
 
     it('should have additionnal classnames on the button', () => {
-        render(<IconButton name={name} label={label} className={additionnalClass}/>);
+        render(
+            <IconButton
+                name={name}
+                label={label}
+                className={additionnalClass}
+            />,
+        );
         const buttonElt = screen.getByRole('button');
         expect(buttonElt).toHaveClass(additionnalClass);
     });
 
     it('should trigger the ripple effect when activated', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        render(<IconButton name={name} label={label} stateLayerColor={'primary'}/>);
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
+        render(
+            <IconButton
+                name={name}
+                label={label}
+                stateLayerColor={'primary'}
+            />,
+        );
         const buttonElt = screen.getByRole('button');
         const stateLayer = buttonElt.querySelector('.stateLayer');
 
@@ -91,7 +112,6 @@ describe('IconButton component test suite', () => {
         expect(stateLayer).toHaveClass('ripple');
         fakeTimers.runAllTimers();
         expect(stateLayer).not.toHaveClass('ripple');
-
 
         await user.keyboard('{Enter}');
         expect(stateLayer).toHaveClass('ripple');
@@ -108,7 +128,14 @@ describe('IconButton component test suite', () => {
 
     it('should not trigger the ripple effect if disabled', async () => {
         const user = userEvent.setup();
-        render(<IconButton name={name} label={label} disabled={true} stateLayerColor={'primary'}/>);
+        render(
+            <IconButton
+                name={name}
+                label={label}
+                disabled={true}
+                stateLayerColor={'primary'}
+            />,
+        );
         const buttonElt = screen.getByRole('button');
         const stateLayer = buttonElt.querySelector('.stateLayer');
 
@@ -123,7 +150,7 @@ describe('IconButton component test suite', () => {
 
     it('should trigger the ripple effect when activated', async () => {
         const user = userEvent.setup();
-        render(<IconButton name={name} label={label}/>);
+        render(<IconButton name={name} label={label} />);
         const buttonElt = screen.getByRole('button');
         const stateLayer = buttonElt.querySelector('.stateLayer');
 
@@ -135,7 +162,6 @@ describe('IconButton component test suite', () => {
         await user.keyboard(' ');
         expect(stateLayer).not.toHaveClass('ripple');
 
-
         await user.keyboard('{Enter}');
         expect(stateLayer).not.toHaveClass('ripple');
 
@@ -145,8 +171,10 @@ describe('IconButton component test suite', () => {
 
     it('should display a tooltip when hovered', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        const { container } = render(<IconButton name={name} label={label}/>);
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
+        const { container } = render(<IconButton name={name} label={label} />);
         const buttonElt = screen.getByRole('button', { name: label });
 
         await user.hover(buttonElt);
@@ -160,13 +188,19 @@ describe('IconButton component test suite', () => {
 
     it('should add any other prop passed to it', () => {
         const description = 'lorem';
-        render(<IconButton name={name} label={label} aria-describedby={description}/>);
+        render(
+            <IconButton
+                name={name}
+                label={label}
+                aria-describedby={description}
+            />,
+        );
         const buttonElt = screen.getByRole('button');
         expect(buttonElt.getAttribute('aria-describedby')).toBe(description);
     });
 
     it('should have all activated states', () => {
-        render(<IconButton name={name} label={label}/>);
+        render(<IconButton name={name} label={label} />);
         const buttonElt = screen.getByRole('button');
 
         expect(buttonElt).toHaveAttribute('data-state-focus', 'true');
@@ -175,20 +209,28 @@ describe('IconButton component test suite', () => {
     });
 
     it('should give the right color to the state layer', () => {
-        const { container } = render(<IconButton name={name} label={label} stateLayerColor="on-primary"/>);
+        const { container } = render(
+            <IconButton
+                name={name}
+                label={label}
+                stateLayerColor="on-primary"
+            />,
+        );
         const stateLayer = container.querySelector('.stateLayer');
 
-        expect(stateLayer).toHaveStyle('--state-layer-color: var(--color-on-primary)');
+        expect(stateLayer).toHaveStyle(
+            '--state-layer-color: var(--color-on-primary)',
+        );
     });
 
     it('should be activated', () => {
-        render(<IconButton name={name} label={label} toggle={true}/>);
+        render(<IconButton name={name} label={label} toggle={true} />);
         const buttonElt = screen.getByRole('button', { name: label });
         expect(buttonElt).toHaveAttribute('aria-pressed', 'true');
     });
 
     it('should not be activated', () => {
-        render(<IconButton name={name} label={label} toggle={false}/>);
+        render(<IconButton name={name} label={label} toggle={false} />);
         const buttonElt = screen.getByRole('button', { name: label });
         expect(buttonElt).toHaveAttribute('aria-pressed', 'false');
     });

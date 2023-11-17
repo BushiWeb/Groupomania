@@ -4,16 +4,16 @@ import { postContext } from './Post';
 
 /** Displays one post data. */
 export default function PostContent() {
-    const {
-        title,
-        titleId,
-        message,
-        messageId,
-    } = useContext(postContext);
+    const { title, titleId, message, messageId } = useContext(postContext);
 
-    return <div className={style.content}>
-        <h2 className={style.title} id={titleId}>{title}</h2>
-        <p className={style.message} id={messageId}>{message}</p>
-    </div>;
-
+    return (
+        <div className={style.content}>
+            <h2 className={style.title} id={titleId}>
+                {title}
+            </h2>
+            <p className={style.message} id={messageId}>
+                {message}
+            </p>
+        </div>
+    );
 }

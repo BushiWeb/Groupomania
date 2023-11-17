@@ -9,12 +9,12 @@ import config from '../../config/config.js';
  */
 export default function generateTextSchema(
     { required = false, sanitize = true } = {},
-    location = ['body']
+    location = ['body'],
 ) {
     return {
         in: location,
 
-        ...required ?
+        ...(required ?
             {
                 exists: {
                     errorMessage: 'The text is required.',
@@ -23,23 +23,28 @@ export default function generateTextSchema(
                     },
                     bail: true,
                 },
-            } :
-            {
+            }
+        :   {
                 optional: {
                     options: { nullable: true },
                 },
-            },
+            }),
 
-        ...sanitize && {
+        ...(sanitize && {
             customSanitizer: {
                 options: (value) => {
                     let newValue = value;
-                    for (const blackListed of config.get('payload.sanitization')) {
-                        newValue = newValue.replace(new RegExp(blackListed), '');
+                    for (const blackListed of config.get(
+                        'payload.sanitization',
+                    )) {
+                        newValue = newValue.replace(
+                            new RegExp(blackListed),
+                            '',
+                        );
                     }
                     return newValue;
                 },
             },
-        },
+        }),
     };
 }

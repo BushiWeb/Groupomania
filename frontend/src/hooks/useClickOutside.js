@@ -7,7 +7,11 @@ import { useEffect } from 'react';
  * @param [observerElementRef] - Reference containing the element on which to apply the event listener,
  *  contains window by default
  */
-export function useClickOutsideModal(elementRef, action, observerElementRef = { current: window }) {
+export function useClickOutsideModal(
+    elementRef,
+    action,
+    observerElementRef = { current: window },
+) {
     useEffect(() => {
         function handleClickOutside(e) {
             if (!elementRef.current || elementRef.current.contains(e.target)) {

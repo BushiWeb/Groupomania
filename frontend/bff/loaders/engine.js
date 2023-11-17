@@ -2,7 +2,9 @@ import { createLoggerNamespace } from '../logger/index.js';
 import { Liquid } from 'liquidjs';
 import { join } from 'node:path';
 
-const loaderLogger = createLoggerNamespace('groupomania:bff:loader:render-engine');
+const loaderLogger = createLoggerNamespace(
+    'groupomania:bff:loader:render-engine',
+);
 
 /**
  * Setup the render engine.
@@ -16,5 +18,4 @@ export default function renderEngineLoader(app) {
     app.set('views', join(process.cwd(), 'build'));
     app.set('view engine', 'liquid');
     loaderLogger.debug('Render engine setup');
-
 }

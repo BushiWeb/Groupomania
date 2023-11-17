@@ -14,19 +14,23 @@ describe('InfiniteUserList test suite', () => {
                 setContainerRef(node);
             }
         };
-        return <div data-testid="container" ref={mainRef}>
-            <InfiniteUserList containerElt={containerRef}/>
-        </div>;
+        return (
+            <div data-testid="container" ref={mainRef}>
+                <InfiniteUserList containerElt={containerRef} />
+            </div>
+        );
     }
 
-    const initialState = { user: { email: 'test@gmail.com', userId: 130, roleId: 1 }};
+    const initialState = {
+        user: { email: 'test@gmail.com', userId: 130, roleId: 1 },
+    };
 
     beforeEach(() => {
         sessionStorage.clear();
     });
 
     it('should render with one page of users', async () => {
-        render(<TestComponent/>, { preloadedState: initialState });
+        render(<TestComponent />, { preloadedState: initialState });
 
         await waitFor(() => {
             screen.getByRole('list', { name: 'Liste des utilisateurs' });
@@ -36,7 +40,7 @@ describe('InfiniteUserList test suite', () => {
     });
 
     it('should load more articles on scroll', async () => {
-        render(<TestComponent/>, { preloadedState: initialState });
+        render(<TestComponent />, { preloadedState: initialState });
 
         await waitFor(() => {
             screen.getByRole('list', { name: 'Liste des utilisateurs' });
@@ -61,9 +65,12 @@ describe('InfiniteUserList test suite', () => {
         });
     });
 
-    it('should navigate to the user\'s page', async () => {
+    it("should navigate to the user's page", async () => {
         const user = userEvent.setup();
-        render(undefined, { initialEntries: ['/reseau'], preloadedState: initialState });
+        render(undefined, {
+            initialEntries: ['/reseau'],
+            preloadedState: initialState,
+        });
         let userElt;
 
         await waitFor(() => {
@@ -79,7 +86,10 @@ describe('InfiniteUserList test suite', () => {
 
     it('should redirect to the login page if the user is not authenticated when loading more posts', async () => {
         sessionStorage.setItem('authError', 'true');
-        render(undefined, { preloadedState: initialState, initialEntries: ['/reseau']});
+        render(undefined, {
+            preloadedState: initialState,
+            initialEntries: ['/reseau'],
+        });
 
         await waitFor(() => {
             const path = screen.getByTestId('search-path').textContent;
@@ -89,7 +99,7 @@ describe('InfiniteUserList test suite', () => {
 
     it('should redirect to the error page if there is a network error', async () => {
         sessionStorage.setItem('networkError', 'true');
-        render(<TestComponent/>, { preloadedState: initialState });
+        render(<TestComponent />, { preloadedState: initialState });
 
         await waitFor(() => {
             const path = screen.getByTestId('search-path').textContent;
@@ -99,7 +109,7 @@ describe('InfiniteUserList test suite', () => {
 
     it('should redirect to the error page if there is a 500 error', async () => {
         sessionStorage.setItem('serverError', 'true');
-        render(<TestComponent/>, { preloadedState: initialState });
+        render(<TestComponent />, { preloadedState: initialState });
 
         await waitFor(() => {
             const path = screen.getByTestId('search-path').textContent;
@@ -109,7 +119,7 @@ describe('InfiniteUserList test suite', () => {
 
     it('should display an error message in case of another error', async () => {
         sessionStorage.setItem('inputError', 'true');
-        render(<TestComponent/>, { preloadedState: initialState });
+        render(<TestComponent />, { preloadedState: initialState });
 
         await waitFor(() => {
             screen.getByText(/erreur/);

@@ -11,23 +11,38 @@ import { selectIsDarkTheme } from '../../../utils/selectors';
  * All additionnal props are passed to the DOM element.
  */
 export default function TextButton({
-    disabled, autoFocus, onClick, label, children, icon, ...other
+    disabled,
+    autoFocus,
+    onClick,
+    label,
+    children,
+    icon,
+    ...other
 }) {
     const className = icon ? style.textButtonIcon : style.textButton;
     const isDarkTheme = useSelector(selectIsDarkTheme);
 
-    return <Button
-        classNames={className}
-        disabled={disabled}
-        autoFocus={autoFocus}
-        onClick={onClick}
-        label={label}
-        stateLayerColor="primary"
-        {...other}
-    >
-        {icon && <Icon name={icon} className={style.icon} size={20} isOnDark={isDarkTheme}/>}
-        {children}
-    </Button>;
+    return (
+        <Button
+            classNames={className}
+            disabled={disabled}
+            autoFocus={autoFocus}
+            onClick={onClick}
+            label={label}
+            stateLayerColor="primary"
+            {...other}
+        >
+            {icon && (
+                <Icon
+                    name={icon}
+                    className={style.icon}
+                    size={20}
+                    isOnDark={isDarkTheme}
+                />
+            )}
+            {children}
+        </Button>
+    );
 }
 
 TextButton.defaultProps = {

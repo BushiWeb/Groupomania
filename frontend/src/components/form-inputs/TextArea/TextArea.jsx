@@ -24,45 +24,47 @@ export default function TextArea({
     const inputRef = useRef();
     const inputId = useId();
 
-    return <TextBox.Root
-        focusInput={() => inputRef.current?.focus?.()}
-        hasPlaceholder={!!placeholder}
-        hasValue={!!value}
-        isDisabled={disabled}
-        hasError={!!errorMessage}
-        className={`${style.textAreaRoot} ${className}`}
-        {... (supportText || errorMessage) && { labelId: supportTextId }}
-    >
-        <TextBox.InteractiveContainer
-            label={label}
-            inputId={inputId}
-            required={required}
-            className={style.textAreaContainer}
+    return (
+        <TextBox.Root
+            focusInput={() => inputRef.current?.focus?.()}
+            hasPlaceholder={!!placeholder}
+            hasValue={!!value}
+            isDisabled={disabled}
+            hasError={!!errorMessage}
+            className={`${style.textAreaRoot} ${className}`}
+            {...((supportText || errorMessage) && { labelId: supportTextId })}
         >
-            <textarea
-                value={value}
-                onChange={onChange}
-                id={inputId}
-                disabled={disabled}
+            <TextBox.InteractiveContainer
+                label={label}
+                inputId={inputId}
                 required={required}
-                placeholder={placeholder}
-                className={style.textarea}
-                ref={inputRef}
-                rows={rows}
-                aria-invalid={!!errorMessage}
-                {...props}
-            />
-        </TextBox.InteractiveContainer>
+                className={style.textAreaContainer}
+            >
+                <textarea
+                    value={value}
+                    onChange={onChange}
+                    id={inputId}
+                    disabled={disabled}
+                    required={required}
+                    placeholder={placeholder}
+                    className={style.textarea}
+                    ref={inputRef}
+                    rows={rows}
+                    aria-invalid={!!errorMessage}
+                    {...props}
+                />
+            </TextBox.InteractiveContainer>
 
-        <SupportText
-            id={supportTextId}
-            supportText={supportText}
-            errorMessage={errorMessage}
-            errorIcon={true}
-            required={required}
-            disabled={disabled}
-        />
-    </TextBox.Root>;
+            <SupportText
+                id={supportTextId}
+                supportText={supportText}
+                errorMessage={errorMessage}
+                errorIcon={true}
+                required={required}
+                disabled={disabled}
+            />
+        </TextBox.Root>
+    );
 }
 
 TextArea.defaultProps = {

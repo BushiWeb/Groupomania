@@ -1,7 +1,9 @@
 import { createLoggerNamespace } from '../../logger/index.js';
 import axios from 'axios';
 
-const requestServiceLogger = createLoggerNamespace('groupomania:bff:service:requests');
+const requestServiceLogger = createLoggerNamespace(
+    'groupomania:bff:service:requests',
+);
 
 /**
  * Creates the request configuration.
@@ -35,8 +37,8 @@ function generateRequestConfiguration({
     // Parses the data
     let parsedData;
     switch (contentType) {
-    default:
-        parsedData = requestData;
+        default:
+            parsedData = requestData;
     }
 
     //Generating the configuration
@@ -45,13 +47,12 @@ function generateRequestConfiguration({
         method,
         data: parsedData,
         headers: {
-            'Authorization': authorizationToken ? `Bearer ${authorizationToken}` : null,
+            Authorization:
+                authorizationToken ? `Bearer ${authorizationToken}` : null,
             'Content-Type': requestData ? contentType : null,
         },
     };
 }
-
-
 
 /**
  * Sends a refresh request to the API.
@@ -67,8 +68,6 @@ async function reAuthenticate(token) {
         refreshToken: token,
     });
 }
-
-
 
 /**
  * Retry the request
@@ -94,7 +93,8 @@ async function retryRequest(refreshToken, requestConfiguration) {
     // Try again
     try {
         requestServiceLogger.debug('Reauthentication successful, trying again');
-        requestConfiguration.headers['Authorization'] = `Bearer ${refreshedTokens.accessToken}`;
+        requestConfiguration.headers['Authorization'] =
+            `Bearer ${refreshedTokens.accessToken}`;
         const { data } = await axios(requestConfiguration);
         return { data, refreshedTokens };
     } catch (error) {
@@ -102,8 +102,6 @@ async function retryRequest(refreshToken, requestConfiguration) {
         return { error, refreshedTokens };
     }
 }
-
-
 
 /**
  * Send a request to the API. If the authentication tokens are invalid, it will attempt to refresh them and try again
@@ -125,7 +123,8 @@ async function retryRequest(refreshToken, requestConfiguration) {
 export default async function apiRequest(requestParameters) {
     requestServiceLogger.debug('Request service starting');
 
-    const requestConfiguration = generateRequestConfiguration(requestParameters);
+    const requestConfiguration =
+        generateRequestConfiguration(requestParameters);
 
     try {
         requestServiceLogger.debug('Sending the request');
@@ -141,7 +140,10 @@ export default async function apiRequest(requestParameters) {
             error.response &&
             error.response.status === 401
         ) {
-            result = retryRequest(requestParameters.refreshToken, requestConfiguration);
+            result = retryRequest(
+                requestParameters.refreshToken,
+                requestConfiguration,
+            );
         }
 
         return result;

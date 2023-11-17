@@ -7,60 +7,60 @@ import PropTypes from 'prop-types';
 import { useUpsertPostDialog } from './useUpsertPostDialog';
 
 /** Dialog used to create a post */
-export default function UpsertPostDialog({
-    isOpen,
-    setIsOpen,
-    post,
-}) {
+export default function UpsertPostDialog({ isOpen, setIsOpen, post }) {
     const {
-        confirmDialog: {
-            isConfirmOpen,
-            setIsConfirmOpen,
-        },
+        confirmDialog: { isConfirmOpen, setIsConfirmOpen },
         isLoading,
         data,
         dispatch,
-        dialogActions: {
-            confirm,
-            cancel,
-            save,
-        },
+        dialogActions: { confirm, cancel, save },
     } = useUpsertPostDialog(setIsOpen, post);
 
-    const acceptButton = <DialogAction onClick={save}>Sauvegarder</DialogAction>;
-    const dismissButton = <DialogAction onClick={confirm}>Annuler</DialogAction>;
-    const closeButton = <DialogCloseButton label="Annuler la création" onClick={confirm}/>;
+    const acceptButton = (
+        <DialogAction onClick={save}>Sauvegarder</DialogAction>
+    );
+    const dismissButton = (
+        <DialogAction onClick={confirm}>Annuler</DialogAction>
+    );
+    const closeButton = (
+        <DialogCloseButton label="Annuler la création" onClick={confirm} />
+    );
 
     const headline = post ? 'Modifier le post' : 'Créer un post';
 
-    return <>
-        <FullscreenDialog
-            label={headline}
-            onClose={(e) => {
-                setIsOpen(false);
-            }}
-            onCancel={(e) => {
-                e.preventDefault();
-                confirm();
-            }}
-            open={isOpen}
-            acceptButton={acceptButton}
-            dismissButton={dismissButton}
-            closeButton={closeButton}
-            headline={headline}
-            {...isLoading && { inert: 'true' }}
-        >
+    return (
+        <>
+            <FullscreenDialog
+                label={headline}
+                onClose={(e) => {
+                    setIsOpen(false);
+                }}
+                onCancel={(e) => {
+                    e.preventDefault();
+                    confirm();
+                }}
+                open={isOpen}
+                acceptButton={acceptButton}
+                dismissButton={dismissButton}
+                closeButton={closeButton}
+                headline={headline}
+                {...(isLoading && { inert: 'true' })}
+            >
+                <RequestLoader isLoading={isLoading} />
+                <UpsertPostForm
+                    {...data}
+                    isLoading={isLoading}
+                    dispatch={dispatch}
+                />
+            </FullscreenDialog>
 
-            <RequestLoader isLoading={isLoading}/>
-            <UpsertPostForm {...data} isLoading={isLoading} dispatch={dispatch}/>
-        </FullscreenDialog>
-
-        <ConfirmDialog
-            open={isConfirmOpen}
-            onAccept={cancel}
-            close={() => setIsConfirmOpen(false)}
-        />
-    </>;
+            <ConfirmDialog
+                open={isConfirmOpen}
+                onAccept={cancel}
+                close={() => setIsConfirmOpen(false)}
+            />
+        </>
+    );
 }
 
 UpsertPostDialog.defaultProps = {

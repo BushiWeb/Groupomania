@@ -9,48 +9,70 @@ import SupportText from '../../../components/form-inputs/SupportText/SupportText
 
 /** Form to create a post, with or without image */
 export default function UpsertPostForm({
-    title, titleError, message, messageError, image, imageError, globalError, dispatch,
+    title,
+    titleError,
+    message,
+    messageError,
+    image,
+    imageError,
+    globalError,
+    dispatch,
 }) {
     const imageRef = useRef(null);
     const errorMessageId = useId();
 
-    return <form className={style.form} aria-label="Formulaire de création de post">
-        <SupportText
-            id={errorMessageId}
-            errorMessage={globalError}
-            errorIcon
-            className={style.supportText}
-            role="alert"
-        />
+    return (
+        <form
+            className={style.form}
+            aria-label="Formulaire de création de post"
+        >
+            <SupportText
+                id={errorMessageId}
+                errorMessage={globalError}
+                errorIcon
+                className={style.supportText}
+                role="alert"
+            />
 
-        <TextField
-            value={title}
-            onChange={(e) => dispatch({ type: ACTIONS.setTitle, payload: e.target.value })}
-            label="Titre du post"
-            errorMessage={titleError}
-            required
-        />
+            <TextField
+                value={title}
+                onChange={(e) =>
+                    dispatch({
+                        type: ACTIONS.setTitle,
+                        payload: e.target.value,
+                    })
+                }
+                label="Titre du post"
+                errorMessage={titleError}
+                required
+            />
 
-        <TextArea
-            value={message}
-            onChange={(e) => dispatch({ type: ACTIONS.setMessage, payload: e.target.value })}
-            label="Message du post"
-            errorMessage={messageError}
-            required
-            rows={5}
-        />
+            <TextArea
+                value={message}
+                onChange={(e) =>
+                    dispatch({
+                        type: ACTIONS.setMessage,
+                        payload: e.target.value,
+                    })
+                }
+                label="Message du post"
+                errorMessage={messageError}
+                required
+                rows={5}
+            />
 
-        <ImageField
-            ref={imageRef}
-            className={style.imageInput}
-            image={image}
-            onChange={(file) => {
-                dispatch({ type: ACTIONS.setImage, payload: file });
-                dispatch({ type: ACTIONS.removeImageError });
-            }}
-            errorMessage={imageError}
-        />
-    </form>;
+            <ImageField
+                ref={imageRef}
+                className={style.imageInput}
+                image={image}
+                onChange={(file) => {
+                    dispatch({ type: ACTIONS.setImage, payload: file });
+                    dispatch({ type: ACTIONS.removeImageError });
+                }}
+                errorMessage={imageError}
+            />
+        </form>
+    );
 }
 
 UpsertPostForm.defaultProps = {

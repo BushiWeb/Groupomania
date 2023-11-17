@@ -8,21 +8,21 @@ import { changeViewportWidth } from '../../utils/tests/changeViewportWidth.js';
 describe('NavigationSection component test suite', () => {
     it('should render with a navigation bar on small screens', () => {
         changeViewportWidth(300);
-        render(<NavigationSection/>);
+        render(<NavigationSection />);
         const listElt = screen.getByRole('tablist');
         expect(listElt).toHaveClass('navigationBar');
     });
 
     it('should render with a navigation rail on medium screens', () => {
         changeViewportWidth(900);
-        render(<NavigationSection/>);
+        render(<NavigationSection />);
         const listElt = screen.getByRole('tablist');
         expect(listElt).toHaveClass('navigationRail');
     });
 
     it('should render with a navigation drawer on large screens', () => {
         changeViewportWidth(1200);
-        render(<NavigationSection/>);
+        render(<NavigationSection />);
         const listElt = screen.getByRole('tablist');
         expect(listElt).toHaveClass('navigationDrawer');
     });
@@ -35,7 +35,7 @@ describe('NavigationSection component test suite', () => {
             label: 'fabTest',
             onClick: jest.fn(),
         };
-        render(<NavigationSection fab={fab}/>);
+        render(<NavigationSection fab={fab} />);
         const fabElt = screen.getByRole('button', { name: fab.label });
         await user.click(fabElt);
         expect(fab.onClick).toHaveBeenCalled();
@@ -50,7 +50,7 @@ describe('NavigationSection component test suite', () => {
             label: 'fabTest',
             onClick: jest.fn(),
         };
-        render(<NavigationSection fab={fab}/>);
+        render(<NavigationSection fab={fab} />);
         const fabElt = screen.getByRole('button', { name: fab.label });
         await user.click(fabElt);
         expect(fab.onClick).toHaveBeenCalled();
@@ -65,7 +65,7 @@ describe('NavigationSection component test suite', () => {
             value: 'fabValue',
             onClick: jest.fn(),
         };
-        render(<NavigationSection fab={fab}/>);
+        render(<NavigationSection fab={fab} />);
         const fabElt = screen.getByRole('button', { name: fab.label });
         expect(fabElt).not.toHaveTextContent(fab.label);
         expect(fabElt).toHaveTextContent(fab.value);

@@ -16,20 +16,20 @@ describe('Checkbox component test suite', () => {
     });
 
     it('should render the component', () => {
-        render(<PasswordField {...props}/>);
+        render(<PasswordField {...props} />);
         screen.getByLabelText(props.label);
     });
 
     it('should have the right value', () => {
         const value = 'input value';
-        render(<PasswordField {...props} value={value}/>);
+        render(<PasswordField {...props} value={value} />);
         const passwordInputElt = screen.getByLabelText(props.label);
         expect(passwordInputElt).toHaveValue(value);
     });
 
     it('should execute the onChange function when updated', async () => {
         const user = userEvent.setup();
-        render(<PasswordField {...props}/>);
+        render(<PasswordField {...props} />);
         const passwordInputElt = screen.getByLabelText(props.label);
 
         await user.click(passwordInputElt);
@@ -40,13 +40,13 @@ describe('Checkbox component test suite', () => {
 
     it('should have a support text', () => {
         const supportText = 'support text';
-        render(<PasswordField {...props} supportText={supportText}/>);
+        render(<PasswordField {...props} supportText={supportText} />);
         screen.getByText(supportText);
     });
 
     it('should be have an error message', () => {
         const errorMessage = 'error message';
-        render(<PasswordField {...props} errorMessage={errorMessage}/>);
+        render(<PasswordField {...props} errorMessage={errorMessage} />);
         screen.getByText(errorMessage);
     });
 
@@ -55,7 +55,7 @@ describe('Checkbox component test suite', () => {
             name: 'favorite',
             label: 'trailing icon',
         };
-        render(<PasswordField {...props} leadingIconProps={leadingIcon}/>);
+        render(<PasswordField {...props} leadingIconProps={leadingIcon} />);
         const leadingIconElt = screen.getByLabelText(leadingIcon.label);
 
         expect(leadingIconElt).toHaveTextContent(leadingIcon.name);
@@ -63,9 +63,11 @@ describe('Checkbox component test suite', () => {
 
     it('should have a trailing icon button to show the password', async () => {
         const user = userEvent.setup();
-        render(<PasswordField {...props}/>);
+        render(<PasswordField {...props} />);
         const passwordInputElt = screen.getByLabelText(props.label);
-        let trailingIconButtonElt = screen.getByRole('button', { name: /Montrer/ });
+        let trailingIconButtonElt = screen.getByRole('button', {
+            name: /Montrer/,
+        });
         expect(trailingIconButtonElt).toHaveTextContent('visibility');
         expect(passwordInputElt).toHaveAttribute('type', 'password');
 
@@ -81,13 +83,13 @@ describe('Checkbox component test suite', () => {
     });
 
     it('should be disabled', () => {
-        render(<PasswordField {...props} disabled/>);
+        render(<PasswordField {...props} disabled />);
         const passwordInputElt = screen.getByLabelText(props.label);
         expect(passwordInputElt).toBeDisabled();
     });
 
     it('should be required', () => {
-        render(<PasswordField {...props} required/>);
+        render(<PasswordField {...props} required />);
         const passwordInputElt = screen.getByLabelText(`${props.label}*`);
         expect(passwordInputElt).toBeRequired();
     });

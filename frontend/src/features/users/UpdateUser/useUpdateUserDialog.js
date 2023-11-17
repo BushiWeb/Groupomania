@@ -29,12 +29,10 @@ export function useUpdateUserDialog(setIsOpen, user) {
     function onSuccess() {
         setIsOpen(false);
     }
-    const {
-        isLoading,
-        mutate,
-        dispatch,
-        data,
-    } = useUpdateUserForm(onSuccess, user);
+    const { isLoading, mutate, dispatch, data } = useUpdateUserForm(
+        onSuccess,
+        user,
+    );
 
     /*
      * Function executed when attempting to close the form.

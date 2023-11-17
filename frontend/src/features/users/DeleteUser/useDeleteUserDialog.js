@@ -20,12 +20,10 @@ export function useDeleteUserDialog(setIsOpen, user) {
     function onSuccess() {
         setIsOpen(false);
     }
-    const {
-        isLoading,
-        mutate,
-        dispatch,
-        data,
-    } = useDeleteUserForm(onSuccess, user);
+    const { isLoading, mutate, dispatch, data } = useDeleteUserForm(
+        onSuccess,
+        user,
+    );
 
     /*
      * Cancels the input.

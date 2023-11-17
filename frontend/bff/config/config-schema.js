@@ -54,7 +54,7 @@ const CONFIG_SCHEMA = {
     },
     payload: {
         maxSize: {
-            doc: 'Payload\'s max size in number of bytes',
+            doc: "Payload's max size in number of bytes",
             format: 'int',
             default: 10240,
         },
@@ -114,14 +114,7 @@ const CONFIG_SCHEMA = {
         methods: {
             doc: 'Access-Control-Allow-Methods header value.',
             format: Array,
-            default: [
-                'GET',
-                'POST',
-                'PUT',
-                'DELETE',
-                'PATCH',
-                'OPTION',
-            ],
+            default: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTION'],
             nullable: false,
         },
         allowedHeaders: {

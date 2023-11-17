@@ -15,7 +15,7 @@ const PRODUCTION_LOGGER_CONFIG = {
         winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
         winston.format.errors({ stack: true }),
         winston.format.splat(),
-        winston.format.json({ replacer: jsonReplacer })
+        winston.format.json({ replacer: jsonReplacer }),
     ),
     transports: [
         new winston.transports.DailyRotateFile({

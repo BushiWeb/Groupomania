@@ -54,35 +54,42 @@ export default function routeLoader(router) {
         }),
         validationMiddlewares(loginBodySchema),
         authenticate(false),
-        loginController
+        loginController,
     );
-    loaderLogger.debug('POST /login - add route to login or refresh the access token');
+    loaderLogger.debug(
+        'POST /login - add route to login or refresh the access token',
+    );
 
     router.post(
         '/logout',
         createBodyParser({}),
         authenticate(true),
-        logoutController
+        logoutController,
     );
     loaderLogger.debug('POST /logout - add route to logout');
 
     router.post(
         '/signup',
-        createBodyParser({
-            'application/json': express.json(expressJsonOptions),
-        }, false),
+        createBodyParser(
+            {
+                'application/json': express.json(expressJsonOptions),
+            },
+            false,
+        ),
         validationMiddlewares(signupBodySchema),
         authenticate(false),
-        signupController
+        signupController,
     );
-    loaderLogger.debug('POST /signup - add route to login or refresh the access token');
+    loaderLogger.debug(
+        'POST /signup - add route to login or refresh the access token',
+    );
 
     router.get(
         '/users',
         createBodyParser({}),
         validationMiddlewares(getUsersSchema),
         authenticate(true),
-        getUsersController
+        getUsersController,
     );
     loaderLogger.debug('GET /users - add route to get all the users');
 
@@ -91,40 +98,55 @@ export default function routeLoader(router) {
         createBodyParser({}),
         validationMiddlewares(getUserSchema),
         authenticate(true),
-        getUserController
+        getUserController,
     );
-    loaderLogger.debug('GET /users/:userId - add route to get the user\'s informations');
+    loaderLogger.debug(
+        "GET /users/:userId - add route to get the user's informations",
+    );
 
     router.put(
         '/users/:userId',
-        createBodyParser({
-            'application/json': express.json(expressJsonOptions),
-        }, false),
+        createBodyParser(
+            {
+                'application/json': express.json(expressJsonOptions),
+            },
+            false,
+        ),
         validationMiddlewares(updateUserSchema),
         authenticate(true),
-        updateUserController
+        updateUserController,
     );
-    loaderLogger.debug('PUT /users/:userId - add route to update the user password and email');
+    loaderLogger.debug(
+        'PUT /users/:userId - add route to update the user password and email',
+    );
 
     router.put(
         '/users/:userId/role',
-        createBodyParser({
-            'application/json': express.json(expressJsonOptions),
-        }, false),
+        createBodyParser(
+            {
+                'application/json': express.json(expressJsonOptions),
+            },
+            false,
+        ),
         validationMiddlewares(updateUserRoleSchema),
         authenticate(true),
-        updateUserRoleController
+        updateUserRoleController,
     );
-    loaderLogger.debug('PUT /users/:userId/role - add route to update the user role');
+    loaderLogger.debug(
+        'PUT /users/:userId/role - add route to update the user role',
+    );
 
     router.delete(
         '/users/:userId',
-        createBodyParser({
-            'application/json': express.json(expressJsonOptions),
-        }, false),
+        createBodyParser(
+            {
+                'application/json': express.json(expressJsonOptions),
+            },
+            false,
+        ),
         validationMiddlewares(deleteUserSchema),
         authenticate(true),
-        deleteUserController
+        deleteUserController,
     );
     loaderLogger.debug('DELETE /users/:userId - add route to delete the user');
 
@@ -133,42 +155,51 @@ export default function routeLoader(router) {
         createBodyParser({}),
         validationMiddlewares(getPostsSchema),
         authenticate(true),
-        getPostsController
+        getPostsController,
     );
     loaderLogger.debug('GET /posts - add route to get all the posts');
 
     router.post(
         '/posts',
-        createBodyParser({
-            'application/json': express.json(expressJsonOptions),
-            'multipart/form-data': multer,
-        }, false),
+        createBodyParser(
+            {
+                'application/json': express.json(expressJsonOptions),
+                'multipart/form-data': multer,
+            },
+            false,
+        ),
         validationMiddlewares(createPostSchema, true),
         authenticate(true),
-        createPostController
+        createPostController,
     );
     loaderLogger.debug('POST /posts - add route to create a post');
 
     router.put(
         '/posts/:postId',
-        createBodyParser({
-            'application/json': express.json(expressJsonOptions),
-            'multipart/form-data': multer,
-        }, false),
+        createBodyParser(
+            {
+                'application/json': express.json(expressJsonOptions),
+                'multipart/form-data': multer,
+            },
+            false,
+        ),
         validationMiddlewares(updatePostSchema, true),
         authenticate(true),
-        updatePostController
+        updatePostController,
     );
     loaderLogger.debug('PUT /posts/:postId - add route to update a post');
 
     router.post(
         '/posts/:postId/like',
-        createBodyParser({
-            'application/json': express.json(expressJsonOptions),
-        }, false),
+        createBodyParser(
+            {
+                'application/json': express.json(expressJsonOptions),
+            },
+            false,
+        ),
         validationMiddlewares(likePostSchema),
         authenticate(true),
-        likePostController
+        likePostController,
     );
     loaderLogger.debug('POST /posts/:postId/like - add route to like a post');
 
@@ -177,7 +208,7 @@ export default function routeLoader(router) {
         createBodyParser({}),
         validationMiddlewares(deletePostSchema),
         authenticate(true),
-        deletePostController
+        deletePostController,
     );
     loaderLogger.debug('DELETE /posts/:postId - add route to delete a post');
 }

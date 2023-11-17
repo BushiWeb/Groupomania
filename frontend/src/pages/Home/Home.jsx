@@ -1,8 +1,6 @@
 import { useOutletContext } from 'react-router-dom';
 import style from './Home.module.css';
-import {
-    useContext, useEffect, useState,
-} from 'react';
+import { useContext, useEffect, useState } from 'react';
 import InfinitePostFeed from '../../features/posts/InifinitePostFeed/InfinitePostFeed';
 import { fabContext } from '../../context/fabContext';
 import UpsertPostDialog from '../../features/posts/UpsertPostDialog/UpsertPostDialog';
@@ -43,9 +41,20 @@ export default function Home() {
         };
     }, [setFab, setIsCreatePostOpen]);
 
-    return <main id={id} className={`${className} ${style.home}`} ref={mainRef}>
-        <h1 className={style.heading}>Accueil</h1>
-        <InfinitePostFeed containerElt={containerRef} errorClassName={style.error} className={style.posts}/>
-        {isCreatePostOpen && <UpsertPostDialog isOpen={isCreatePostOpen} setIsOpen={setIsCreatePostOpen}/>}
-    </main>;
+    return (
+        <main id={id} className={`${className} ${style.home}`} ref={mainRef}>
+            <h1 className={style.heading}>Accueil</h1>
+            <InfinitePostFeed
+                containerElt={containerRef}
+                errorClassName={style.error}
+                className={style.posts}
+            />
+            {isCreatePostOpen && (
+                <UpsertPostDialog
+                    isOpen={isCreatePostOpen}
+                    setIsOpen={setIsCreatePostOpen}
+                />
+            )}
+        </main>
+    );
 }

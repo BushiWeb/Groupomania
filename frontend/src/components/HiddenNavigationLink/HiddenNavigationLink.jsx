@@ -8,7 +8,10 @@ import InteractiveElement from '../InteractiveElement/InteractiveElement.jsx';
  * Hidden navigation link, useful for accessibility. It can be used for a "skip to main content" link for example.
  */
 export default function HiddenNavigationLink({ children, target }) {
-    const { enter, exit } = useEnterExitWithinBounds({ origin: 'left', className: 'sr-only' });
+    const { enter, exit } = useEnterExitWithinBounds({
+        origin: 'left',
+        className: 'sr-only',
+    });
 
     function handleFocus(e) {
         enter(e.target);
@@ -25,18 +28,20 @@ export default function HiddenNavigationLink({ children, target }) {
         targetElt.focus();
     }
 
-    return <InteractiveElement
-        rootElement={Link}
-        className={`sr-only ${style.hiddenLink}`}
-        stateLayerColor="on-tertiary"
-        focus={false}
-        to={`#${target}`}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        onClick={handleClick}
-    >
-        {children}
-    </InteractiveElement>;
+    return (
+        <InteractiveElement
+            rootElement={Link}
+            className={`sr-only ${style.hiddenLink}`}
+            stateLayerColor="on-tertiary"
+            focus={false}
+            to={`#${target}`}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            onClick={handleClick}
+        >
+            {children}
+        </InteractiveElement>
+    );
 }
 
 HiddenNavigationLink.propTypes = {

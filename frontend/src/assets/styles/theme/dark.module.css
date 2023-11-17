@@ -44,7 +44,7 @@
     /* Inverse */
     --color-inverse-surface: var(--ref-color-palette-neutral90);
     --color-on-inverse-surface: var(--ref-color-palette-neutral20);
-    --color-inverse-primary:: var(--ref-color-palette-primary40);
+    --color-inverse-primary: var(--ref-color-palette-primary40);
 
     /* Other */
     --color-outline-focus: var(--ref-color-key-white);

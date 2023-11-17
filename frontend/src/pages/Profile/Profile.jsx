@@ -1,8 +1,6 @@
 import { useOutletContext } from 'react-router-dom';
 import style from './Profile.module.css';
-import {
-    useContext, useEffect, useState,
-} from 'react';
+import { useContext, useEffect, useState } from 'react';
 import InfinitePostFeed from '../../features/posts/InifinitePostFeed/InfinitePostFeed';
 import { fabContext } from '../../context/fabContext';
 import UpsertPostDialog from '../../features/posts/UpsertPostDialog/UpsertPostDialog';
@@ -23,11 +21,7 @@ export default function Profile() {
     useSetNavigationInfo(PAGE_NAME);
     const breakpoint = useBreakpoint();
     const userId = useSelector(selectUserId);
-    const {
-        data,
-        isLoading,
-        isError,
-    } = useGetUser(userId);
+    const { data, isLoading, isError } = useGetUser(userId);
 
     useChangePageTitle('Groupomania - Profil');
 
@@ -56,24 +50,33 @@ export default function Profile() {
         };
     }, [setFab, setIsCreatePostOpen]);
 
-    return <main id={id} className={`${className} ${style.profile}`} ref={mainRef}>
-        <UserHeader
-            email={data?.email}
-            userId={userId}
-            roleId={data?.role.roleId}
-            className={style.header}
-            {...breakpoint > BP_ID.compact && { small: true }}
-            busy={isLoading}
-            errorMessage={isError ?
-                'Une erreur est survenue lors du chargement des données. Vous pouvez essayer de recharger la page. Si le problème persiste, n\'hésitez pas à vous rapprocher d\'un administrateur.' :
-                undefined}
-        />
-        <InfinitePostFeed
-            containerElt={containerRef}
-            errorClassName={style.error}
-            className={style.posts}
-            userId={userId}
-        />
-        {isCreatePostOpen && <UpsertPostDialog isOpen={isCreatePostOpen} setIsOpen={setIsCreatePostOpen}/>}
-    </main>;
+    return (
+        <main id={id} className={`${className} ${style.profile}`} ref={mainRef}>
+            <UserHeader
+                email={data?.email}
+                userId={userId}
+                roleId={data?.role.roleId}
+                className={style.header}
+                {...(breakpoint > BP_ID.compact && { small: true })}
+                busy={isLoading}
+                errorMessage={
+                    isError ?
+                        "Une erreur est survenue lors du chargement des données. Vous pouvez essayer de recharger la page. Si le problème persiste, n'hésitez pas à vous rapprocher d'un administrateur."
+                    :   undefined
+                }
+            />
+            <InfinitePostFeed
+                containerElt={containerRef}
+                errorClassName={style.error}
+                className={style.posts}
+                userId={userId}
+            />
+            {isCreatePostOpen && (
+                <UpsertPostDialog
+                    isOpen={isCreatePostOpen}
+                    setIsOpen={setIsCreatePostOpen}
+                />
+            )}
+        </main>
+    );
 }

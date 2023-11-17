@@ -38,8 +38,12 @@ describe('FilledButton component test suite', () => {
         expect(buttonElt).toBeDisabled();
     });
 
-    it('should be disabled and don\'t have the focus', () => {
-        render(<FilledButton disabled={true} autoFocus={true}>{label}</FilledButton>);
+    it("should be disabled and don't have the focus", () => {
+        render(
+            <FilledButton disabled={true} autoFocus={true}>
+                {label}
+            </FilledButton>,
+        );
         const buttonElt = screen.getByRole('button');
         expect(buttonElt).toBeDisabled();
         expect(buttonElt).not.toHaveFocus();
@@ -74,7 +78,9 @@ describe('FilledButton component test suite', () => {
 
     it('should trigger the ripple effect when activated', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
         render(<FilledButton>{label}</FilledButton>);
         const buttonElt = screen.getByRole('button');
         const stateLayer = buttonElt.querySelector('.stateLayer');
@@ -88,7 +94,6 @@ describe('FilledButton component test suite', () => {
         expect(stateLayer).toHaveClass('ripple');
         fakeTimers.runAllTimers();
         expect(stateLayer).not.toHaveClass('ripple');
-
 
         await user.keyboard('{Enter}');
         expect(stateLayer).toHaveClass('ripple');
@@ -134,7 +139,9 @@ describe('FilledButton component test suite', () => {
     });
 
     it('should have an icon', () => {
-        const { container } = render(<FilledButton icon="favorite">{label}</FilledButton>);
+        const { container } = render(
+            <FilledButton icon="favorite">{label}</FilledButton>,
+        );
         const iconElt = container.querySelector('span.material-icon');
 
         expect(iconElt).not.toBeNull();

@@ -8,14 +8,19 @@ import { useEffect, useState } from 'react';
  * @param {boolean} [fromBottom = false] - Weither the threshold is from the top (false) or the bottom (true)
  * @returns Returns a boolean indicating the position of the scroll relative to the threshold.
  */
-export function useScrollThreshold(threshold, element = window, fromBottom = false) {
+export function useScrollThreshold(
+    threshold,
+    element = window,
+    fromBottom = false,
+) {
     const [isPastThreshold, setPastThreshold] = useState(null);
 
     useEffect(() => {
         function handleScroll() {
-            const currentThreshold = fromBottom ?
-                element.scrollHeight - element.clientHeight - threshold :
-                threshold;
+            const currentThreshold =
+                fromBottom ?
+                    element.scrollHeight - element.clientHeight - threshold
+                :   threshold;
 
             if (element.scrollTop > currentThreshold) {
                 setPastThreshold(true);

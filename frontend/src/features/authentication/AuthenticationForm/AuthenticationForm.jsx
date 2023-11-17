@@ -21,27 +21,31 @@ export default function AuthenticationForm() {
         },
     } = useAuthForm();
 
-    return <form className={style.form} aria-label="Formulaire d'inscription et de connection">
-        <RequestLoader signupLoading={isLoading}/>
+    return (
+        <form
+            className={style.form}
+            aria-label="Formulaire d'inscription et de connection"
+        >
+            <RequestLoader signupLoading={isLoading} />
 
-        <Logo color width={240} className={style.logo}/>
+            <Logo color width={240} className={style.logo} />
 
-        <FormFields
-            globalError={globalError}
-            email={email}
-            emailError={emailError}
-            password={password}
-            passwordError={passwordError}
-            rememberMe={rememberMe}
-            isLoading={isLoading}
-            dispatch={dispatch}
-        />
+            <FormFields
+                globalError={globalError}
+                email={email}
+                emailError={emailError}
+                password={password}
+                passwordError={passwordError}
+                rememberMe={rememberMe}
+                isLoading={isLoading}
+                dispatch={dispatch}
+            />
 
-        <FormButtons
-            isLoading={isLoading}
-            onSignupClick={() => mutate('signup')}
-            onLoginClick={() => mutate('login')}
-        />
-    </form>;
-
+            <FormButtons
+                isLoading={isLoading}
+                onSignupClick={() => mutate('signup')}
+                onLoginClick={() => mutate('login')}
+            />
+        </form>
+    );
 }

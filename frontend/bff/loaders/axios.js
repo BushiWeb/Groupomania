@@ -10,5 +10,7 @@ const loaderLogger = createLoggerNamespace('groupomania:bff:loader:axios');
 export default function axiosLoader() {
     loaderLogger.verbose('Axios setup loading');
 
-    axios.defaults.baseURL = `${config.get('api.protocol')}://${config.get('api.baseUrl')}:${config.get('api.port')}${config.get('api.baseRoutePath')}`;
+    axios.defaults.baseURL = `${config.get('api.protocol')}://${config.get(
+        'api.baseUrl',
+    )}:${config.get('api.port')}${config.get('api.baseRoutePath')}`;
 }

@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import {
-    Outlet, useOutletContext, useParams,
-} from 'react-router-dom';
+import { Outlet, useOutletContext, useParams } from 'react-router-dom';
 import InfiniteUserList from '../../features/users/InfiniteUserList/InfiniteUserList';
 import { useBreakpoint } from '../../hooks/useBreakpoints';
 import style from './Network.module.css';
@@ -31,15 +29,23 @@ export default function Network() {
         }
     };
 
-    return <main id={id} className={`${className} ${style.network}`} {...breakpoint < 4 && { ref: mainRef }}>
-        <h1 className={style.heading}>Réseau</h1>
-        <InfiniteUserList
-            containerElt={containerRef}
-            errorClassName={style.error}
-            className={style.users}
-            {...breakpoint >= BP_ID.xxl && { ref: mainRef }}
-            selectedUserId={userId && parseInt(userId)}
-        />
-        {breakpoint >= BP_ID.xxl && <Outlet context={{ className: style.user }}/>}
-    </main>;
+    return (
+        <main
+            id={id}
+            className={`${className} ${style.network}`}
+            {...(breakpoint < 4 && { ref: mainRef })}
+        >
+            <h1 className={style.heading}>Réseau</h1>
+            <InfiniteUserList
+                containerElt={containerRef}
+                errorClassName={style.error}
+                className={style.users}
+                {...(breakpoint >= BP_ID.xxl && { ref: mainRef })}
+                selectedUserId={userId && parseInt(userId)}
+            />
+            {breakpoint >= BP_ID.xxl && (
+                <Outlet context={{ className: style.user }} />
+            )}
+        </main>
+    );
 }

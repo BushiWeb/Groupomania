@@ -9,18 +9,30 @@ describe('HiddenNavigationLink component test suite', () => {
     const target = '/test';
 
     it('should render', () => {
-        render(<HiddenNavigationLink target={target}>{label}</HiddenNavigationLink>);
+        render(
+            <HiddenNavigationLink target={target}>
+                {label}
+            </HiddenNavigationLink>,
+        );
     });
 
     it('should have the right label', () => {
-        render(<HiddenNavigationLink target={target}>{label}</HiddenNavigationLink>);
+        render(
+            <HiddenNavigationLink target={target}>
+                {label}
+            </HiddenNavigationLink>,
+        );
         screen.getByRole('link', { name: label });
     });
 
     it('should be accessible using the keyboard', async () => {
         const user = userEvent.setup();
 
-        render(<HiddenNavigationLink target={target}>{label}</HiddenNavigationLink>);
+        render(
+            <HiddenNavigationLink target={target}>
+                {label}
+            </HiddenNavigationLink>,
+        );
         const linkElt = screen.getByRole('link', { name: label });
 
         expect(linkElt).not.toHaveFocus();
@@ -32,8 +44,14 @@ describe('HiddenNavigationLink component test suite', () => {
 
     it('should trigger the animation when focused and blurred', async () => {
         jest.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-        render(<HiddenNavigationLink target={target}>{label}</HiddenNavigationLink>);
+        const user = userEvent.setup({
+            advanceTimers: jest.advanceTimersByTime,
+        });
+        render(
+            <HiddenNavigationLink target={target}>
+                {label}
+            </HiddenNavigationLink>,
+        );
         const linkElt = screen.getByRole('link', { name: label });
 
         expect(linkElt).toHaveClass('sr-only');
@@ -65,7 +83,11 @@ describe('HiddenNavigationLink component test suite', () => {
     });
 
     it('should have all states activated except the focus one', () => {
-        render(<HiddenNavigationLink target={target}>{label}</HiddenNavigationLink>);
+        render(
+            <HiddenNavigationLink target={target}>
+                {label}
+            </HiddenNavigationLink>,
+        );
         const linkElt = screen.getByRole('link', { name: label });
 
         expect(linkElt).toHaveAttribute('data-state-active', 'true');

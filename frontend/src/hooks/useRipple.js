@@ -20,8 +20,6 @@ function getClickCoordinates(elementBox, clickCoordinates) {
     };
 }
 
-
-
 /**
  * Get the coordinates of the furthest border-radius center.
  * @param {HTMLElement} element
@@ -34,13 +32,21 @@ function getFurthestCornerRadiusCoordinates(element, click) {
     const elementBox = element.getBoundingClientRect();
 
     if (borderRadius === '50%') {
-        return { x: elementBox.width / 2, y: elementBox.height / 2, borderRadius: elementBox.width / 2 };
+        return {
+            x: elementBox.width / 2,
+            y: elementBox.height / 2,
+            borderRadius: elementBox.width / 2,
+        };
     }
 
     borderRadius = parseInt(borderRadius);
 
     if (borderRadius >= elementBox.height && borderRadius >= elementBox.width) {
-        return { x: elementBox.width / 2, y: elementBox.height / 2, borderRadius: elementBox.width / 2 };
+        return {
+            x: elementBox.width / 2,
+            y: elementBox.height / 2,
+            borderRadius: elementBox.width / 2,
+        };
     }
 
     if (borderRadius >= elementBox.height) {
@@ -52,13 +58,17 @@ function getFurthestCornerRadiusCoordinates(element, click) {
     }
 
     return {
-        x: click.x > elementBox.width / 2 ? borderRadius : elementBox.width - borderRadius,
-        y: click.y > elementBox.height / 2 ? borderRadius : elementBox.height - borderRadius,
+        x:
+            click.x > elementBox.width / 2 ?
+                borderRadius
+            :   elementBox.width - borderRadius,
+        y:
+            click.y > elementBox.height / 2 ?
+                borderRadius
+            :   elementBox.height - borderRadius,
         borderRadius,
     };
 }
-
-
 
 /**
  * Calculates the distance to the furthest point on the shape outline, and add a bit more to finish the ripple effect.
@@ -68,13 +78,11 @@ function getFurthestCornerRadiusCoordinates(element, click) {
  */
 function getMaxRadius(furthestCorner, click) {
     const distanceToRadiusCenter = Math.sqrt(
-        (furthestCorner.x - click.x) ** 2 + (furthestCorner.y - click.y) ** 2
+        (furthestCorner.x - click.x) ** 2 + (furthestCorner.y - click.y) ** 2,
     );
 
     return (distanceToRadiusCenter + furthestCorner.borderRadius) * 1.25;
 }
-
-
 
 /**
  * Hook allowing to add the ripple effect to an element.
@@ -122,7 +130,10 @@ export function useRipple(duration, { onPointerDown, onKeyDown }) {
             The ripple will stretch to the side of the state-layer, taking the curvature into account.
             We consider that all corners have the same border radius.
         */
-        const furthestCorner = getFurthestCornerRadiusCoordinates(element, click);
+        const furthestCorner = getFurthestCornerRadiusCoordinates(
+            element,
+            click,
+        );
         const endRadius = getMaxRadius(furthestCorner, click);
         element.style.setProperty('--ripple-width', `${endRadius}`);
 
@@ -133,14 +144,16 @@ export function useRipple(duration, { onPointerDown, onKeyDown }) {
             timeoutId.current = null;
             element.classList.remove('ripple');
         }, duration);
-
     }
 
     function handlePointerDown(e) {
         onPointerDown?.(e);
 
         if (duration > 0) {
-            rippleTrigger(stateLayerRef.current, { x: e.clientX, y: e.clientY });
+            rippleTrigger(stateLayerRef.current, {
+                x: e.clientX,
+                y: e.clientY,
+            });
         }
     }
 

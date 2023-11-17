@@ -5,7 +5,9 @@ import getUserRequest from '../../services/requests/getUser.js';
 import config from '../../config/config.js';
 import { UnauthorizedError } from '../../errors/index.js';
 
-const loginControllerLogger = createLoggerNamespace('groupomania:bff:controller:login');
+const loginControllerLogger = createLoggerNamespace(
+    'groupomania:bff:controller:login',
+);
 
 /**
  * Send a login request and then a get user request.
@@ -15,16 +17,20 @@ const loginControllerLogger = createLoggerNamespace('groupomania:bff:controller:
  */
 async function login(req) {
     loginControllerLogger.debug('Logging in with credentials');
-    const loginInformations = await loginRequest(req.body.email, req.body.password);
-    const userInformations = await getUserRequest(loginInformations.userId, loginInformations);
+    const loginInformations = await loginRequest(
+        req.body.email,
+        req.body.password,
+    );
+    const userInformations = await getUserRequest(
+        loginInformations.userId,
+        loginInformations,
+    );
     return {
         infos: userInformations,
         accessToken: loginInformations.accessToken,
         refreshToken: loginInformations.refreshToken,
     };
 }
-
-
 
 /**
  * Send a refresh request.
@@ -40,19 +46,20 @@ async function refresh(req) {
         throw new UnauthorizedError({
             message: 'User is not authenticated',
             title: 'You are not authenticated',
-            description: 'This request requires you to be authenticated, but we can\'t find your session. Please, login and try again.',
+            description:
+                "This request requires you to be authenticated, but we can't find your session. Please, login and try again.",
         });
     }
 
-    const loginInformations = await refreshRequest(req.session.user.refreshToken);
+    const loginInformations = await refreshRequest(
+        req.session.user.refreshToken,
+    );
     return {
         infos: req.session.user.infos,
         accessToken: loginInformations.accessToken,
         refreshToken: loginInformations.refreshToken,
     };
 }
-
-
 
 /**
  * Extends session lifespan.
@@ -62,8 +69,6 @@ function extendSessionLifespan(req) {
     loginControllerLogger.debug('Extending session lifespan');
     req.session.cookie.maxAge = config.get('session.extendedCookieExp');
 }
-
-
 
 /**
  * Login controller.
@@ -94,11 +99,15 @@ export default async function loginController(req, res, next) {
         // Save the new data in the session
         req.session.regenerate((error) => {
             if (error) {
-                loginControllerLogger.debug('Error while regenerating the session');
+                loginControllerLogger.debug(
+                    'Error while regenerating the session',
+                );
                 return next(error);
             }
 
-            loginControllerLogger.debug('Session regenerated, saving data in the session');
+            loginControllerLogger.debug(
+                'Session regenerated, saving data in the session',
+            );
             req.session.user = user;
             req.session.crsfToken = crsfToken;
             req.session.cookie.maxAge = maxAge;
@@ -111,11 +120,15 @@ export default async function loginController(req, res, next) {
             // Send the response
             req.session.save((error) => {
                 if (error) {
-                    loginControllerLogger.debug('Error while saving the session');
+                    loginControllerLogger.debug(
+                        'Error while saving the session',
+                    );
                     return next(error);
                 }
 
-                loginControllerLogger.debug('Session saved. Sending the response');
+                loginControllerLogger.debug(
+                    'Session saved. Sending the response',
+                );
                 res.status(200).json({ ...user.infos });
             });
         });

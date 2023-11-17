@@ -34,7 +34,7 @@ const DEVELOPMENT_LOGGER_CONFIG = {
         winston.format.errors({ stack: true }),
         winston.format.splat(),
         winston.format.printf(printfFormat),
-        winston.format.colorize({ all: true })
+        winston.format.colorize({ all: true }),
     ),
     transports: [new winston.transports.Console()],
 };

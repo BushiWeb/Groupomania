@@ -34,72 +34,73 @@ export function initState({ email }) {
 
 export function reducer(state, action) {
     switch (action.type) {
-    case ACTIONS.setEmail:
-        return {
-            ...state,
-            email: action.payload,
-        };
-    case ACTIONS.setEmailError:
-        return {
-            ...state,
-            emailError: action.payload,
-        };
-    case ACTIONS.removeEmailError:
-        return {
-            ...state,
-            emailError: undefined,
-        };
-    case ACTIONS.setOldPassword:
-        return {
-            ...state,
-            oldPassword: action.payload,
-        };
-    case ACTIONS.setOldPasswordError:
-        return {
-            ...state,
-            oldPasswordError: action.payload,
-        };
-    case ACTIONS.removeOldPasswordError:
-        return {
-            ...state,
-            oldPasswordError: undefined,
-        };
-    case ACTIONS.setNewPassword:
-        return {
-            ...state,
-            newPassword: action.payload,
-        };
-    case ACTIONS.setNewPasswordError:
-        return {
-            ...state,
-            newPasswordError: action.payload,
-        };
-    case ACTIONS.removeNewPasswordError:
-        return {
-            ...state,
-            newPasswordError: undefined,
-        };
-    case ACTIONS.setGlobalError:
-        return {
-            ...state,
-            globalError: action.payload,
-        };
-    case ACTIONS.removeGlobalError:
-        return {
-            ...state,
-            globalError: undefined,
-        };
-    case ACTIONS.removeErrors:
-        return {
-            ...state,
-            globalError: undefined,
-            emailError: undefined,
-            newPasswordError: undefined,
-            oldPasswordError: undefined,
-        };
-    case ACTIONS.reset:
-        return initialState;
-    default: return state;
+        case ACTIONS.setEmail:
+            return {
+                ...state,
+                email: action.payload,
+            };
+        case ACTIONS.setEmailError:
+            return {
+                ...state,
+                emailError: action.payload,
+            };
+        case ACTIONS.removeEmailError:
+            return {
+                ...state,
+                emailError: undefined,
+            };
+        case ACTIONS.setOldPassword:
+            return {
+                ...state,
+                oldPassword: action.payload,
+            };
+        case ACTIONS.setOldPasswordError:
+            return {
+                ...state,
+                oldPasswordError: action.payload,
+            };
+        case ACTIONS.removeOldPasswordError:
+            return {
+                ...state,
+                oldPasswordError: undefined,
+            };
+        case ACTIONS.setNewPassword:
+            return {
+                ...state,
+                newPassword: action.payload,
+            };
+        case ACTIONS.setNewPasswordError:
+            return {
+                ...state,
+                newPasswordError: action.payload,
+            };
+        case ACTIONS.removeNewPasswordError:
+            return {
+                ...state,
+                newPasswordError: undefined,
+            };
+        case ACTIONS.setGlobalError:
+            return {
+                ...state,
+                globalError: action.payload,
+            };
+        case ACTIONS.removeGlobalError:
+            return {
+                ...state,
+                globalError: undefined,
+            };
+        case ACTIONS.removeErrors:
+            return {
+                ...state,
+                globalError: undefined,
+                emailError: undefined,
+                newPasswordError: undefined,
+                oldPasswordError: undefined,
+            };
+        case ACTIONS.reset:
+            return initialState;
+        default:
+            return state;
     }
 }
 
@@ -113,7 +114,7 @@ export function reducer(state, action) {
  */
 export function isUserUpdated(currentState, initialState) {
     return (
-        !initialState && currentState.email !== '' ||
+        (!initialState && currentState.email !== '') ||
         currentState.email !== initialState.email ||
         currentState.newPassword !== ''
     );

@@ -7,37 +7,47 @@ import { forwardRef, useId } from 'react';
  * Similar to Interactive Container, but includes a button.
  * The label of the button is contained within the children.
  */
-const InteractiveButton = forwardRef(({
-    label,
-    required,
-    leadingIcon,
-    trailingIcon,
-    className,
-    children,
-    onClick,
-    ...props
-}, ref) => {
-    const labelId = useId();
+const InteractiveButton = forwardRef(
+    (
+        {
+            label,
+            required,
+            leadingIcon,
+            trailingIcon,
+            className,
+            children,
+            onClick,
+            ...props
+        },
+        ref,
+    ) => {
+        const labelId = useId();
 
-    return <InteractiveElement
-        rootElement='button'
-        type='button'
-        onClick={onClick}
-        active={false}
-        stateLayerColor={false}
-        className={`${style.interactiveContainer} ${className}`}
-        {...leadingIcon && { 'data-leading-icon': true }}
-        {...trailingIcon && { 'data-trailing-icon': true }}
-        ref={ref}
-        aria-labelledby={labelId}
-        {...props}
-    >
-        {leadingIcon}
-        <span className={style.labelText} id={labelId}>{label}{required && '*'}</span>
-        <span className={style.buttonContent}>{children}</span>
-        {trailingIcon}
-    </InteractiveElement>;
-});
+        return (
+            <InteractiveElement
+                rootElement="button"
+                type="button"
+                onClick={onClick}
+                active={false}
+                stateLayerColor={false}
+                className={`${style.interactiveContainer} ${className}`}
+                {...(leadingIcon && { 'data-leading-icon': true })}
+                {...(trailingIcon && { 'data-trailing-icon': true })}
+                ref={ref}
+                aria-labelledby={labelId}
+                {...props}
+            >
+                {leadingIcon}
+                <span className={style.labelText} id={labelId}>
+                    {label}
+                    {required && '*'}
+                </span>
+                <span className={style.buttonContent}>{children}</span>
+                {trailingIcon}
+            </InteractiveElement>
+        );
+    },
+);
 
 InteractiveButton.defaultProps = {
     required: false,

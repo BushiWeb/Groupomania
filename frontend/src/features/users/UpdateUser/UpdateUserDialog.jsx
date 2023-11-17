@@ -14,53 +14,56 @@ export default function UpdateUserDialog({
     userEmail,
 }) {
     const {
-        confirmDialog: {
-            isConfirmOpen,
-            setIsConfirmOpen,
-        },
+        confirmDialog: { isConfirmOpen, setIsConfirmOpen },
         isLoading,
         data,
         dispatch,
-        dialogActions: {
-            confirm,
-            cancel,
-            save,
-        },
+        dialogActions: { confirm, cancel, save },
     } = useUpdateUserDialog(setIsOpen, { userId, email: userEmail });
 
-    const acceptButton = <DialogAction onClick={save}>Sauvegarder</DialogAction>;
-    const dismissButton = <DialogAction onClick={confirm}>Annuler</DialogAction>;
-    const closeButton = <DialogCloseButton label="Annuler la création" onClick={confirm}/>;
+    const acceptButton = (
+        <DialogAction onClick={save}>Sauvegarder</DialogAction>
+    );
+    const dismissButton = (
+        <DialogAction onClick={confirm}>Annuler</DialogAction>
+    );
+    const closeButton = (
+        <DialogCloseButton label="Annuler la création" onClick={confirm} />
+    );
 
+    return (
+        <>
+            <FullscreenDialog
+                label="Modifier le profil"
+                onClose={(e) => {
+                    setIsOpen(false);
+                }}
+                onCancel={(e) => {
+                    e.preventDefault();
+                    confirm();
+                }}
+                open={isOpen}
+                acceptButton={acceptButton}
+                dismissButton={dismissButton}
+                closeButton={closeButton}
+                headline="Modifier le profil"
+                {...(isLoading && { inert: 'true' })}
+            >
+                <RequestLoader isLoading={isLoading} />
+                <UpdateUserForm
+                    {...data}
+                    isLoading={isLoading}
+                    dispatch={dispatch}
+                />
+            </FullscreenDialog>
 
-    return <>
-        <FullscreenDialog
-            label="Modifier le profil"
-            onClose={(e) => {
-                setIsOpen(false);
-            }}
-            onCancel={(e) => {
-                e.preventDefault();
-                confirm();
-            }}
-            open={isOpen}
-            acceptButton={acceptButton}
-            dismissButton={dismissButton}
-            closeButton={closeButton}
-            headline="Modifier le profil"
-            {...isLoading && { inert: 'true' }}
-        >
-
-            <RequestLoader isLoading={isLoading}/>
-            <UpdateUserForm {...data} isLoading={isLoading} dispatch={dispatch}/>
-        </FullscreenDialog>
-
-        <ConfirmDialog
-            open={isConfirmOpen}
-            onAccept={cancel}
-            close={() => setIsConfirmOpen(false)}
-        />
-    </>;
+            <ConfirmDialog
+                open={isConfirmOpen}
+                onAccept={cancel}
+                close={() => setIsConfirmOpen(false)}
+            />
+        </>
+    );
 }
 
 UpdateUserDialog.defaultProps = {

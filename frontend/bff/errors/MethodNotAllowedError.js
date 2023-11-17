@@ -35,23 +35,30 @@ export default class MethodNotAllowedError extends HttpError {
             ...otherData
         },
         cause,
-        headers = {}
+        headers = {},
     ) {
         const statusCode = 405;
         const name = 'MethodNotAllowedError';
-        const title = optionnalTitle || 'This method can\'t be used with this ressource.';
-        const description = optionnalDescription || `We can't execute you request because the ${method} can't be used on the ${path} path. Please, verify which methods are allowed and try again.`;
-        super({
-            message,
-            name,
-            title,
-            description,
-            details,
-            logDetails,
-            statusCode,
-            path,
-            method,
-            ...otherData,
-        }, cause, headers);
+        const title =
+            optionnalTitle || "This method can't be used with this ressource.";
+        const description =
+            optionnalDescription ||
+            `We can't execute you request because the ${method} can't be used on the ${path} path. Please, verify which methods are allowed and try again.`;
+        super(
+            {
+                message,
+                name,
+                title,
+                description,
+                details,
+                logDetails,
+                statusCode,
+                path,
+                method,
+                ...otherData,
+            },
+            cause,
+            headers,
+        );
     }
 }

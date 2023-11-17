@@ -11,11 +11,7 @@ export function useLikePost(userId) {
     const currentUserId = useSelector(selectUserId);
     const queryKey = userId ? ['posts', userId] : ['posts'];
 
-    const {
-        mutate,
-        isError,
-        error,
-    } = useMutation({
+    const { mutate, isError, error } = useMutation({
         mutationFn: async ({ postId, likeAction, writerId }) => {
             return simpleFetch({
                 url: `/data/posts/${postId}/like`,
@@ -40,7 +36,10 @@ export function useLikePost(userId) {
                             post.usersLiked.push(currentUserId);
                         } else {
                             post.likes--;
-                            post.usersLiked.splice(post.usersLiked.indexOf(currentUserId), 1);
+                            post.usersLiked.splice(
+                                post.usersLiked.indexOf(currentUserId),
+                                1,
+                            );
                         }
                     }
                 }
@@ -54,8 +53,8 @@ export function useLikePost(userId) {
         },
 
         onSuccess: (data, { writerId }) => {
-            queryClient.invalidateQueries({ queryKey: ['posts']});
-            queryClient.invalidateQueries({ queryKey: ['posts', writerId]});
+            queryClient.invalidateQueries({ queryKey: ['posts'] });
+            queryClient.invalidateQueries({ queryKey: ['posts', writerId] });
         },
     });
 

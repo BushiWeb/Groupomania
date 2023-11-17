@@ -10,7 +10,9 @@ import { selectPreviousNavigation } from '../../utils/selectors.js';
  * }} Returns the location and the state of the previous page
  */
 export function useGetPrevNavigationInfo() {
-    const { prevLocation, prevState, key } = useSelector(selectPreviousNavigation);
+    const { prevLocation, prevState, key } = useSelector(
+        selectPreviousNavigation,
+    );
 
     return {
         prevLocation,

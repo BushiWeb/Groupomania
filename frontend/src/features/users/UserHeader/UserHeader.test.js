@@ -37,23 +37,25 @@ describe('UserHeader component test suite', () => {
     };
 
     it('should render', () => {
-        render(<UserHeader {...props}/>);
+        render(<UserHeader {...props} />);
     });
 
     it('should render the right email', () => {
-        render(<UserHeader {...props}/>);
+        render(<UserHeader {...props} />);
         screen.getByRole('heading', { name: email, level: 1 });
     });
 
     it('should render the admin subtitle', () => {
-        render(<UserHeader {...{ ...props, roleId: 1 }}/>);
+        render(<UserHeader {...{ ...props, roleId: 1 }} />);
         screen.getByText('Administrateur', { selector: 'p' });
     });
 
     it('should display the navigate back button to return to the list', async () => {
         const user = userEvent.setup();
-        render(<UserHeader {...props} backArrow/>, { preloadedState });
-        const backArrow = screen.getByRole('button', { name: 'Retourner à la liste' });
+        render(<UserHeader {...props} backArrow />, { preloadedState });
+        const backArrow = screen.getByRole('button', {
+            name: 'Retourner à la liste',
+        });
 
         await user.click(backArrow);
         expect(screen.getByTestId('search-path').textContent).toMatch('reseau');
@@ -61,13 +63,17 @@ describe('UserHeader component test suite', () => {
 
     it('should display the logout and theme buttons, and have a hidden link', async () => {
         const user = userEvent.setup();
-        render(<UserHeader {...props} topLevelHeader/>);
+        render(<UserHeader {...props} topLevelHeader />);
         screen.getByRole('button', { name: 'Se déconnecter' });
         screen.getByRole('link', { name: 'Accéder directement au contenu' });
 
-        let themeButton = screen.getByRole('button', { name: 'Passer au mode sombre' });
+        let themeButton = screen.getByRole('button', {
+            name: 'Passer au mode sombre',
+        });
         await user.click(themeButton);
-        themeButton = screen.getByRole('button', { name: 'Passer au mode clair' });
+        themeButton = screen.getByRole('button', {
+            name: 'Passer au mode clair',
+        });
         expect(document.body).toHaveClass('dark');
 
         await user.click(themeButton);
@@ -76,21 +82,27 @@ describe('UserHeader component test suite', () => {
     });
 
     it('should display the update user button and the delete user button', () => {
-        render(<UserHeader {...props}/>, { preloadedState });
+        render(<UserHeader {...props} />, { preloadedState });
         screen.getByRole('button', { name: 'Modifier le profil' });
         screen.getByRole('button', { name: 'Supprimer le profil' });
     });
 
     it('should display the update role button and the delete user button', () => {
-        render(<UserHeader {...props}/>, { preloadedState: adminPreloadedState });
-        screen.getByRole('button', { name: 'Modifier le role de l\'utilisateur' });
+        render(<UserHeader {...props} />, {
+            preloadedState: adminPreloadedState,
+        });
+        screen.getByRole('button', {
+            name: "Modifier le role de l'utilisateur",
+        });
         screen.getByRole('button', { name: 'Supprimer le profil' });
     });
 
     it('should display the actions in a menu when using it as top level header', async () => {
         const user = userEvent.setup();
-        render(<UserHeader {...props} topLevelHeader/>, { preloadedState });
-        const moreActionsButton = screen.getByRole('button', { name: 'Plus d\'actions' });
+        render(<UserHeader {...props} topLevelHeader />, { preloadedState });
+        const moreActionsButton = screen.getByRole('button', {
+            name: "Plus d'actions",
+        });
 
         await user.click(moreActionsButton);
         screen.getByRole('menu', { name: /Actions/ });
@@ -99,13 +111,15 @@ describe('UserHeader component test suite', () => {
     });
 
     it('should display a loader', async () => {
-        render(<UserHeader {...props} busy/>, { preloadedState });
-        screen.getByLabelText('Chargement des données de l\'utilisateur');
+        render(<UserHeader {...props} busy />, { preloadedState });
+        screen.getByLabelText("Chargement des données de l'utilisateur");
     });
 
     it('should display an error', async () => {
         const errorMessage = 'lorem ipsum';
-        render(<UserHeader {...props} errorMessage={errorMessage}/>, { preloadedState });
+        render(<UserHeader {...props} errorMessage={errorMessage} />, {
+            preloadedState,
+        });
         screen.getByText(errorMessage);
     });
 });

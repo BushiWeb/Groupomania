@@ -1,10 +1,5 @@
 import { useReducer } from 'react';
-import {
-    ACTIONS,
-    initState,
-    isUserUpdated,
-    reducer,
-} from './formReducer.js';
+import { ACTIONS, initState, isUserUpdated, reducer } from './formReducer.js';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
     updateUserRequest,
@@ -50,11 +45,14 @@ export function useUpdateUserForm(onSuccess, user) {
                 oldPassword,
             });
 
-            return updateUserRequest({
-                ...email !== user.email && { email },
-                ...newPassword && { password: newPassword },
-                currentPassword: oldPassword,
-            }, user.userId);
+            return updateUserRequest(
+                {
+                    ...(email !== user.email && { email }),
+                    ...(newPassword && { password: newPassword }),
+                    currentPassword: oldPassword,
+                },
+                user.userId,
+            );
         },
         onMutate: () => {
             dispatch({ type: ACTIONS.removeErrors });
@@ -76,27 +74,39 @@ export function useUpdateUserForm(onSuccess, user) {
             }
 
             if (errorMessages.email) {
-                dispatch({ type: ACTIONS.setEmailError, payload: errorMessages.email });
+                dispatch({
+                    type: ACTIONS.setEmailError,
+                    payload: errorMessages.email,
+                });
             }
 
             if (errorMessages.oldPassword) {
-                dispatch({ type: ACTIONS.setOldPasswordError, payload: errorMessages.oldPassword });
+                dispatch({
+                    type: ACTIONS.setOldPasswordError,
+                    payload: errorMessages.oldPassword,
+                });
             }
 
             if (errorMessages.newPassword) {
-                dispatch({ type: ACTIONS.setNewPasswordError, payload: errorMessages.newPassword });
+                dispatch({
+                    type: ACTIONS.setNewPasswordError,
+                    payload: errorMessages.newPassword,
+                });
             }
 
             if (errorMessages.global) {
-                dispatch({ type: ACTIONS.setGlobalError, payload: errorMessages.global });
+                dispatch({
+                    type: ACTIONS.setGlobalError,
+                    payload: errorMessages.global,
+                });
             }
         },
         onSuccess: () => {
             dispatch({ type: ACTIONS.reset });
-            queryClient.invalidateQueries({ queryKey: ['users']});
-            queryClient.invalidateQueries({ queryKey: ['users', user.userId]});
-            queryClient.invalidateQueries({ queryKey: ['posts']});
-            queryClient.invalidateQueries({ queryKey: ['posts', user.userId]});
+            queryClient.invalidateQueries({ queryKey: ['users'] });
+            queryClient.invalidateQueries({ queryKey: ['users', user.userId] });
+            queryClient.invalidateQueries({ queryKey: ['posts'] });
+            queryClient.invalidateQueries({ queryKey: ['posts', user.userId] });
             onSuccess();
         },
     });

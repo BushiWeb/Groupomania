@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-    deletePostRequest,
-    handleDeletePostRequestError,
-} from './request.js';
+import { deletePostRequest, handleDeletePostRequestError } from './request.js';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from 'react-redux';
 import { logout } from '../../authentication/user.slice.js';
@@ -47,8 +44,8 @@ export function useDeletePostForm(onSuccess, postId, writerId) {
             setError(errorMessages);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['posts']});
-            queryClient.invalidateQueries({ queryKey: ['posts', writerId]});
+            queryClient.invalidateQueries({ queryKey: ['posts'] });
+            queryClient.invalidateQueries({ queryKey: ['posts', writerId] });
             onSuccess();
         },
     });

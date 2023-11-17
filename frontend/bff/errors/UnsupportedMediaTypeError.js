@@ -35,23 +35,29 @@ export default class UnsupportedMediaTypeError extends HttpError {
             ...otherData
         },
         cause,
-        headers = {}
+        headers = {},
     ) {
         const statusCode = 415;
         const name = 'UnsupportedMediaTypeError';
         const title = optionnalTitle || 'the Content-Type is not supported.';
-        const description = optionnalDescription || 'We currently can\'t handle this Content-Type. You may try again with a different data format.';
-        super({
-            message,
-            name,
-            title,
-            description,
-            details,
-            logDetails,
-            statusCode,
-            path,
-            method,
-            ...otherData,
-        }, cause, headers);
+        const description =
+            optionnalDescription ||
+            "We currently can't handle this Content-Type. You may try again with a different data format.";
+        super(
+            {
+                message,
+                name,
+                title,
+                description,
+                details,
+                logDetails,
+                statusCode,
+                path,
+                method,
+                ...otherData,
+            },
+            cause,
+            headers,
+        );
     }
 }

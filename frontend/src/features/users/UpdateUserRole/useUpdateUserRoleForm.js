@@ -26,13 +26,7 @@ export function useUpdateUserRoleForm(onSuccess, user) {
     const { dispatch: globalDispatch } = useStore();
     const queryClient = useQueryClient();
     const [
-        {
-            roleId,
-            roleError,
-            password,
-            passwordError,
-            globalError,
-        },
+        { roleId, roleError, password, passwordError, globalError },
         dispatch,
     ] = useReducer(reducer, user, initState);
 
@@ -47,7 +41,10 @@ export function useUpdateUserRoleForm(onSuccess, user) {
                 roleId,
             });
 
-            return updateUserRoleRequest({ roleId, currentPassword: password }, user.userId);
+            return updateUserRoleRequest(
+                { roleId, currentPassword: password },
+                user.userId,
+            );
         },
         onMutate: () => {
             dispatch({ type: ACTIONS.removeErrors });
@@ -69,21 +66,30 @@ export function useUpdateUserRoleForm(onSuccess, user) {
             }
 
             if (errorMessages.role) {
-                dispatch({ type: ACTIONS.setEmailError, payload: errorMessages.role });
+                dispatch({
+                    type: ACTIONS.setEmailError,
+                    payload: errorMessages.role,
+                });
             }
 
             if (errorMessages.password) {
-                dispatch({ type: ACTIONS.setPasswordError, payload: errorMessages.password });
+                dispatch({
+                    type: ACTIONS.setPasswordError,
+                    payload: errorMessages.password,
+                });
             }
 
             if (errorMessages.global) {
-                dispatch({ type: ACTIONS.setGlobalError, payload: errorMessages.global });
+                dispatch({
+                    type: ACTIONS.setGlobalError,
+                    payload: errorMessages.global,
+                });
             }
         },
         onSuccess: () => {
             dispatch({ type: ACTIONS.reset });
-            queryClient.invalidateQueries({ queryKey: ['users']});
-            queryClient.invalidateQueries({ queryKey: ['users', user.userId]});
+            queryClient.invalidateQueries({ queryKey: ['users'] });
+            queryClient.invalidateQueries({ queryKey: ['users', user.userId] });
             onSuccess();
         },
     });

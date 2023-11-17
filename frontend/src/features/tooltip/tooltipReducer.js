@@ -19,23 +19,24 @@ export const initialState = {
 
 export function reducer(state, action) {
     switch (action.type) {
-    case ACTIONS.setValue:
-        return {
-            ...state,
-            value: action.payload,
-        };
-    case ACTIONS.open:
-        return {
-            isOpen: true,
-            value: action.payload.value,
-            openCause: action.payload.cause,
-            anchor: action.payload.anchor,
-        };
-    case ACTIONS.close:
-        return {
-            ...state,
-            isOpen: false,
-        };
-    default: return state;
+        case ACTIONS.setValue:
+            return {
+                ...state,
+                value: action.payload,
+            };
+        case ACTIONS.open:
+            return {
+                isOpen: true,
+                value: action.payload.value,
+                openCause: action.payload.cause,
+                anchor: action.payload.anchor,
+            };
+        case ACTIONS.close:
+            return {
+                ...state,
+                isOpen: false,
+            };
+        default:
+            return state;
     }
 }

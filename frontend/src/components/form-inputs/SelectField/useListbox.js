@@ -15,12 +15,13 @@ import { useLayoutEffect, useRef, useState } from 'react';
  * }}
  *  Returns an object containing the position of the menu
  */
-export default function useListbox({
-    anchor,
-    open = false,
-}) {
+export default function useListbox({ anchor, open = false }) {
     const ref = useRef(null);
-    const [{ top, left, width }, setPosition] = useState({ top: 0, left: 0, width: null });
+    const [{ top, left, width }, setPosition] = useState({
+        top: 0,
+        left: 0,
+        width: null,
+    });
 
     /* Get position when opening */
     useLayoutEffect(() => {
@@ -41,22 +42,27 @@ export default function useListbox({
         const anchorBox = anchor.getBoundingClientRect();
 
         // Place the element underneath the anchor except if it overflows
-        const top = anchorBox.y + anchorBox.height + listboxBox.height > window.innerHeight ?
-            Math.max(0, anchorBox.y - listboxBox.height) :
-            anchorBox.y + anchorBox.height;
+        const top =
+            (
+                anchorBox.y + anchorBox.height + listboxBox.height >
+                window.innerHeight
+            ) ?
+                Math.max(0, anchorBox.y - listboxBox.height)
+            :   anchorBox.y + anchorBox.height;
 
         // The element spans at least the widht of the anchor, and is placed in priority on the left side
-        const width = listboxBox.width < anchorBox.width ? anchorBox.width : null;
-        const left = anchorBox.x < window.innerWidth / 2 ?
-            Math.min(anchorBox.x, window.innerWidth - listboxBox.width) :
-            Math.max(0, anchorBox.x - listboxBox.width + anchorBox.width);
+        const width =
+            listboxBox.width < anchorBox.width ? anchorBox.width : null;
+        const left =
+            anchorBox.x < window.innerWidth / 2 ?
+                Math.min(anchorBox.x, window.innerWidth - listboxBox.width)
+            :   Math.max(0, anchorBox.x - listboxBox.width + anchorBox.width);
 
         setPosition({
             top,
             left,
             width,
         });
-
     }, [open, anchor]);
 
     return {

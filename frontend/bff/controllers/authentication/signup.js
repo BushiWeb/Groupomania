@@ -2,7 +2,9 @@ import { createLoggerNamespace } from '../../logger/index.js';
 import signupRequest from '../../services/requests/signup.js';
 import loginController from './login.js';
 
-const signupControllerLogger = createLoggerNamespace('groupomania:bff:controller:signup');
+const signupControllerLogger = createLoggerNamespace(
+    'groupomania:bff:controller:signup',
+);
 
 /**
  * Signup controller.

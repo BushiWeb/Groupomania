@@ -8,14 +8,20 @@ import { FullscreenDialogContext } from './FullscreenDialogContext';
  * Headline of the dialog.
  */
 export default function FullscreenDialogHeadline({
-    children, className, ...props
+    children,
+    className,
+    ...props
 }) {
     const largeScreen = useContext(FullscreenDialogContext);
 
     if (largeScreen) {
         return <DialogHeadline>{children}</DialogHeadline>;
     }
-    return <h1 className={`${style.headline} ${className}`} {...props}>{children}</h1>;
+    return (
+        <h1 className={`${style.headline} ${className}`} {...props}>
+            {children}
+        </h1>
+    );
 }
 
 FullscreenDialogHeadline.defaultProps = {

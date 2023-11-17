@@ -1,29 +1,21 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { render as rtlRender } from '@testing-library/react';
-import {
-    MemoryRouter, Routes, Route, useLocation, Outlet,
-} from 'react-router-dom';
+import { MemoryRouter, useLocation } from 'react-router-dom';
 import themeReducer from '../../features/theme/theme.slice.js';
 import snackbarReducer from '../../features/snackbar/snackbar.slice.js';
 import userReducer from '../../features/authentication/user.slice.js';
 import navigationReducer from '../../features/navigationInfo/navigationInfo.slice.js';
 import { Provider } from 'react-redux';
-import Login from '../../pages/Login/Login.jsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import UI from '../../pages/UI/UI.jsx';
-import Home from '../../pages/Home/Home.jsx';
 import TooltipWrapper from '../../features/tooltip/TooltipWrapper.jsx';
-import Network from '../../pages/Network/Network.jsx';
 import ThemeSwitcher from '../../features/theme/ThemeSwitcher.jsx';
 import ResponsiveRoutes from '../../routes.jsx';
 import BreakpointContext from '../../context/BreakpointContext.js';
 
-export function render(ui, {
-    preloadedState,
-    store,
-    renderOptions,
-    initialEntries = ['/test'],
-} = {}) {
+export function render(
+    ui,
+    { preloadedState, store, renderOptions, initialEntries = ['/test'] } = {},
+) {
     if (!store) {
         store = configureStore({
             reducer: {
@@ -32,7 +24,7 @@ export function render(ui, {
                 user: userReducer,
                 navigationInfo: navigationReducer,
             },
-            ...preloadedState && { preloadedState },
+            ...(preloadedState && { preloadedState }),
         });
     }
 
@@ -57,7 +49,8 @@ export function render(ui, {
             logger: {
                 log: console.log,
                 warn: console.warn,
-                error: process.env.NODE_ENV === 'test' ? () => {} : console.error,
+                error:
+                    process.env.NODE_ENV === 'test' ? () => {} : console.error,
             },
         });
 
@@ -68,8 +61,8 @@ export function render(ui, {
                         <ThemeSwitcher>
                             <BreakpointContext>
                                 <MemoryRouter initialEntries={initialEntries}>
-                                    <ResponsiveRoutes test/>
-                                    <ShowLocation/>
+                                    <ResponsiveRoutes test />
+                                    <ShowLocation />
                                     {children}
                                 </MemoryRouter>
                             </BreakpointContext>

@@ -1,9 +1,5 @@
 import { useReducer } from 'react';
-import {
-    ACTIONS,
-    initialState,
-    reducer,
-} from './formReducer.js';
+import { ACTIONS, initialState, reducer } from './formReducer.js';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
     deleteUserRequest,
@@ -24,21 +20,19 @@ export function useDeleteUserForm(onSuccess, user) {
     const redirect = useNavigate();
     const { dispatch: globalDispatch } = useStore();
     const queryClient = useQueryClient();
-    const [
-        {
-            password,
-            passwordError,
-            globalError,
-        },
-        dispatch,
-    ] = useReducer(reducer, initialState);
+    const [{ password, passwordError, globalError }, dispatch] = useReducer(
+        reducer,
+        initialState,
+    );
 
     const { mutate, isLoading } = useMutation({
         mutationFn: async () => {
-
             validatePostData({ password });
 
-            return deleteUserRequest({ currentPassword: password }, user.userId);
+            return deleteUserRequest(
+                { currentPassword: password },
+                user.userId,
+            );
         },
         onMutate: () => {
             dispatch({ type: ACTIONS.removeErrors });
@@ -60,19 +54,25 @@ export function useDeleteUserForm(onSuccess, user) {
             }
 
             if (errorMessages.password) {
-                dispatch({ type: ACTIONS.setPasswordError, payload: errorMessages.password });
+                dispatch({
+                    type: ACTIONS.setPasswordError,
+                    payload: errorMessages.password,
+                });
             }
 
             if (errorMessages.global) {
-                dispatch({ type: ACTIONS.setGlobalError, payload: errorMessages.global });
+                dispatch({
+                    type: ACTIONS.setGlobalError,
+                    payload: errorMessages.global,
+                });
             }
         },
         onSuccess: () => {
             dispatch({ type: ACTIONS.reset });
-            queryClient.invalidateQueries({ queryKey: ['users']});
-            queryClient.invalidateQueries({ queryKey: ['posts']});
-            queryClient.removeQueries({ queryKey: ['users', user.userId]});
-            queryClient.removeQueries({ queryKey: ['posts', user.userId]});
+            queryClient.invalidateQueries({ queryKey: ['users'] });
+            queryClient.invalidateQueries({ queryKey: ['posts'] });
+            queryClient.removeQueries({ queryKey: ['users', user.userId] });
+            queryClient.removeQueries({ queryKey: ['posts', user.userId] });
             onSuccess();
             redirect('/reseau');
         },

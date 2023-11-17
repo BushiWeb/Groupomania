@@ -33,15 +33,20 @@ export default function PasswordField({
         ...inputProps,
     };
 
-    return <TextField
-        type={passwordVisible ? 'text' : 'password'}
-        trailingIconProps={{
-            name: passwordVisible ? 'visibility_off' : 'visibility',
-            label: passwordVisible ? 'Cacher le mot de passe' : 'Montrer le mot de passe',
-            onClick: (e) => setPasswordVisible((visible) => !visible),
-        }}
-        {...props}
-    />;
+    return (
+        <TextField
+            type={passwordVisible ? 'text' : 'password'}
+            trailingIconProps={{
+                name: passwordVisible ? 'visibility_off' : 'visibility',
+                label:
+                    passwordVisible ?
+                        'Cacher le mot de passe'
+                    :   'Montrer le mot de passe',
+                onClick: (e) => setPasswordVisible((visible) => !visible),
+            }}
+            {...props}
+        />
+    );
 }
 
 PasswordField.defaultProps = {

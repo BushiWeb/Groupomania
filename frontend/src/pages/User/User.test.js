@@ -1,5 +1,10 @@
 import {
-    getByLabelText, getByRole, getByText, queryByRole, screen, waitFor,
+    getByLabelText,
+    getByRole,
+    getByText,
+    queryByRole,
+    screen,
+    waitFor,
 } from '@testing-library/react';
 import { render } from '../../utils/tests/test-wrapper';
 import userEvent from '../../utils/tests/user-event';
@@ -14,12 +19,21 @@ beforeEach(() => {
 
 describe('User page test suite', () => {
     const userId = POSTS[0].writer.writerId;
-    const initialAdminState = { user: { email: 'test@gmail.com', userId: 130, role: { roleId: 1 }}};
-    const initialOwnerState = { user: { email: 'test@gmail.com', userId, role: { roleId: 2 }}};
-    const initialState = { user: { email: 'test@gmail.com', userId: 130, role: { roleId: 2 }}};
+    const initialAdminState = {
+        user: { email: 'test@gmail.com', userId: 130, role: { roleId: 1 } },
+    };
+    const initialOwnerState = {
+        user: { email: 'test@gmail.com', userId, role: { roleId: 2 } },
+    };
+    const initialState = {
+        user: { email: 'test@gmail.com', userId: 130, role: { roleId: 2 } },
+    };
 
-    function renderOptions({ preloadedState = initialState, id = userId } = {}) {
-        return { preloadedState, initialEntries: [`/reseau/${id}`]};
+    function renderOptions({
+        preloadedState = initialState,
+        id = userId,
+    } = {}) {
+        return { preloadedState, initialEntries: [`/reseau/${id}`] };
     }
 
     it('should render the page at the top level on small devices', async () => {
@@ -33,7 +47,9 @@ describe('User page test suite', () => {
         await waitFor(() => {
             const headerElt = container.querySelector('.userHeader');
             expect(headerElt).not.toBeNull();
-            getByRole(headerElt, 'link', { name: 'Accéder directement au contenu' });
+            getByRole(headerElt, 'link', {
+                name: 'Accéder directement au contenu',
+            });
             getByRole(headerElt, 'button', { name: 'Se déconnecter' });
             getByRole(headerElt, 'button', { name: 'Passer au mode sombre' });
             getByRole(headerElt, 'button', { name: 'Retourner à la liste' });
@@ -49,9 +65,17 @@ describe('User page test suite', () => {
         expect(headerElt).not.toBeNull();
         getByRole(mainElt, 'feed');
 
-        expect(queryByRole(headerElt, 'link', { name: 'Accéder directement au contenu' })).toBeNull();
-        expect(queryByRole(headerElt, 'button', { name: 'Se déconnecter' })).toBeNull();
-        expect(queryByRole(headerElt, 'button', { name: 'Passer au mode sombre' })).toBeNull();
+        expect(
+            queryByRole(headerElt, 'link', {
+                name: 'Accéder directement au contenu',
+            }),
+        ).toBeNull();
+        expect(
+            queryByRole(headerElt, 'button', { name: 'Se déconnecter' }),
+        ).toBeNull();
+        expect(
+            queryByRole(headerElt, 'button', { name: 'Passer au mode sombre' }),
+        ).toBeNull();
         getByRole(headerElt, 'button', { name: 'Retourner à la liste' });
     });
 
@@ -65,10 +89,20 @@ describe('User page test suite', () => {
         expect(headerElt).not.toBeNull();
         getByRole(sectionElt, 'feed');
 
-        expect(queryByRole(headerElt, 'link', { name: 'Accéder directement au contenu' })).toBeNull();
-        expect(queryByRole(headerElt, 'button', { name: 'Se déconnecter' })).toBeNull();
-        expect(queryByRole(headerElt, 'button', { name: 'Passer au mode sombre' })).toBeNull();
-        expect(queryByRole(headerElt, 'button', { name: 'Retourner à la liste' })).toBeNull();
+        expect(
+            queryByRole(headerElt, 'link', {
+                name: 'Accéder directement au contenu',
+            }),
+        ).toBeNull();
+        expect(
+            queryByRole(headerElt, 'button', { name: 'Se déconnecter' }),
+        ).toBeNull();
+        expect(
+            queryByRole(headerElt, 'button', { name: 'Passer au mode sombre' }),
+        ).toBeNull();
+        expect(
+            queryByRole(headerElt, 'button', { name: 'Retourner à la liste' }),
+        ).toBeNull();
     });
 
     it('should focus the main content', async () => {
@@ -77,7 +111,9 @@ describe('User page test suite', () => {
         render(undefined, renderOptions());
 
         const mainElt = screen.getByRole('main');
-        const linkElt = screen.getByRole('link', { name: 'Accéder directement au contenu' });
+        const linkElt = screen.getByRole('link', {
+            name: 'Accéder directement au contenu',
+        });
 
         await user.click(linkElt);
         expect(mainElt).toHaveFocus();
@@ -90,7 +126,9 @@ describe('User page test suite', () => {
         let logoutButton;
 
         await waitFor(() => {
-            logoutButton = screen.getByRole('button', { name: 'Se déconnecter' });
+            logoutButton = screen.getByRole('button', {
+                name: 'Se déconnecter',
+            });
         });
 
         await user.click(logoutButton);
@@ -103,7 +141,7 @@ describe('User page test suite', () => {
     it('should get the user informations', async () => {
         changeViewportWidth(300);
         const { container } = render(undefined, renderOptions());
-        screen.getByLabelText('Chargement des données de l\'utilisateur');
+        screen.getByLabelText("Chargement des données de l'utilisateur");
         const user = USERS.find((value) => value.userId === userId);
 
         await waitFor(() => {
@@ -115,7 +153,7 @@ describe('User page test suite', () => {
     it('should display the admin subtitle', async () => {
         changeViewportWidth(300);
         const { container } = render(undefined, renderOptions({ id: 1 }));
-        screen.getByLabelText('Chargement des données de l\'utilisateur');
+        screen.getByLabelText("Chargement des données de l'utilisateur");
 
         await waitFor(() => {
             const headerElt = container.querySelector('.userHeader');
@@ -126,7 +164,7 @@ describe('User page test suite', () => {
     it('should display the owner actions', async () => {
         changeViewportWidth(1500);
         render(undefined, renderOptions({ preloadedState: initialOwnerState }));
-        screen.getByLabelText('Chargement des données de l\'utilisateur');
+        screen.getByLabelText("Chargement des données de l'utilisateur");
 
         await waitFor(() => {
             screen.getByRole('button', { name: 'Modifier le profil' });
@@ -137,19 +175,23 @@ describe('User page test suite', () => {
     it('should display the admin actions', async () => {
         changeViewportWidth(1500);
         render(undefined, renderOptions({ preloadedState: initialAdminState }));
-        screen.getByLabelText('Chargement des données de l\'utilisateur');
+        screen.getByLabelText("Chargement des données de l'utilisateur");
 
         await waitFor(() => {
-            screen.getByRole('button', { name: 'Modifier le role de l\'utilisateur' });
+            screen.getByRole('button', {
+                name: "Modifier le role de l'utilisateur",
+            });
             screen.getByRole('button', { name: 'Supprimer le profil' });
         });
     });
 
-    it('should get the user\'s posts', async () => {
+    it("should get the user's posts", async () => {
         changeViewportWidth(300);
         render(undefined, renderOptions());
-        screen.getByLabelText('Chargement d\'anciens posts');
-        const userEmail = POSTS.find((value) => value.writer.writerId === userId).writer.email;
+        screen.getByLabelText("Chargement d'anciens posts");
+        const userEmail = POSTS.find(
+            (value) => value.writer.writerId === userId,
+        ).writer.email;
 
         await waitFor(() => {
             screen.getByRole('feed');
@@ -163,7 +205,7 @@ describe('User page test suite', () => {
     it('should display an error message if the user is not found', async () => {
         changeViewportWidth(300);
         const { container } = render(undefined, renderOptions({ id: 99999 }));
-        screen.getByLabelText('Chargement des données de l\'utilisateur');
+        screen.getByLabelText("Chargement des données de l'utilisateur");
 
         await waitFor(() => {
             const headerElt = container.querySelector('.userHeader');
@@ -174,7 +216,7 @@ describe('User page test suite', () => {
     it('should display an error message if the user is not found', async () => {
         changeViewportWidth(300);
         const { container } = render(undefined, renderOptions({ id: 99999 }));
-        screen.getByLabelText('Chargement des données de l\'utilisateur');
+        screen.getByLabelText("Chargement des données de l'utilisateur");
 
         await waitFor(() => {
             const headerElt = container.querySelector('.userHeader');
@@ -185,7 +227,7 @@ describe('User page test suite', () => {
     it('should display an error message if the user id is not a number', async () => {
         changeViewportWidth(300);
         const { container } = render(undefined, renderOptions({ id: 'text' }));
-        screen.getByLabelText('Chargement des données de l\'utilisateur');
+        screen.getByLabelText("Chargement des données de l'utilisateur");
 
         await waitFor(() => {
             const headerElt = container.querySelector('.userHeader');
@@ -199,7 +241,9 @@ describe('User page test suite', () => {
         render(undefined, renderOptions());
 
         await waitFor(() => {
-            expect(screen.getByTestId('search-path').textContent).toMatch('login');
+            expect(screen.getByTestId('search-path').textContent).toMatch(
+                'login',
+            );
         });
     });
 
@@ -209,7 +253,9 @@ describe('User page test suite', () => {
         render(undefined, renderOptions());
 
         await waitFor(() => {
-            expect(screen.getByTestId('search-path').textContent).toMatch('error');
+            expect(screen.getByTestId('search-path').textContent).toMatch(
+                'error',
+            );
         });
     });
 
@@ -219,7 +265,9 @@ describe('User page test suite', () => {
         render(undefined, renderOptions());
 
         await waitFor(() => {
-            expect(screen.getByTestId('search-path').textContent).toMatch('error');
+            expect(screen.getByTestId('search-path').textContent).toMatch(
+                'error',
+            );
         });
     });
 
@@ -233,7 +281,9 @@ describe('User page test suite', () => {
             getByText(headerElt, user.email);
         });
 
-        const list = screen.getByRole('list', { name: 'Liste des utilisateurs' });
+        const list = screen.getByRole('list', {
+            name: 'Liste des utilisateurs',
+        });
         const selectedListItem = list.querySelector('[data-selected]');
         expect(selectedListItem).toHaveTextContent(user.email);
     });

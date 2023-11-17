@@ -13,26 +13,36 @@ describe('Tooltip component test suite', () => {
         labelChangeButtonLabel = 'label';
 
     function TooltipContainer({ label }) {
-        const {
-            anchorEventHandlers,
-        } = useTooltip(label);
-        return <div tabIndex={0} {...anchorEventHandlers }>{label} container</div>;
+        const { anchorEventHandlers } = useTooltip(label);
+        return (
+            <div tabIndex={0} {...anchorEventHandlers}>
+                {label} container
+            </div>
+        );
     }
 
     function RenderContainer() {
         const [isContainerVisible, setIsContainerVisible] = useState(true);
         const [currentLabel, setCurrentLabel] = useState(label1);
-        return <>
-            {isContainerVisible && <TooltipContainer label={currentLabel}/>}
-            <TooltipContainer label={label2}/>
-            <button onClick={() => setIsContainerVisible(false)}>{anchorHideButtonLabel}</button>
-            <button onClick={() => setCurrentLabel(label1bis)}>{labelChangeButtonLabel}</button>
-        </>;
+        return (
+            <>
+                {isContainerVisible && (
+                    <TooltipContainer label={currentLabel} />
+                )}
+                <TooltipContainer label={label2} />
+                <button onClick={() => setIsContainerVisible(false)}>
+                    {anchorHideButtonLabel}
+                </button>
+                <button onClick={() => setCurrentLabel(label1bis)}>
+                    {labelChangeButtonLabel}
+                </button>
+            </>
+        );
     }
 
     it('should render closed', () => {
         fakeTimers.useFakeTimers();
-        render(<RenderContainer/>);
+        render(<RenderContainer />);
 
         fakeTimers.runAllTimers();
         const tooltipLabel = screen.queryByRole('tooltip', { hidden: true });
@@ -43,8 +53,10 @@ describe('Tooltip component test suite', () => {
 
     it('should display a tooltip when hovered', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        render(<RenderContainer/>);
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
+        render(<RenderContainer />);
         const tooltipContainerElt = screen.getByText(`${label1} container`);
 
         await user.hover(tooltipContainerElt);
@@ -57,8 +69,10 @@ describe('Tooltip component test suite', () => {
 
     it('should close the tooltip when unhovering the element', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        render(<RenderContainer/>);
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
+        render(<RenderContainer />);
         const tooltipContainerElt = screen.getByText(`${label1} container`);
 
         await user.hover(tooltipContainerElt);
@@ -75,8 +89,10 @@ describe('Tooltip component test suite', () => {
 
     it('should keep the tooltip opened when hovering the tooltip itself', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        render(<RenderContainer/>);
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
+        render(<RenderContainer />);
         const tooltipContainerElt = screen.getByText(`${label1} container`);
 
         await user.hover(tooltipContainerElt);
@@ -93,8 +109,10 @@ describe('Tooltip component test suite', () => {
 
     it('should close the tooltip when unhovering the tooltip and the element', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        render(<RenderContainer/>);
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
+        render(<RenderContainer />);
         const tooltipContainerElt = screen.getByText(`${label1} container`);
 
         await user.hover(tooltipContainerElt);
@@ -116,8 +134,10 @@ describe('Tooltip component test suite', () => {
 
     it('should display a tooltip when focused', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        render(<RenderContainer/>);
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
+        render(<RenderContainer />);
         const tooltipContainerElt = screen.getByText(`${label1} container`);
 
         await user.tab();
@@ -131,8 +151,10 @@ describe('Tooltip component test suite', () => {
 
     it('should close the tooltip when bluring the element', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        render(<RenderContainer/>);
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
+        render(<RenderContainer />);
         const tooltipContainerElt = screen.getByText(`${label1} container`);
 
         await user.tab();
@@ -150,8 +172,10 @@ describe('Tooltip component test suite', () => {
 
     it('should switch the tooltip target when hovering or focusing another target', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        render(<RenderContainer/>);
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
+        render(<RenderContainer />);
         const tooltipContainer1Elt = screen.getByText(`${label1} container`);
         const tooltipContainer2Elt = screen.getByText(`${label2} container`);
 
@@ -185,8 +209,10 @@ describe('Tooltip component test suite', () => {
 
     it('should close the tooltip when pressing "Escape"', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        render(<RenderContainer/>);
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
+        render(<RenderContainer />);
         const tooltipContainerElt = screen.getByText(`${label1} container`);
 
         await user.hover(tooltipContainerElt);
@@ -203,10 +229,14 @@ describe('Tooltip component test suite', () => {
 
     it('should close the tooltip when the anchor dismount', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        render(<RenderContainer/>);
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
+        render(<RenderContainer />);
         const tooltipContainerElt = screen.getByText(`${label1} container`);
-        const buttonElt = screen.getByRole('button', { name: anchorHideButtonLabel });
+        const buttonElt = screen.getByRole('button', {
+            name: anchorHideButtonLabel,
+        });
 
         await user.tab();
         await user.tab();
@@ -228,10 +258,14 @@ describe('Tooltip component test suite', () => {
 
     it('should update the tooltip value', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        render(<RenderContainer/>);
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
+        render(<RenderContainer />);
         const tooltipContainerElt = screen.getByText(`${label1} container`);
-        const buttonElt = screen.getByRole('button', { name: labelChangeButtonLabel });
+        const buttonElt = screen.getByRole('button', {
+            name: labelChangeButtonLabel,
+        });
 
         await user.tab();
         await user.tab();
@@ -254,11 +288,15 @@ describe('Tooltip component test suite', () => {
 
     it('should not update the tooltip value when the label changes on another potential anchor', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        render(<RenderContainer/>);
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
+        render(<RenderContainer />);
         const tooltipContainer1Elt = screen.getByText(`${label1} container`);
         const tooltipContainer2Elt = screen.getByText(`${label2} container`);
-        const buttonElt = screen.getByRole('button', { name: labelChangeButtonLabel });
+        const buttonElt = screen.getByRole('button', {
+            name: labelChangeButtonLabel,
+        });
 
         await user.tab();
         await user.tab();

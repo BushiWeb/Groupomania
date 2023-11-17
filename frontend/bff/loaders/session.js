@@ -14,22 +14,23 @@ export default function sessionLoader(app) {
 
     const MemoryStore = memoryStore(session);
 
-    app.use(session({
-        cookie: {
-            httpOnly: config.get('session.httpOnly'),
-            secure: config.get('session.secure'),
-            sameSite: config.get('session.sameSite'),
-            maxAge: config.get('session.cookieExp'),
-        },
-        name: config.get('session.name'),
-        secret: config.get('session.secret'),
-        resave: false,
-        saveUninitialized: false,
-        unset: 'destroy',
-        store: new MemoryStore({
-            checkPeriod: config.get('session.cookieExp'),
+    app.use(
+        session({
+            cookie: {
+                httpOnly: config.get('session.httpOnly'),
+                secure: config.get('session.secure'),
+                sameSite: config.get('session.sameSite'),
+                maxAge: config.get('session.cookieExp'),
+            },
+            name: config.get('session.name'),
+            secret: config.get('session.secret'),
+            resave: false,
+            saveUninitialized: false,
+            unset: 'destroy',
+            store: new MemoryStore({
+                checkPeriod: config.get('session.cookieExp'),
+            }),
         }),
-    }));
+    );
     loaderLogger.debug('Session middleware loaded');
-
 }

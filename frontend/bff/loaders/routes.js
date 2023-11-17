@@ -2,7 +2,6 @@ import { createLoggerNamespace } from '../logger/index.js';
 import getRoutesRegexp from '../utils/get-routes.js';
 import HTMLRouter from '../routes/html-router.js';
 import BFFRouter from '../routes/authentication-router.js';
-import express from 'express';
 import expressStaticGzip from 'express-static-gzip';
 
 const loaderLogger = createLoggerNamespace('groupomania:bff:loader:routes');
@@ -21,11 +20,13 @@ export default function routeLoader(app) {
     });
 
     // Add the static routes
-    app.use(expressStaticGzip('build', {
-        enableBrotli: true,
-        index: false,
-        orderPreference: ['br'],
-    }));
+    app.use(
+        expressStaticGzip('build', {
+            enableBrotli: true,
+            index: false,
+            orderPreference: ['br'],
+        }),
+    );
     loaderLogger.debug('Build static route added');
 
     // Add the BFF router
@@ -38,6 +39,7 @@ export default function routeLoader(app) {
 
     // Finds all available routes to analyse errors
     app.set('routes-regexp', getRoutesRegexp(app));
-    loaderLogger.debug(`All route's regexps found: ${app.get('routes-regexp')}`);
-
+    loaderLogger.debug(
+        `All route's regexps found: ${app.get('routes-regexp')}`,
+    );
 }

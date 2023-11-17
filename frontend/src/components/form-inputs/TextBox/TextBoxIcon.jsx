@@ -23,27 +23,31 @@ export default function TextBoxIcon({
     }
 
     if (onClick) {
-        return <SimpleIconButton
-            name={name}
-            label={label}
-            onClick={(e) => {
-                e.stopPropagation();
-                onClick(e);
-            }}
-            onMouseDown={e => e.preventDefault()}
-            className={`${style.textBoxIconButton} ${style[position]}`}
-            disabled={disabled}
-            {...props}
-        />;
+        return (
+            <SimpleIconButton
+                name={name}
+                label={label}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onClick(e);
+                }}
+                onMouseDown={(e) => e.preventDefault()}
+                className={`${style.textBoxIconButton} ${style[position]}`}
+                disabled={disabled}
+                {...props}
+            />
+        );
     }
 
-    return <Icon
-        name={name}
-        label={label}
-        className={`${style.textBoxIcon} ${style[position]}`}
-        isOnDark={darkTheme}
-        {...props}
-    />;
+    return (
+        <Icon
+            name={name}
+            label={label}
+            className={`${style.textBoxIcon} ${style[position]}`}
+            isOnDark={darkTheme}
+            {...props}
+        />
+    );
 }
 
 TextBoxIcon.defaultProps = {

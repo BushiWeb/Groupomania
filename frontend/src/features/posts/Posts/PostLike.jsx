@@ -5,23 +5,24 @@ import { postContext } from './Post';
 import { useContext } from 'react';
 
 /** Displays one post data. */
-export default function PostLike({
-    onClick,
-}) {
-    const {
-        liked,
-        likeNumber,
-    } = useContext(postContext);
+export default function PostLike({ onClick }) {
+    const { liked, likeNumber } = useContext(postContext);
 
-    return <div className={style.like}>
-        <StandardIconButton
-            label={`${liked ? 'Ne plus aimer' : 'Aimer'}, ${likeNumber} j'aimes`}
-            name="favorite"
-            toggle={liked}
-            onClick={onClick}
-        />
-        <span className={liked ? style.likedLikeNumber : style.likeNumber}>{likeNumber}</span>
-    </div>;
+    return (
+        <div className={style.like}>
+            <StandardIconButton
+                label={`${
+                    liked ? 'Ne plus aimer' : 'Aimer'
+                }, ${likeNumber} j'aimes`}
+                name="favorite"
+                toggle={liked}
+                onClick={onClick}
+            />
+            <span className={liked ? style.likedLikeNumber : style.likeNumber}>
+                {likeNumber}
+            </span>
+        </div>
+    );
 }
 
 PostLike.propTypes = {

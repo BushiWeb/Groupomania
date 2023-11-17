@@ -4,7 +4,6 @@ import config from '../config/config.js';
 
 const multerLogger = createLoggerNamespace('groupomania:bff:multer');
 
-
 const storage = multer.memoryStorage();
 
 /**
@@ -23,12 +22,12 @@ function fileFilter(req, file, cb) {
         return cb(null, true);
     }
 
-    multerLogger.debug(`The file has ${file.mimetype} MIME type, it is refused`);
+    multerLogger.debug(
+        `The file has ${file.mimetype} MIME type, it is refused`,
+    );
     req.rejectedFile.push(file);
     return cb(null, false);
 }
-
-
 
 /**
  * Multer middleware.

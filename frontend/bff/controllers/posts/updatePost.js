@@ -1,7 +1,9 @@
 import { createLoggerNamespace } from '../../logger/index.js';
 import updatePostRequest from '../../services/requests/updatePost.js';
 
-const updatePostControllerLogger = createLoggerNamespace('groupomania:bff:controller:update-posts');
+const updatePostControllerLogger = createLoggerNamespace(
+    'groupomania:bff:controller:update-posts',
+);
 
 /**
  * Update post controller.
@@ -15,7 +17,9 @@ export default async function updatePostController(req, res, next) {
     try {
         let contentType, postData;
         if (req.body.post) {
-            updatePostControllerLogger.debug('Multipart request with post data');
+            updatePostControllerLogger.debug(
+                'Multipart request with post data',
+            );
             contentType = 'multipart/form-data';
             postData = new FormData();
             postData.set('post', req.body.post);
@@ -31,10 +35,15 @@ export default async function updatePostController(req, res, next) {
             postData.set(
                 'image',
                 new Blob(
-                    [req.file.buffer.buffer.slice(req.file.buffer.byteOffset, req.file.buffer.length)],
-                    { type: req.file.mimetype }
+                    [
+                        req.file.buffer.buffer.slice(
+                            req.file.buffer.byteOffset,
+                            req.file.buffer.length,
+                        ),
+                    ],
+                    { type: req.file.mimetype },
                 ),
-                req.file.originalname
+                req.file.originalname,
             );
         }
 
@@ -48,7 +57,12 @@ export default async function updatePostController(req, res, next) {
             };
         }
 
-        const newPost = await updatePostRequest(postData, contentType, req.params.postId, req.session.user);
+        const newPost = await updatePostRequest(
+            postData,
+            contentType,
+            req.params.postId,
+            req.session.user,
+        );
         res.status(200).json(newPost);
     } catch (error) {
         next(error);

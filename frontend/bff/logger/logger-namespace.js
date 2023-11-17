@@ -21,7 +21,11 @@ export default function createLoggerNamespace(namespace) {
          * Otherwise, create an object with the info as a message and the label.
          * If the object is an error, it behaves as if it as no message
          */
-        if (typeof info === 'object' && !(info instanceof Error) && info.message !== undefined) {
+        if (
+            typeof info === 'object' &&
+            !(info instanceof Error) &&
+            info.message !== undefined
+        ) {
             // If the info already possesses a label, then the namespace is going to be overriden
             labelledInfo = { label: namespace, ...info };
         } else {

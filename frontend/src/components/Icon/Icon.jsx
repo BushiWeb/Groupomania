@@ -5,17 +5,25 @@ import style from './Icon.module.css';
  * Insert a Google Font Icon.
  */
 export default function Icon({
-    name, weight, size, grad, fill, isOnDark, label, className, ...props
+    name,
+    weight,
+    size,
+    grad,
+    fill,
+    isOnDark,
+    label,
+    className,
+    ...props
 }) {
     const elementsProps = {
         className: `material-icon ${style.icon} ${className}`,
         style: {
-            ...fill && { '--icon-fill': 1 },
+            ...(fill && { '--icon-fill': 1 }),
             '--icon-weight': weight || 'inherit',
             '--icon-grad': isOnDark ? grad - 25 : grad,
-            ...size && { '--icon-optical-size': `${size}` },
+            ...(size && { '--icon-optical-size': `${size}` }),
         },
-        ...label ? { 'aria-label': label } : { 'aria-hidden': true },
+        ...(label ? { 'aria-label': label } : { 'aria-hidden': true }),
         ...props,
     };
 

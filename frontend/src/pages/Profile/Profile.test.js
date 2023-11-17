@@ -1,6 +1,4 @@
-import {
-    getByRole, getByText, screen, waitFor,
-} from '@testing-library/react';
+import { getByRole, getByText, screen, waitFor } from '@testing-library/react';
 import { render } from '../../utils/tests/test-wrapper';
 import userEvent from '../../utils/tests/user-event';
 import '@testing-library/jest-dom';
@@ -17,35 +15,50 @@ describe('Profile test suite', () => {
     };
 
     it('should render with the user informations', async () => {
-        render(undefined, { initialEntries: ['/profil'], preloadedState: initialState });
+        render(undefined, {
+            initialEntries: ['/profil'],
+            preloadedState: initialState,
+        });
 
         const mainElt = screen.getByRole('main');
         const headerElt = mainElt.querySelector('.topAppBar');
 
         await waitFor(() => {
-            expect(getByRole(headerElt, 'heading')).toHaveTextContent(initialState.user.email);
+            expect(getByRole(headerElt, 'heading')).toHaveTextContent(
+                initialState.user.email,
+            );
             screen.getByRole('button', { name: 'Modifier le profil' });
             screen.getByRole('button', { name: 'Supprimer le profil' });
         });
     });
 
     it('should render with the admin user informations', async () => {
-        render(undefined, { initialEntries: ['/profil'], preloadedState: adminInitialState });
+        render(undefined, {
+            initialEntries: ['/profil'],
+            preloadedState: adminInitialState,
+        });
 
         const mainElt = screen.getByRole('main');
         const headerElt = mainElt.querySelector('.topAppBar');
 
         await waitFor(() => {
-            expect(getByRole(headerElt, 'heading')).toHaveTextContent(adminInitialState.user.email);
+            expect(getByRole(headerElt, 'heading')).toHaveTextContent(
+                adminInitialState.user.email,
+            );
             getByText(headerElt, 'Administrateur');
             screen.getByRole('button', { name: 'Modifier le profil' });
             screen.getByRole('button', { name: 'Supprimer le profil' });
-            screen.getByRole('button', { name: 'Modifier le role de l\'utilisateur' });
+            screen.getByRole('button', {
+                name: "Modifier le role de l'utilisateur",
+            });
         });
     });
 
     it('should render with articles from the user', async () => {
-        render(undefined, { initialEntries: ['/profil'], preloadedState: initialState });
+        render(undefined, {
+            initialEntries: ['/profil'],
+            preloadedState: initialState,
+        });
 
         await waitFor(() => {
             screen.getByRole('feed');
@@ -57,9 +70,14 @@ describe('Profile test suite', () => {
     });
 
     it('should load more articles on scroll', async () => {
-        render(undefined, { initialEntries: ['/profil'], preloadedState: initialState });
+        render(undefined, {
+            initialEntries: ['/profil'],
+            preloadedState: initialState,
+        });
 
-        const posts = POSTS.filter((value) => value.writer.writerId === initialState.user.userId);
+        const posts = POSTS.filter(
+            (value) => value.writer.writerId === initialState.user.userId,
+        );
 
         await waitFor(() => {
             screen.getByRole('feed', { name: 'Liste des posts' });
@@ -87,14 +105,19 @@ describe('Profile test suite', () => {
     it('should like an article', async () => {
         const user = userEvent.setup();
         sessionStorage.setItem('userId', initialState.user.userId);
-        render(undefined, { initialEntries: ['/profil'], preloadedState: initialState });
+        render(undefined, {
+            initialEntries: ['/profil'],
+            preloadedState: initialState,
+        });
 
         await waitFor(() => {
             screen.getAllByRole('article');
         });
 
         const postsElts = screen.getAllByRole('article');
-        const likeButton = getByRole(postsElts[0], 'button', { name: /j'aimes/ });
+        const likeButton = getByRole(postsElts[0], 'button', {
+            name: /j'aimes/,
+        });
         const previousLabel = likeButton.getAttribute('aria-label');
 
         await user.click(likeButton);
@@ -107,7 +130,10 @@ describe('Profile test suite', () => {
     it('should give the focus to the main content when clicking the hidden link', async () => {
         const user = userEvent.setup();
         sessionStorage.setItem('userId', initialState.user.userId);
-        render(undefined, { initialEntries: ['/profil'], preloadedState: initialState });
+        render(undefined, {
+            initialEntries: ['/profil'],
+            preloadedState: initialState,
+        });
 
         await waitFor(() => {
             screen.getAllByRole('article');
@@ -122,28 +148,43 @@ describe('Profile test suite', () => {
 
     it('should redirect to the login page if the user is not authenticated', async () => {
         sessionStorage.setItem('authError', true);
-        render(undefined, { initialEntries: ['/profil'], preloadedState: initialState });
+        render(undefined, {
+            initialEntries: ['/profil'],
+            preloadedState: initialState,
+        });
 
         await waitFor(() => {
-            expect(screen.getByTestId('search-path').textContent).toMatch('login');
+            expect(screen.getByTestId('search-path').textContent).toMatch(
+                'login',
+            );
         });
     });
 
     it('should redirect to the error page if there is a server error', async () => {
         sessionStorage.setItem('serverError', true);
-        render(undefined, { initialEntries: ['/profil'], preloadedState: initialState });
+        render(undefined, {
+            initialEntries: ['/profil'],
+            preloadedState: initialState,
+        });
 
         await waitFor(() => {
-            expect(screen.getByTestId('search-path').textContent).toMatch('error');
+            expect(screen.getByTestId('search-path').textContent).toMatch(
+                'error',
+            );
         });
     });
 
     it('should redirect to the error page if there is a network error', async () => {
         sessionStorage.setItem('networkError', true);
-        render(undefined, { initialEntries: ['/profil'], preloadedState: initialState });
+        render(undefined, {
+            initialEntries: ['/profil'],
+            preloadedState: initialState,
+        });
 
         await waitFor(() => {
-            expect(screen.getByTestId('search-path').textContent).toMatch('error');
+            expect(screen.getByTestId('search-path').textContent).toMatch(
+                'error',
+            );
         });
     });
 });

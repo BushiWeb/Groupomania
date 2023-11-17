@@ -8,12 +8,16 @@ import useTooltip from '../../../features/tooltip/useTooltip';
  * Checkbox, with or without label
  */
 export default function Checkbox({
-    checked, onChange, disabled, autoFocus, label, className, ...other
+    checked,
+    onChange,
+    disabled,
+    autoFocus,
+    label,
+    className,
+    ...other
 }) {
     const checkboxRef = useRef();
-    const {
-        anchorEventHandlers,
-    } = useTooltip(label);
+    const { anchorEventHandlers } = useTooltip(label);
 
     function handleClickTarget(e) {
         checkboxRef.current.focus();
@@ -24,30 +28,32 @@ export default function Checkbox({
         e.stopPropagation();
     }
 
-    const checkboxElt = <InteractiveElement
-        rootElement="div"
-        rippleDuration={disabled ? null : 350}
-        stateLayerColor={checked ? 'primary' : 'on-surface'}
-        className={`${style.checkboxContainer} ${!label ? className : ''}`}
-        hover={!disabled}
-        active={!disabled}
-        focus={!disabled}
-        onClick={!disabled ? handleClickTarget : undefined}
-        {...label && { ...anchorEventHandlers }}
-    >
-        <input
-            type="checkbox"
-            className={style.checkbox}
-            checked={checked}
-            disabled={disabled}
-            autoFocus={!disabled && autoFocus}
-            onChange={onChange}
-            onClick={handleClickCheckbox}
-            aria-label={label}
-            ref={checkboxRef}
-            {...other}
-        />
-    </InteractiveElement>;
+    const checkboxElt = (
+        <InteractiveElement
+            rootElement="div"
+            rippleDuration={disabled ? null : 350}
+            stateLayerColor={checked ? 'primary' : 'on-surface'}
+            className={`${style.checkboxContainer} ${!label ? className : ''}`}
+            hover={!disabled}
+            active={!disabled}
+            focus={!disabled}
+            onClick={!disabled ? handleClickTarget : undefined}
+            {...(label && { ...anchorEventHandlers })}
+        >
+            <input
+                type="checkbox"
+                className={style.checkbox}
+                checked={checked}
+                disabled={disabled}
+                autoFocus={!disabled && autoFocus}
+                onChange={onChange}
+                onClick={handleClickCheckbox}
+                aria-label={label}
+                ref={checkboxRef}
+                {...other}
+            />
+        </InteractiveElement>
+    );
 
     return checkboxElt;
 }

@@ -9,37 +9,33 @@ import { forwardRef } from 'react';
  * When a user clicks on a like button, optimistic UI is used to make the app more responsive.
  * Use an ErrorBoundary to handle errors.
  */
-const InfiniteUserList = forwardRef((
-    {
-        containerElt,
-        errorClassName,
-        className,
-        selectedUserId,
+const InfiniteUserList = forwardRef(
+    ({ containerElt, errorClassName, className, selectedUserId }, ref) => {
+        const { data, isFetchingNextPage, isLoading, isError } =
+            useInfiniteUserList(containerElt);
+
+        if (isError) {
+            return (
+                <p className={errorClassName}>
+                    Une erreur est survenue lors du chargement des données. Vous
+                    pouvez essayer de recharger la page. Si le problème
+                    persiste, n'hésitez pas à vous rapprocher d'un
+                    administrateur.
+                </p>
+            );
+        }
+
+        return (
+            <UsersList
+                users={data}
+                className={className}
+                busy={isFetchingNextPage || isLoading}
+                ref={ref}
+                selectedUserId={selectedUserId}
+            />
+        );
     },
-    ref
-) => {
-    const {
-        data,
-        isFetchingNextPage,
-        isLoading,
-        isError,
-    } = useInfiniteUserList(containerElt);
-
-    if (isError) {
-        return <p className={errorClassName}>
-            Une erreur est survenue lors du chargement des données. Vous pouvez essayer de recharger la page.
-            Si le problème persiste, n'hésitez pas à vous rapprocher d'un administrateur.
-        </p>;
-    }
-
-    return <UsersList
-        users={data}
-        className={className}
-        busy={isFetchingNextPage || isLoading}
-        ref={ref}
-        selectedUserId={selectedUserId}
-    />;
-});
+);
 
 InfiniteUserList.propTypes = {
     /** Container reference */

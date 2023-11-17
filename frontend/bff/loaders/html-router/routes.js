@@ -1,7 +1,9 @@
 import { createLoggerNamespace } from '../../logger/index.js';
 import { staticHTMLController } from '../../controllers/static-html/index.js';
 
-const loaderLogger = createLoggerNamespace('groupomania:bff:html-loader:routes');
+const loaderLogger = createLoggerNamespace(
+    'groupomania:bff:html-loader:routes',
+);
 
 /**
  * Add all routes.

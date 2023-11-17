@@ -1,7 +1,9 @@
 import apiRequest from './apiRequest.js';
 import { createLoggerNamespace } from '../../logger/index.js';
 
-const requestServiceLogger = createLoggerNamespace('groupomania:bff:service:requests');
+const requestServiceLogger = createLoggerNamespace(
+    'groupomania:bff:service:requests',
+);
 
 /**
  * Creates an delete user request to the API.

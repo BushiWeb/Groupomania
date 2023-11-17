@@ -14,7 +14,11 @@ export default function EmptyUser() {
     const [isRedirecting, setIsRedirecting] = useState(true);
 
     useEffect(() => {
-        if (prevState?.userId && breakpoint >= BP_ID.xxl && key === currentKey) {
+        if (
+            prevState?.userId &&
+            breakpoint >= BP_ID.xxl &&
+            key === currentKey
+        ) {
             navigate(`/reseau/${prevState.userId}`, { replace: true });
         } else {
             setIsRedirecting(false);
@@ -25,7 +29,12 @@ export default function EmptyUser() {
         return;
     }
 
-    return <div className={style.userPlaceholder}>
-        <p>Veuillez choisir un utilisateur dans la liste ci-contre pour voir ses informations et ses posts.</p>
-    </div>;
+    return (
+        <div className={style.userPlaceholder}>
+            <p>
+                Veuillez choisir un utilisateur dans la liste ci-contre pour
+                voir ses informations et ses posts.
+            </p>
+        </div>
+    );
 }

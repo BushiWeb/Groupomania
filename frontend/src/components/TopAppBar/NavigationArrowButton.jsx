@@ -8,13 +8,15 @@ import { useNavigate } from 'react-router-dom';
 export default function NavigationArrowButton({ to, label, state }) {
     const navigate = useNavigate();
 
-    return <StandardIconButton
-        name="arrow_back"
-        onClick={() => {
-            navigate(to, { state });
-        }}
-        label={label}
-    />;
+    return (
+        <StandardIconButton
+            name="arrow_back"
+            onClick={() => {
+                navigate(to, { state });
+            }}
+            label={label}
+        />
+    );
 }
 
 NavigationArrowButton.propTypes = {

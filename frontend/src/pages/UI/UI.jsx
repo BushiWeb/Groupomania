@@ -13,16 +13,25 @@ export default function UI() {
     const mainId = useId();
     const [fab, setFab] = useState(undefined);
 
-    return <fabContext.Provider value={{ fab, setFab }}>
-        <div className={style.container}>
-            {
-                isAuthenticated &&
-            <>
-                <MainHeader mainContentId={mainId} className={style.header}/>
-                <NavigationSection fab={fab} className={style.navigation}/>
-                <Outlet context={{ id: mainId, className: style.main }}/>
-            </>
-            }
-        </div>
-    </fabContext.Provider>;
+    return (
+        <fabContext.Provider value={{ fab, setFab }}>
+            <div className={style.container}>
+                {isAuthenticated && (
+                    <>
+                        <MainHeader
+                            mainContentId={mainId}
+                            className={style.header}
+                        />
+                        <NavigationSection
+                            fab={fab}
+                            className={style.navigation}
+                        />
+                        <Outlet
+                            context={{ id: mainId, className: style.main }}
+                        />
+                    </>
+                )}
+            </div>
+        </fabContext.Provider>
+    );
 }

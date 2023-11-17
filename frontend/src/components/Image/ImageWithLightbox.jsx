@@ -7,32 +7,43 @@ import { useState } from 'react';
  * Displays an image that can be enlarged in a lightbox by clicking.
  */
 export default function ImageWithLighbox({
-    src, alt, className, lightboxLabel, lightboxDescription, label,
+    src,
+    alt,
+    className,
+    lightboxLabel,
+    lightboxDescription,
+    label,
 }) {
     const [isLightboxOpened, setIsLightboxOpened] = useState(false);
 
     function handleClick() {
-        setIsLightboxOpened(isOpened => !isOpened);
+        setIsLightboxOpened((isOpened) => !isOpened);
     }
 
     function handleClose() {
         setIsLightboxOpened(false);
     }
 
-    return <>
-        <button className={`${style.button} ${className}`} onClick={handleClick} aria-label={label}>
-            <img src={src} alt={alt} className={style.image}/>
-        </button>
+    return (
+        <>
+            <button
+                className={`${style.button} ${className}`}
+                onClick={handleClick}
+                aria-label={label}
+            >
+                <img src={src} alt={alt} className={style.image} />
+            </button>
 
-        <Lightbox
-            open={isLightboxOpened}
-            onClose={handleClose}
-            alt={alt}
-            src={src}
-            aria-label={lightboxLabel}
-            aria-describedby={lightboxDescription}
-        />
-    </>;
+            <Lightbox
+                open={isLightboxOpened}
+                onClose={handleClose}
+                alt={alt}
+                src={src}
+                aria-label={lightboxLabel}
+                aria-describedby={lightboxDescription}
+            />
+        </>
+    );
 }
 
 ImageWithLighbox.defaultProps = {

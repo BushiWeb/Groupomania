@@ -1,5 +1,9 @@
 import {
-    useContext, useEffect, useLayoutEffect, useRef, useState,
+    useContext,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
 } from 'react';
 import { tooltipContext } from './tooltipContext.js';
 import { ACTIONS } from './tooltipReducer.js';
@@ -24,12 +28,7 @@ const TOOLTIP_MARGIN = 4;
  */
 export default function useTooltipLabel() {
     const ref = useRef(null);
-    const {
-        isOpen,
-        anchor,
-        value,
-        dispatch,
-    } = useContext(tooltipContext);
+    const { isOpen, anchor, value, dispatch } = useContext(tooltipContext);
     const [{ top, left }, setPosition] = useState({ top: 0, left: 0 });
 
     // Controlling the final state of the tooltip and the timing
@@ -59,12 +58,18 @@ export default function useTooltipLabel() {
     useEffect(() => {
         if (isOpen || labelHover) {
             clearTimeout(closeTimeoutRef.current);
-            openTimeoutRef.current = setTimeout(() => setOpen(true), openTimeout);
+            openTimeoutRef.current = setTimeout(
+                () => setOpen(true),
+                openTimeout,
+            );
             return;
         }
 
         clearTimeout(openTimeoutRef.current);
-        closeTimeoutRef.current = setTimeout(() => setOpen(false), closeTimeout);
+        closeTimeoutRef.current = setTimeout(
+            () => setOpen(false),
+            closeTimeout,
+        );
         return;
     }, [isOpen, labelHover]);
 
@@ -96,8 +101,8 @@ export default function useTooltipLabel() {
             TOOLTIP_MARGIN,
             Math.min(
                 anchorBox.x + anchorBox.width / 2 - tooltipBox.width / 2,
-                window.innerWidth - TOOLTIP_MARGIN - tooltipBox.width
-            )
+                window.innerWidth - TOOLTIP_MARGIN - tooltipBox.width,
+            ),
         );
 
         setPosition({

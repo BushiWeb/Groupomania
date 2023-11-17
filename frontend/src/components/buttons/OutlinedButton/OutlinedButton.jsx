@@ -11,23 +11,40 @@ import { selectIsDarkTheme } from '../../../utils/selectors';
  * All additionnal props are passed to the DOM element.
  */
 export default function OutlinedButton({
-    disabled, autoFocus, onClick, label, children, icon, className, ...other
+    disabled,
+    autoFocus,
+    onClick,
+    label,
+    children,
+    icon,
+    className,
+    ...other
 }) {
-    const classNameButton = icon ? style.outlinedButtonIcon : style.outlinedButton;
+    const classNameButton =
+        icon ? style.outlinedButtonIcon : style.outlinedButton;
     const isDarkTheme = useSelector(selectIsDarkTheme);
 
-    return <Button
-        classNames={`${classNameButton} ${className}`}
-        disabled={disabled}
-        autoFocus={autoFocus}
-        onClick={onClick}
-        label={label}
-        stateLayerColor="primary"
-        {...other}
-    >
-        {icon && <Icon name={icon} className={style.icon} size={20} isOnDark={isDarkTheme}/>}
-        {children}
-    </Button>;
+    return (
+        <Button
+            classNames={`${classNameButton} ${className}`}
+            disabled={disabled}
+            autoFocus={autoFocus}
+            onClick={onClick}
+            label={label}
+            stateLayerColor="primary"
+            {...other}
+        >
+            {icon && (
+                <Icon
+                    name={icon}
+                    className={style.icon}
+                    size={20}
+                    isOnDark={isDarkTheme}
+                />
+            )}
+            {children}
+        </Button>
+    );
 }
 
 OutlinedButton.defaultProps = {

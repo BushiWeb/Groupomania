@@ -45,10 +45,20 @@ export default function NavigationSection({ fab, ...props }) {
 
     const className = `${style.container} ${props.className || ''}`;
 
-    return <div className={className}>
-        <Navigation links={links} type={type} className={style.navigation}/>
-        {fab && <FAB {...fabProps} className={style.fab}>{fabChildren}</FAB>}
-    </div>;
+    return (
+        <div className={className}>
+            <Navigation
+                links={links}
+                type={type}
+                className={style.navigation}
+            />
+            {fab && (
+                <FAB {...fabProps} className={style.fab}>
+                    {fabChildren}
+                </FAB>
+            )}
+        </div>
+    );
 }
 
 NavigationSection.propTypes = {

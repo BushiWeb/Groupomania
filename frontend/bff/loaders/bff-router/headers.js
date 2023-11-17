@@ -3,7 +3,9 @@ import { createLoggerNamespace } from '../../logger/index.js';
 import cors from 'cors';
 import config from '../../config/config.js';
 
-const loaderLogger = createLoggerNamespace('groupomania:bff:bff-loader:headers');
+const loaderLogger = createLoggerNamespace(
+    'groupomania:bff:bff-loader:headers',
+);
 
 /**
  * Add all middleware adding headers.
@@ -28,7 +30,9 @@ export default function bffHeadersLoader(router) {
     router.use(
         helmet.noSniff(),
         helmet.frameguard({ action: 'deny' }),
-        helmet.contentSecurityPolicy({ directives: { 'frame-ancestors': 'none' }})
+        helmet.contentSecurityPolicy({
+            directives: { 'frame-ancestors': 'none' },
+        }),
     );
     loaderLogger.verbose('Security header middlewares added');
 }

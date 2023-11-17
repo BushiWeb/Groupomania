@@ -6,7 +6,14 @@ import IconButton from '../IconButton/IconButton.jsx';
  * Icon button with no state layer or complex styling
  */
 export default function SimpleIconButton({
-    disabled, autoFocus, onClick, label, name, toggle, className, ...other
+    disabled,
+    autoFocus,
+    onClick,
+    label,
+    name,
+    toggle,
+    className,
+    ...other
 }) {
     return (
         <IconButton

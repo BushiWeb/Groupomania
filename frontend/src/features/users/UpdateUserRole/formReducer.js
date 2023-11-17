@@ -29,56 +29,57 @@ export function initState({ roleId }) {
 
 export function reducer(state, action) {
     switch (action.type) {
-    case ACTIONS.setRole:
-        return {
-            ...state,
-            roleId: action.payload,
-        };
-    case ACTIONS.setRoleError:
-        return {
-            ...state,
-            roleError: action.payload,
-        };
-    case ACTIONS.removeRoleError:
-        return {
-            ...state,
-            roleError: undefined,
-        };
-    case ACTIONS.setPassword:
-        return {
-            ...state,
-            password: action.payload,
-        };
-    case ACTIONS.setPasswordError:
-        return {
-            ...state,
-            passwordError: action.payload,
-        };
-    case ACTIONS.removePasswordError:
-        return {
-            ...state,
-            passwordError: undefined,
-        };
-    case ACTIONS.setGlobalError:
-        return {
-            ...state,
-            globalError: action.payload,
-        };
-    case ACTIONS.removeGlobalError:
-        return {
-            ...state,
-            globalError: undefined,
-        };
-    case ACTIONS.removeErrors:
-        return {
-            ...state,
-            globalError: undefined,
-            roleError: undefined,
-            passwordError: undefined,
-        };
-    case ACTIONS.reset:
-        return initialState;
-    default: return state;
+        case ACTIONS.setRole:
+            return {
+                ...state,
+                roleId: action.payload,
+            };
+        case ACTIONS.setRoleError:
+            return {
+                ...state,
+                roleError: action.payload,
+            };
+        case ACTIONS.removeRoleError:
+            return {
+                ...state,
+                roleError: undefined,
+            };
+        case ACTIONS.setPassword:
+            return {
+                ...state,
+                password: action.payload,
+            };
+        case ACTIONS.setPasswordError:
+            return {
+                ...state,
+                passwordError: action.payload,
+            };
+        case ACTIONS.removePasswordError:
+            return {
+                ...state,
+                passwordError: undefined,
+            };
+        case ACTIONS.setGlobalError:
+            return {
+                ...state,
+                globalError: action.payload,
+            };
+        case ACTIONS.removeGlobalError:
+            return {
+                ...state,
+                globalError: undefined,
+            };
+        case ACTIONS.removeErrors:
+            return {
+                ...state,
+                globalError: undefined,
+                roleError: undefined,
+                passwordError: undefined,
+            };
+        case ACTIONS.reset:
+            return initialState;
+        default:
+            return state;
     }
 }
 
@@ -92,7 +93,7 @@ export function reducer(state, action) {
  */
 export function isUserRoleUpdated(currentState, initialState) {
     return (
-        !initialState && currentState.roleId ||
+        (!initialState && currentState.roleId) ||
         currentState.roleId !== initialState.roleId
     );
 }

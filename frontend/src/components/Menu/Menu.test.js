@@ -17,7 +17,7 @@ describe('Menu component test suite', () => {
         },
         {
             label: 'b',
-            leadingIcon: <MenuIcon name={iconName}/>,
+            leadingIcon: <MenuIcon name={iconName} />,
             onClick: jest.fn(),
         },
         {
@@ -26,21 +26,24 @@ describe('Menu component test suite', () => {
         },
     ];
 
-    function MenuWrapper({
-        open = true,
-    }) {
+    function MenuWrapper({ open = true }) {
         const [anchorRef, setAnchorRef] = useState(null);
-        return <>
-            <div data-testid="anchor" ref={(node) => setAnchorRef(node)}></div>
-            <div data-testid="out"></div>
-            <Menu
-                label={menuLabel}
-                open={open}
-                anchor={anchorRef}
-                onClose={mockOnClose}
-                menuItems={menuButtons}
-            />
-        </>;
+        return (
+            <>
+                <div
+                    data-testid="anchor"
+                    ref={(node) => setAnchorRef(node)}
+                ></div>
+                <div data-testid="out"></div>
+                <Menu
+                    label={menuLabel}
+                    open={open}
+                    anchor={anchorRef}
+                    onClose={mockOnClose}
+                    menuItems={menuButtons}
+                />
+            </>
+        );
     }
 
     afterEach(() => {
@@ -49,14 +52,16 @@ describe('Menu component test suite', () => {
     });
 
     it('should render closed', () => {
-        render(<MenuWrapper open={false}/>);
+        render(<MenuWrapper open={false} />);
         expect(screen.queryByRole('menu', { name: menuLabel })).toBeNull();
     });
 
     it('should render opened with the right label and actions', () => {
-        render(<MenuWrapper/>);
+        render(<MenuWrapper />);
         screen.getByRole('menu', { name: menuLabel });
-        const firstButton = screen.getByRole('button', { name: menuButtons[0].label });
+        const firstButton = screen.getByRole('button', {
+            name: menuButtons[0].label,
+        });
         expect(firstButton).toHaveFocus();
         screen.getByRole('button', { name: menuButtons[1].label });
         screen.getByText(iconName);
@@ -65,7 +70,7 @@ describe('Menu component test suite', () => {
 
     it('should move the focus with the up / down arrows', async () => {
         const user = userEvent.setup();
-        render(<MenuWrapper/>);
+        render(<MenuWrapper />);
         const buttonElts = screen.getAllByRole('button');
 
         expect(buttonElts[0]).toHaveFocus();
@@ -91,7 +96,7 @@ describe('Menu component test suite', () => {
 
     it('should move the focus with the left / right arrows', async () => {
         const user = userEvent.setup();
-        render(<MenuWrapper/>);
+        render(<MenuWrapper />);
         const buttonElts = screen.getAllByRole('button');
 
         expect(buttonElts[0]).toHaveFocus();
@@ -117,7 +122,7 @@ describe('Menu component test suite', () => {
 
     it('should move the focus with the home / end keys', async () => {
         const user = userEvent.setup();
-        render(<MenuWrapper/>);
+        render(<MenuWrapper />);
         const buttonElts = screen.getAllByRole('button');
 
         expect(buttonElts[0]).toHaveFocus();
@@ -133,7 +138,7 @@ describe('Menu component test suite', () => {
 
     it('should move the focus with the letters keys', async () => {
         const user = userEvent.setup();
-        render(<MenuWrapper/>);
+        render(<MenuWrapper />);
         const buttonElts = screen.getAllByRole('button');
 
         expect(buttonElts[0]).toHaveFocus();
@@ -153,7 +158,7 @@ describe('Menu component test suite', () => {
 
     it('should synchronyse between tab focus and arrow focus', async () => {
         const user = userEvent.setup();
-        render(<MenuWrapper/>);
+        render(<MenuWrapper />);
         const buttonElts = screen.getAllByRole('button');
 
         expect(buttonElts[0]).toHaveFocus();
@@ -177,7 +182,7 @@ describe('Menu component test suite', () => {
 
     it('should prevent escaping using tab', async () => {
         const user = userEvent.setup();
-        render(<MenuWrapper/>);
+        render(<MenuWrapper />);
         const buttonElts = screen.getAllByRole('button');
 
         expect(buttonElts[0]).toHaveFocus();
@@ -195,8 +200,10 @@ describe('Menu component test suite', () => {
 
     it('should execute the action and execute onClose when clicking on a button', async () => {
         const user = userEvent.setup();
-        render(<MenuWrapper/>);
-        const buttonElt = screen.getByRole('button', { name: menuButtons[0].label });
+        render(<MenuWrapper />);
+        const buttonElt = screen.getByRole('button', {
+            name: menuButtons[0].label,
+        });
 
         await user.click(buttonElt);
         expect(menuButtons[0].onClick).toHaveBeenCalled();
@@ -205,7 +212,7 @@ describe('Menu component test suite', () => {
 
     it('should execute onClose when pressing Escape', async () => {
         const user = userEvent.setup();
-        render(<MenuWrapper/>);
+        render(<MenuWrapper />);
 
         await user.keyboard('{Escape}');
         expect(mockOnClose).toHaveBeenCalled();
@@ -213,7 +220,7 @@ describe('Menu component test suite', () => {
 
     it('should execute onClose when clicking out', async () => {
         const user = userEvent.setup();
-        render(<MenuWrapper/>);
+        render(<MenuWrapper />);
         const outElt = screen.getByTestId('out');
 
         await user.click(outElt);
@@ -222,7 +229,7 @@ describe('Menu component test suite', () => {
 
     it('should not execute onClose when clicking the anchor', async () => {
         const user = userEvent.setup();
-        render(<MenuWrapper/>);
+        render(<MenuWrapper />);
         const anchorElt = screen.getByTestId('anchor');
 
         await user.click(anchorElt);

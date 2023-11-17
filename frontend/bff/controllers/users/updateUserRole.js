@@ -2,7 +2,9 @@ import { createLoggerNamespace } from '../../logger/index.js';
 import checkPassword from '../../services/requests/checkPassword.js';
 import updateUserRoleRequest from '../../services/requests/updateUserRole.js';
 
-const updateUserRoleControllerLogger = createLoggerNamespace('groupomania:bff:controller:update-user-role');
+const updateUserRoleControllerLogger = createLoggerNamespace(
+    'groupomania:bff:controller:update-user-role',
+);
 
 /**
  * Update user role controller.
@@ -13,13 +15,22 @@ const updateUserRoleControllerLogger = createLoggerNamespace('groupomania:bff:co
  * @param next - Next middleware to execute.
  */
 export default async function updateUserRoleController(req, res, next) {
-    updateUserRoleControllerLogger.verbose('Update user role controller starting');
+    updateUserRoleControllerLogger.verbose(
+        'Update user role controller starting',
+    );
     try {
         // Check the password
-        await checkPassword(req.session.user.infos.email, req.body.currentPassword);
+        await checkPassword(
+            req.session.user.infos.email,
+            req.body.currentPassword,
+        );
 
         // Send the update request
-        await updateUserRoleRequest(req.body.roleId, req.params.userId, req.session.user);
+        await updateUserRoleRequest(
+            req.body.roleId,
+            req.params.userId,
+            req.session.user,
+        );
 
         // Save the new user role if needed
         if (req.params.userId === req.session.user.infos.userId) {

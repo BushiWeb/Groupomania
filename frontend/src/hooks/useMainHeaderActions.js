@@ -32,7 +32,8 @@ export function useMainHeaderActions() {
         dispatch(themeToggle());
     }
 
-    let themeLabel = 'Passer au mode sombre', themeIcon = 'dark_mode';
+    let themeLabel = 'Passer au mode sombre',
+        themeIcon = 'dark_mode';
 
     if (theme === THEMES_NAMES.dark) {
         themeLabel = 'Passer au mode clair';

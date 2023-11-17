@@ -8,28 +8,45 @@ import { forwardRef } from 'react';
  * Its value is given as the child of the button.
  * All additionnal props are passed to the DOM element.
  */
-const Button = forwardRef(({
-    children, disabled, autoFocus, onClick, label, classNames, hover, focus, active, stateLayerColor, ...other
-}, ref) => {
-    return <InteractiveElement
-        rootElement="button"
-        className={`${style.button} ${classNames}`}
-        rippleDuration={disabled || !stateLayerColor ? null : 350}
-        stateLayerColor={stateLayerColor}
-        hover={hover}
-        focus={focus}
-        active={active}
-        type="button"
-        disabled={disabled}
-        autoFocus={autoFocus}
-        onClick={onClick}
-        aria-label={label}
-        ref={ref}
-        {...other}
-    >
-        {children}
-    </InteractiveElement>;
-});
+const Button = forwardRef(
+    (
+        {
+            children,
+            disabled,
+            autoFocus,
+            onClick,
+            label,
+            classNames,
+            hover,
+            focus,
+            active,
+            stateLayerColor,
+            ...other
+        },
+        ref,
+    ) => {
+        return (
+            <InteractiveElement
+                rootElement="button"
+                className={`${style.button} ${classNames}`}
+                rippleDuration={disabled || !stateLayerColor ? null : 350}
+                stateLayerColor={stateLayerColor}
+                hover={hover}
+                focus={focus}
+                active={active}
+                type="button"
+                disabled={disabled}
+                autoFocus={autoFocus}
+                onClick={onClick}
+                aria-label={label}
+                ref={ref}
+                {...other}
+            >
+                {children}
+            </InteractiveElement>
+        );
+    },
+);
 
 Button.defaultProps = {
     disabled: false,

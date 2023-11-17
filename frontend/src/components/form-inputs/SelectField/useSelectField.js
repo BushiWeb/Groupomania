@@ -1,5 +1,8 @@
 import { useId, useRef, useState } from 'react';
-import { NO_CONTROL, useArrowNavigation } from '../../../hooks/useArrowNavigation.js';
+import {
+    NO_CONTROL,
+    useArrowNavigation,
+} from '../../../hooks/useArrowNavigation.js';
 
 /**
  * Hook containing the logic of the select field
@@ -18,11 +21,7 @@ import { NO_CONTROL, useArrowNavigation } from '../../../hooks/useArrowNavigatio
  * popupAnchor,
  * }}
  */
-export default function useSelectField({
-    value,
-    valueCollection,
-    onChange,
-}) {
+export default function useSelectField({ value, valueCollection, onChange }) {
     const comboboxRef = useRef(null);
     const wrapperRef = useRef(null);
 
@@ -31,11 +30,13 @@ export default function useSelectField({
     const [isPopupOpened, setIsPopupOpened] = useState(false);
     const [popupAnchor, setPopupAnchor] = useState(null);
     const stringComparator = new Intl.Collator('fr');
-    const orderedValueCollection = valueCollection.map(({ value, label }, index) => ({
-        value,
-        label,
-        id: `${listboxId}-${index}-${value}-${label}`,
-    })).toSorted((a, b) => stringComparator.compare(a.label, b.label));
+    const orderedValueCollection = valueCollection
+        .map(({ value, label }, index) => ({
+            value,
+            label,
+            id: `${listboxId}-${index}-${value}-${label}`,
+        }))
+        .toSorted((a, b) => stringComparator.compare(a.label, b.label));
 
     // Keyboard interactions
     const {
@@ -45,11 +46,16 @@ export default function useSelectField({
     } = useArrowNavigation(
         orderedValueCollection.map(({ label }) => label),
         {
-            initialFocus: orderedValueCollection.findIndex(({ value: optionValue }) => optionValue === value),
+            initialFocus: orderedValueCollection.findIndex(
+                ({ value: optionValue }) => optionValue === value,
+            ),
             useHomeEnd: NO_CONTROL,
             useFirstLetter: true,
         },
-        (index) => index === null ? onChange(undefined) : onChange(orderedValueCollection[index].value)
+        (index) =>
+            index === null ?
+                onChange(undefined)
+            :   onChange(orderedValueCollection[index].value),
     );
 
     function handleKeyboardInteraction(e) {
@@ -79,7 +85,7 @@ export default function useSelectField({
 
     // Button click handler
     function handleButtonClick(e) {
-        setIsPopupOpened(previous => !previous);
+        setIsPopupOpened((previous) => !previous);
         setPopupAnchor(e.currentTarget);
     }
 

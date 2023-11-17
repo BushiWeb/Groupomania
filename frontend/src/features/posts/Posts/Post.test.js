@@ -24,41 +24,59 @@ describe('Post component test suite', () => {
     });
 
     it('should render', () => {
-        render(<Post {...postInformations}/>);
+        render(<Post {...postInformations} />);
     });
 
     it('should display the right post informations', () => {
-        render(<Post {...postInformations}/>);
+        render(<Post {...postInformations} />);
 
         screen.getByRole('heading', { name: postInformations.title, level: 2 });
         screen.getByText(postInformations.message);
         screen.getByText(postInformations.authorEmail);
-        const timeElt = screen.getByText(/\d{1,2} (?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre) \d{4} à \d{2}:\d{2}/);
-        const likeButton = screen.getByRole('button', { name: `Aimer, ${postInformations.likeNumber} j'aimes` });
-        const optionButton = screen.queryByRole('button', { name: 'Plus d\'actions' });
-        const postElt = screen.getByLabelText(postInformations.title, { selector: 'article' });
+        const timeElt = screen.getByText(
+            /\d{1,2} (?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre) \d{4} à \d{2}:\d{2}/,
+        );
+        const likeButton = screen.getByRole('button', {
+            name: `Aimer, ${postInformations.likeNumber} j'aimes`,
+        });
+        const optionButton = screen.queryByRole('button', {
+            name: "Plus d'actions",
+        });
+        const postElt = screen.getByLabelText(postInformations.title, {
+            selector: 'article',
+        });
 
         expect(optionButton).toBeNull();
         expect(likeButton).toHaveAttribute('aria-pressed', 'false');
         expect(timeElt).toHaveAttribute('dateTime', postInformations.date);
-        expect(postElt).toHaveAttribute('aria-posinset', `${postInformations.posinset}`);
-        expect(postElt).toHaveAttribute('aria-setsize', `${postInformations.setsize}`);
+        expect(postElt).toHaveAttribute(
+            'aria-posinset',
+            `${postInformations.posinset}`,
+        );
+        expect(postElt).toHaveAttribute(
+            'aria-setsize',
+            `${postInformations.setsize}`,
+        );
     });
 
     it('should display the like', () => {
-        render(<Post {...postInformations} liked={true}/>);
-        const likeButton = screen.getByRole('button', { name: `Ne plus aimer, ${postInformations.likeNumber} j'aimes` });
+        render(<Post {...postInformations} liked={true} />);
+        const likeButton = screen.getByRole('button', {
+            name: `Ne plus aimer, ${postInformations.likeNumber} j'aimes`,
+        });
         expect(likeButton).toHaveAttribute('aria-pressed', 'true');
     });
 
     it('should display the more action buttons', () => {
-        render(<Post {...postInformations} hasRights={true}/>);
-        screen.getByRole('button', { name: 'Plus d\'actions' });
+        render(<Post {...postInformations} hasRights={true} />);
+        screen.getByRole('button', { name: "Plus d'actions" });
     });
 
     it('should have an image', () => {
         const imageUrl = 'image.com';
-        const { container } = render(<Post {...postInformations} imageUrl={imageUrl}/>);
+        const { container } = render(
+            <Post {...postInformations} imageUrl={imageUrl} />,
+        );
 
         const imgElt = container.querySelector('img');
 
@@ -68,8 +86,10 @@ describe('Post component test suite', () => {
 
     it('should execute the function when clicking on the like button', async () => {
         const user = userEvent.setup();
-        render(<Post {...postInformations}/>);
-        const likeButton = screen.getByRole('button', { name: `Aimer, ${postInformations.likeNumber} j'aimes` });
+        render(<Post {...postInformations} />);
+        const likeButton = screen.getByRole('button', {
+            name: `Aimer, ${postInformations.likeNumber} j'aimes`,
+        });
 
         await user.click(likeButton);
         expect(postInformations.onLike).toHaveBeenCalled();
@@ -77,7 +97,7 @@ describe('Post component test suite', () => {
 
     it('should execute the onMoreActions functions when clicking on the more actions button', async () => {
         const user = userEvent.setup();
-        render(<Post {...postInformations} hasRights/>);
+        render(<Post {...postInformations} hasRights />);
         const moreButton = screen.getByRole('button', { name: /actions/ });
 
         await user.click(moreButton);
@@ -85,7 +105,7 @@ describe('Post component test suite', () => {
     });
 
     it('should be vertical', () => {
-        render(<Post {...postInformations} liked={true} vertical/>);
+        render(<Post {...postInformations} liked={true} vertical />);
         const post = screen.getByRole('article');
         expect(post).toHaveAttribute('data-vertical');
     });

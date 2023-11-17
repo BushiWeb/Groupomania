@@ -13,14 +13,22 @@ describe('Checkbox component test suite', () => {
     const inputHandle = jest.fn(() => true);
 
     it('should render', () => {
-        render(<CheckboxLabel name={name} onChange={inputHandle}>{label}</CheckboxLabel>);
+        render(
+            <CheckboxLabel name={name} onChange={inputHandle}>
+                {label}
+            </CheckboxLabel>,
+        );
         const checkboxElt = screen.getByRole('checkbox', { name: label });
         expect(checkboxElt).toHaveAttribute('name', name);
         expect(checkboxElt).not.toBeChecked();
     });
 
     it('should render in a checked state', () => {
-        render(<CheckboxLabel name={name} checked={true} onChange={inputHandle}>{label}</CheckboxLabel>);
+        render(
+            <CheckboxLabel name={name} checked={true} onChange={inputHandle}>
+                {label}
+            </CheckboxLabel>,
+        );
         const checkboxElt = screen.getByRole('checkbox');
         expect(checkboxElt).toBeChecked();
     });
@@ -28,7 +36,11 @@ describe('Checkbox component test suite', () => {
     it('should execute the action when clicked', async () => {
         const user = userEvent.setup();
 
-        render(<CheckboxLabel name={name} onChange={inputHandle}>{label}</CheckboxLabel>);
+        render(
+            <CheckboxLabel name={name} onChange={inputHandle}>
+                {label}
+            </CheckboxLabel>,
+        );
         const checkbox = screen.getByRole('checkbox');
         const labelElt = screen.getByText(label);
 
@@ -40,30 +52,52 @@ describe('Checkbox component test suite', () => {
     });
 
     it('should has the initial focus', () => {
-        render(<CheckboxLabel name={name} autoFocus={true} onChange={inputHandle}>{label}</CheckboxLabel>);
+        render(
+            <CheckboxLabel name={name} autoFocus={true} onChange={inputHandle}>
+                {label}
+            </CheckboxLabel>,
+        );
         const checkbox = screen.getByRole('checkbox');
         expect(checkbox).toHaveFocus();
     });
 
     it('should be disabled', () => {
-        render(<CheckboxLabel name={name} disabled={true} onChange={inputHandle}>{label}</CheckboxLabel>);
+        render(
+            <CheckboxLabel name={name} disabled={true} onChange={inputHandle}>
+                {label}
+            </CheckboxLabel>,
+        );
         const checkbox = screen.getByRole('checkbox');
         expect(checkbox).toBeDisabled();
     });
 
     it('should be disabled and checked', () => {
-        render(<CheckboxLabel
-            name={name} disabled={true} checked={true} onChange={inputHandle}
-        >{label}</CheckboxLabel>);
+        render(
+            <CheckboxLabel
+                name={name}
+                disabled={true}
+                checked={true}
+                onChange={inputHandle}
+            >
+                {label}
+            </CheckboxLabel>,
+        );
         const checkbox = screen.getByRole('checkbox');
         expect(checkbox).toBeDisabled();
         expect(checkbox).toBeChecked();
     });
 
     it('should be disabled and not focused', () => {
-        render(<CheckboxLabel
-            name={name} autoFocus={true} disabled={true} onChange={inputHandle}
-        >{label}</CheckboxLabel>);
+        render(
+            <CheckboxLabel
+                name={name}
+                autoFocus={true}
+                disabled={true}
+                onChange={inputHandle}
+            >
+                {label}
+            </CheckboxLabel>,
+        );
         const checkbox = screen.getByRole('checkbox');
         expect(checkbox).toBeDisabled();
         expect(checkbox).not.toHaveFocus();
@@ -72,7 +106,11 @@ describe('Checkbox component test suite', () => {
     it('should be accessible using keyboard navigation', async () => {
         const user = userEvent.setup();
 
-        render(<CheckboxLabel name={name} onChange={inputHandle}>{label}</CheckboxLabel>);
+        render(
+            <CheckboxLabel name={name} onChange={inputHandle}>
+                {label}
+            </CheckboxLabel>,
+        );
         const checkbox = screen.getByRole('checkbox');
 
         expect(checkbox).not.toBeChecked();
@@ -88,8 +126,14 @@ describe('Checkbox component test suite', () => {
 
     it('should trigger the ripple effect when activated', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
-        const { container } = render(<CheckboxLabel name={name} onChange={inputHandle}>{label}</CheckboxLabel>);
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
+        const { container } = render(
+            <CheckboxLabel name={name} onChange={inputHandle}>
+                {label}
+            </CheckboxLabel>,
+        );
         const checkboxElt = screen.getByRole('checkbox');
         const stateLayerElt = container.querySelector('.stateLayer');
 
@@ -113,9 +157,11 @@ describe('Checkbox component test suite', () => {
 
     it('should not have the ripple effect when disabled', async () => {
         const user = userEvent.setup();
-        const { container } = render(<CheckboxLabel
-            name={name} disabled={true} onChange={inputHandle}
-        >{label}</CheckboxLabel>);
+        const { container } = render(
+            <CheckboxLabel name={name} disabled={true} onChange={inputHandle}>
+                {label}
+            </CheckboxLabel>,
+        );
         const checkboxElt = screen.getByRole('checkbox');
         const stateLayerElt = container.querySelector('.stateLayer');
 
@@ -127,9 +173,11 @@ describe('Checkbox component test suite', () => {
 
     it('should not have the ripple effect when clicking on the text', async () => {
         const user = userEvent.setup();
-        const { container } = render(<CheckboxLabel
-            name={name} onChange={inputHandle}
-        >{label}</CheckboxLabel>);
+        const { container } = render(
+            <CheckboxLabel name={name} onChange={inputHandle}>
+                {label}
+            </CheckboxLabel>,
+        );
         const labelElt = screen.getByText(label);
         const stateLayerElt = container.querySelector('.stateLayer');
 
@@ -140,16 +188,31 @@ describe('Checkbox component test suite', () => {
     });
 
     it('should have additionnal classnames', () => {
-        render(<CheckboxLabel
-            name={name} className={moreClass} onChange={inputHandle}
-        >{label}</CheckboxLabel>);
+        render(
+            <CheckboxLabel
+                name={name}
+                className={moreClass}
+                onChange={inputHandle}
+            >
+                {label}
+            </CheckboxLabel>,
+        );
         const labelElt = screen.getByText(label);
 
         expect(labelElt).toHaveClass(moreClass);
     });
 
     it('should have more props added', () => {
-        render(<CheckboxLabel name={name} label={label} aria-describedby="lorem" onChange={inputHandle}>{label}</CheckboxLabel>);
+        render(
+            <CheckboxLabel
+                name={name}
+                label={label}
+                aria-describedby="lorem"
+                onChange={inputHandle}
+            >
+                {label}
+            </CheckboxLabel>,
+        );
         const checkboxElt = screen.getByRole('checkbox');
 
         expect(checkboxElt).toHaveAttribute('aria-describedby', 'lorem');

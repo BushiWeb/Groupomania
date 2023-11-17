@@ -9,51 +9,84 @@ import { ACTIONS } from './formReducer';
 import PropTypes from 'prop-types';
 
 export default function FormFields({
-    globalError, email, emailError, password, passwordError, isLoading, rememberMe, dispatch,
+    globalError,
+    email,
+    emailError,
+    password,
+    passwordError,
+    isLoading,
+    rememberMe,
+    dispatch,
 }) {
     const darkTheme = useSelector(selectIsDarkTheme);
 
-    return <div className={style.inputs}>
-        {globalError && <p className={style.globalError} role="alert">
-            <Icon name="error" label="Error" size={20} grad={50} isOnDark={darkTheme} className={style.globalErrorIcon}/>
-            {globalError}
-        </p>}
+    return (
+        <div className={style.inputs}>
+            {globalError && (
+                <p className={style.globalError} role="alert">
+                    <Icon
+                        name="error"
+                        label="Error"
+                        size={20}
+                        grad={50}
+                        isOnDark={darkTheme}
+                        className={style.globalErrorIcon}
+                    />
+                    {globalError}
+                </p>
+            )}
 
-        <TextField
-            value={email}
-            errorMessage={emailError}
-            onChange={(e) => dispatch({ type: ACTIONS.setEmail, payload: e.target.value })}
-            label="Email"
-            leadingIconProps={{
-                name: 'mail',
-            }}
-            autoFocus
-            className={style.email}
-            required
-            readOnly={isLoading}
-        />
-        <PasswordField
-            value={password}
-            errorMessage={passwordError}
-            onChange={(e) => dispatch({ type: ACTIONS.setPassword, payload: e.target.value })}
-            label="Mot de passe"
-            leadingIconProps={{
-                name: 'lock',
-            }}
-            className={style.password}
-            required
-            readOnly={isLoading}
-        />
+            <TextField
+                value={email}
+                errorMessage={emailError}
+                onChange={(e) =>
+                    dispatch({
+                        type: ACTIONS.setEmail,
+                        payload: e.target.value,
+                    })
+                }
+                label="Email"
+                leadingIconProps={{
+                    name: 'mail',
+                }}
+                autoFocus
+                className={style.email}
+                required
+                readOnly={isLoading}
+            />
+            <PasswordField
+                value={password}
+                errorMessage={passwordError}
+                onChange={(e) =>
+                    dispatch({
+                        type: ACTIONS.setPassword,
+                        payload: e.target.value,
+                    })
+                }
+                label="Mot de passe"
+                leadingIconProps={{
+                    name: 'lock',
+                }}
+                className={style.password}
+                required
+                readOnly={isLoading}
+            />
 
-        <CheckboxLabel
-            checked={rememberMe}
-            onChange={(e) => dispatch({ type: ACTIONS.setRememberMe, payload: e.target.checked })}
-            className={style.rememberMe}
-            readOnly={isLoading}
-        >
-            Se souvenir de moi
-        </CheckboxLabel>
-    </div>;
+            <CheckboxLabel
+                checked={rememberMe}
+                onChange={(e) =>
+                    dispatch({
+                        type: ACTIONS.setRememberMe,
+                        payload: e.target.checked,
+                    })
+                }
+                className={style.rememberMe}
+                readOnly={isLoading}
+            >
+                Se souvenir de moi
+            </CheckboxLabel>
+        </div>
+    );
 }
 
 FormFields.defaultProps = {

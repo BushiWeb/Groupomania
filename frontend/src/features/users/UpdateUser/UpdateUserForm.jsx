@@ -8,42 +8,69 @@ import PasswordField from '../../../components/form-inputs/PasswordField/Passwor
 
 /** Form to create a post, with or without image */
 export default function UpdateUserForm({
-    email, emailError, oldPassword, oldPasswordError, newPassword, newPasswordError, globalError, dispatch,
+    email,
+    emailError,
+    oldPassword,
+    oldPasswordError,
+    newPassword,
+    newPasswordError,
+    globalError,
+    dispatch,
 }) {
     const errorMessageId = useId();
 
-    return <form className={style.form} aria-label="Formulaire de mise à jour du profil">
-        <SupportText
-            id={errorMessageId}
-            errorMessage={globalError}
-            errorIcon
-            className={style.supportText}
-            role="alert"
-        />
+    return (
+        <form
+            className={style.form}
+            aria-label="Formulaire de mise à jour du profil"
+        >
+            <SupportText
+                id={errorMessageId}
+                errorMessage={globalError}
+                errorIcon
+                className={style.supportText}
+                role="alert"
+            />
 
-        <PasswordField
-            value={oldPassword}
-            onChange={(e) => dispatch({ type: ACTIONS.setOldPassword, payload: e.target.value })}
-            label="Mot de passe"
-            errorMessage={oldPasswordError}
-            supportText="Veuillez confirmer votre identité avant de continuer."
-            required
-        />
+            <PasswordField
+                value={oldPassword}
+                onChange={(e) =>
+                    dispatch({
+                        type: ACTIONS.setOldPassword,
+                        payload: e.target.value,
+                    })
+                }
+                label="Mot de passe"
+                errorMessage={oldPasswordError}
+                supportText="Veuillez confirmer votre identité avant de continuer."
+                required
+            />
 
-        <TextField
-            value={email}
-            onChange={(e) => dispatch({ type: ACTIONS.setEmail, payload: e.target.value })}
-            label="Email"
-            errorMessage={emailError}
-        />
+            <TextField
+                value={email}
+                onChange={(e) =>
+                    dispatch({
+                        type: ACTIONS.setEmail,
+                        payload: e.target.value,
+                    })
+                }
+                label="Email"
+                errorMessage={emailError}
+            />
 
-        <PasswordField
-            value={newPassword}
-            onChange={(e) => dispatch({ type: ACTIONS.setNewPassword, payload: e.target.value })}
-            label="Nouveau mot de passe"
-            errorMessage={newPasswordError}
-        />
-    </form>;
+            <PasswordField
+                value={newPassword}
+                onChange={(e) =>
+                    dispatch({
+                        type: ACTIONS.setNewPassword,
+                        payload: e.target.value,
+                    })
+                }
+                label="Nouveau mot de passe"
+                errorMessage={newPasswordError}
+            />
+        </form>
+    );
 }
 
 UpdateUserForm.defaultProps = {

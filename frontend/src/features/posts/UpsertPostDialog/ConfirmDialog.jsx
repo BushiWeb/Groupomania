@@ -8,27 +8,23 @@ import Dialog, {
 import PropTypes from 'prop-types';
 
 /** Dialog used to confirm the cancellation of the upsert */
-export default function ConfirmDialog({
-    close, open, onAccept,
-}) {
-    return <Dialog
-        label="Confirmer l'annulation"
-        onClose={close}
-        open={open}
-    >
-        <DialogHeader>
-            <DialogHeadline>Confirmer l'annulation?</DialogHeadline>
-        </DialogHeader>
+export default function ConfirmDialog({ close, open, onAccept }) {
+    return (
+        <Dialog label="Confirmer l'annulation" onClose={close} open={open}>
+            <DialogHeader>
+                <DialogHeadline>Confirmer l'annulation?</DialogHeadline>
+            </DialogHeader>
 
-        <DialogContent>
-            <p>Voulez-vous annuler les changements apportés au post?</p>
-        </DialogContent>
+            <DialogContent>
+                <p>Voulez-vous annuler les changements apportés au post?</p>
+            </DialogContent>
 
-        <DialogActions>
-            <DialogAction onClick={close}>Non, continuer</DialogAction>
-            <DialogAction onClick={onAccept}>Oui, annuler</DialogAction>
-        </DialogActions>
-    </Dialog>;
+            <DialogActions>
+                <DialogAction onClick={close}>Non, continuer</DialogAction>
+                <DialogAction onClick={onAccept}>Oui, annuler</DialogAction>
+            </DialogActions>
+        </Dialog>
+    );
 }
 
 ConfirmDialog.defaultProps = {

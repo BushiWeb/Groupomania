@@ -19,7 +19,7 @@ const Link = React.forwardRef(
             useSpaceBar = true,
             ...rest
         },
-        ref
+        ref,
     ) => {
         let href = useHref(to);
         let navigationHandler = useLinkClickHandler(to, {
@@ -43,17 +43,19 @@ const Link = React.forwardRef(
             }
         }
 
-        return <a
-            {...rest}
-            href={href}
-            onClick={handleClick}
-            onKeyDown={handleKeyDown}
-            ref={ref}
-            target={target}
-        >
-            {children}
-        </a>;
-    }
+        return (
+            <a
+                {...rest}
+                href={href}
+                onClick={handleClick}
+                onKeyDown={handleKeyDown}
+                ref={ref}
+                target={target}
+            >
+                {children}
+            </a>
+        );
+    },
 );
 
 Link.defaultProps = {

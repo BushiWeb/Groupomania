@@ -14,35 +14,45 @@ import { THEMES_NAMES } from '../../features/theme/theme.slice.js';
  * Only giving one of the dimension will scale the image proportionnaly.
  */
 export default function Logo({
-    target, color, width, height, label, ...otherProps
+    target,
+    color,
+    width,
+    height,
+    label,
+    ...otherProps
 }) {
     // Calculating the size of the image
-    const initialWidth = 136, initialHeight = 25;
+    const initialWidth = 136,
+        initialHeight = 25;
     if (!width && !height) {
         width = initialWidth;
         height = initialHeight;
     } else if (width && !height) {
-        height = Math.round(width * initialHeight / initialWidth);
+        height = Math.round((width * initialHeight) / initialWidth);
     } else if (height && !width) {
-        width = Math.round(height * initialWidth / initialHeight);
+        width = Math.round((height * initialWidth) / initialHeight);
     }
 
     // Choosing the logo
     const theme = useSelector(selectTheme);
     const monochromeLogo = theme === THEMES_NAMES.light ? blackLogo : whiteLogo;
-    const logoElement = <img
-        src={color ? colorLogo : monochromeLogo}
-        alt={`Groupomania${label ? ` ${label}` : ''}`}
-        loading='lazy'
-        width={width}
-        height={height}
-        className={target ? undefined : otherProps?.className}
-    />;
+    const logoElement = (
+        <img
+            src={color ? colorLogo : monochromeLogo}
+            alt={`Groupomania${label ? ` ${label}` : ''}`}
+            loading="lazy"
+            width={width}
+            height={height}
+            className={target ? undefined : otherProps?.className}
+        />
+    );
 
     // The structure depends weither or not the logo is a link
     if (target) {
         return (
-            <Link to={target} className={otherProps?.className}>{logoElement}</Link>
+            <Link to={target} className={otherProps?.className}>
+                {logoElement}
+            </Link>
         );
     }
 

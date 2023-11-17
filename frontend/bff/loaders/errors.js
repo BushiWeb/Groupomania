@@ -16,7 +16,9 @@ export default function errorsLoader(app) {
 
     // Intercept Express 404 errors, sent when the method or the URL isn't defined
     app.use(unHandledRequestHandler);
-    loaderLogger.verbose('Middleware to intercept Express Not Found error added.');
+    loaderLogger.verbose(
+        'Middleware to intercept Express Not Found error added.',
+    );
 
     // Normalizes error format
     app.use(errorNormalizer);
@@ -25,5 +27,4 @@ export default function errorsLoader(app) {
     // Create error responses
     app.use(errorHandler);
     loaderLogger.verbose('Error handling middleware added');
-
 }

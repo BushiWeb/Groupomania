@@ -16,7 +16,7 @@ export const handlers = [
                             type: 'UnauthorizedError',
                             statusCode: 401,
                         },
-                    })
+                    }),
                 );
             }
 
@@ -31,7 +31,7 @@ export const handlers = [
                         name: 'user',
                         roleId: 2,
                     },
-                })
+                }),
             );
         }
 
@@ -57,7 +57,7 @@ export const handlers = [
                         ],
                         statusCode: 400,
                     },
-                })
+                }),
             );
         }
 
@@ -72,18 +72,20 @@ export const handlers = [
                         details: [
                             {
                                 param: 'email',
-                                message: 'The email must have the right format. It must contain your email username, followed by an @, followed by a domain name.',
+                                message:
+                                    'The email must have the right format. It must contain your email username, followed by an @, followed by a domain name.',
                                 location: 'body',
                             },
                             {
                                 param: 'password',
-                                message: 'The password must be stronger. It has to contain at least 8 characters, including at least 1 lowercase letters, 1 uppercase letters, 1 numbers and 1 symbols.',
+                                message:
+                                    'The password must be stronger. It has to contain at least 8 characters, including at least 1 lowercase letters, 1 uppercase letters, 1 numbers and 1 symbols.',
                                 location: 'body',
                             },
                         ],
                         statusCode: 400,
                     },
-                })
+                }),
             );
         }
 
@@ -97,14 +99,13 @@ export const handlers = [
                         type: 'UnauthorizedError',
                         statusCode: 401,
                     },
-                })
+                }),
             );
         }
 
         if (sessionStorage.getItem('otherError')) {
             return res.networkError();
         }
-
 
         if (sessionStorage.getItem('otherSyntaxError')) {
             return res(
@@ -116,7 +117,7 @@ export const handlers = [
                         type: 'UserInputValidationError',
                         statusCode: 400,
                     },
-                })
+                }),
             );
         }
 
@@ -132,7 +133,7 @@ export const handlers = [
                     name: 'user',
                     roleId: 2,
                 },
-            })
+            }),
         );
     }),
 
@@ -147,7 +148,7 @@ export const handlers = [
                         type: 'ConflictError',
                         statusCode: 409,
                     },
-                })
+                }),
             );
         }
 
@@ -163,7 +164,7 @@ export const handlers = [
                     name: 'user',
                     roleId: 2,
                 },
-            })
+            }),
         );
     }),
 
@@ -171,7 +172,7 @@ export const handlers = [
         return res(
             ctx.delay(),
             ctx.status(200),
-            ctx.set('X-Crsf-Token', 'testToken')
+            ctx.set('X-Crsf-Token', 'testToken'),
         );
     }),
 
@@ -186,7 +187,7 @@ export const handlers = [
                         type: 'UserInputValidationError',
                         statusCode: 400,
                     },
-                })
+                }),
             );
         }
 
@@ -200,7 +201,7 @@ export const handlers = [
                         type: 'ServerError',
                         statusCode: 500,
                     },
-                })
+                }),
             );
         }
 
@@ -218,24 +219,29 @@ export const handlers = [
                         type: 'UnauthorizedError',
                         statusCode: 401,
                     },
-                })
+                }),
             );
         }
 
         let posts = POSTS;
         if (req.url.searchParams.get('userId')) {
-            posts = POSTS.filter((value) => value.writer.writerId === parseInt(req.url.searchParams.get('userId')));
+            posts = POSTS.filter(
+                (value) =>
+                    value.writer.writerId ===
+                    parseInt(req.url.searchParams.get('userId')),
+            );
         }
 
         const page = req.url.searchParams.get('page');
         const sliceIndex = posts.length / 2;
-        const response = page === '1' ? posts.slice(0, sliceIndex) : posts.slice(sliceIndex);
+        const response =
+            page === '1' ? posts.slice(0, sliceIndex) : posts.slice(sliceIndex);
 
         return res(
             ctx.delay(),
             ctx.status(200),
             ctx.set('X-Crsf-Token', 'testToken'),
-            ctx.json(response)
+            ctx.json(response),
         );
     }),
 
@@ -250,7 +256,7 @@ export const handlers = [
                         type: 'UserInputValidationError',
                         statusCode: 400,
                     },
-                })
+                }),
             );
         }
 
@@ -264,7 +270,7 @@ export const handlers = [
                         type: 'ServerError',
                         statusCode: 500,
                     },
-                })
+                }),
             );
         }
 
@@ -282,20 +288,23 @@ export const handlers = [
                         type: 'UnauthorizedError',
                         statusCode: 401,
                     },
-                })
+                }),
             );
         }
         const { like } = await req.json();
         const id = parseInt(req.params.id);
         const userId = parseInt(sessionStorage.getItem('userId'));
 
-        const postIndex = POSTS.findIndex(elt => elt.postId === id);
+        const postIndex = POSTS.findIndex((elt) => elt.postId === id);
         POSTS[postIndex].likes += like ? 1 : -1;
 
         if (like) {
             POSTS[postIndex].usersLiked.push(userId);
         } else {
-            POSTS[postIndex].usersLiked.splice(POSTS[postIndex].usersLiked.indexOf(userId), 1);
+            POSTS[postIndex].usersLiked.splice(
+                POSTS[postIndex].usersLiked.indexOf(userId),
+                1,
+            );
         }
 
         const response = { message: 'done, or not' };
@@ -304,7 +313,7 @@ export const handlers = [
             ctx.delay(),
             ctx.status(200),
             ctx.set('X-Crsf-Token', 'testToken'),
-            ctx.json(response)
+            ctx.json(response),
         );
     }),
 
@@ -319,7 +328,7 @@ export const handlers = [
                         type: 'UserInputValidationError',
                         statusCode: 400,
                     },
-                })
+                }),
             );
         }
 
@@ -333,7 +342,7 @@ export const handlers = [
                         type: 'ServerError',
                         statusCode: 500,
                     },
-                })
+                }),
             );
         }
 
@@ -351,7 +360,7 @@ export const handlers = [
                         type: 'UnauthorizedError',
                         statusCode: 401,
                     },
-                })
+                }),
             );
         }
 
@@ -361,7 +370,7 @@ export const handlers = [
             ctx.delay(),
             ctx.status(200),
             ctx.set('X-Crsf-Token', 'testToken'),
-            ctx.json(response)
+            ctx.json(response),
         );
     }),
 
@@ -376,7 +385,7 @@ export const handlers = [
                         type: 'UserInputValidationError',
                         statusCode: 400,
                     },
-                })
+                }),
             );
         }
 
@@ -390,7 +399,7 @@ export const handlers = [
                         type: 'ServerError',
                         statusCode: 500,
                     },
-                })
+                }),
             );
         }
 
@@ -408,11 +417,13 @@ export const handlers = [
                         type: 'UnauthorizedError',
                         statusCode: 401,
                     },
-                })
+                }),
             );
         }
 
-        const response = USERS.find((value) => value.userId === parseInt(req.params.userId));
+        const response = USERS.find(
+            (value) => value.userId === parseInt(req.params.userId),
+        );
 
         if (!response) {
             return res(
@@ -424,7 +435,7 @@ export const handlers = [
                         type: 'NotFoundError',
                         statusCode: 404,
                     },
-                })
+                }),
             );
         }
 
@@ -432,7 +443,7 @@ export const handlers = [
             ctx.delay(),
             ctx.status(200),
             ctx.set('X-Crsf-Token', 'testToken'),
-            ctx.json(response)
+            ctx.json(response),
         );
     }),
 ];

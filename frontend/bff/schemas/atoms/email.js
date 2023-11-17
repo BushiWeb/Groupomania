@@ -7,17 +7,13 @@
  * @param {Array} [location=['body']] - Where the email is located.
  */
 export default function generateEmailSchema(
-    {
-        required = true,
-        checkFormat = true,
-        trim = true,
-    } = {},
-    location = ['body']
+    { required = true, checkFormat = true, trim = true } = {},
+    location = ['body'],
 ) {
     return {
         in: location,
 
-        ...required ?
+        ...(required ?
             {
                 exists: {
                     errorMessage: 'The email is required.',
@@ -26,20 +22,21 @@ export default function generateEmailSchema(
                     },
                     bail: true,
                 },
-            } :
-            {
+            }
+        :   {
                 optional: {
                     options: { nullable: true },
                 },
-            },
+            }),
 
-        ...trim && { trim: true },
+        ...(trim && { trim: true }),
 
-        ...checkFormat && {
+        ...(checkFormat && {
             isEmail: {
-                errorMessage: 'The email must have the right format. It must contain your email username, followed by an @, followed by a domain name.',
+                errorMessage:
+                    'The email must have the right format. It must contain your email username, followed by an @, followed by a domain name.',
                 bail: true,
             },
-        },
+        }),
     };
 }

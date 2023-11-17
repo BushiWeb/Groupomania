@@ -39,8 +39,12 @@ describe('Button component test suite', () => {
         expect(buttonElt).toBeDisabled();
     });
 
-    it('should be disabled and don\'t have the focus', () => {
-        render(<Button disabled={true} autoFocus={true}>{label}</Button>);
+    it("should be disabled and don't have the focus", () => {
+        render(
+            <Button disabled={true} autoFocus={true}>
+                {label}
+            </Button>,
+        );
         const buttonElt = screen.getByRole('button');
         expect(buttonElt).toBeDisabled();
         expect(buttonElt).not.toHaveFocus();
@@ -81,7 +85,9 @@ describe('Button component test suite', () => {
 
     it('should trigger the ripple effect when activated', async () => {
         fakeTimers.useFakeTimers();
-        const user = userEvent.setup({ advanceTimers: fakeTimers.rawAdvanceTimersByTime });
+        const user = userEvent.setup({
+            advanceTimers: fakeTimers.rawAdvanceTimersByTime,
+        });
         render(<Button stateLayerColor={'primary'}>{label}</Button>);
         const buttonElt = screen.getByRole('button');
         const stateLayer = buttonElt.querySelector('.stateLayer');
@@ -95,7 +101,6 @@ describe('Button component test suite', () => {
         expect(stateLayer).toHaveClass('ripple');
         fakeTimers.runAllTimers();
         expect(stateLayer).not.toHaveClass('ripple');
-
 
         await user.keyboard('{Enter}');
         expect(stateLayer).toHaveClass('ripple');
@@ -112,7 +117,11 @@ describe('Button component test suite', () => {
 
     it('should not trigger the ripple effect if disabled', async () => {
         const user = userEvent.setup();
-        render(<Button disabled={true} stateLayerColor={'primary'}>{label}</Button>);
+        render(
+            <Button disabled={true} stateLayerColor={'primary'}>
+                {label}
+            </Button>,
+        );
         const buttonElt = screen.getByRole('button');
         const stateLayer = buttonElt.querySelector('.stateLayer');
 
@@ -139,7 +148,6 @@ describe('Button component test suite', () => {
         await user.keyboard(' ');
         expect(stateLayer).not.toHaveClass('ripple');
 
-
         await user.keyboard('{Enter}');
         expect(stateLayer).not.toHaveClass('ripple');
 
@@ -163,7 +171,11 @@ describe('Button component test suite', () => {
     });
 
     it('should have all states disabled', () => {
-        render(<Button hover={false} focus={false} active={false}>{label}</Button>);
+        render(
+            <Button hover={false} focus={false} active={false}>
+                {label}
+            </Button>,
+        );
         const buttonElt = screen.getByRole('button');
 
         expect(buttonElt).not.toHaveAttribute('data-state-focus');
@@ -172,9 +184,13 @@ describe('Button component test suite', () => {
     });
 
     it('should give the right color to the state layer', () => {
-        const { container } = render(<Button stateLayerColor='on-primary'>{label}</Button>);
+        const { container } = render(
+            <Button stateLayerColor="on-primary">{label}</Button>,
+        );
         const stateLayer = container.querySelector('.stateLayer');
 
-        expect(stateLayer).toHaveStyle('--state-layer-color: var(--color-on-primary)');
+        expect(stateLayer).toHaveStyle(
+            '--state-layer-color: var(--color-on-primary)',
+        );
     });
 });

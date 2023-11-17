@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import style from './TextBox.module.css';
 
-
 /**
  * Root element for the text box.
  * Creates a context to share the text box state.
@@ -18,19 +17,21 @@ export default function Root({
     labelId,
     ...props
 }) {
-    return <div
-        className={`${style.root} ${className}`}
-        onClick={focusInput}
-        aria-label={label}
-        aria-labelledby={labelId}
-        {...hasPlaceholder && { 'data-placeholder': true }}
-        {...hasValue && { 'data-value': true }}
-        {...isDisabled && { 'data-disabled': true }}
-        {...hasError && { 'data-error': true, 'role': 'alert' }}
-        {...props}
-    >
-        {children}
-    </div>;
+    return (
+        <div
+            className={`${style.root} ${className}`}
+            onClick={focusInput}
+            aria-label={label}
+            aria-labelledby={labelId}
+            {...(hasPlaceholder && { 'data-placeholder': true })}
+            {...(hasValue && { 'data-value': true })}
+            {...(isDisabled && { 'data-disabled': true })}
+            {...(hasError && { 'data-error': true, role: 'alert' })}
+            {...props}
+        >
+            {children}
+        </div>
+    );
 }
 
 Root.defaultProps = {

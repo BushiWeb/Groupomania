@@ -25,12 +25,12 @@ describe('ImageField component test suite', () => {
     });
 
     it('should render with the right label', () => {
-        render(<ImageField {...props}/>);
+        render(<ImageField {...props} />);
         screen.getByRole('button', { name: emptyLabel });
     });
 
     it('should display the image and have the right label when the image is a File', () => {
-        render(<ImageField {...props} image={file}/>);
+        render(<ImageField {...props} image={file} />);
 
         screen.getByRole('button', { name: selectedLabel });
         screen.getByRole('button', { name: /Supprimer/ });
@@ -38,7 +38,7 @@ describe('ImageField component test suite', () => {
     });
 
     it('should display the image and have the right label when the image is a URL', () => {
-        render(<ImageField {...props} image={fileUrl}/>);
+        render(<ImageField {...props} image={fileUrl} />);
 
         screen.getByRole('button', { name: selectedLabel });
         screen.getByRole('button', { name: /Supprimer/ });
@@ -47,7 +47,7 @@ describe('ImageField component test suite', () => {
 
     it('should execute the onChange function with the file when the user chooses an image', async () => {
         const user = userEvent.setup();
-        render(<ImageField {...props}/>);
+        render(<ImageField {...props} />);
         screen.getByRole('button', { name: emptyLabel });
 
         await user.upload(fieldRef.current, file);
@@ -59,7 +59,7 @@ describe('ImageField component test suite', () => {
 
     it('should execute the onChange function with null when the user deletes the image', async () => {
         const user = userEvent.setup();
-        render(<ImageField {...props} image={file}/>);
+        render(<ImageField {...props} image={file} />);
         screen.getByAltText(fileName);
 
         const deleteButton = screen.getByRole('button', { name: /Supprimer/ });
@@ -72,14 +72,14 @@ describe('ImageField component test suite', () => {
 
     it('should have a support text', () => {
         const supportText = 'Support text';
-        render(<ImageField {...props} supportText={supportText}/>);
+        render(<ImageField {...props} supportText={supportText} />);
         screen.getByText(supportText);
         screen.getByLabelText(supportText);
     });
 
     it('should have an error message', () => {
         const errorMessage = 'Error message';
-        render(<ImageField {...props} errorMessage={errorMessage}/>);
+        render(<ImageField {...props} errorMessage={errorMessage} />);
         screen.getByText(errorMessage);
         screen.getByRole('alert', { name: errorMessage });
     });
@@ -87,7 +87,13 @@ describe('ImageField component test suite', () => {
     it('should prioritize the error message over the support text', () => {
         const errorMessage = 'Error message';
         const supportText = 'Support text';
-        render(<ImageField {...props} errorMessage={errorMessage} supportText={supportText}/>);
+        render(
+            <ImageField
+                {...props}
+                errorMessage={errorMessage}
+                supportText={supportText}
+            />,
+        );
         screen.getByText(errorMessage);
         screen.getByRole('alert', { name: errorMessage });
         const supportTextElt = screen.queryByText(supportText);

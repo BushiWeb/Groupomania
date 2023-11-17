@@ -20,12 +20,10 @@ export function useUpdateUserRoleDialog(setIsOpen, user) {
     function onSuccess() {
         setIsOpen(false);
     }
-    const {
-        isLoading,
-        mutate,
-        dispatch,
-        data,
-    } = useUpdateUserRoleForm(onSuccess, user);
+    const { isLoading, mutate, dispatch, data } = useUpdateUserRoleForm(
+        onSuccess,
+        user,
+    );
 
     /*
      * Cancels the input.

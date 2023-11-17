@@ -27,7 +27,7 @@ describe('Navigation component test suite', () => {
     }
 
     it('should render with the right links as a navigation bar', () => {
-        render(<Navigation links={links}/>);
+        render(<Navigation links={links} />);
         const link1 = screen.getByRole('tab', { name: links[0].label });
         const link2 = screen.getByRole('tab', { name: links[1].label });
         const listItemsElts = screen.getAllByRole('tab');
@@ -44,7 +44,7 @@ describe('Navigation component test suite', () => {
     });
 
     it('should render as a navigation rail', () => {
-        render(<Navigation links={links} type='rail'/>);
+        render(<Navigation links={links} type="rail" />);
         const listItemsElts = screen.getAllByRole('tab');
         const listElt = screen.getByRole('tablist');
 
@@ -55,7 +55,7 @@ describe('Navigation component test suite', () => {
     });
 
     it('should render as a navigation drawer', () => {
-        render(<Navigation links={links} type='drawer'/>);
+        render(<Navigation links={links} type="drawer" />);
         const listItemsElts = screen.getAllByRole('tab');
         const listElt = screen.getByRole('tablist');
 
@@ -67,7 +67,7 @@ describe('Navigation component test suite', () => {
 
     it('should give the focus to the first list item on tab press', async () => {
         const user = userEvent.setup();
-        render(<Navigation links={links}/>);
+        render(<Navigation links={links} />);
         const navigationItems = screen.getAllByRole('tab');
         const navigationLinks = getNavigationLinks(navigationItems);
 
@@ -79,7 +79,7 @@ describe('Navigation component test suite', () => {
 
     it('should move the focus with the arrow keys when drawer', async () => {
         const user = userEvent.setup();
-        render(<Navigation links={links} type='drawer'/>);
+        render(<Navigation links={links} type="drawer" />);
         const navigationItems = screen.getAllByRole('tab');
         const navigationLinks = getNavigationLinks(navigationItems);
 
@@ -101,7 +101,7 @@ describe('Navigation component test suite', () => {
 
     it('should give the focus to the right element event when the first element gains it using a click when a drawer', async () => {
         const user = userEvent.setup();
-        render(<Navigation links={links} type='drawer'/>);
+        render(<Navigation links={links} type="drawer" />);
         const navigationItems = screen.getAllByRole('tab');
         const navigationLinks = getNavigationLinks(navigationItems);
 
@@ -114,7 +114,7 @@ describe('Navigation component test suite', () => {
 
     it('should synchronyse between tab focus and arrow focus when a drawer', async () => {
         const user = userEvent.setup();
-        render(<Navigation links={links} type='drawer'/>);
+        render(<Navigation links={links} type="drawer" />);
         const navigationItems = screen.getAllByRole('tab');
         const navigationLinks = getNavigationLinks(navigationItems);
 
@@ -145,7 +145,9 @@ describe('Navigation component test suite', () => {
     });
 
     it('should mark the current link as activated', () => {
-        render(<Navigation links={links}/>, { initialEntries: [links[0].target]});
+        render(<Navigation links={links} />, {
+            initialEntries: [links[0].target],
+        });
         const link1 = screen.getByRole('tab', { name: links[0].label });
         const link2 = screen.getByRole('tab', { name: links[1].label });
 

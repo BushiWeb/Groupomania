@@ -2,13 +2,13 @@ import ProgressIndicator from '../../../components/ProgressIndicator/ProgressInd
 import style from './UpdateUserDialog.module.css';
 import PropTypes from 'prop-types';
 
-export default function RequestLoader({
-    isLoading,
-}) {
+export default function RequestLoader({ isLoading }) {
     if (isLoading) {
-        return <div className={style.requestLoader}>
-            <ProgressIndicator circular label="Requête en attente" />
-        </div>;
+        return (
+            <div className={style.requestLoader}>
+                <ProgressIndicator circular label="Requête en attente" />
+            </div>
+        );
     }
 
     return;

@@ -20,43 +20,53 @@ describe('List component test suite', () => {
     ];
 
     it('should render', () => {
-        render(<List label={listLabel} data={listData}/>);
+        render(<List label={listLabel} data={listData} />);
     });
 
     it('should have the right label and role', () => {
-        render(<List label={listLabel} data={listData}/>);
+        render(<List label={listLabel} data={listData} />);
         screen.getByRole('list', { name: listLabel });
     });
 
     it('should have the right headline level', () => {
         const headingLevel = 5;
-        render(<List label={listLabel} data={listData} headlineLevel={headingLevel}/>);
+        render(
+            <List
+                label={listLabel}
+                data={listData}
+                headlineLevel={headingLevel}
+            />,
+        );
         const titles = screen.getAllByRole('heading', { level: headingLevel });
 
         expect(titles).toHaveLength(listData.length);
     });
 
     it('should display the right list items', () => {
-        render(<List label={listLabel} data={listData}/>);
+        render(<List label={listLabel} data={listData} />);
         const listItems = screen.getAllByRole('listitem');
 
         expect(listItems).toHaveLength(listData.length);
 
         for (const index in listItems) {
-            const headline = getByRole(listItems[index], 'heading', { level: 2 });
+            const headline = getByRole(listItems[index], 'heading', {
+                level: 2,
+            });
             expect(headline).toHaveTextContent(listData[index].headline);
 
             if (listData[index].supportingText) {
                 getByText(listItems[index], listData[index].supportingText);
             }
 
-            getByRole(listItems[index], 'link', { name: listData[index].headline });
+            getByRole(listItems[index], 'link', {
+                name: listData[index].headline,
+            });
         }
     });
 
     it('should give the focus to the first list item on tab press', async () => {
         const user = userEvent.setup();
-        render(<List label={listLabel} data={listData}/>);
+        render(<List label={listLabel} data={listData} />);
         const listItems = screen.getAllByRole('link');
 
         expect(listItems[0]).not.toHaveFocus();
@@ -67,7 +77,7 @@ describe('List component test suite', () => {
 
     it('should move the focus with the arrow keys', async () => {
         const user = userEvent.setup();
-        render(<List label={listLabel} data={listData}/>);
+        render(<List label={listLabel} data={listData} />);
         const listItems = screen.getAllByRole('link');
 
         expect(listItems[0]).not.toHaveFocus();
@@ -92,7 +102,7 @@ describe('List component test suite', () => {
 
     it('should move the focus with the page keys', async () => {
         const user = userEvent.setup();
-        render(<List label={listLabel} data={listData}/>);
+        render(<List label={listLabel} data={listData} />);
         const listItems = screen.getAllByRole('link');
 
         expect(listItems[0]).not.toHaveFocus();
@@ -117,7 +127,7 @@ describe('List component test suite', () => {
 
     it('should move the focus with the home and end keys', async () => {
         const user = userEvent.setup();
-        render(<List label={listLabel} data={[...listData, ...listData]}/>);
+        render(<List label={listLabel} data={[...listData, ...listData]} />);
         const listItems = screen.getAllByRole('link');
 
         expect(listItems[0]).not.toHaveFocus();
@@ -142,7 +152,7 @@ describe('List component test suite', () => {
 
     it('should give the focus to the right element event when the first element gains it using a click', async () => {
         const user = userEvent.setup();
-        render(<List label={listLabel} data={listData}/>);
+        render(<List label={listLabel} data={listData} />);
         const listItems = screen.getAllByRole('link');
 
         await user.click(listItems[1]);
@@ -154,7 +164,7 @@ describe('List component test suite', () => {
 
     it('should synchronyse between tab focus and arrow focus', async () => {
         const user = userEvent.setup();
-        render(<List label={listLabel} data={listData}/>);
+        render(<List label={listLabel} data={listData} />);
         const listItems = screen.getAllByRole('link');
 
         expect(listItems[0]).not.toHaveFocus();
@@ -185,7 +195,7 @@ describe('List component test suite', () => {
 
     it('should be activated by the enter key', async () => {
         const user = userEvent.setup();
-        render(<List label={listLabel} data={listData}/>);
+        render(<List label={listLabel} data={listData} />);
         const listItems = screen.getAllByRole('link');
 
         expect(listItems[0]).not.toHaveFocus();
@@ -200,7 +210,7 @@ describe('List component test suite', () => {
 
     it('should be activated by the space key', async () => {
         const user = userEvent.setup();
-        render(<List label={listLabel} data={listData}/>);
+        render(<List label={listLabel} data={listData} />);
         const listItems = screen.getAllByRole('link');
 
         expect(listItems[0]).not.toHaveFocus();

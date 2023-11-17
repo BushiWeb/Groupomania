@@ -9,25 +9,26 @@ export default function TooltipLabel() {
         ref,
         value,
         open,
-        position: {
-            top,
-            left,
-        },
+        position: { top, left },
         labelEventHandlers,
     } = useTooltipLabel();
 
     if (open) {
-        return <div
-            className={`${style.tooltip}`}
-            role="tooltip"
-            aria-hidden={true}
-            ref={ref}
-            style={{
-                '--tooltip-top': `${top}px`,
-                '--tooltip-left': `${left}px`,
-            }}
-            {...labelEventHandlers}
-        >{value}</div>;
+        return (
+            <div
+                className={`${style.tooltip}`}
+                role="tooltip"
+                aria-hidden={true}
+                ref={ref}
+                style={{
+                    '--tooltip-top': `${top}px`,
+                    '--tooltip-left': `${left}px`,
+                }}
+                {...labelEventHandlers}
+            >
+                {value}
+            </div>
+        );
     }
 
     return;

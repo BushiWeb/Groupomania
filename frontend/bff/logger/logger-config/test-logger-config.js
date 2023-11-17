@@ -6,7 +6,7 @@ const TEST_LOGGER_CONFIG = {
         winston.format.errors({ stack: true }),
         winston.format.splat(),
         winston.format.simple(),
-        winston.format.colorize({ all: true })
+        winston.format.colorize({ all: true }),
     ),
     transports: [new winston.transports.Console()],
 };

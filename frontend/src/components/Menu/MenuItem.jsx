@@ -16,25 +16,24 @@ export default function MenuItem({
 }) {
     const ref = useFocusable(focused);
 
-    return <li
-        className={style.menuItem}
-        role="menuitem"
-    >
-        <InteractiveElement
-            rootElement={'button'}
-            stateLayerColor="on-surface"
-            rippleDuration={350}
-            aria-label={label}
-            className={`${style.button}`}
-            onClick={onClick}
-            onFocus={onFocus}
-            disabled={disabled}
-            ref={ref}
-        >
-            {leadingIcon}
-            {label}
-        </InteractiveElement>
-    </li>;
+    return (
+        <li className={style.menuItem} role="menuitem">
+            <InteractiveElement
+                rootElement={'button'}
+                stateLayerColor="on-surface"
+                rippleDuration={350}
+                aria-label={label}
+                className={`${style.button}`}
+                onClick={onClick}
+                onFocus={onFocus}
+                disabled={disabled}
+                ref={ref}
+            >
+                {leadingIcon}
+                {label}
+            </InteractiveElement>
+        </li>
+    );
 }
 
 MenuItem.defaultProps = {

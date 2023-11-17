@@ -15,15 +15,10 @@ export default function Menu({
     menuItems,
 }) {
     const {
-        position: {
-            top,
-            left,
-        },
+        position: { top, left },
         ref,
         focusId,
-        menuItemsEventHandlers: {
-            handleFocus,
-        },
+        menuItemsEventHandlers: { handleFocus },
         menuEventHandlers,
     } = useMenu({
         anchor,
@@ -36,31 +31,33 @@ export default function Menu({
         return;
     }
 
-    return <ul
-        className={`${style.menu} ${className}`}
-        aria-label={label}
-        role="menu"
-        style={{
-            '--menu-top': `${top}px`,
-            '--menu-left': `${left}px`,
-        }}
-        ref={ref}
-        {...menuEventHandlers}
-    >
-        {menuItems.map((value, index) => {
-            const props = {
-                ...value,
-                onFocus: handleFocus(index),
-                onClick: () => {
-                    value.onClick();
-                    onClose();
-                },
-                key: `${index}-${value.label}`,
-                focused: focusId === index,
-            };
-            return <MenuItem {...props}/>;
-        })}
-    </ul>;
+    return (
+        <ul
+            className={`${style.menu} ${className}`}
+            aria-label={label}
+            role="menu"
+            style={{
+                '--menu-top': `${top}px`,
+                '--menu-left': `${left}px`,
+            }}
+            ref={ref}
+            {...menuEventHandlers}
+        >
+            {menuItems.map((value, index) => {
+                const props = {
+                    ...value,
+                    onFocus: handleFocus(index),
+                    onClick: () => {
+                        value.onClick();
+                        onClose();
+                    },
+                    key: `${index}-${value.label}`,
+                    focused: focusId === index,
+                };
+                return <MenuItem {...props} />;
+            })}
+        </ul>
+    );
 }
 
 Menu.defaultProps = {
@@ -85,10 +82,12 @@ Menu.propTypes = {
     onClose: PropTypes.func.isRequired,
 
     /* Data to insert menu items, required */
-    menuItems: PropTypes.arrayOf(PropTypes.exact({
-        label: PropTypes.string.isRequired,
-        onClick: PropTypes.func.isRequired,
-        leadingIcon: PropTypes.element,
-        disabled: PropTypes.bool,
-    })).isRequired,
+    menuItems: PropTypes.arrayOf(
+        PropTypes.exact({
+            label: PropTypes.string.isRequired,
+            onClick: PropTypes.func.isRequired,
+            leadingIcon: PropTypes.element,
+            disabled: PropTypes.bool,
+        }),
+    ).isRequired,
 };

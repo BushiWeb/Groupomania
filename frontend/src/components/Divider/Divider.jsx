@@ -3,7 +3,13 @@ import style from './Divider.module.css';
 
 /** Divider to separate different zones or reinforce interactive zones */
 export default function Divider({ fullWidth, className }) {
-    return <div className={`${className} ${fullWidth ? style.divider : style.shortDivider}`}></div>;
+    return (
+        <div
+            className={`${className} ${
+                fullWidth ? style.divider : style.shortDivider
+            }`}
+        ></div>
+    );
 }
 
 Divider.defaultProps = {

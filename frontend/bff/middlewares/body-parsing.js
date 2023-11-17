@@ -3,7 +3,6 @@ import { UnsupportedMediaTypeError } from '../errors/index.js';
 
 const parsingLogger = createLoggerNamespace('groupomania:api:body-parsing');
 
-
 /**
  * Get the Content-Type.
  * Checks if the body is empty and if the requests accepts empty bodies.
@@ -22,7 +21,8 @@ function getContentType(req, isEmptyAllowed) {
         throw new UnsupportedMediaTypeError({
             message: `The request ${req.method} ${req.originalUrl} requires a content.`,
             title: 'The request is missing a body content.',
-            description: 'We couldn\'t find the request Content-Type. Please, make sure you are sending a body and it\'s Content-Type with the request, and try again. The list off all supported data formats for this endpoint is given in the details. An empty body is not allowed for this endpoint.',
+            description:
+                "We couldn't find the request Content-Type. Please, make sure you are sending a body and it's Content-Type with the request, and try again. The list off all supported data formats for this endpoint is given in the details. An empty body is not allowed for this endpoint.",
         });
     }
 
@@ -33,7 +33,6 @@ function getContentType(req, isEmptyAllowed) {
 
     return contentType.split(';')[0];
 }
-
 
 /**
  * Get the parser corresponding to the Content-Type, as well as the data formatting function.
@@ -51,7 +50,7 @@ function getParser(contentType, parsers) {
         parsingLogger.debug('Unsupported Content-Typed, throwing an error');
         throw new UnsupportedMediaTypeError({
             message: `The request doesn't handle ${contentType} bodies.`,
-            title: 'The request\'s body can\'t be parsed.',
+            title: "The request's body can't be parsed.",
             description: `We currently don't support the ${contentType} Content-Type. Please, try again with a different data format. The list off all supported data formats for this endpoint is given in the details.`,
         });
     }
@@ -62,7 +61,6 @@ function getParser(contentType, parsers) {
 
     return parser;
 }
-
 
 /**
  * Function returning a middleware validating the content type and parsin the request body.
@@ -77,7 +75,11 @@ function getParser(contentType, parsers) {
  */
 export default function createBodyParser(parsers, emptyAllowed = true) {
     parsingLogger.verbose('Starting parsing middleware creation');
-    parsingLogger.debug(`This request accepts the following Content-Types : ${Object.keys(parsers)}${emptyAllowed ? ', as well as empty bodies' : ''}`);
+    parsingLogger.debug(
+        `This request accepts the following Content-Types : ${Object.keys(
+            parsers,
+        )}${emptyAllowed ? ', as well as empty bodies' : ''}`,
+    );
 
     /**
      * Middleware validating the content-type and parsing the request body.
@@ -94,13 +96,17 @@ export default function createBodyParser(parsers, emptyAllowed = true) {
                 parsingLogger.debug('Empty body, next middleware');
                 return next();
             }
-            parsingLogger.debug(`Searching parsing middleware for ${contentType}`);
+            parsingLogger.debug(
+                `Searching parsing middleware for ${contentType}`,
+            );
 
             const parser = getParser(contentType, parsers);
 
             parsingLogger.debug('Parser execution');
             parser.parser(req, res, (err) => {
-                parsingLogger.debug('Parsing middleware executed, analysing result');
+                parsingLogger.debug(
+                    'Parsing middleware executed, analysing result',
+                );
 
                 if (err) {
                     return next(err);
@@ -112,7 +118,9 @@ export default function createBodyParser(parsers, emptyAllowed = true) {
                         parsingLogger.debug('Data formating executed');
                     }
                 } catch (error) {
-                    parsingLogger.verbose('Error while executing the data formatting function');
+                    parsingLogger.verbose(
+                        'Error while executing the data formatting function',
+                    );
                     return next(error);
                 }
 
@@ -120,7 +128,10 @@ export default function createBodyParser(parsers, emptyAllowed = true) {
             });
         } catch (error) {
             if (error instanceof UnsupportedMediaTypeError) {
-                error.details = [].concat(emptyAllowed ? 'Empty body allowed' : [], Object.keys(parsers));
+                error.details = [].concat(
+                    emptyAllowed ? 'Empty body allowed' : [],
+                    Object.keys(parsers),
+                );
             }
             next(error);
         }

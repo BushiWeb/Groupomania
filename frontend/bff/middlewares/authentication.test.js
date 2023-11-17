@@ -1,5 +1,9 @@
 import authenticate from './authentication.js';
-import { mockNext, mockResponse, mockRequest } from '../utils/test/mock-express.js';
+import {
+    mockNext,
+    mockResponse,
+    mockRequest,
+} from '../utils/test/mock-express.js';
 import { ForbiddenError, UnauthorizedError } from '../errors/index.js';
 import config from '../config/config.js';
 
@@ -15,9 +19,8 @@ beforeEach(() => {
     request.restore();
 });
 
-
 describe('authenticate and its middleware test suite', () => {
-    it('should call the next function if the user mustn\'t be authenticated and the CRSF token is valid', () => {
+    it("should call the next function if the user mustn't be authenticated and the CRSF token is valid", () => {
         request.session.crsfToken = validCrsfToken;
         request.headers['x-crsf-token'] = validCrsfToken;
         authenticate(false)(request, response, next);
@@ -53,7 +56,9 @@ describe('authenticate and its middleware test suite', () => {
         expect(next.mock.calls[0]).toHaveLength(0);
         expect(response.headers).toHaveProperty('x-crsf-token');
         expect(request.session.crsfToken).not.toBe(validCrsfToken);
-        expect(request.session.cookie.maxAge).toBe(config.get('session.cookieExp'));
+        expect(request.session.cookie.maxAge).toBe(
+            config.get('session.cookieExp'),
+        );
     });
 
     it('should not extend the session ttl if the cookie expiration is not close', () => {
@@ -65,7 +70,9 @@ describe('authenticate and its middleware test suite', () => {
         expect(next.mock.calls[0]).toHaveLength(0);
         expect(response.headers).toHaveProperty('x-crsf-token');
         expect(request.session.crsfToken).not.toBe(validCrsfToken);
-        expect(request.session.cookie.maxAge).toBe(config.get('session.cookieExp') * 2);
+        expect(request.session.cookie.maxAge).toBe(
+            config.get('session.cookieExp') * 2,
+        );
     });
 
     it('should call the next error middleware if there is no X-CRSF-Token header', () => {

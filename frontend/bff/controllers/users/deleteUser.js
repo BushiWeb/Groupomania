@@ -3,7 +3,9 @@ import checkPassword from '../../services/requests/checkPassword.js';
 import deleteUserRequest from '../../services/requests/deleteUser.js';
 import logoutController from '../authentication/logout.js';
 
-const deleteUserControllerLogger = createLoggerNamespace('groupomania:bff:controller:delete-user');
+const deleteUserControllerLogger = createLoggerNamespace(
+    'groupomania:bff:controller:delete-user',
+);
 
 /**
  * Delete user controller.
@@ -17,7 +19,10 @@ export default async function deleteUserController(req, res, next) {
     deleteUserControllerLogger.verbose('Delete user controller starting');
     try {
         // Check the password
-        await checkPassword(req.session.user.infos.email, req.body.currentPassword);
+        await checkPassword(
+            req.session.user.infos.email,
+            req.body.currentPassword,
+        );
 
         // Send the update request
         await deleteUserRequest(req.params.userId, req.session.user);

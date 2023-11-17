@@ -12,27 +12,29 @@ export default function ListboxOption({
     id,
     ...props
 }) {
-    return <li
-        className={style.option}
-        role="option"
-        aria-selected={selected}
-        id={id}
-    >
-        <InteractiveElement
-            rootElement='button'
-            type='button'
-            stateLayerColor="on-surface"
-            rippleDuration={350}
-            aria-label={label}
-            className={`${style.button}`}
-            onClick={onClick}
-            selected={selected}
-            tabIndex={-1}
-            {...props}
+    return (
+        <li
+            className={style.option}
+            role="option"
+            aria-selected={selected}
+            id={id}
         >
-            {label}
-        </InteractiveElement>
-    </li>;
+            <InteractiveElement
+                rootElement="button"
+                type="button"
+                stateLayerColor="on-surface"
+                rippleDuration={350}
+                aria-label={label}
+                className={`${style.button}`}
+                onClick={onClick}
+                selected={selected}
+                tabIndex={-1}
+                {...props}
+            >
+                {label}
+            </InteractiveElement>
+        </li>
+    );
 }
 
 ListboxOption.defaultProps = {

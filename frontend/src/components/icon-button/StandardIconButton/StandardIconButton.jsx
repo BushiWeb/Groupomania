@@ -6,7 +6,14 @@ import IconButton from '../IconButton/IconButton.jsx';
  * Standard icon button
  */
 export default function StandardIconButton({
-    disabled, autoFocus, onClick, label, name, toggle, className, ...other
+    disabled,
+    autoFocus,
+    onClick,
+    label,
+    name,
+    toggle,
+    className,
+    ...other
 }) {
     return (
         <IconButton

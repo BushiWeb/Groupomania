@@ -36,39 +36,37 @@ export function useUserHeader(userId, topLevelHeader) {
         editRoleButton = isAdmin;
 
     const actions = [
-        ...topLevelHeader ?
-            mainActions :
-            [],
+        ...(topLevelHeader ? mainActions : []),
 
-        ...editButton ?
+        ...(editButton ?
             [
                 {
                     label: 'Modifier le profil',
                     onClick: () => setIsUpdateUserOpen(true),
                     icon: 'edit',
                 },
-            ] :
-            [],
+            ]
+        :   []),
 
-        ...deleteButton ?
+        ...(deleteButton ?
             [
                 {
                     label: 'Supprimer le profil',
                     onClick: () => setIsDeleteUserOpen(true),
                     icon: 'delete_forever',
                 },
-            ] :
-            [],
+            ]
+        :   []),
 
-        ...editRoleButton ?
+        ...(editRoleButton ?
             [
                 {
-                    label: 'Modifier le role de l\'utilisateur',
+                    label: "Modifier le role de l'utilisateur",
                     onClick: () => setIsUpdateUserRoleOpen(true),
                     icon: 'admin_panel_settings',
                 },
-            ] :
-            [],
+            ]
+        :   []),
     ];
 
     return {

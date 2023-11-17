@@ -9,13 +9,15 @@ import { useMainHeaderActions } from '../../hooks/useMainHeaderActions.js';
 export default function MainHeader({ mainContentId, ...props }) {
     const actions = useMainHeaderActions();
 
-    return <TopAppBar
-        hiddenLinkTargetId={mainContentId}
-        actions={actions}
-        className={props.className || ''}
-    >
-        <Logo label="Retourner à la page d'accueil" target="/"/>
-    </TopAppBar>;
+    return (
+        <TopAppBar
+            hiddenLinkTargetId={mainContentId}
+            actions={actions}
+            className={props.className || ''}
+        >
+            <Logo label="Retourner à la page d'accueil" target="/" />
+        </TopAppBar>
+    );
 }
 
 MainHeader.propTypes = {

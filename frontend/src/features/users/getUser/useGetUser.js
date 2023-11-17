@@ -14,12 +14,7 @@ import { simpleFetch } from '../../../utils/fetch.js';
  * }}
  */
 export default function useGetUser(userId) {
-    const {
-        data,
-        isLoading,
-        isError,
-        error,
-    } = useQuery({
+    const { data, isLoading, isError, error } = useQuery({
         queryKey: ['users', userId],
         queryFn: async () => simpleFetch({ url: `/data/users/${userId}` }),
     });

@@ -2,13 +2,13 @@ import ProgressIndicator from '../../../components/ProgressIndicator/ProgressInd
 import style from './AuthenticationForm.module.css';
 import PropTypes from 'prop-types';
 
-export default function RequestLoader({
-    signupLoading,
-}) {
+export default function RequestLoader({ signupLoading }) {
     if (signupLoading) {
-        return <div className={style.requestLoader}>
-            <ProgressIndicator circular label="Requête en attente" />
-        </div>;
+        return (
+            <div className={style.requestLoader}>
+                <ProgressIndicator circular label="Requête en attente" />
+            </div>
+        );
     }
 
     return;

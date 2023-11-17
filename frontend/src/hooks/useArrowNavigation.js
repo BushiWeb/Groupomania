@@ -34,14 +34,18 @@ const NAVIGATION_KEYS = [
  *  handleBlur, the function to remove the focus, to give to the container.
  *  setFocus, manually sets the focus id
  */
-export function useArrowNavigation(elements, {
-    usePageKeys = false,
-    useHomeEnd = false,
-    useLeftRight = false,
-    initialFocus = null,
-    useFirstLetter = false,
-    useFocusTrap = false,
-} = {}, callback) {
+export function useArrowNavigation(
+    elements,
+    {
+        usePageKeys = false,
+        useHomeEnd = false,
+        useLeftRight = false,
+        initialFocus = null,
+        useFirstLetter = false,
+        useFocusTrap = false,
+    } = {},
+    callback,
+) {
     const [focusId, setFocusId] = useState(initialFocus);
     const savedFocusId = useRef(initialFocus);
 
@@ -98,31 +102,40 @@ export function useArrowNavigation(elements, {
         // Next element
         if (
             e.key === 'ArrowDown' ||
-            usePageKeys && e.key === 'PageDown' ||
-            useLeftRight && e.key === 'ArrowRight'
+            (usePageKeys && e.key === 'PageDown') ||
+            (useLeftRight && e.key === 'ArrowRight')
         ) {
-            executeShortcut(Math.min(elementNumber - 1, ++savedFocusId.current), e);
+            executeShortcut(
+                Math.min(elementNumber - 1, ++savedFocusId.current),
+                e,
+            );
             return;
         }
 
         // Previous element
         if (
             e.key === 'ArrowUp' ||
-            usePageKeys && e.key === 'PageUp' ||
-            useLeftRight && e.key === 'ArrowLeft'
+            (usePageKeys && e.key === 'PageUp') ||
+            (useLeftRight && e.key === 'ArrowLeft')
         ) {
             executeShortcut(Math.max(0, --savedFocusId.current), e);
             return;
         }
 
         // First element
-        if (e.key === 'Home' && (useHomeEnd && e.ctrlKey || useHomeEnd === NO_CONTROL)) {
+        if (
+            e.key === 'Home' &&
+            ((useHomeEnd && e.ctrlKey) || useHomeEnd === NO_CONTROL)
+        ) {
             executeShortcut(0, e);
             return;
         }
 
         // Last element
-        if (e.key === 'End' && (useHomeEnd && e.ctrlKey || useHomeEnd === NO_CONTROL)) {
+        if (
+            e.key === 'End' &&
+            ((useHomeEnd && e.ctrlKey) || useHomeEnd === NO_CONTROL)
+        ) {
             executeShortcut(elementNumber - 1, e);
             return;
         }
@@ -155,13 +168,19 @@ export function useArrowNavigation(elements, {
         }
 
         // Preventing other actions to be executed when the focus is trapped
-        if (useFocusTrap && (NAVIGATION_KEYS.includes(e.key) || /^\w$/.test(e.key))) {
+        if (
+            useFocusTrap &&
+            (NAVIGATION_KEYS.includes(e.key) || /^\w$/.test(e.key))
+        ) {
             e.stopPropagation();
         }
 
         // Preventing leaving the list with tabulations
         if (useFocusTrap && e.key === 'Tab') {
-            if (savedFocusId.current === 0 && e.shiftKey || savedFocusId.current === elementNumber - 1 && !e.shiftKey) {
+            if (
+                (savedFocusId.current === 0 && e.shiftKey) ||
+                (savedFocusId.current === elementNumber - 1 && !e.shiftKey)
+            ) {
                 e.preventDefault();
                 return;
             }

@@ -39,72 +39,73 @@ export function initState(initialArg) {
 
 export function reducer(state, action) {
     switch (action.type) {
-    case ACTIONS.setTitle:
-        return {
-            ...state,
-            title: action.payload,
-        };
-    case ACTIONS.setTitleError:
-        return {
-            ...state,
-            titleError: action.payload,
-        };
-    case ACTIONS.removeTitleError:
-        return {
-            ...state,
-            titleError: undefined,
-        };
-    case ACTIONS.setMessage:
-        return {
-            ...state,
-            message: action.payload,
-        };
-    case ACTIONS.setMessageError:
-        return {
-            ...state,
-            messageError: action.payload,
-        };
-    case ACTIONS.removeMessageError:
-        return {
-            ...state,
-            messageError: undefined,
-        };
-    case ACTIONS.setImage:
-        return {
-            ...state,
-            image: action.payload,
-        };
-    case ACTIONS.setImageError:
-        return {
-            ...state,
-            imageError: action.payload,
-        };
-    case ACTIONS.removeImageError:
-        return {
-            ...state,
-            imageError: undefined,
-        };
-    case ACTIONS.setGlobalError:
-        return {
-            ...state,
-            globalError: action.payload,
-        };
-    case ACTIONS.removeGlobalError:
-        return {
-            ...state,
-            globalError: undefined,
-        };
-    case ACTIONS.removeErrors:
-        return {
-            ...state,
-            globalError: undefined,
-            titleError: undefined,
-            messageError: undefined,
-            imageError: undefined,
-        };
-    case ACTIONS.reset:
-        return initialState;
-    default: return state;
+        case ACTIONS.setTitle:
+            return {
+                ...state,
+                title: action.payload,
+            };
+        case ACTIONS.setTitleError:
+            return {
+                ...state,
+                titleError: action.payload,
+            };
+        case ACTIONS.removeTitleError:
+            return {
+                ...state,
+                titleError: undefined,
+            };
+        case ACTIONS.setMessage:
+            return {
+                ...state,
+                message: action.payload,
+            };
+        case ACTIONS.setMessageError:
+            return {
+                ...state,
+                messageError: action.payload,
+            };
+        case ACTIONS.removeMessageError:
+            return {
+                ...state,
+                messageError: undefined,
+            };
+        case ACTIONS.setImage:
+            return {
+                ...state,
+                image: action.payload,
+            };
+        case ACTIONS.setImageError:
+            return {
+                ...state,
+                imageError: action.payload,
+            };
+        case ACTIONS.removeImageError:
+            return {
+                ...state,
+                imageError: undefined,
+            };
+        case ACTIONS.setGlobalError:
+            return {
+                ...state,
+                globalError: action.payload,
+            };
+        case ACTIONS.removeGlobalError:
+            return {
+                ...state,
+                globalError: undefined,
+            };
+        case ACTIONS.removeErrors:
+            return {
+                ...state,
+                globalError: undefined,
+                titleError: undefined,
+                messageError: undefined,
+                imageError: undefined,
+            };
+        case ACTIONS.reset:
+            return initialState;
+        default:
+            return state;
     }
 }
 
@@ -116,12 +117,16 @@ export function reducer(state, action) {
  */
 export function isPostUpdated(currentState, initialState) {
     if (!initialState) {
-        return currentState.message !== '' || currentState.title !== '' || currentState.image !== null;
+        return (
+            currentState.message !== '' ||
+            currentState.title !== '' ||
+            currentState.image !== null
+        );
     }
     return (
         currentState.title !== initialState.title ||
         currentState.message !== initialState.message ||
         currentState.image instanceof File ||
-        !currentState.image && initialState.imageUrl
+        (!currentState.image && initialState.imageUrl)
     );
 }

@@ -8,12 +8,12 @@
  */
 export default function generateRoleSchema(
     { required = false, checkFormat = true, allowString = true } = {},
-    location = ['query']
+    location = ['query'],
 ) {
     return {
         in: location,
 
-        ...required ?
+        ...(required ?
             {
                 exists: {
                     errorMessage: 'The parameter is required.',
@@ -22,37 +22,40 @@ export default function generateRoleSchema(
                     },
                     bail: true,
                 },
-            } :
-            {
+            }
+        :   {
                 optional: {
                     options: { nullable: true },
                 },
-            },
+            }),
 
-        ...checkFormat && allowString && {
-            isString: {
-                errorMessage: 'The parameter must either be a string or an integer.',
-                bail: true,
-            },
-            customSanitizer: {
-                options: value => {
-                    const intRegexp = /^(?:[-+]?(?:0|[1-9][0-9]*))$/;
-                    if (intRegexp.test(value)) {
-                        return parseInt(value);
-                    }
-
-                    return value;
+        ...(checkFormat &&
+            allowString && {
+                isString: {
+                    errorMessage:
+                        'The parameter must either be a string or an integer.',
+                    bail: true,
                 },
-            },
-        },
+                customSanitizer: {
+                    options: (value) => {
+                        const intRegexp = /^(?:[-+]?(?:0|[1-9][0-9]*))$/;
+                        if (intRegexp.test(value)) {
+                            return parseInt(value);
+                        }
 
-        ...checkFormat && !allowString && {
-            isInt: {
-                errorMessage: 'The role id must be an integer.',
-                bail: true,
-            },
+                        return value;
+                    },
+                },
+            }),
 
-            toInt: true,
-        },
+        ...(checkFormat &&
+            !allowString && {
+                isInt: {
+                    errorMessage: 'The role id must be an integer.',
+                    bail: true,
+                },
+
+                toInt: true,
+            }),
     };
 }

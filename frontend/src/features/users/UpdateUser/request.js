@@ -4,12 +4,16 @@ import isStrongPassword from 'validator/lib/isStrongPassword.js';
 
 export const ERROR_MESSAGES = {
     wrongEmailFormat: 'L\'email doit être du type "exemple@email.com"',
-    wrongPasswordFormat: 'Le mot de passe doit contenir 8 caractères dont au moins 1 majuscule, 1 minuscule, 1 chiffre et 1 symbole',
-    requiredOldPassword: 'L\'ancien mot de passe est obligatoire pour confirmer votre identité',
-    wrongOldPassword: 'L\'ancien mot de passe est invalide',
-    forbiddenAction: 'Vous n\'avez pas les droits pour modifier cet utilisateur',
-    notFound: 'L\'utilisateur que vous souhaitez modifier ne peut pas être trouvé. Il se peut qu\'il soit supprimé.',
-    existingAccount: 'Un compte avec cet email existe déjà, veuillez choisir un nouvel email',
+    wrongPasswordFormat:
+        'Le mot de passe doit contenir 8 caractères dont au moins 1 majuscule, 1 minuscule, 1 chiffre et 1 symbole',
+    requiredOldPassword:
+        "L'ancien mot de passe est obligatoire pour confirmer votre identité",
+    wrongOldPassword: "L'ancien mot de passe est invalide",
+    forbiddenAction: "Vous n'avez pas les droits pour modifier cet utilisateur",
+    notFound:
+        "L'utilisateur que vous souhaitez modifier ne peut pas être trouvé. Il se peut qu'il soit supprimé.",
+    existingAccount:
+        'Un compte avec cet email existe déjà, veuillez choisir un nouvel email',
 };
 
 /**
@@ -20,11 +24,7 @@ export const ERROR_MESSAGES = {
  * @param {string} validationData.newPassword
  * @throws Throws if there is an error
  */
-export function validatePostData({
-    email,
-    oldPassword,
-    newPassword,
-}) {
+export function validatePostData({ email, oldPassword, newPassword }) {
     const errors = {};
 
     if ((email || newPassword) && !oldPassword) {
@@ -38,7 +38,6 @@ export function validatePostData({
     if (newPassword && !isStrongPassword(newPassword)) {
         errors.newPassword = ERROR_MESSAGES.wrongPasswordFormat;
     }
-
 
     if (Object.keys(errors).length !== 0) {
         throw errors;
@@ -74,27 +73,27 @@ export async function handleUpdateUserRequestError(error) {
     const errorMessages = {};
 
     switch (error.status) {
-    case 400:
-        if (!requestError.error?.details) {
-            throw new Error('Unhandled 400 error type');
-        }
-        break;
-    case 401:
-        if (/credentials/.test(requestError.error?.title)) {
-            return { oldPassword: ERROR_MESSAGES.wrongOldPassword };
-        }
-        throw new Error('Unauthorized');
-    case 403:
-        if (requestError.error?.details) {
-            return { global: ERROR_MESSAGES.forbiddenAction };
-        }
-        return { global: ERROR_MESSAGES.existingAccount };
-    case 404:
-        return { global: ERROR_MESSAGES.notFound };
-    case 409:
-        return { global: ERROR_MESSAGES.existingAccount };
-    default:
-        throw new Error('Unhandled error status');
+        case 400:
+            if (!requestError.error?.details) {
+                throw new Error('Unhandled 400 error type');
+            }
+            break;
+        case 401:
+            if (/credentials/.test(requestError.error?.title)) {
+                return { oldPassword: ERROR_MESSAGES.wrongOldPassword };
+            }
+            throw new Error('Unauthorized');
+        case 403:
+            if (requestError.error?.details) {
+                return { global: ERROR_MESSAGES.forbiddenAction };
+            }
+            return { global: ERROR_MESSAGES.existingAccount };
+        case 404:
+            return { global: ERROR_MESSAGES.notFound };
+        case 409:
+            return { global: ERROR_MESSAGES.existingAccount };
+        default:
+            throw new Error('Unhandled error status');
     }
 
     for (const fieldError of requestError.error.details) {

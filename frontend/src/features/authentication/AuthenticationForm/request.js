@@ -3,12 +3,14 @@ import isEmail from 'validator/lib/isEmail.js';
 import isStrongPassword from 'validator/lib/isStrongPassword.js';
 
 export const ERROR_MESSAGES = {
-    requiredEmail: 'L\'email est obligatoire',
+    requiredEmail: "L'email est obligatoire",
     requiredPassword: 'Le mot de passe est obligatoire',
     wrongEmail: 'L\'email doit être du type "exemple@email.com"',
-    wrongPassword: 'Le mot de passe doit contenir 8 caractères dont au moins 1 majuscule, 1 minuscule, 1 chiffre et 1 symbole',
-    existingAccount: 'Un compte avec cet email existe déjà, veuillez vous connecter',
-    wrongCredentials: 'L\'email ou le mot de passe est invalide',
+    wrongPassword:
+        'Le mot de passe doit contenir 8 caractères dont au moins 1 majuscule, 1 minuscule, 1 chiffre et 1 symbole',
+    existingAccount:
+        'Un compte avec cet email existe déjà, veuillez vous connecter',
+    wrongCredentials: "L'email ou le mot de passe est invalide",
 };
 
 /**
@@ -25,8 +27,16 @@ export const ERROR_MESSAGES = {
  * @throws Throws if there is an error
  */
 export function validateAuthData({
-    email: { required: emailRequired = true, format: emailFormat = true, value: email },
-    password: { required: passwordRequired = true, format: passwordFormat = true, value: password },
+    email: {
+        required: emailRequired = true,
+        format: emailFormat = true,
+        value: email,
+    },
+    password: {
+        required: passwordRequired = true,
+        format: passwordFormat = true,
+        value: password,
+    },
 }) {
     const errors = {};
 
@@ -76,25 +86,31 @@ export async function handleAuthRequestError(error) {
     const errorMessages = {};
 
     switch (error.status) {
-    case 409:
-        return { global: ERROR_MESSAGES.existingAccount };
-    case 401:
-        return { global: ERROR_MESSAGES.wrongCredentials };
-    case 400:
-        if (!requestError.error?.details) {
-            throw new Error('Unhandled 400 error type');
-        }
-        break;
-    default:
-        throw new Error('Unhandled error status');
+        case 409:
+            return { global: ERROR_MESSAGES.existingAccount };
+        case 401:
+            return { global: ERROR_MESSAGES.wrongCredentials };
+        case 400:
+            if (!requestError.error?.details) {
+                throw new Error('Unhandled 400 error type');
+            }
+            break;
+        default:
+            throw new Error('Unhandled error status');
     }
 
     for (const fieldError of requestError.error.details) {
         const isRequiredError = /required/.test(fieldError.message);
         if (fieldError.param === 'email') {
-            errorMessages.email = isRequiredError ? ERROR_MESSAGES.requiredEmail : ERROR_MESSAGES.wrongEmail;
+            errorMessages.email =
+                isRequiredError ?
+                    ERROR_MESSAGES.requiredEmail
+                :   ERROR_MESSAGES.wrongEmail;
         } else if (fieldError.param === 'password') {
-            errorMessages.password = isRequiredError ? ERROR_MESSAGES.requiredPassword : ERROR_MESSAGES.wrongPassword;
+            errorMessages.password =
+                isRequiredError ?
+                    ERROR_MESSAGES.requiredPassword
+                :   ERROR_MESSAGES.wrongPassword;
         }
     }
     return errorMessages;

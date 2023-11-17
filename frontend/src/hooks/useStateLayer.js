@@ -11,11 +11,12 @@
  */
 export function useStateLayer(
     usedStates = {
-        hover: false, focus: false, active: false, dragged: false,
+        hover: false,
+        focus: false,
+        active: false,
+        dragged: false,
     },
-    {
-        width, height, color, borderRadius,
-    } = {}
+    { width, height, color, borderRadius } = {},
 ) {
     let states = '';
 
@@ -28,10 +29,14 @@ export function useStateLayer(
     return {
         'data-state-layer': states,
         style: {
-            ...width && { '--state-layer-width': width },
-            ...height && { '--state-layer-height': height },
-            ...color && { '--state-layer-color': `rgb(var(--color-${color}))` },
-            ...borderRadius && { '--state-layer-border-radius': borderRadius },
+            ...(width && { '--state-layer-width': width }),
+            ...(height && { '--state-layer-height': height }),
+            ...(color && {
+                '--state-layer-color': `rgb(var(--color-${color}))`,
+            }),
+            ...(borderRadius && {
+                '--state-layer-border-radius': borderRadius,
+            }),
         },
     };
 }
