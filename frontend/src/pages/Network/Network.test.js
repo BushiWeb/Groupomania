@@ -116,10 +116,10 @@ describe('Network page test suite', () => {
         const backButton = screen.getByRole('button', { name: 'Retourner à la liste' });
         await user.click(backButton);
 
-        const homeButton = screen.getByRole('tab', { name: 'Accueil' });
+        const homeButton = screen.getByRole('link', { name: 'Accueil' });
         await user.click(homeButton);
 
-        const networkButton = screen.getByRole('tab', { name: 'Réseau' });
+        const networkButton = screen.getByRole('link', { name: 'Réseau' });
         await user.click(networkButton);
 
         await waitFor(() => {

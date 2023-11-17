@@ -13,38 +13,37 @@ describe('NavigationItem component test suite', () => {
 
     it('should render with the right content', () => {
         render(<NavigationItem {...link}/>);
-        const linkElt = screen.getByRole('tab', { name: link.label });
-        const listItemElt = screen.getByRole('listitem');
+        const linkElt = screen.getByRole('link', { name: link.label });
+        const listItemElt = screen.getByRole('tab');
         screen.getByText(link.icon);
         expect(linkElt).toHaveAttribute('href', link.target);
-        expect(linkElt).toHaveAttribute('aria-selected', 'false');
+        expect(listItemElt).toHaveAttribute('aria-selected', 'false');
         expect(listItemElt).not.toHaveAttribute('data-active');
         expect(listItemElt).toHaveClass('navigationBarItem');
     });
 
     it('should be activated', () => {
         render(<NavigationItem {...link} active={true}/>);
-        const linkElt = screen.getByRole('tab', { name: link.label });
-        const listItemElt = screen.getByRole('listitem');
-        expect(linkElt).toHaveAttribute('aria-selected', 'true');
+        const listItemElt = screen.getByRole('tab');
+        expect(listItemElt).toHaveAttribute('aria-selected', 'true');
         expect(listItemElt).toHaveAttribute('data-active');
     });
 
     it('should render as a navigation rail item', () => {
         render(<NavigationItem {...link} type="rail"/>);
-        const listItemElt = screen.getByRole('listitem');
+        const listItemElt = screen.getByRole('tab');
         expect(listItemElt).toHaveClass('navigationRailItem');
     });
 
     it('should render as a navigation drawer item', () => {
         render(<NavigationItem {...link} type="drawer"/>);
-        const listItemElt = screen.getByRole('listitem');
+        const listItemElt = screen.getByRole('tab');
         expect(listItemElt).toHaveClass('navigationDrawerItem');
     });
 
     it('should be focused', async () => {
         render(<NavigationItem {...link} focused={true}/>);
-        const linkElt = screen.getByRole('tab', { name: link.label });
+        const linkElt = screen.getByRole('link', { name: link.label });
 
         await waitFor(() => {
             expect(linkElt).toHaveFocus();

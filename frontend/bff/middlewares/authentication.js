@@ -104,7 +104,7 @@ export default function authenticate(checkAuthentication = true) {
         authLogger.verbose('Authentication middleware starting');
 
         try {
-            if (config.get('env') === 'production') {
+            if (config.get('env') !== 'development') {
                 const crsfToken = getCrsfToken(req);
                 checkCRSFToken(req, crsfToken);
             }

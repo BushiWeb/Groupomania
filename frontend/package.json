@@ -40,13 +40,13 @@
     },
     "scripts": {
         "frontend-dev": "react-scripts start",
-        "backend-dev": "nodemon -r dotenv/config ./bff/server.js",
-        "backend-start": "node -r dotenv/config ./bff/server.js",
-        "dev-start": "npm run build && npm run backend-start",
-        "start": "npm run build && node -r dotenv/config ./bff/server.js --env production",
-        "build": "react-scripts build && compress-cra",
         "frontend-test": "react-scripts test --watchAll=false",
+        "bff-dev": "nodemon -r dotenv/config ./bff/server.js",
+        "bff-start": "node -r dotenv/config ./bff/server.js",
         "bff-test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+        "start": "npm run bff-start -- --env production",
+        "build": "react-scripts build && compress-cra",
+        "build-and-start": "npm run build && npm start",
         "eject": "react-scripts eject",
         "format": "prettier --write --cache --cache-strategy metadata ./ && eslint --fix --cache --ext .js,.cjs ./"
     },

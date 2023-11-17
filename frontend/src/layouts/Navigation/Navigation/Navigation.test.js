@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { getByRole, screen } from '@testing-library/react';
 import { render } from '../../../utils/tests/test-wrapper.js';
 import userEvent from '../../../utils/tests/user-event.js';
 import '@testing-library/jest-dom';
@@ -18,11 +18,19 @@ describe('Navigation component test suite', () => {
         },
     ];
 
+    function getNavigationLinks(tabElts) {
+        const navigationLinks = [];
+        for (const tab of tabElts) {
+            navigationLinks.push(getByRole(tab, 'link'));
+        }
+        return navigationLinks;
+    }
+
     it('should render with the right links as a navigation bar', () => {
         render(<Navigation links={links}/>);
         const link1 = screen.getByRole('tab', { name: links[0].label });
         const link2 = screen.getByRole('tab', { name: links[1].label });
-        const listItemsElts = screen.getAllByRole('listitem');
+        const listItemsElts = screen.getAllByRole('tab');
         const listElt = screen.getByRole('tablist');
 
         expect(link1).toHaveTextContent(links[0].label);
@@ -37,7 +45,7 @@ describe('Navigation component test suite', () => {
 
     it('should render as a navigation rail', () => {
         render(<Navigation links={links} type='rail'/>);
-        const listItemsElts = screen.getAllByRole('listitem');
+        const listItemsElts = screen.getAllByRole('tab');
         const listElt = screen.getByRole('tablist');
 
         expect(listElt).toHaveClass('navigationRail');
@@ -48,7 +56,7 @@ describe('Navigation component test suite', () => {
 
     it('should render as a navigation drawer', () => {
         render(<Navigation links={links} type='drawer'/>);
-        const listItemsElts = screen.getAllByRole('listitem');
+        const listItemsElts = screen.getAllByRole('tab');
         const listElt = screen.getByRole('tablist');
 
         expect(listElt).toHaveClass('navigationDrawer');
@@ -61,75 +69,79 @@ describe('Navigation component test suite', () => {
         const user = userEvent.setup();
         render(<Navigation links={links}/>);
         const navigationItems = screen.getAllByRole('tab');
+        const navigationLinks = getNavigationLinks(navigationItems);
 
-        expect(navigationItems[0]).not.toHaveFocus();
+        expect(navigationLinks[0]).not.toHaveFocus();
 
         await user.tab();
-        expect(navigationItems[0]).toHaveFocus();
+        expect(navigationLinks[0]).toHaveFocus();
     });
 
     it('should move the focus with the arrow keys when drawer', async () => {
         const user = userEvent.setup();
         render(<Navigation links={links} type='drawer'/>);
         const navigationItems = screen.getAllByRole('tab');
+        const navigationLinks = getNavigationLinks(navigationItems);
 
-        expect(navigationItems[0]).not.toHaveFocus();
+        expect(navigationLinks[0]).not.toHaveFocus();
 
         await user.tab();
-        expect(navigationItems[0]).toHaveFocus();
+        expect(navigationLinks[0]).toHaveFocus();
 
         await user.keyboard('{ArrowUp}');
-        expect(navigationItems[0]).toHaveFocus();
+        expect(navigationLinks[0]).toHaveFocus();
 
         await user.keyboard('{ArrowDown}');
-        expect(navigationItems[0]).not.toHaveFocus();
-        expect(navigationItems[1]).toHaveFocus();
+        expect(navigationLinks[0]).not.toHaveFocus();
+        expect(navigationLinks[1]).toHaveFocus();
 
         await user.keyboard('{ArrowDown}');
-        expect(navigationItems[1]).toHaveFocus();
+        expect(navigationLinks[1]).toHaveFocus();
     });
 
     it('should give the focus to the right element event when the first element gains it using a click when a drawer', async () => {
         const user = userEvent.setup();
         render(<Navigation links={links} type='drawer'/>);
         const navigationItems = screen.getAllByRole('tab');
+        const navigationLinks = getNavigationLinks(navigationItems);
 
-        await user.click(navigationItems[1]);
-        expect(navigationItems[1]).toHaveFocus();
+        await user.click(navigationLinks[1]);
+        expect(navigationLinks[1]).toHaveFocus();
 
         await user.keyboard('{ArrowUp}');
-        expect(navigationItems[0]).toHaveFocus();
+        expect(navigationLinks[0]).toHaveFocus();
     });
 
     it('should synchronyse between tab focus and arrow focus when a drawer', async () => {
         const user = userEvent.setup();
         render(<Navigation links={links} type='drawer'/>);
         const navigationItems = screen.getAllByRole('tab');
+        const navigationLinks = getNavigationLinks(navigationItems);
 
-        expect(navigationItems[0]).not.toHaveFocus();
-
-        await user.tab();
-        expect(navigationItems[0]).toHaveFocus();
+        expect(navigationLinks[0]).not.toHaveFocus();
 
         await user.tab();
-        expect(navigationItems[0]).not.toHaveFocus();
-        expect(navigationItems[1]).toHaveFocus();
+        expect(navigationLinks[0]).toHaveFocus();
+
+        await user.tab();
+        expect(navigationLinks[0]).not.toHaveFocus();
+        expect(navigationLinks[1]).toHaveFocus();
 
         await user.keyboard('{ArrowUp}');
-        expect(navigationItems[1]).not.toHaveFocus();
-        expect(navigationItems[0]).toHaveFocus();
+        expect(navigationLinks[1]).not.toHaveFocus();
+        expect(navigationLinks[0]).toHaveFocus();
 
         await user.tab();
         await user.tab();
-        expect(navigationItems[0]).not.toHaveFocus();
-        expect(navigationItems[1]).not.toHaveFocus();
+        expect(navigationLinks[0]).not.toHaveFocus();
+        expect(navigationLinks[1]).not.toHaveFocus();
 
         await user.keyboard('{ArrowUp}');
-        expect(navigationItems[0]).not.toHaveFocus();
-        expect(navigationItems[1]).not.toHaveFocus();
+        expect(navigationLinks[0]).not.toHaveFocus();
+        expect(navigationLinks[1]).not.toHaveFocus();
 
         await user.tab({ shift: true });
-        expect(navigationItems[1]).toHaveFocus();
+        expect(navigationLinks[1]).toHaveFocus();
     });
 
     it('should mark the current link as activated', () => {
