@@ -42,7 +42,7 @@ These statements will first create the _groupomania_ database as well as the _pr
 -   Delete the statements for the creation of the roles if you wish to reuse existing roles, althought we advise against it.
 -   If the _groupomania_ database already exist, either drop the existing database, rename it or change the name of the new database.
 
-**Note**: after creating the database and before creating the tables and other objects, you will be prompted to enter the _project_admin_ role's password you chose.
+**Note**: after creating the database and before creating the tables and other objects, you will be prompted to enter the _project_admin_'s password you chose.
 
 ### Add data to the database
 
@@ -65,11 +65,13 @@ The tables are split into 4 schemas:
 -   _users_: containing all the users related tables;
 -   _posts_: containing all the posts related tables.
 
+![](./db_schame.png)
+
 ### Roles table
 
 This table contains the list of roles. It is part of the _admin_ schema.
 
-By defaults, to roles are inserted:
+By defaults, two roles are inserted:
 
 -   _user_ with id _2_, and the default role for any user;
 -   _admin_ with id _1_, and the superuser role.

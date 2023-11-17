@@ -29,7 +29,7 @@ All required packages will be installed.
 
 ## Configuration
 
-Make sure to check the defautl configuration to make sure it suits your needs.
+Make sure to check the default configuration to make sure it suits your needs.
 
 ### Environment variables
 
@@ -54,7 +54,7 @@ To update a parameter:
 
 ## Launching the application
 
-**Note**: Make sure the API is available. Otherwise, the application won't work.
+**Note**: Make sure the [API](../api/README.md) is available. Otherwise, the application won't work.
 
 To build the project, run :
 
