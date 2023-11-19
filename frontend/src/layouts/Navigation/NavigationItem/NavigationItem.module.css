@@ -1,0 +1,169 @@
+@layer components {
+    .navigationItem {
+        position: relative;
+        isolation: isolate;
+    }
+
+    .link {
+        color: rgb(var(--color-on-surface-variant));
+    }
+
+    .icon {
+        display: grid;
+        place-content: center;
+    }
+
+    .activeIndicator {
+        position: absolute;
+        z-index: var(--layer-00);
+    }
+
+    .stateLayer {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border-radius: inherit;
+        background-color: rgb(
+            var(--color-on-surface) / var(--state-layer-opacity)
+        );
+
+        transition: background-color var(--motion-duration-5)
+            var(--motion-easing-standard-decelerate);
+    }
+
+    /* States */
+    [data-active] .link {
+        color: rgb(var(--color-on-surface));
+    }
+
+    [data-active] .icon {
+        color: rgb(var(--color-on-secondary-container));
+    }
+
+    .navigationItem:hover {
+        --state-layer-opacity: var(--state-hovered-opacity);
+    }
+
+    .navigationItem:focus-within {
+        --state-layer-opacity: var(--state-focused-opacity);
+    }
+
+    .navigationItem:active {
+        --state-layer-opacity: var(--state-pressed-opacity);
+    }
+
+    [data-active] .activeIndicator {
+        background-color: rgb(var(--color-secondary-container));
+    }
+
+    /* Navigation bar version */
+    .navigationBarItem {
+        composes: navigationItem, label-medium from '../../../assets/styles/patterns/typography.module.css';
+
+        flex-grow: 1;
+        flex-basis: var(--size-18);
+
+        --padding-block-start: var(--padding-3);
+    }
+
+    .navigationBarItem .link {
+        padding-block-start: var(--padding-block-start);
+        padding-block-end: var(--padding-4);
+
+        height: 100%;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .navigationBarItem .icon {
+        height: var(--size-10);
+        width: var(--size-14);
+        border-radius: var(--border-radius-5);
+
+        background-color: rgb(
+            var(--state-bg-color, var(--color-on-surface-variant)) /
+                var(--state-bg-opacity, 0)
+        );
+    }
+
+    .navigationBarItem .activeIndicator {
+        height: var(--size-10);
+        width: var(--size-14);
+        border-radius: var(--border-radius-5);
+
+        top: var(--padding-block-start);
+        left: 50%;
+        translate: -50%;
+    }
+
+    /* Navigation rail version */
+    .navigationRailItem {
+        composes: navigationItem, label-medium from '../../../assets/styles/patterns/typography.module.css';
+    }
+
+    .navigationRailItem .link {
+        height: var(--size-13);
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--padding-1);
+    }
+
+    .navigationRailItem .icon {
+        height: var(--size-10);
+        width: var(--size-13);
+        border-radius: var(--border-radius-5);
+
+        background-color: rgb(
+            var(--state-bg-color, var(--color-on-surface-variant)) /
+                var(--state-bg-opacity, 0)
+        );
+    }
+
+    .navigationRailItem .activeIndicator {
+        height: var(--size-10);
+        width: var(--size-13);
+        border-radius: var(--border-radius-5);
+
+        top: 0;
+        left: 50%;
+        translate: -50%;
+    }
+
+    /* Navigation drawer version */
+    .navigationDrawerItem {
+        composes: navigationItem, label-large from '../../../assets/styles/patterns/typography.module.css';
+        width: 100%;
+    }
+
+    .navigationDrawerItem .link {
+        height: var(--size-13);
+
+        padding-block: 0;
+        padding-inline-start: var(--padding-4);
+        padding-inline-end: var(--padding-3);
+        border-radius: var(--border-radius-6);
+
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: var(--padding-3);
+
+        background-color: rgb(
+            var(--state-bg-color, var(--color-on-surface-variant)) /
+                var(--state-bg-opacity, 0)
+        );
+    }
+
+    .navigationDrawerItem .activeIndicator {
+        border-radius: var(--border-radius-6);
+
+        inset: 0;
+    }
+}

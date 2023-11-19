@@ -1,0 +1,13 @@
+@layer components {
+    .list {
+        list-style-type: none;
+
+        padding-block: var(--size-4);
+        padding-inline: 0;
+        margin: 0;
+
+        border-radius: var(--border-radius-2);
+
+        background-color: rgb(var(--color-surface));
+    }
+}

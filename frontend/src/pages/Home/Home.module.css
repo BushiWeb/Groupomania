@@ -1,0 +1,65 @@
+@value extra-large as bp-extra-large, expanded as bp-expanded, medium as bp-medium from "../../assets/styles/variables/breakpoints.module.css";
+
+@layer components {
+    .home {
+        padding: var(--padding-4);
+    }
+
+    .heading {
+        composes: headline-large from '../../assets/styles/patterns/typography.module.css';
+        margin-block-end: var(--padding-4);
+        color: rgb(var(--color-on-surface));
+    }
+
+    .error {
+        composes: body-large from '../../assets/styles/patterns/typography.module.css';
+        color: rgb(var(--color-on-surface));
+    }
+
+    .posts,
+    .heading,
+    .error {
+        width: 100%;
+    }
+
+    @media bp-medium {
+        .home {
+            padding-block: var(--padding-8);
+            padding-inline: var(--padding-12);
+        }
+
+        .heading {
+            margin-block-end: var(--padding-8);
+        }
+
+        .posts,
+        .heading,
+        .error {
+            max-width: var(--size-34);
+            margin-inline: auto;
+        }
+    }
+
+    @media bp-expanded {
+        .home {
+            padding-block: var(--padding-8);
+            padding-inline: var(--padding-10);
+        }
+
+        .posts,
+        .heading,
+        .error {
+            max-width: var(--size-60);
+        }
+    }
+
+    @media bp-extra-large {
+        .home {
+            padding-inline: var(--padding-12);
+        }
+
+        .heading {
+            margin-block-end: var(--padding-12);
+        }
+    }
+}

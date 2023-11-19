@@ -1,0 +1,37 @@
+@layer components {
+    .tonalIconButton {
+        height: var(--size-11);
+        width: var(--size-11);
+
+        display: grid;
+        place-content: center;
+
+        border: none;
+        border-radius: var(--border-radius-7);
+
+        color: rgb(var(--color-on-secondary-container));
+        background-color: rgb(var(--color-secondary-container));
+    }
+
+    .tonalIconButton:disabled {
+        color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+        background-color: rgb(
+            var(--color-on-surface) / var(--state-disabled-bg-opacity)
+        );
+    }
+
+    .tonalIconButton[aria-pressed='false'] {
+        border-style: none;
+
+        color: rgb(var(--color-on-surface-variant));
+        background-color: rgb(var(--color-surface-container-highest));
+    }
+
+    .tonalIconButton[aria-pressed='true']:disabled {
+        background-color: rgb(
+            var(--color-on-surface) / var(--state-disabled-bg-opacity)
+        );
+    }
+}

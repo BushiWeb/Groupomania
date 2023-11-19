@@ -1,0 +1,115 @@
+@value medium as bp-medium from "../../../assets/styles/variables/breakpoints.module.css";
+
+@layer components {
+    .form {
+        display: flex;
+        flex-direction: column;
+        gap: var(--padding-6);
+        align-items: center;
+
+        max-width: var(--size-36);
+        width: 100%;
+
+        padding: var(--padding-4);
+        background-color: rgb(var(--color-surface));
+        border-radius: var(--border-radius-4);
+
+        position: relative;
+        overflow: hidden;
+    }
+
+    .requestLoader {
+        position: absolute;
+        inset: 0;
+        z-index: var(--layer-5);
+
+        background-color: rgb(var(--color-scrim) / 0.3);
+
+        display: grid;
+        place-content: center;
+    }
+
+    .inputs {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        max-width: var(--size-26);
+    }
+
+    .globalError {
+        composes: body-medium from '../../../assets/styles/patterns/typography.module.css';
+
+        margin-block-end: var(--padding-4);
+        padding-inline: var(--padding-2);
+
+        color: rgb(var(--color-error));
+
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: var(--padding-1);
+    }
+
+    .globalErrorIcon {
+        --icon-font-size: calc(
+            var(--typo-body-medium-size) * var(--typo-body-medium-line-height)
+        );
+    }
+
+    .email {
+        margin-block-end: var(--padding-4);
+    }
+
+    .password {
+        margin-block-end: var(--padding-2);
+    }
+
+    .buttons {
+        display: flex;
+        flex-direction: column;
+        gap: var(--padding-4);
+        align-items: stretch;
+        width: 100%;
+        max-width: var(--size-23);
+    }
+
+    @media bp-medium {
+        .form {
+            gap: var(--padding-12);
+            padding: var(--padding-8);
+        }
+
+        .logo {
+            align-self: flex-start;
+        }
+
+        .globalError {
+            margin-block-end: var(--padding-8);
+        }
+
+        .email {
+            margin-block-end: var(--padding-8);
+        }
+
+        .password {
+            margin-block-end: var(--padding-4);
+        }
+
+        .rememberMe {
+            align-self: center;
+        }
+
+        .buttons {
+            max-width: none;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .login,
+        .signup {
+            flex-grow: 1;
+        }
+    }
+}

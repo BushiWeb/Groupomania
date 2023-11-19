@@ -1,0 +1,17 @@
+@import './layers.module.css';
+
+@import './vendor/normalize.css' layer(reset.normalize);
+
+@import './vendor/material-symbols.module.css' layer(vendor.material-icons);
+
+@import './variables/index.module.css' layer(defaults);
+
+@import './base/index.module.css' layer(defaults);
+
+@import './theme/dark.module.css' layer(themes.dark);
+
+@import './patterns/index.module.css' layer(patterns);
+
+@import './animations/index.module.css' layer(animations);
+
+@import './utils/index.module.css' layer(utils);

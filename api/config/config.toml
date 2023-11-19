@@ -1,0 +1,31 @@
+[cors]
+origin = true
+methods = ["GET", "POST", "PUT", "DELETE", "OPTION"]
+allowedHeaders = ["Origin", "X-Requested-With", "Accept", "Content-Type", "Authorization"]
+# exposedHeaders
+# credentials
+# maxAge
+
+# [payload]
+# maxSize = 10240
+# sanitization = ['<script', '<\\/script', '<!--', '-->', '\\]\\]>']
+# [payload.files]
+# maxFileSize = 5242880
+# saveFolder = "images"
+# [payload.files.allowedFileTypes]
+# 'image/jpg' = 'jpg',
+# 'image/jpeg' = 'jpg',
+# 'image/png' = 'png',
+# 'image/webp' = 'webp',
+# 'image/avif' = 'avif'
+
+# [password]
+# minLength = 8
+# minLowercase = 1
+# minUppercase = 1
+# minNumbers = 1
+# minSymbols = 1
+
+# [adminUser]
+# roleId = 1
+# email = 'admin@groupomania.com'

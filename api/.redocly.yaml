@@ -1,0 +1,8 @@
+apis:
+    Groupomania:
+        root: doc/groupomania_openapi.yaml
+features.openapi:
+    pathInMiddlePanel: true
+    expandDefaultServerVariables: true
+rules:
+    no-unused-components: off

@@ -1,0 +1,47 @@
+@value medium as bp-medium from "../../assets/styles/variables/breakpoints.module.css";
+
+@layer components {
+    .snackbar {
+        composes: body-medium from '../../assets/styles/patterns/typography.module.css';
+
+        --snackbar-margin: var(--size-8);
+
+        background-color: rgb(var(--color-inverse-surface));
+        color: rgb(var(--color-inverse-on-surface));
+
+        border-radius: var(--border-radius-3);
+        border-style: none;
+
+        min-height: var(--size-12);
+        max-height: var(--size-14);
+        overflow: hidden;
+        width: calc(100% - (var(--snackbar-margin) * 2));
+        padding-inline: var(--padding-4);
+        padding-block: calc(
+            (
+                    var(--size-12) - var(--typo-body-medium-size) *
+                        var(--typo-body-medium-line-height)
+                ) / 2
+        );
+
+        display: grid;
+        place-content: center start;
+
+        box-shadow: var(--elevation-3);
+
+        position: fixed;
+        left: 50%;
+        bottom: var(--snackbar-margin);
+        translate: -50% 0;
+        z-index: var(--layer-5);
+    }
+
+    @media bp-medium {
+        .snackbar {
+            left: var(--snackbar-margin);
+            translate: 0;
+            width: max-content;
+            max-width: 40ch;
+        }
+    }
+}

@@ -1,0 +1,33 @@
+/**
+    Ripple animation. Creates an expeding and fading circle on top of the state layer.
+    It should be used with the useRippleAnimation hook.
+*/
+
+:global .ripple:not(:disabled)::before {
+    content: '';
+
+    position: absolute;
+    top: var(--origin-y);
+    left: var(--origin-x);
+    translate: -50% -50%;
+    width: 2px;
+    height: 2px;
+
+    background-color: rgb(var(--state-layer-color, var(--color-on-surface)));
+    border-radius: 50%;
+
+    animation: var(--animation-duration, --motion-duration-5)
+        var(--motion-easing-linear) 0s 1 normal forwards ripple;
+}
+
+@keyframes :global(ripple) {
+    from {
+        opacity: var(--state-pressed-opacity);
+        scale: 0;
+    }
+
+    to {
+        opacity: 0;
+        scale: var(--ripple-width);
+    }
+}

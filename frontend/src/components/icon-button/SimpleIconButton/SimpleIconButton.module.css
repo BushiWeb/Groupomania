@@ -1,0 +1,24 @@
+@layer components {
+    .simpleIconButton {
+        height: var(--size-11);
+        width: var(--size-11);
+
+        display: grid;
+        place-content: center;
+
+        border-style: none;
+
+        color: currentColor;
+        background-color: transparent;
+    }
+
+    .simpleIconButton:disabled {
+        color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+    }
+
+    .simpleIconButton[aria-pressed='true'] {
+        color: rgb(var(--color-primary));
+    }
+}

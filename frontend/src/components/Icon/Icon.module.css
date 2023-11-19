@@ -1,0 +1,22 @@
+@layer components {
+    .icon {
+        --icon-optical-size: var(--icon-font-optical-size, 24);
+        --icon-size: var(
+            --icon-font-size,
+            calc(var(--icon-optical-size) * 1px)
+        );
+        --icon-fill: var(--icon-font-fill, 0);
+
+        font-variation-settings:
+            'FILL' var(--icon-fill),
+            'GRAD' var(--icon-grad),
+            'opsz' var(--icon-optical-size);
+        font-weight: var(--icon-weight);
+
+        font-size: var(--icon-size);
+        vertical-align: middle;
+
+        transition: font-variation-settings var(--motion-duration-3)
+            var(--motion-easing-standard-decelerate);
+    }
+}

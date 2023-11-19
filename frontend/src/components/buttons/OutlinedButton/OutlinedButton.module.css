@@ -1,0 +1,39 @@
+@layer components {
+    .outlinedButton {
+        composes: label-large from '../../../assets/styles/patterns/typography.module.css';
+
+        min-height: var(--size-11);
+        min-width: var(--size-11);
+
+        border-radius: var(--size-11);
+        border-style: solid;
+        border-width: var(--size-1);
+        border-color: rgb(var(--color-outline));
+
+        padding-inline-start: var(--button-padding-start, var(--padding-6));
+        padding-inline-end: var(--padding-6);
+        gap: var(--padding-2);
+
+        color: rgb(var(--color-primary));
+        background-color: transparent;
+    }
+
+    .outlinedButtonIcon {
+        composes: outlinedButton;
+
+        --button-padding-start: var(--padding-4);
+    }
+
+    .outlinedButton:disabled {
+        color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+        border-color: rgb(
+            var(--color-on-surface) / var(--state-disabled-bg-opacity)
+        );
+    }
+
+    .icon {
+        --icon-size: var(--size-6);
+    }
+}

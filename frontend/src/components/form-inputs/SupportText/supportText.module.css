@@ -1,0 +1,33 @@
+@layer components {
+    .supportText {
+        composes: body-small from '../../../assets/styles/patterns/typography.module.css';
+
+        --supportText-color: rgb(var(--color-on-surface-variant));
+        color: var(--supportText-color);
+        padding-inline: var(--padding-4);
+
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: var(--padding-1);
+    }
+
+    .supportTextIcon {
+        --icon-font-size: calc(
+            var(--typo-body-small-size) * var(--typo-body-small-line-height)
+        );
+    }
+
+    /* Disabled state */
+    .supportText[data-disabled] {
+        --supportText-color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+    }
+
+    /* Error */
+    .supportText[data-error]:not([data-disabled]) {
+        --supportText-color: rgb(var(--color-error));
+    }
+}

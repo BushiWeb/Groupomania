@@ -1,0 +1,37 @@
+@layer components {
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--padding-4);
+
+        position: relative;
+    }
+
+    .inputCommand {
+        display: flex;
+        flex-direction: column;
+        gap: var(--padding-1);
+    }
+
+    .previewContainer {
+        position: relative;
+    }
+
+    .deleteImageButton {
+        position: absolute;
+        top: var(--size-4);
+        right: var(--size-4);
+    }
+
+    .previewImage {
+        object-fit: scale-down;
+        width: 100%;
+        border-radius: var(--border-radius-3);
+    }
+
+    .imageField {
+        position: absolute;
+        display: none;
+    }
+}

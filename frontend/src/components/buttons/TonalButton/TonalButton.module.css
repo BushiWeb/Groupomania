@@ -1,0 +1,37 @@
+@layer components {
+    .tonalButton {
+        composes: label-large from '../../../assets/styles/patterns/typography.module.css';
+
+        min-height: var(--size-11);
+        min-width: var(--size-11);
+
+        border-radius: var(--size-11);
+        border: none;
+
+        padding-inline-start: var(--button-padding-start, var(--padding-6));
+        padding-inline-end: var(--padding-6);
+        gap: var(--padding-2);
+
+        color: rgb(var(--color-on-secondary-container));
+        background-color: rgb(var(--color-secondary-container));
+    }
+
+    .tonalButtonIcon {
+        composes: tonalButton;
+
+        --button-padding-start: var(--padding-4);
+    }
+
+    .tonalButton:disabled {
+        color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+        background-color: rgb(
+            var(--color-on-surface) / var(--state-disabled-bg-opacity)
+        );
+    }
+
+    .icon {
+        --icon-size: var(--size-6);
+    }
+}

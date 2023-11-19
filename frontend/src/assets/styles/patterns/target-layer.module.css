@@ -1,0 +1,26 @@
+/**
+    The target layer allows to increase the interactive area of the element, if the element is bellow a certains size.
+    However, the interactive area should be cleared by adding a margin.
+*/
+
+/* Component */
+[data-target-layer] {
+    position: relative;
+}
+
+/* Layer */
+[data-target-layer]::after {
+    content: '';
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+
+    min-height: var(--size-target);
+    min-width: var(--size-target);
+    width: calc(100%);
+    height: calc(100%);
+
+    background-color: transparent;
+}

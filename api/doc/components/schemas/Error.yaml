@@ -1,0 +1,60 @@
+title: Error
+type: object
+properties:
+    type:
+        type: string
+        description: Type of the error
+    title:
+        type: string
+        description: >-
+            Title of the error. It should describe brievly the error and should be the
+            same for all the errors of the same type.
+    message:
+        type: string
+        description: The message will give more informations about this specific error
+    details:
+        type: array
+        description: >-
+            The details contain additional information regarding the error, which
+            would be unclear if depicted in the message string.
+
+
+            It can contains data about invalid fields, parameters, ...
+        items:
+            type: object
+    statusCode:
+        type: string
+        description: >-
+            Status code of the error. It may be redundant with the status code of the
+            response, but unlike the response's data, it remains unchanged after using
+            a proxy.
+    timestamp:
+        type: string
+        format: date-time
+        description: Date and time of the error
+    path:
+        type: string
+        description: URI used in the request
+    method:
+        type: string
+        description: Method used in the request
+required:
+    - type
+    - title
+    - statusCode
+    - timestamp
+    - path
+    - method
+examples:
+    - type: ValidationError
+      title: There is some invalid data in the request
+      message: The paramters you sent are invalid
+      details:
+          - name: limit
+            location: query
+            message: The limit must be an integer greater than 0
+      statusCode: '400'
+      timestamp: '2019-08-24T14:15:22Z'
+      path: /api/v1/posts?limit:-3
+      method: GET
+description: Generic error format.

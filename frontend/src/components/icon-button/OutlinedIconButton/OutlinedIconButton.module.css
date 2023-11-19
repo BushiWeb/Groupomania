@@ -1,0 +1,39 @@
+@layer components {
+    .outlinedIconButton {
+        height: var(--size-11);
+        width: var(--size-11);
+
+        display: grid;
+        place-content: center;
+
+        border-style: solid;
+        border-width: var(--size-1);
+        border-color: rgb(var(--color-outline));
+        border-radius: var(--border-radius-7);
+
+        color: rgb(var(--color-on-surface-variant));
+        background-color: transparent;
+    }
+
+    .outlinedIconButton:disabled {
+        color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+        border-color: rgb(
+            var(--color-on-surface) / var(--state-disabled-bg-opacity)
+        );
+    }
+
+    .outlinedIconButton[aria-pressed='true'] {
+        border-style: none;
+
+        color: rgb(var(--color-on-inverse-surface));
+        background-color: rgb(var(--color-inverse-surface));
+    }
+
+    .outlinedIconButton[aria-pressed='true']:disabled {
+        background-color: rgb(
+            var(--color-on-surface) / var(--state-disabled-bg-opacity)
+        );
+    }
+}

@@ -1,0 +1,56 @@
+@layer components {
+    .listbox {
+        --item-height: var(--size-12);
+
+        min-width: var(--size-18);
+        width: var(--listbox-width, auto);
+        max-width: 90vw;
+        max-height: calc(100svh - var(--item-height));
+        padding-block: var(--padding-2);
+        padding-inline: 0;
+        margin: 0;
+
+        border-radius: var(--border-radius-2);
+
+        list-style-type: none;
+
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+
+        position: fixed;
+        top: var(--listbox-top, 0);
+        left: var(--listbox-left, 0);
+        z-index: var(--layer-highest);
+
+        background-color: rgb(var(--color-surface-container));
+
+        box-shadow: var(--elevation-2);
+
+        overflow: auto;
+    }
+
+    .option {
+        height: var(--item-height);
+        flex-shrink: 0;
+    }
+
+    .button {
+        composes: label-large from '../../../assets/styles/patterns/typography.module.css';
+
+        width: 100%;
+        height: 100%;
+        padding-inline: var(--padding-3);
+
+        background-color: transparent;
+        border: none;
+        border-radius: 0;
+        color: rgb(var(--color-on-surface));
+
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: var(--padding-3);
+    }
+}

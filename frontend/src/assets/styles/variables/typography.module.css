@@ -1,0 +1,96 @@
+/*
+    Defines all the variables for the different typography styles
+*/
+:root {
+    --base-font-size: var(--ref-typography-base-font-size);
+
+    /* Display large */
+    --typo-display-large-line-height: 1.12;
+    --typo-display-large-size: 3.56rem;
+    --typo-display-large-tracking: -0.015625rem;
+    --typo-display-large-weight: var(--ref-typography-weight-regular);
+
+    /* Display medium */
+    --typo-display-medium-line-height: 1.15;
+    --typo-display-medium-size: 2.81rem;
+    --typo-display-medium-tracking: 0;
+    --typo-display-medium-weight: var(--ref-typography-weight-regular);
+
+    /* Display small */
+    --typo-display-small-line-height: 1.22;
+    --typo-display-small-size: 2.25rem;
+    --typo-display-small-tracking: 0;
+    --typo-display-small-weight: var(--ref-typography-weight-regular);
+
+    /* Headline large */
+    --typo-headline-large-line-height: 1.25;
+    --typo-headline-large-size: 2rem;
+    --typo-headline-large-tracking: 0;
+    --typo-headline-large-weight: var(--ref-typography-weight-regular);
+
+    /* Headline medium */
+    --typo-headline-medium-line-height: 1.29;
+    --typo-headline-medium-size: 1.75rem;
+    --typo-headline-medium-tracking: 0;
+    --typo-headline-medium-weight: var(--ref-typography-weight-regular);
+
+    /* Headline small */
+    --typo-headline-small-line-height: 1.33;
+    --typo-headline-small-size: 1.5rem;
+    --typo-headline-small-tracking: 0;
+    --typo-headline-small-weight: var(--ref-typography-weight-regular);
+
+    /* Title large */
+    --typo-title-large-line-height: 1.27;
+    --typo-title-large-size: 1.38rem;
+    --typo-title-large-tracking: 0;
+    --typo-title-large-weight: var(--ref-typography-weight-regular);
+
+    /* Title medium */
+    --typo-title-medium-line-height: 1.5;
+    --typo-title-medium-size: 1rem;
+    --typo-title-medium-tracking: 0.009375rem;
+    --typo-title-medium-weight: var(--ref-typography-weight-medium);
+
+    /* Title small */
+    --typo-title-small-line-height: 1.43;
+    --typo-title-small-size: 0.88rem;
+    --typo-title-small-tracking: 0.00625rem;
+    --typo-title-small-weight: var(--ref-typography-weight-medium);
+
+    /* Label large */
+    --typo-label-large-line-height: 1.43;
+    --typo-label-large-size: 0.88rem;
+    --typo-label-large-tracking: 0.00625rem;
+    --typo-label-large-weight: var(--ref-typography-weight-medium);
+
+    /* Label medium */
+    --typo-label-medium-line-height: 1.33;
+    --typo-label-medium-size: 0.75rem;
+    --typo-label-medium-tracking: 0.03125rem;
+    --typo-label-medium-weight: var(--ref-typography-weight-medium);
+
+    /* Label small */
+    --typo-label-small-line-height: 1.45;
+    --typo-label-small-size: 0.69rem;
+    --typo-label-small-tracking: 0.03125rem;
+    --typo-label-small-weight: var(--ref-typography-weight-medium);
+
+    /* Body large */
+    --typo-body-large-line-height: 1.5;
+    --typo-body-large-size: 1rem;
+    --typo-body-large-tracking: 0.03125rem;
+    --typo-body-large-weight: var(--ref-typography-weight-regular);
+
+    /* Body medium */
+    --typo-body-medium-line-height: 1.43;
+    --typo-body-medium-size: 0.88rem;
+    --typo-body-medium-tracking: 0.015625rem;
+    --typo-body-medium-weight: var(--ref-typography-weight-regular);
+
+    /* Body small */
+    --typo-body-small-line-height: 1.33;
+    --typo-body-small-size: 0.75rem;
+    --typo-body-small-tracking: 0.025rem;
+    --typo-body-small-weight: var(--ref-typography-weight-regular);
+}

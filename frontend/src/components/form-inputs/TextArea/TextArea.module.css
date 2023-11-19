@@ -1,0 +1,37 @@
+@layer components {
+    .textAreaRoot {
+        --padding-block: calc(var(--padding-4) - var(--border-width));
+        --height: calc(auto + var(--padding-4));
+        --label-v-shift: var(--padding-block);
+        --label-translate: 0;
+    }
+
+    .textarea {
+        composes: body-large from '../../../assets/styles/patterns/typography.module.css';
+
+        border: none;
+        padding: 0;
+        background-color: transparent;
+        color: rgb(var(--color-on-surface));
+        flex-grow: 1;
+
+        resize: none;
+        height: auto;
+        width: 100%;
+    }
+
+    .textarea::placeholder {
+        color: rgb(var(--color-on-surface-variant));
+    }
+
+    .textarea:focus-visible {
+        outline: none;
+    }
+
+    /* Disabled state */
+    .textarea:disabled {
+        color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+    }
+}

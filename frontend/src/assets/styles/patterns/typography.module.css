@@ -1,0 +1,104 @@
+.display-large {
+    font-size: var(--typo-display-large-size);
+    font-weight: var(--typo-display-large-weight);
+    line-height: var(--typo-display-large-line-height);
+    letter-spacing: var(--typo-display-large-tracking);
+}
+
+.display-medium {
+    font-size: var(--typo-display-medium-size);
+    font-weight: var(--typo-display-medium-weight);
+    line-height: var(--typo-display-medium-line-height);
+    letter-spacing: var(--typo-display-medium-tracking);
+}
+
+.display-small {
+    font-size: var(--typo-display-small-size);
+    font-weight: var(--typo-display-small-weight);
+    line-height: var(--typo-display-small-line-height);
+    letter-spacing: var(--typo-display-small-tracking);
+}
+
+.headline-large {
+    font-size: var(--typo-headline-large-size);
+    font-weight: var(--typo-headline-large-weight);
+    line-height: var(--typo-headline-large-line-height);
+    letter-spacing: var(--typo-headline-large-tracking);
+}
+
+.headline-medium {
+    font-size: var(--typo-headline-medium-size);
+    font-weight: var(--typo-headline-medium-weight);
+    line-height: var(--typo-headline-medium-line-height);
+    letter-spacing: var(--typo-headline-medium-tracking);
+}
+
+.headline-small {
+    font-size: var(--typo-headline-small-size);
+    font-weight: var(--typo-headline-small-weight);
+    line-height: var(--typo-headline-small-line-height);
+    letter-spacing: var(--typo-headline-small-tracking);
+}
+
+.title-large {
+    font-size: var(--typo-title-large-size);
+    font-weight: var(--typo-title-large-weight);
+    line-height: var(--typo-title-large-line-height);
+    letter-spacing: var(--typo-title-large-tracking);
+}
+
+.title-medium {
+    font-size: var(--typo-title-medium-size);
+    font-weight: var(--typo-title-medium-weight);
+    line-height: var(--typo-title-medium-line-height);
+    letter-spacing: var(--typo-title-medium-tracking);
+}
+
+.title-small {
+    font-size: var(--typo-title-small-size);
+    font-weight: var(--typo-title-small-weight);
+    line-height: var(--typo-title-small-line-height);
+    letter-spacing: var(--typo-title-small-tracking);
+}
+
+.label-large {
+    font-size: var(--typo-label-large-size);
+    font-weight: var(--typo-label-large-weight);
+    line-height: var(--typo-label-large-line-height);
+    letter-spacing: var(--typo-label-large-tracking);
+}
+
+.label-medium {
+    font-size: var(--typo-label-medium-size);
+    font-weight: var(--typo-label-medium-weight);
+    line-height: var(--typo-label-medium-line-height);
+    letter-spacing: var(--typo-label-medium-tracking);
+}
+
+.label-small {
+    font-size: var(--typo-label-small-size);
+    font-weight: var(--typo-label-small-weight);
+    line-height: var(--typo-label-small-line-height);
+    letter-spacing: var(--typo-label-small-tracking);
+}
+
+.body-large {
+    font-size: var(--typo-body-large-size);
+    font-weight: var(--typo-body-large-weight);
+    line-height: var(--typo-body-large-line-height);
+    letter-spacing: var(--typo-body-large-tracking);
+}
+
+.body-medium {
+    font-size: var(--typo-body-medium-size);
+    font-weight: var(--typo-body-medium-weight);
+    line-height: var(--typo-body-medium-line-height);
+    letter-spacing: var(--typo-body-medium-tracking);
+}
+
+.body-small {
+    font-size: var(--typo-body-small-size);
+    font-weight: var(--typo-body-small-weight);
+    line-height: var(--typo-body-small-line-height);
+    letter-spacing: var(--typo-body-small-tracking);
+}

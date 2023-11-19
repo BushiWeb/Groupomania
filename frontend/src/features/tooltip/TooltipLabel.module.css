@@ -1,0 +1,26 @@
+@layer components {
+    .tooltip {
+        composes: body-small from '../../assets/styles/patterns/typography.module.css';
+
+        display: grid;
+        place-content: center;
+
+        position: fixed;
+        top: var(--tooltip-top, 0);
+        left: var(--tooltip-left, 0);
+
+        min-height: var(--size-8);
+        max-width: min(100vw, var(--size-text-medium));
+        width: max-content;
+        padding-inline: var(--padding-2);
+        z-index: var(--layer-highest);
+
+        text-align: center;
+        color: rgb(var(--color-on-inverse-surface));
+
+        background-color: rgb(var(--color-inverse-surface));
+
+        border-radius: var(--border-radius-2);
+        border-style: none;
+    }
+}

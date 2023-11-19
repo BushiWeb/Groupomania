@@ -1,0 +1,112 @@
+@value xxl as bp-xxl, extra-large as bp-extra-large, expanded as bp-expanded, medium as bp-medium from "../../assets/styles/variables/breakpoints.module.css";
+
+@layer components {
+    .network {
+    }
+
+    .heading {
+        composes: headline-large from '../../assets/styles/patterns/typography.module.css';
+        padding: var(--padding-4);
+        color: rgb(var(--color-on-surface));
+    }
+
+    .error {
+        composes: body-large from '../../assets/styles/patterns/typography.module.css';
+        color: rgb(var(--color-on-surface));
+    }
+
+    .users,
+    .heading,
+    .error {
+        width: 100%;
+    }
+
+    @media bp-medium {
+        .network {
+            padding-block: var(--padding-8);
+            padding-inline: var(--padding-12);
+            background-color: rgb(var(--color-surface-container-low));
+        }
+
+        .heading {
+            padding: 0;
+            margin-block-end: var(--padding-8);
+        }
+
+        .users,
+        .heading,
+        .error {
+            margin-inline: auto;
+        }
+    }
+
+    @media bp-expanded {
+        .network {
+            padding-block: var(--padding-8);
+            padding-inline: var(--padding-10);
+        }
+
+        .users,
+        .heading,
+        .error {
+            max-width: none;
+        }
+    }
+
+    @media bp-xxl {
+        .network {
+            overflow: hidden;
+            padding-inline: var(--padding-12);
+
+            display: grid;
+            grid-template-columns: fit-content(40%) 1fr;
+            grid-template-rows: auto 1fr;
+            grid-template-areas:
+                'heading user'
+                'users user';
+            grid-gap: var(--padding-12) var(--padding-6);
+        }
+
+        .heading {
+            grid-area: heading;
+            margin: 0;
+        }
+
+        .users {
+            background-color: rgb(var(--color-surface));
+            border-radius: var(--border-radius-2);
+            overflow: auto;
+        }
+
+        .error,
+        .users {
+            grid-area: users;
+        }
+
+        .userPlaceholder {
+            composes: body-large from '../../assets/styles/patterns/typography.module.css';
+
+            background-color: rgb(var(--color-surface));
+            color: rgb(var(--color-on-surface));
+            text-align: center;
+
+            display: grid;
+            place-content: center;
+
+            padding-inline: calc(50% - var(--size-text-small));
+        }
+
+        .user,
+        .userPlaceholder {
+            grid-area: user;
+            border-radius: var(--border-radius-4);
+        }
+
+        .users,
+        .heading,
+        .error {
+            max-width: var(--size-68);
+            min-width: var(--size-19);
+        }
+    }
+}

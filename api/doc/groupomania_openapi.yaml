@@ -1,0 +1,1102 @@
+openapi: 3.1.0
+info:
+  title: Groupomania
+  description: |-
+    This social network enables the user to share messages and pictures, and to react to other's posts.
+    Mediation is handled by administrator users.
+  version: 1.0.0
+  contact:
+    name: Emeric Francisod
+    email: emeric.francisod@gmail.com
+  summary: MVP for the Groupomania's social network's API.
+  license:
+    name: MIT
+    url: https://github.com/emeric-francisod/P7_Creez_un_reseau_social_d_entreprise_Francisod_Emeric/blob/development/LICENSE
+servers:
+  - url: http://{domain}:{port}/api/v1
+    description: Development server
+    variables:
+      domain:
+        default: localhost
+      port:
+        default: '3000'
+tags:
+  - name: user
+    description: Users operations
+  - name: auth
+    description: Authentication operations
+  - name: post
+    description: Posts operations
+  - name: role
+    description: Roles operations
+components:
+  securitySchemes:
+    AccessToken:
+      type: http
+      description: Authentication using an access token.
+      scheme: bearer
+    RefreshToken:
+      type: http
+      scheme: bearer
+      description: Exceptionnal authentication using a refresh token. Used for a few selected endpoints.
+  responses:
+    BadRequestBodyResponse:
+      description: The body is invalid (invalid JSON, validation error, ...).
+    UnauthorizedCredentials:
+      description: The authentication credentials are invalid.
+    LockedAccountResponse:
+      description: The user's account is locked for a limited period, due to authentication failure.
+    UnauthorizedRefreshTokenResponse:
+      description: The refresh token is invalid or absent.
+      headers:
+        WWW-Authenticate:
+          schema:
+            type: string
+          description: Describes the authentication method to use
+    BadRequestQueryResponse:
+      description: The request's parameters are invalid (query parameters or path parameters).
+    UnauthorizedAccessTokenResponse:
+      description: The access token is invalid or absent.
+      headers:
+        WWW-Authenticate:
+          schema:
+            type: string
+          description: Describes the authentication method to use
+    ConflictEmailResponse:
+      description: A user with the same email already exists.
+    UserNotFoundResponse:
+      description: The requested user can't be found.
+    BadRequestBodyQueryResponse:
+      description: The body is invalid (invalid JSON, validation error, ...), or the parameters are invalid.
+    ForbiddenResponse:
+      description: The user doesn't have the permission to execute this action.
+    PostNotFoundResponse:
+      description: The requested post can't be found.
+  parameters:
+    RoleFilter:
+      name: role
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Filter the results by user role.
+    LimitFilter:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+      description: Limit the number of results returned.
+    OffsetFilter:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+      description: Choose which result page to get. It must be used with limit, otherwise it won't have any effect.
+    RoleInfo:
+      name: roleInfo
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: Allows to add more informations about the user's role.
+    UserId:
+      name: userId
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: User's id.
+    UserFilter:
+      name: userId
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: Filter the ressources by user, given the user's id.
+    UserInfo:
+      name: userInfo
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: Allows to add more informations about the post's author.
+    LikeInfo:
+      name: likeInfo
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: Allows to add more informations about the post's likes.
+    PostId:
+      name: postId
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Post's id.
+  schemas:
+    User:
+      title: PublicUserInfos
+      type: object
+      description: User informations.
+      properties:
+        userId:
+          type: integer
+          description: The user's id
+        email:
+          type: string
+          format: email
+          description: User's email
+        roleId:
+          type: integer
+          description: The user's role id
+        role:
+          type: object
+          required:
+            - name
+            - roleId
+          properties:
+            name:
+              type: string
+              description: The user's role
+            roleId:
+              type: integer
+              description: the id of the user's role
+      required:
+        - userId
+        - email
+      examples:
+        - userId: 1
+          email: john.doe@example.com
+          role:
+            name: admin
+            roleId: 1
+    Post:
+      title: Post
+      type: object
+      description: Post data.
+      examples:
+        - postId: 3
+          title: The most exalting post
+          message: This is the story of a litle man, so litle that evan I can't see him. The end.
+          imageUrl: http://groupomania.com/images/small_man31022002.png
+          writer:
+            writerId: 3
+            email: john.doe@groupomania.com
+          likes: 2
+          usersLiked:
+            - 3
+            - 5
+          creationDate: '2019-08-24T14:15:22Z'
+          lastUpdateDate: null
+      properties:
+        postId:
+          type: integer
+          description: Post's id
+        title:
+          type: string
+          description: Post's title
+        message:
+          type: string
+          description: Post's message
+        imageUrl:
+          type:
+            - string
+            - 'null'
+          description: Post's image's URL. Since the image is optionnal, it's value may be null.
+          format: uri
+        writerId:
+          type: integer
+          description: The author's id
+        writer:
+          type: object
+          description: The writer's informations
+          required:
+            - writerId
+            - email
+            - roleId
+          properties:
+            email:
+              type: string
+              description: The writer's email
+              format: email
+            writerId:
+              type: integer
+              description: The writer's id
+            roleId:
+              type: integer
+              description: The author's role id
+        likes:
+          type: integer
+          description: Number of likes
+        usersLiked:
+          type: array
+          items:
+            type: integer
+          description: Users who liked the post
+        creationDate:
+          type: string
+          format: date-time
+          description: Date of creation
+        lastUpdateDate:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: Date of the most recent update. When the post is created, this value will be null.
+      required:
+        - postId
+        - title
+        - message
+        - imageUrl
+        - creationDate
+        - lastUpdateDate
+    Role:
+      title: Role
+      type: object
+      description: Available user roles.
+      properties:
+        roleId:
+          type: integer
+          description: Role's id
+        name:
+          type: string
+          description: Role's name
+      required:
+        - roleId
+        - name
+      examples:
+        - roled: 1
+          name: admin
+security:
+  - AccessToken: []
+paths:
+  /auth/login:
+    post:
+      summary: Login
+      operationId: Login
+      responses:
+        '200':
+          description: Returns both the access token and the refresh token.
+          content:
+            application/json:
+              schema:
+                title: AuthenticationInformations
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    description: |-
+                      Token used to authenticate the user in most of the requests.
+
+                      This token is short-lived and needs to be safely stored.
+                  refreshToken:
+                    type: string
+                    description: |-
+                      Token used to get a new access token once the previous one expires. It's also used to log the user out.
+
+                      This token has a longer life span than the access token. It should be safely stored and can be used only once.
+                  userId:
+                    type: integer
+                    description: User's unique identifier.
+                required:
+                  - accessToken
+                  - refreshToken
+                  - userId
+              examples:
+                Authentication informations:
+                  value:
+                    accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcklkIjozMiwicm9sZUlkIjozLCJpYXQiOjE1MTYyMzkwMjJ9.fN0yO6oUJT4exdM8aGdzFQGEa98_Qzk3192YrxiVgQc
+                    refreshToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcklkIjozMSwicm9sZSI6MiwiaWF0IjoxNTE2MjM5MDIyfQ.7aHJpRLIfGiovWnTM9MbeS-Dnn7nQBIGokCr7GGs7A4
+                    userId: 0
+        '400':
+          $ref: '#/components/responses/BadRequestBodyResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCredentials'
+        '403':
+          $ref: '#/components/responses/LockedAccountResponse'
+      tags:
+        - auth
+      description: |-
+        Creates new authentication tokens using the user's credentials.
+
+        The API is using two types of token for authentication:
+        - The **access token** is used to authenticate the user in most requests. It is short-lived and should be stored in an ephemeral and secure location, like a closure. No informations about this token is kept on the API, so it can't be revoked. To revoke this token, simply delete it.
+        - The **refresh token** is used to get a new access token when it expires, without having to send the user's credentials again. It is longer lived and can be stored in a permanent but secure location. We recommand storing it on a server to avoid Cross Site Scripting attacks (chekout the Backend For Frontend pattern). This token can only be used once. Using it multiple times will result in all the user's refresh tokens being revoked.
+
+        This request will generate a new access token for the user authentication, and a new refresh token that may be used to get a new access token with the `POST /auth/accessToken` endpoint.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              title: UserCredentials
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: User's email
+                password:
+                  type: string
+                  description: User's password
+              required:
+                - email
+                - password
+            examples:
+              Credentials:
+                value:
+                  email: john.doe@example.com
+                  password: P@55word
+        description: The body contains the users credentials, to prove the user's identity.
+      security: []
+  /auth/accessToken:
+    post:
+      summary: Get a new access token
+      operationId: GetAccessToken
+      responses:
+        '200':
+          description: Returns both the access token and the refresh token.
+          content:
+            application/json:
+              schema:
+                title: AuthenticationInformations
+                type: object
+                description: Contains all the informations to authenticate the user.
+                properties:
+                  accessToken:
+                    type: string
+                    description: |-
+                      Token used to authenticate the user in most of the requests.
+
+                      This token is short-lived and needs to be safely stored.
+                  refreshToken:
+                    type: string
+                    description: |-
+                      Token used to get a new access token once the previous one expires. It's also used to log the user out.
+
+                      This token has a longer life span than the access token. It should be safely stored and can be used only once.
+                  userId:
+                    type: integer
+                    description: User's unique identifier.
+                required:
+                  - accessToken
+                  - refreshToken
+                  - userId
+              examples:
+                New tokens:
+                  value:
+                    accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcklkIjozMiwicm9sZUlkIjozLCJpYXQiOjE1MTYyMzkwMjJ9.fN0yO6oUJT4exdM8aGdzFQGEa98_Qzk3192YrxiVgQc
+                    refreshToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcklkIjozMSwicm9sZSI6MiwiaWF0IjoxNTE2MjM5MDIyfQ.7aHJpRLIfGiovWnTM9MbeS-Dnn7nQBIGokCr7GGs7A4
+                    userId: 0
+        '401':
+          $ref: '#/components/responses/UnauthorizedRefreshTokenResponse'
+      tags:
+        - auth
+      description: |-
+        Creates new authentication tokens using the refresh token. Use this endpoint if your access token has expired but your refresh token is still valid.
+
+        For more informations about the different types of tokens, checkout the `POST /auth/login` endpoint's documentation.
+
+        This request will generate a new access token for the user authentication. The refresh token will be revoked and a new one generated.
+
+        *The authentication for this endpoint is different. You should check the details in the security section.*
+      security:
+        - RefreshToken: []
+  /auth/logout:
+    post:
+      summary: Logout
+      operationId: Logout
+      responses:
+        '204':
+          description: The refresh token sent with the request is now invalid. When the access token expires or is deleted, the user will have to user it's credentials to log back in.
+        '401':
+          $ref: '#/components/responses/UnauthorizedRefreshTokenResponse'
+      description: |-
+        Logs the user out. Revoke the refresh token for the current user-agent.
+
+        Since the access token has a very short life span, we made the choice to not store it in the database or the API. Thus, it can't be revoked. The client has the responsability to delete it on manual logout. The token should also be deleted when the browser window is closed, or when the user navigates to another website.
+
+        *The authentication for this endpoint is different. You should check the details in the security section.*
+      security:
+        - RefreshToken: []
+      tags:
+        - auth
+  /users:
+    get:
+      summary: Fetch all users
+      tags:
+        - user
+      responses:
+        '200':
+          description: Array containing all the user's data.
+          content:
+            application/json:
+              schema:
+                title: PublicUserInfosList
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+              examples:
+                No informations:
+                  value:
+                    - userId: 3
+                      email: john.doe@example.com
+                      roleId: 1
+                    - userId: 4
+                      email: jean.dupont@example.com
+                      roleId: 2
+                More role informations:
+                  value:
+                    - userId: 3
+                      email: john.doe@example.com
+                      role:
+                        name: admin
+                        roleId: 1
+                    - userId: 4
+                      email: jean.dupont@example.com
+                      role:
+                        name: user
+                        roleId: 2
+        '400':
+          $ref: '#/components/responses/BadRequestQueryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedAccessTokenResponse'
+      operationId: GetAllUsers
+      description: |-
+        Fetches the list off all users.
+
+        The user may use parameters to filter or paginate the response.
+      parameters:
+        - $ref: '#/components/parameters/RoleFilter'
+        - $ref: '#/components/parameters/LimitFilter'
+        - $ref: '#/components/parameters/OffsetFilter'
+        - $ref: '#/components/parameters/RoleInfo'
+    post:
+      summary: Create a new user
+      operationId: CreateUser
+      responses:
+        '200':
+          description: The user is created, returns the user's data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                New user:
+                  value:
+                    id: 1
+                    email: john.doe@example.com
+        '400':
+          $ref: '#/components/responses/BadRequestBodyResponse'
+        '409':
+          $ref: '#/components/responses/ConflictEmailResponse'
+      description: |-
+        Creates a new user.
+
+        To prevent account overriding, the email the user is providing must be unique.
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: User's email. This must be unique.
+                  format: email
+                password:
+                  type: string
+                  description: User's password, weak passwords will be refused.
+              required:
+                - email
+                - password
+            examples:
+              New user:
+                value:
+                  email: john.doe@example.com
+                  password: P@55word
+        description: The body contains the necessary user informations.
+      tags:
+        - user
+  /users/{userId}:
+    parameters:
+      - $ref: '#/components/parameters/UserId'
+    put:
+      summary: Update a user (password or email)
+      operationId: UpdateUser
+      responses:
+        '204':
+          description: The user is updated.
+        '400':
+          $ref: '#/components/responses/BadRequestBodyQueryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedAccessTokenResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/UserNotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictEmailResponse'
+      tags:
+        - user
+      description: |-
+        Updates the user's email or password.
+
+        To execute this action, you must:
+        - Be the owner of the account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              title: NewUserInfos
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: New email
+                password:
+                  type: string
+                  description: New password
+            examples:
+              New email:
+                value:
+                  email: new.john.doe@example.com
+                  password: newP@55w0rd
+        description: The body contains the new user's email.
+    delete:
+      summary: Delete one user
+      operationId: DeleteUser
+      responses:
+        '204':
+          description: The user is deleted.
+        '400':
+          $ref: '#/components/responses/BadRequestQueryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedAccessTokenResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/UserNotFoundResponse'
+      description: |-
+        Deletes one user. Also deletes the likes, posts and images owned by the user.
+
+        To execute this action, you must:
+        - Be an admin user
+        OR
+        - Be the user itself
+      tags:
+        - user
+    get:
+      summary: Fetch one user
+      operationId: GetUser
+      responses:
+        '200':
+          description: Returns the selected post.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                Selected user:
+                  value:
+                    userId: 1
+                    email: john.doe@example.com
+                    roleId: 2
+                More role informations:
+                  value:
+                    userId: 1
+                    email: john.doe@example.com
+                    role:
+                      name: user
+                      roleId: 2
+        '400':
+          $ref: '#/components/responses/BadRequestQueryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedAccessTokenResponse'
+        '404':
+          $ref: '#/components/responses/UserNotFoundResponse'
+      tags:
+        - user
+      description: Fetches specific user data depending on the id given in the path.
+  /users/{userId}/role:
+    parameters:
+      - $ref: '#/components/parameters/UserId'
+    put:
+      summary: Update one user's role
+      operationId: UpdateUserRole
+      responses:
+        '204':
+          description: The role is udpated.
+        '400':
+          $ref: '#/components/responses/BadRequestBodyQueryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedAccessTokenResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/UserNotFoundResponse'
+      tags:
+        - user
+      description: |-
+        Updates the user's role.
+
+        To execute this action, you must:
+        - Be an admin user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              title: NewRole
+              type: object
+              properties:
+                roleId:
+                  type: integer
+                  description: Id of the new role of the user
+              required:
+                - roleId
+            examples:
+              New role:
+                value:
+                  roleId: 1
+        description: The body contain's the new user's role. The role is identified by its id.
+  /posts:
+    get:
+      summary: Fetch all the posts
+      tags:
+        - post
+      responses:
+        '200':
+          description: Array containing all the post's data.
+          content:
+            application/json:
+              schema:
+                title: PostList
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+              examples:
+                No informations asked:
+                  value:
+                    - postId: 3
+                      title: The most exalting post
+                      message: This is the story of a litle man, so litle that evan I can't see him. The end.
+                      imageUrl: http://groupomania.com/images/small_man31022002.png
+                      writerId: 1
+                      creationDate: '2019-08-24T14:15:22Z'
+                      lastUpdateDate: null
+                    - postId: 3
+                      title: The most boring post
+                      message: This is the story of a normal child in a normal house, wearing normal clothes.
+                      imageUrl: null
+                      writerId: 3
+                      creationDate: '2019-08-24T14:15:22Z'
+                      lastUpdateDate: '2020-09-18T03:12:13Z'
+                More author informations:
+                  value:
+                    - postId: 3
+                      title: The most exalting post
+                      message: This is the story of a litle man, so litle that evan I can't see him. The end.
+                      imageUrl: http://groupomania.com/images/small_man31022002.png
+                      writer:
+                        writerId: 1
+                        email: jane.foster@groupomania.com
+                      creationDate: '2019-08-24T14:15:22Z'
+                      lastUpdateDate: null
+                    - postId: 3
+                      title: The most boring post
+                      message: This is the story of a normal child in a normal house, wearing normal clothes.
+                      imageUrl: null
+                      writer:
+                        writerId: 3
+                        email: john.doe@groupomania.com
+                      creationDate: '2019-08-24T14:15:22Z'
+                      lastUpdateDate: '2020-09-18T03:12:13Z'
+                More like informations:
+                  value:
+                    - postId: 3
+                      title: The most exalting post
+                      message: This is the story of a litle man, so litle that evan I can't see him. The end.
+                      imageUrl: http://groupomania.com/images/small_man31022002.png
+                      likes: 3
+                      writerId: 1
+                      usersLiked:
+                        - 1
+                        - 2
+                        - 3
+                      creationDate: '2019-08-24T14:15:22Z'
+                      lastUpdateDate: null
+                    - postId: 3
+                      title: The most boring post
+                      message: This is the story of a normal child in a normal house, wearing normal clothes.
+                      imageUrl: null
+                      writerId: 3
+                      likes: 0
+                      usersLiked: []
+                      creationDate: '2019-08-24T14:15:22Z'
+                      lastUpdateDate: '2020-09-18T03:12:13Z'
+        '400':
+          $ref: '#/components/responses/BadRequestQueryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedAccessTokenResponse'
+      operationId: GetAllPosts
+      description: |-
+        Fetches the list off all posts.
+
+        The user may use parameters to filter or paginate the response.
+      parameters:
+        - $ref: '#/components/parameters/UserFilter'
+        - $ref: '#/components/parameters/LimitFilter'
+        - $ref: '#/components/parameters/OffsetFilter'
+        - $ref: '#/components/parameters/UserInfo'
+        - $ref: '#/components/parameters/LikeInfo'
+    post:
+      summary: Create a new post
+      operationId: CreatePost
+      responses:
+        '201':
+          description: The post is created, returns the post's data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+              examples:
+                New post:
+                  value:
+                    postId: 3
+                    title: The most exalting post
+                    message: This is the story of a litle man, so litle that evan I can't see him. The end.
+                    imageUrl: http://groupomania.com/images/small_man31022002.png
+                    writerId: 3
+                    creationDate: '2019-08-24T14:15:22Z'
+                    lastUpdateDate: null
+        '400':
+          $ref: '#/components/responses/BadRequestBodyQueryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedAccessTokenResponse'
+      description: Creates a new post.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              title: NewPostInfos
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Post's title
+                message:
+                  type: string
+                  description: Post's message
+              required:
+                - title
+                - message
+            examples:
+              New Post:
+                value:
+                  title: My new fantastic post
+                  message: This message is so great you will never forget it!
+          multipart/form-data:
+            schema:
+              title: NewPostInfosWithImage
+              type: object
+              properties:
+                post:
+                  type: string
+                  description: Contains a JSON string representing the sauce data.
+                  example: '"{"title": "The post''s title", "message": "You will find something to write"}"'
+                image:
+                  type: string
+                  format: binary
+                  description: Contains the image to send.
+              required:
+                - post
+            examples:
+              New post with image:
+                value:
+                  post: '{"title": "The title", "message": "And the message"}'
+                  image: image binary
+        description: |-
+          The body contains the new post's data. Two format can be used, depending on the content:
+          - Use JSON if the post doesn't contain any image. All the post's data are within this object.
+          - Use form-data to send an image. The post data will be in the `post` property as a JSON string, and the `image` property will contain the image.
+      tags:
+        - post
+  /posts/{postId}:
+    parameters:
+      - $ref: '#/components/parameters/PostId'
+    get:
+      summary: Fetch a post
+      tags:
+        - post
+      responses:
+        '200':
+          description: Returns the selected post.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+              examples:
+                Base informations:
+                  value:
+                    postId: 3
+                    title: The most exalting post
+                    message: This is the story of a litle man, so litle that evan I can't see him. The end.
+                    imageUrl: http://groupomania.com/images/small_man31022002.png
+                    writerId: 3
+                    creationDate: '2019-08-24T14:15:22Z'
+                    lastUpdateDate: null
+                Add likes informations:
+                  value:
+                    postId: 3
+                    title: The most exalting post
+                    message: This is the story of a litle man, so litle that evan I can't see him. The end.
+                    imageUrl: http://groupomania.com/images/small_man31022002.png
+                    writerId: 3
+                    likes: 3
+                    usersLiked:
+                      - 1
+                      - 2
+                      - 3
+                    creationDate: '2019-08-24T14:15:22Z'
+                    lastUpdateDate: null
+                Add author informations:
+                  value:
+                    postId: 3
+                    title: The most exalting post
+                    message: This is the story of a litle man, so litle that evan I can't see him. The end.
+                    imageUrl: http://groupomania.com/images/small_man31022002.png
+                    writer:
+                      writerId: 3
+                      email: john.doe@groupomania.com
+                    creationDate: '2019-08-24T14:15:22Z'
+                    lastUpdateDate: null
+        '400':
+          $ref: '#/components/responses/BadRequestQueryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedAccessTokenResponse'
+        '404':
+          $ref: '#/components/responses/PostNotFoundResponse'
+      operationId: GetPost
+      description: Fetches a specific post depending on the id given in the path.
+      parameters:
+        - $ref: '#/components/parameters/UserInfo'
+        - $ref: '#/components/parameters/LikeInfo'
+    put:
+      summary: Update a post
+      operationId: UpdatePost
+      responses:
+        '200':
+          description: The post is updated. Returns the post's new data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+              examples:
+                Updated data:
+                  value:
+                    postId: 3
+                    title: The most exalting post with an update
+                    message: This is the story of a litle man, so litle that evan I can't see him. The end.
+                    imageUrl: http://groupomania.com/images/new_small_man31022002.png
+                    writerId: 3
+                    creationDate: '2019-08-24T14:15:22Z'
+                    lastUpdateDate: '2022-10-08T08:34:45Z'
+        '400':
+          $ref: '#/components/responses/BadRequestBodyQueryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedAccessTokenResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/PostNotFoundResponse'
+      description: |-
+        Updates a post.
+
+        To execute this action, you must:
+        - Be the owner of the post
+        OR
+        - Be an admin user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              title: PostInfosUpdate
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Post's new title
+                message:
+                  type: string
+                  description: Post's new message
+                deleteImage:
+                  type: boolean
+                  default: false
+                  description: Specifies whether to remove the image from the post
+            examples:
+              Update post, delete the image:
+                value:
+                  title: The new title
+                  message: And a litle update for the message
+                  deleteImage: true
+              Update post, keep the image:
+                value:
+                  title: The new title
+                  message: And a litle update for the message
+          multipart/form-data:
+            schema:
+              title: PostInfosUpdateWithImage
+              type: object
+              properties:
+                post:
+                  type: string
+                  description: Contains a JSON string representing the sauce data.
+                  example: '"{"title": "The post''s title", "message": "You will find something to write"}"'
+                image:
+                  type: string
+                  format: binary
+                  description: Contains the image to send.
+            examples:
+              Post update with image:
+                value:
+                  post: '{"title": "The title", "message": "And the message"}'
+                  image: image binary
+        description: |-
+          The body contains the updated post's data. Two format can be used, depending on the content:
+          - Use JSON if the image is not modified. All the post's data are within this object. If you wish to delete the image, set the `deleteImage` property to `true`.
+          - Use Form-data to update the image. The post data will be in the `post` property as a JSON string, and the `image` property will contain the image.
+      tags:
+        - post
+    delete:
+      summary: Delete a post
+      operationId: DeletePost
+      responses:
+        '204':
+          description: The post is deleted.
+        '400':
+          $ref: '#/components/responses/BadRequestQueryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedAccessTokenResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/PostNotFoundResponse'
+      description: |-
+        Deletes a post. Also deletes the associated likes and images.
+
+        To execute this action, you must:
+        - Be the owner of the post
+        OR
+        - Be an admin user
+      tags:
+        - post
+  /posts/{postId}/like:
+    parameters:
+      - $ref: '#/components/parameters/PostId'
+    post:
+      summary: Like a post
+      tags:
+        - post
+      responses:
+        '200':
+          description: |-
+            The request is successful.
+
+            The request succeding doesn't mean the action succeding. The message gives the user more informations on the result of that action. It can be successful (e.g., the like is accepted, the like is removed), or fail (e.g., the user has already liked, the user has nothing to reset).
+          content:
+            application/json:
+              schema:
+                title: Message
+                type: object
+                description: Generic message.
+                properties:
+                  message:
+                    type: string
+                    description: Message to send.
+                required:
+                  - message
+              examples:
+                The post is liked:
+                  value:
+                    message: Your like has been applied.
+                The like is removed:
+                  value:
+                    message: Your previous like has been removed.
+                The user already liked:
+                  value:
+                    message: Your like couldn't be applied, you already liked this post.
+                The user already removed the like:
+                  value:
+                    message: We couldn't remove you like, you didn't like this post before.
+        '400':
+          $ref: '#/components/responses/BadRequestBodyQueryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedAccessTokenResponse'
+        '404':
+          $ref: '#/components/responses/PostNotFoundResponse'
+      operationId: LikePost
+      description: |-
+        Performs some kinf of like action.
+
+        Each user can only like a post once.
+
+        Depending on the desired action, the like value will be different:
+        - true will attempt to like the post
+        - false will attempt to remove the like
+      requestBody:
+        content:
+          application/json:
+            schema:
+              title: Like
+              type: object
+              properties:
+                like:
+                  type: boolean
+                  description: |-
+                    Boolean representing the action to take:
+                    - true means a like
+                    - false means to reset the like
+              required:
+                - like
+            examples:
+              Like:
+                value:
+                  like: true
+              Reset like:
+                value:
+                  like: false
+        description: |-
+          The body contains the action to execute:
+          - true to like
+          - false to reset the like
+  /roles:
+    get:
+      summary: Fetch all roles
+      tags:
+        - role
+      responses:
+        '200':
+          description: Array containing all the roles.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
+              examples:
+                example-1:
+                  value:
+                    - roleId: 1
+                      name: admin
+                    - roleId: 2
+                      name: user
+        '401':
+          $ref: '#/components/responses/UnauthorizedAccessTokenResponse'
+      operationId: GetAllRoles
+      description: Fetches the list off all roles.

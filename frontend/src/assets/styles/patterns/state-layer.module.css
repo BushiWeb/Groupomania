@@ -1,0 +1,46 @@
+/**
+    The state layer is an overlay between the background and the content of the element.
+    It can change its opacity depending on the state of the element, to modify the look
+        of the element.
+*/
+
+/* Component */
+[data-state-layer] {
+    --state-layer-opacity: 0;
+
+    position: relative;
+    isolation: isolate;
+}
+
+/* Layer */
+[data-state-layer]::before {
+    content: '';
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    z-index: var(--layer-00);
+
+    width: var(--state-layer-width, 100%);
+    height: var(--state-layer-height, 100%);
+    border-radius: var(--state-layer-border-radius, inherit);
+
+    background-color: var(--state-layer-color, currentColor);
+    opacity: var(--state-layer-opacity);
+
+    transition: opacity var(--motion-duration-4) var(--motion-easing-standard);
+}
+
+/* States */
+[data-state-layer~='hover']:hover:not(:disabled) {
+    --state-layer-opacity: var(--state-hovered-opacity);
+}
+
+[data-state-layer~='focus']:focus:not(:disabled) {
+    --state-layer-opacity: var(--state-focused-opacity);
+}
+
+[data-state-layer~='active']:active:not(:disabled) {
+    --state-layer-opacity: var(--state-pressed-opacity);
+}

@@ -1,0 +1,99 @@
+get:
+    summary: Fetch all users
+    tags:
+        - user
+    responses:
+        '200':
+            description: Array containing all the user's data.
+            content:
+                application/json:
+                    schema:
+                        title: PublicUserInfosList
+                        type: array
+                        items:
+                            $ref: ..\components\schemas\User.yaml
+                    examples:
+                        No informations:
+                            value:
+                                - userId: 3
+                                  email: john.doe@example.com
+                                  roleId: 1
+                                - userId: 4
+                                  email: jean.dupont@example.com
+                                  roleId: 2
+                        More role informations:
+                            value:
+                                - userId: 3
+                                  email: john.doe@example.com
+                                  role:
+                                      name: admin
+                                      roleId: 1
+                                - userId: 4
+                                  email: jean.dupont@example.com
+                                  role:
+                                      name: user
+                                      roleId: 2
+        '400':
+            $ref: ..\components\responses\BadRequestQueryResponse.yaml
+        '401':
+            $ref: ..\components\responses\UnauthorizedAccessTokenResponse.yaml
+    operationId: GetAllUsers
+    description: |-
+        Fetches the list off all users.
+
+        The user may use parameters to filter or paginate the response.
+    parameters:
+        - $ref: ..\components\parameters\RoleFilter.yaml
+        - $ref: ..\components\parameters\LimitFilter.yaml
+        - $ref: ..\components\parameters\OffsetFilter.yaml
+        - $ref: ..\components\parameters\RoleInfo.yaml
+post:
+    summary: Create a new user
+    operationId: CreateUser
+    responses:
+        '200':
+            description: The user is created, returns the user's data.
+            content:
+                application/json:
+                    schema:
+                        $ref: ..\components\schemas\User.yaml
+                    examples:
+                        New user:
+                            value:
+                                id: 1
+                                email: john.doe@example.com
+        '400':
+            $ref: ..\components\responses\BadRequestBodyResponse.yaml
+        '409':
+            $ref: ..\components\responses\ConflictEmailResponse.yaml
+    description: >-
+        Creates a new user.
+
+
+        To prevent account overriding, the email the user is providing must be
+        unique.
+    security: []
+    requestBody:
+        content:
+            application/json:
+                schema:
+                    type: object
+                    properties:
+                        email:
+                            type: string
+                            description: User's email. This must be unique.
+                            format: email
+                        password:
+                            type: string
+                            description: User's password, weak passwords will be refused.
+                    required:
+                        - email
+                        - password
+                examples:
+                    New user:
+                        value:
+                            email: john.doe@example.com
+                            password: P@55word
+        description: The body contains the necessary user informations.
+    tags:
+        - user

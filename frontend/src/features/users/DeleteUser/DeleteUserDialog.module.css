@@ -1,0 +1,39 @@
+@value expanded as bp-expanded, medium as bp-medium from "../../../assets/styles/variables/breakpoints.module.css";
+
+@layer components {
+    .form {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--padding-8);
+        height: 100%;
+    }
+
+    .imageInput {
+        margin-top: var(--size-5);
+        align-self: center;
+        max-width: var(--size-25);
+        width: 100%;
+    }
+
+    .requestLoader {
+        position: absolute;
+        inset: 0;
+        z-index: var(--layer-5);
+
+        background-color: rgb(var(--color-scrim) / 0.3);
+
+        display: grid;
+        place-content: center;
+    }
+
+    .supportText {
+        padding-inline: 0;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        gap: var(--padding-8);
+    }
+}

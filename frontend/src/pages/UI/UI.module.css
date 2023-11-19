@@ -1,0 +1,43 @@
+@value medium as bp-medium from "../../assets/styles/variables/breakpoints.module.css";
+
+@layer components {
+    .container {
+        flex-grow: 1;
+        height: 100%;
+
+        overflow: hidden;
+
+        display: grid;
+        grid-template-areas:
+            'header'
+            'main'
+            'navigation';
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+    }
+
+    .header {
+        grid-area: header;
+    }
+
+    .navigation {
+        grid-area: navigation;
+    }
+
+    .main {
+        grid-area: main;
+        overflow: auto;
+        background-color: rgb(var(--color-surface));
+        scroll-behavior: smooth;
+    }
+
+    @media bp-medium {
+        .container {
+            grid-template-areas:
+                'header header'
+                'navigation main';
+            grid-template-columns: auto 1fr;
+            grid-template-rows: auto 1fr;
+        }
+    }
+}

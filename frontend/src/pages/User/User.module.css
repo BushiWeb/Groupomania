@@ -1,0 +1,95 @@
+@value extra-large as bp-extra-large, expanded as bp-expanded, medium as bp-medium from "../../assets/styles/variables/breakpoints.module.css";
+
+@layer components {
+    .user {
+        flex-grow: 1;
+        height: 100%;
+
+        overflow: hidden;
+
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+
+        background-color: rgb(var(--color-surface));
+    }
+
+    .content {
+        overflow: auto;
+        scroll-behavior: smooth;
+        padding-inline: var(--padding-4);
+        padding-block: var(--padding-6);
+    }
+
+    .posts {
+        max-width: var(--size-34);
+        margin-inline: auto;
+    }
+
+    .loadingUser {
+        background-color: rgb(var(--color-surface-container-low));
+        height: var(--size-18);
+
+        display: grid;
+        place-content: center;
+
+        flex-shrink: 0;
+    }
+
+    .errorUser {
+        composes: body-large from '../../assets/styles/patterns/typography.module.css';
+
+        color: rgb(var(--color-on-surface));
+        background-color: rgb(var(--color-surface-container-low));
+
+        padding: var(--padding-4);
+        min-height: var(--size-18);
+
+        display: grid;
+        place-content: center;
+
+        flex-shrink: 0;
+    }
+
+    @media bp-medium {
+        .userHeader {
+            background-color: rgb(var(--color-surface));
+        }
+
+        .loadingUser {
+            background-color: rgb(var(--color-surface));
+        }
+
+        .errorUser {
+            background-color: rgb(var(--color-surface));
+            color: rgb(var(--color-on-surface));
+            padding-inline: var(--padding-12);
+        }
+
+        .content {
+            padding-inline: var(--padding-12);
+            padding-block: var(--padding-8);
+        }
+    }
+
+    @media bp-expanded {
+        .posts {
+            max-width: var(--size-60);
+        }
+    }
+
+    @media bp-extra-large {
+        .content {
+            padding-inline: var(--padding-4);
+            padding-block: var(--padding-6);
+        }
+
+        .errorUser {
+            padding-inline: var(--padding-4);
+        }
+
+        .posts {
+            max-width: var(--size-34);
+        }
+    }
+}

@@ -1,0 +1,25 @@
+@layer components {
+    .standardIconButton {
+        height: var(--size-11);
+        width: var(--size-11);
+
+        display: grid;
+        place-content: center;
+
+        border-style: none;
+        border-radius: var(--border-radius-7);
+
+        color: rgb(var(--color-on-surface-variant));
+        background-color: transparent;
+    }
+
+    .standardIconButton:disabled {
+        color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+    }
+
+    .standardIconButton[aria-pressed='true'] {
+        color: rgb(var(--color-primary));
+    }
+}

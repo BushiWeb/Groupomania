@@ -1,0 +1,41 @@
+@layer components {
+    .fab {
+        composes: label-large from '../../../assets/styles/patterns/typography.module.css';
+
+        min-height: var(--size-13);
+        width: var(--size-13);
+
+        border-radius: var(--border-radius-5);
+        border: none;
+
+        padding-inline: var(--padding-4);
+        gap: var(--padding-2);
+
+        color: rgb(var(--color-on-primary-container));
+        background-color: rgb(var(--color-primary-container));
+
+        box-shadow: var(--elevation-3);
+    }
+
+    .fab[data-low] {
+        box-shadow: var(--elevation-1);
+    }
+
+    .fab:hover {
+        box-shadow: var(--elevation-4);
+    }
+
+    .fab:hover[data-low] {
+        box-shadow: var(--elevation-2);
+    }
+
+    .extendedFab {
+        composes: fab;
+        width: auto;
+        min-width: var(--size-16);
+    }
+
+    .icon {
+        --icon-size: var(--size-8);
+    }
+}

@@ -1,0 +1,40 @@
+parameters:
+  - $ref: ..\components\parameters\UserId.yaml
+put:
+  summary: Update one user's role
+  operationId: UpdateUserRole
+  responses:
+    '204':
+      description: The role is udpated.
+    '400':
+      $ref: ..\components\responses\BadRequestBodyQueryResponse.yaml
+    '401':
+      $ref: ..\components\responses\UnauthorizedAccessTokenResponse.yaml
+    '403':
+      $ref: ..\components\responses\ForbiddenResponse.yaml
+    '404':
+      $ref: ..\components\responses\UserNotFoundResponse.yaml
+  tags:
+    - user
+  description: |-
+    Updates the user's role.
+
+    To execute this action, you must:
+    - Be an admin user
+  requestBody:
+    content:
+      application/json:
+        schema:
+          title: NewRole
+          type: object
+          properties:
+            roleId:
+              type: integer
+              description: Id of the new role of the user
+          required:
+            - roleId
+        examples:
+          New role:
+            value:
+              roleId: 1
+    description: The body contain's the new user's role. The role is identified by its id.

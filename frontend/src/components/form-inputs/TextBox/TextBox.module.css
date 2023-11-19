@@ -1,0 +1,180 @@
+@layer components {
+    .root {
+        display: flex;
+        flex-direction: column;
+        gap: var(--padding-1);
+
+        /* Interactive container properties */
+        --border-width: var(--size-1);
+        --border-color: rgb(var(--color-outline));
+        --bg-color: rgb(var(--color-surface));
+        --padding-inline-start: var(--padding-4);
+        --padding-inline-end: var(--padding-4);
+        --padding-block: 0;
+        --height: var(--size-13);
+
+        /* Label properties */
+        --label-h-shift: var(--padding-4);
+        --label-v-shift: 50%;
+        --label-translate: 0 -50%;
+        --label-color: rgb(var(--color-on-surface-variant));
+
+        /* Icon properties */
+        --leading-icon-color: rgb(var(--color-on-surface-variant));
+        --trailing-icon-color: rgb(var(--color-on-surface-variant));
+
+        /* Input properties */
+        --caret-color: rgb(var(--color-primary));
+    }
+
+    .interactiveContainer {
+        height: var(--height);
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: var(--padding-2);
+
+        border: var(--border-width) solid var(--border-color);
+        border-radius: var(--border-radius-2);
+        background-color: var(--bg-color);
+        caret-color: var(--caret-color);
+
+        padding-inline-start: var(--padding-inline-start);
+        padding-inline-end: var(--padding-inline-end);
+        padding-block: var(--padding-block);
+
+        position: relative;
+    }
+
+    .interactiveContainer[data-leading-icon] {
+        --label-h-shift: var(--padding-13);
+        --padding-inline-start: var(--padding-1);
+    }
+
+    .interactiveContainer[data-trailing-icon] {
+        --padding-inline-end: var(--padding-1);
+    }
+
+    .labelText {
+        color: var(--label-color);
+        background-color: transparent;
+
+        position: absolute;
+        left: var(--label-h-shift);
+        top: var(--label-v-shift);
+        translate: var(--label-translate);
+
+        font-size: var(--typo-body-large-size);
+        font-weight: var(--typo-body-large-weight);
+        line-height: var(--typo-body-large-line-height);
+        letter-spacing: var(--typo-body-large-tracking);
+
+        transition-property: all;
+        transition-duration: var(--motion-duration-4);
+        transition-timing-function: var(--motion-easing-standard-decelerate);
+    }
+
+    .root:focus-within .labelText,
+    .root[data-placeholder] .labelText,
+    .root[data-value] .labelText {
+        padding-inline: var(--padding-1);
+        --label-h-shift: var(--padding-3);
+        --label-v-shift: 0;
+        --label-translate: 0 -50%;
+
+        background-image: linear-gradient(
+            to bottom,
+            transparent 0 calc(50% - var(--border-width)),
+            var(--bg-color) calc(50% - var(--border-width)) 100%
+        );
+
+        font-size: var(--typo-body-small-size);
+        font-weight: var(--typo-body-small-weight);
+        line-height: var(--typo-body-small-line-height);
+        letter-spacing: var(--typo-body-small-tracking);
+    }
+
+    .textBoxIcon {
+        padding: var(--padding-2);
+    }
+
+    .textBoxIconButton {
+        composes: textBoxIcon;
+        padding: 0;
+    }
+
+    .textBoxIcon.leading {
+        color: var(--leading-icon-color);
+    }
+
+    .textBoxIcon.trailing {
+        color: var(--trailing-icon-color);
+    }
+
+    .buttonContent {
+        composes: body-large from '../../../assets/styles/patterns/typography.module.css';
+
+        flex-grow: 1;
+        text-align: start;
+        color: rgb(var(--color-on-surface));
+    }
+
+    /* Disabled state */
+    .root[data-disabled] {
+        --border-color: rgb(
+            var(--color-on-surface) / var(--state-disabled-bg-opacity)
+        );
+        --label-color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+        --leading-icon-color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+        --trailing-icon-color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+    }
+
+    .root[data-disabled] .buttonContent {
+        color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+    }
+
+    /* Hovered state */
+    .root:not([data-disabled]):hover {
+        --border-color: rgb(var(--color-on-surface));
+        --label-color: rgb(var(--color-on-surface));
+    }
+
+    /* Focus state */
+    .root:focus-within,
+    .root:hover:focus-within {
+        --border-color: rgb(var(--color-primary));
+        --border-width: var(--size-2);
+        --label-color: rgb(var(--color-primary));
+    }
+
+    /* Error */
+    .root[data-error]:not([data-disabled]) {
+        --border-color: rgb(var(--color-error));
+        --label-color: rgb(var(--color-error));
+        --trailing-icon-color: rgb(var(--color-error));
+        --caret-color: rgb(var(--color-error));
+    }
+
+    .root[data-error]:focus-within,
+    .root[data-error]:not([data-disabled]):hover:focus-within {
+        --border-color: rgb(var(--color-error));
+        --label-color: rgb(var(--color-error));
+        --trailing-icon-color: rgb(var(--color-error));
+    }
+
+    .root[data-error]:not([data-disabled]):hover {
+        --border-color: rgb(var(--color-on-error-container));
+        --label-color: rgb(var(--color-on-error-container));
+        --trailing-icon-color: rgb(var(--color-on-error-container));
+    }
+}

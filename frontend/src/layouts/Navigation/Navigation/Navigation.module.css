@@ -1,0 +1,35 @@
+@layer components {
+    .navigation {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navigationDrawer {
+        composes: navigation;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        gap: var(--padding-4);
+    }
+
+    .navigationRail {
+        composes: navigation;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        gap: var(--padding-3);
+    }
+
+    .navigationBar {
+        composes: navigation;
+
+        display: flex;
+        flex-direction: row;
+        gap: var(--padding-2);
+    }
+}

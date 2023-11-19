@@ -1,0 +1,5 @@
+@value compact: (max-width: 600px);
+@value medium: (min-width: 601px);
+@value expanded: (min-width: 841px);
+@value extra-large: (min-width: 1024px);
+@value xxl: (min-width: 1200px);

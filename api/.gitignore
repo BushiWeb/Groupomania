@@ -1,0 +1,8 @@
+node_modules
+api.code-workspace
+coverage
+.env
+logs
+doc/groupomania_doc.html
+src/authorization/base-operators.js
+images

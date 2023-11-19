@@ -1,0 +1,104 @@
+@layer components {
+    .checkbox {
+        appearance: none;
+        position: relative;
+
+        width: var(--size-11);
+        height: var(--size-11);
+    }
+
+    /* Check box */
+    .checkbox::before {
+        content: '';
+
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        translate: -50% -50%;
+
+        width: var(--size-6);
+        height: var(--size-6);
+
+        border-radius: var(--border-radius-1);
+        border-style: solid;
+        border-color: rgb(var(--color-on-surface));
+        border-width: var(--size-2);
+
+        background-color: transparent;
+
+        transition-property: background-color, border-width;
+        transition-duration: var(--motion-duration-2);
+        transition-timing-function: var(--motion-easing-standard-decelerate),
+            var(--motion-easing-standard-accelerate);
+    }
+
+    .checkbox:checked::before {
+        background-color: rgb(var(--color-primary));
+        border-width: 0;
+    }
+
+    .checkbox:disabled::before {
+        border-color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+    }
+
+    .checkbox:checked:disabled::before {
+        background-color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+    }
+
+    .checkbox:focus-visible::before {
+        outline: rgb(var(--color-outline-focus)) var(--size-2) solid;
+        outline-offset: var(--size-1);
+    }
+
+    /* Check mark */
+    .checkbox::after {
+        content: 'done';
+        font-family: 'Material Symbols Rounded';
+        font-style: normal;
+        text-transform: none;
+        letter-spacing: normal;
+        word-wrap: normal;
+        white-space: nowrap;
+        direction: ltr;
+        line-height: 1;
+        font-weight: 700;
+        color: rgb(var(--color-on-primary));
+        font-size: 0;
+
+        display: grid;
+        place-content: center;
+
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        translate: -50% -50%;
+
+        transition: font-size var(--motion-duration-2)
+            var(--motion-easing-standard);
+    }
+
+    .checkbox:checked::after {
+        font-size: var(--size-6);
+    }
+
+    .checkbox:checked:disabled::after {
+        color: rgb(var(--color-surface));
+    }
+
+    .checkbox:focus-visible {
+        outline: none;
+    }
+
+    .checkboxContainer {
+        width: var(--size-11);
+        height: var(--size-11);
+        border-radius: var(--border-radius-7);
+
+        display: grid;
+        place-items: center;
+    }
+}

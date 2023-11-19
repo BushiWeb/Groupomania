@@ -1,0 +1,28 @@
+@layer components {
+    .hiddenLink {
+        composes: label-large from '../../assets/styles/patterns/typography.module.css';
+
+        display: grid;
+        place-content: center;
+
+        position: fixed;
+        top: var(--page-margin);
+        left: var(--page-margin);
+        z-index: var(--layer-5);
+
+        min-height: var(--size-11);
+        min-width: var(--size-target);
+        padding-inline: var(--padding-6);
+
+        border-radius: var(--border-radius-5);
+
+        background-color: rgb(var(--color-tertiary));
+        color: rgb(var(--color-on-tertiary));
+    }
+
+    /* States */
+    .hiddenLink:focus-visible {
+        outline: rgb(var(--color-outline-focus)) var(--size-2) solid;
+        outline-offset: var(--size-1);
+    }
+}

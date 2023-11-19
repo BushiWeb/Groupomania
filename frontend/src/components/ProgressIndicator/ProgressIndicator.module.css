@@ -1,0 +1,136 @@
+@layer components {
+    /* Common progress indicator styling */
+    .progressIndicator {
+        stroke: rgb(var(--color-primary));
+        fill: none;
+    }
+
+    /* Linear progress indicator styling */
+    .linear {
+        composes: progressIndicator;
+
+        background-color: rgb(var(--color-surface-container-highest));
+
+        height: var(--size-3);
+        max-width: 100%;
+
+        animation-name: linear-animation;
+        animation-duration: 2000ms;
+        animation-timing-function: var(--motion-easing-linear);
+        animation-fill-mode: both;
+        animation-iteration-count: infinite;
+    }
+
+    /* Circular progress indicator styling */
+    .circular {
+        composes: progressIndicator;
+
+        height: var(--size-12);
+        width: var(--size-12);
+
+        animation-name: circular-animation, circular-rotation;
+        animation-duration: 1500ms, 2000ms;
+        animation-timing-function: var(--motion-easing-linear);
+        animation-fill-mode: both;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes linear-animation {
+        0% {
+            stroke-dasharray: 0 28;
+            stroke-dashoffset: 0;
+        }
+
+        26% {
+            stroke-dasharray: 22 22;
+            stroke-dashoffset: 0;
+        }
+
+        44% {
+            stroke-dasharray: 20 20;
+            stroke-dashoffset: -8;
+        }
+
+        50% {
+            stroke-dasharray: 12 16;
+            stroke-dashoffset: -16;
+        }
+
+        60% {
+            stroke-dasharray: 6 20;
+            stroke-dashoffset: -26;
+        }
+
+        72% {
+            stroke-dasharray: 18 5;
+            stroke-dashoffset: -28;
+        }
+
+        76% {
+            stroke-dasharray: 16 10;
+            stroke-dashoffset: -36;
+        }
+
+        82% {
+            stroke-dasharray: 6 22;
+            stroke-dashoffset: -50;
+        }
+
+        100% {
+            stroke-dasharray: 0 28;
+            stroke-dashoffset: -56;
+        }
+    }
+
+    @keyframes circular-rotation {
+        0% {
+            rotate: -0.25turn;
+        }
+
+        100% {
+            rotate: 0.75turn;
+        }
+    }
+
+    @keyframes circular-animation {
+        0% {
+            stroke-dasharray: 5 95;
+            stroke-dashoffset: 0;
+        }
+
+        18% {
+            stroke-dasharray: 50 50;
+            stroke-dashoffset: 0;
+        }
+
+        30% {
+            stroke-dasharray: 70 30;
+            stroke-dashoffset: 0;
+        }
+
+        54% {
+            stroke-dasharray: 75 25;
+            stroke-dashoffset: -10;
+        }
+
+        66% {
+            stroke-dasharray: 50 50;
+            stroke-dashoffset: -40;
+        }
+
+        72% {
+            stroke-dasharray: 25 75;
+            stroke-dashoffset: -75;
+        }
+
+        84% {
+            stroke-dasharray: 8 92;
+            stroke-dashoffset: -95;
+        }
+
+        100% {
+            stroke-dasharray: 5 95;
+            stroke-dashoffset: -100;
+        }
+    }
+}

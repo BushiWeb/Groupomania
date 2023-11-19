@@ -1,0 +1,34 @@
+@layer components {
+    .textButton {
+        composes: label-large from '../../../assets/styles/patterns/typography.module.css';
+
+        min-height: var(--size-11);
+        min-width: var(--size-11);
+
+        border-radius: var(--size-11);
+        border: none;
+
+        padding-inline-start: var(--padding-3);
+        padding-inline-end: var(--button-padding-end, var(--padding-3));
+        gap: var(--padding-2);
+
+        color: rgb(var(--color-primary));
+        background-color: transparent;
+    }
+
+    .textButtonIcon {
+        composes: textButton;
+
+        --button-padding-end: var(--padding-4);
+    }
+
+    .textButton:disabled {
+        color: rgb(
+            var(--color-on-surface) / var(--state-disabled-text-opacity)
+        );
+    }
+
+    .icon {
+        --icon-size: var(--size-6);
+    }
+}

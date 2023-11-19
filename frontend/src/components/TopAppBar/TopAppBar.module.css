@@ -1,0 +1,89 @@
+@value expanded as bp-expanded, medium as bp-medium from "../../assets/styles/variables/breakpoints.module.css";
+
+@layer components {
+    .topAppBar {
+        --icon-inline-padding: var(--padding-2);
+        --no-icon-inline-padding: var(--padding-4);
+        --icon-block-padding: 0;
+        --no-icon-block-padding: 0;
+        --icon-content-padding: calc(
+            var(--no-icon-inline-padding) - var(--icon-inline-padding)
+        );
+
+        --min-height: var(--size-14);
+        --padding-inline-start: var(--no-icon-inline-padding);
+        --padding-inline-end: var(--no-icon-inline-padding);
+        --padding-block-start: var(--no-icon-block-padding);
+        --padding-block-end: var(--no-icon-block-padding);
+        --background-color: rgb(var(--color-surface-container-low));
+
+        background-color: var(--background-color);
+
+        min-height: var(--min-height);
+        padding-inline-start: var(--padding-inline-start);
+        padding-inline-end: var(--padding-inline-end);
+        padding-block-start: var(--padding-block-start);
+        padding-block-end: var(--padding-block-end);
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        column-gap: var(--padding-4);
+    }
+
+    [data-navigation] {
+        --padding-inline-start: var(--icon-inline-padding);
+        --padding-block-start: var(--icon-block-padding);
+    }
+
+    [data-actions] {
+        --padding-inline-end: var(--icon-inline-padding);
+        --padding-block-start: var(--icon-block-padding);
+    }
+
+    [data-type='medium'] {
+        --min-height: var(--size-18);
+        --icon-block-padding: var(--padding-3);
+        --no-icon-block-padding: var(--padding-5);
+
+        flex-wrap: wrap;
+        row-gap: 0;
+    }
+
+    .content {
+        flex-grow: 1;
+        overflow: hidden;
+    }
+
+    [data-type='medium'] .content {
+        order: 1;
+        flex-basis: 100%;
+    }
+
+    [data-navigation][data-type='medium'] .content {
+        padding-inline-start: var(--icon-content-padding);
+    }
+
+    [data-actions][data-type='medium'] .content {
+        padding-inline-end: var(--icon-content-padding);
+    }
+
+    .actions {
+        flex-grow: 1;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        gap: var(--padding-2);
+    }
+
+    @media bp-medium {
+        .topAppBar {
+            --icon-inline-padding: var(--padding-4);
+            --no-icon-inline-padding: var(--padding-6);
+            --background-color: rgb(var(--color-surface-container));
+        }
+    }
+}

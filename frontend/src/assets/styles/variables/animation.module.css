@@ -1,0 +1,31 @@
+/*
+    Defines all animation related variables
+*/
+:root {
+    /* Duration */
+    --motion-duration-1: 50ms;
+    --motion-duration-2: 100ms;
+    --motion-duration-3: 150ms;
+    --motion-duration-4: 200ms;
+    --motion-duration-5: 250ms;
+    --motion-duration-6: 300ms;
+    --motion-duration-7: 350ms;
+    --motion-duration-8: 400ms;
+    --motion-duration-9: 450ms;
+    --motion-duration-10: 500ms;
+    --motion-duration-11: 550ms;
+    --motion-duration-12: 600ms;
+    --motion-duration-13: 700ms;
+    --motion-duration-14: 800ms;
+    --motion-duration-15: 900ms;
+    --motion-duration-16: 1000ms;
+
+    /* Easing */
+    --motion-easing-linear: cubic-bezier(0, 0, 1, 1);
+    --motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+    --motion-easing-standard-accelerate: cubic-bezier(0.3, 0, 1, 1);
+    --motion-easing-standard-decelerate: cubic-bezier(0, 0, 0, 1);
+    --motion-easing-emphasized: var(--motion-easing-standard);
+    --motion-easing-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+    --motion-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+}

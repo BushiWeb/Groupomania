@@ -1,0 +1,7 @@
+.vscode
+build
+logs
+node_modules
+frontend.code-workspace
+package.json
+package-lock.json
