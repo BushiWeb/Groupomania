@@ -24,6 +24,6 @@ _Note_: While executing the commands, make sure you are located within the _./ap
 
 The BFF serves the frontend application.
 
-To install, configure and start the server, please refer the the [API README](./api/README.md). You will also find more informations about the role of the BFF.
+To install, configure and start the server, please refer the the [Frontend README](./frontend/README.md). You will also find more informations about the role of the BFF.
 
 _Note_: While executing the commands, make sure you are located within the _./frontend_ folder. You can use `cd frontend`.
