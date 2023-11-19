@@ -31,7 +31,7 @@ export default function ImageWithLighbox({
                 onClick={handleClick}
                 aria-label={label}
             >
-                <img src={src} alt={alt} className={style.image} />
+                <img crossOrigin="anonymous" src={src} alt={alt} className={style.image}/>
             </button>
 
             <Lightbox

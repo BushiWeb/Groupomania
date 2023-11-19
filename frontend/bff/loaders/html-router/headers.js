@@ -25,6 +25,14 @@ export default function htmlHeadersLoader(router) {
                 ],
                 objectSrc: ["'none'"],
                 frameAncestors: ['none'],
+                imgSrc: [
+                    'https:',
+                    'data:',
+                    'blob:',
+                    "'self'",
+                    'localhost:8000',
+                    'localhost:3000',
+                ]
             },
         }),
         helmet.crossOriginEmbedderPolicy(),

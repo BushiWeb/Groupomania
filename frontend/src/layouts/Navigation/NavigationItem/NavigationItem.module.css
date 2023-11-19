@@ -58,9 +58,7 @@
 
     /* Navigation bar version */
     .navigationBarItem {
-        composes:
-            navigationItem,
-            label-medium from '../../../assets/styles/patterns/typography.module.css';
+        composes: navigationItem, label-medium from '../../../assets/styles/patterns/typography.module.css';
 
         flex-grow: 1;
         flex-basis: var(--size-18);
@@ -103,9 +101,7 @@
 
     /* Navigation rail version */
     .navigationRailItem {
-        composes:
-            navigationItem,
-            label-medium from '../../../assets/styles/patterns/typography.module.css';
+        composes: navigationItem, label-medium from '../../../assets/styles/patterns/typography.module.css';
     }
 
     .navigationRailItem .link {
@@ -141,9 +137,7 @@
 
     /* Navigation drawer version */
     .navigationDrawerItem {
-        composes:
-            navigationItem,
-            label-large from '../../../assets/styles/patterns/typography.module.css';
+        composes: navigationItem, label-large from '../../../assets/styles/patterns/typography.module.css';
         width: 100%;
     }
 

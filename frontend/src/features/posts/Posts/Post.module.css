@@ -111,6 +111,8 @@
 
     .message {
         composes: body-medium from '../../../assets/styles/patterns/typography.module.css';
+
+        white-space: pre-wrap;
     }
 
     .image {
