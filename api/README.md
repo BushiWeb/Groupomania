@@ -53,14 +53,24 @@ To start the server for production, use
 npm start
 ```
 
-### API documentation
+## Admin account
+
+When starting the server for the first time, an administrator account will be automatically created if it doesn't yet exist in the database. The administrator has rigths to update and delete other user's posts, and to delete and change the role of other users.
+
+You can configure the email address used for this accound in the configuration file.
+
+The password will be randomly generated and printed in the log, under the label _groupomania:api:loader:adminUser_.
+
+**_WARNING_**: although the password generated is secured, it is still accessible within the logs. You MUST change it quickly, otherwise it might get stolen.
+
+## API documentation
 
 To consult the API documentation, you have two options:
 
 1. Build the documentation as a static and dependance free HTML file
 2. Serve the documentation using a local server
 
-#### Building the documentation
+### Building the documentation
 
 The following command generates a **groupomania_doc.html** file. This file is dependance free and can easily be shared.
 
@@ -68,13 +78,13 @@ The following command generates a **groupomania_doc.html** file. This file is de
 npm run buildDoc
 ```
 
-#### Serving the documentation
+### Serving the documentation
 
 ```
 npm run watchDoc
 ```
 
-### Running the tests
+## Running the tests
 
 ```
 npm test
