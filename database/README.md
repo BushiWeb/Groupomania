@@ -32,6 +32,7 @@ psql -U superuser -d postgres -h localhost -f path/create.sql
 
 -   `superuser` is the name of the role you want to use to connect to the database. This is not the _project_admin_ role. More informations bellow.
 -   We use the **postgres** database since it should be present on your server, but you can use any database except _groupomania_.
+-   Replace localhost with the address of your database if it is remote.
 -   `path/create.sql` must be replaced by the path to the **create.sql** file.
 
 This will execute the statements inside of the _create.sql_ dump.
@@ -52,7 +53,7 @@ Once the structure is installed, you can add data to the tables with:
 psql -U project_admin -d groupomania -h localhost -f path/init.sql
 ```
 
-This time, you must connect to the new _groupomania_ database with the new _project_admin_ role. `path/init.sql` must be replaced by the path to **init.sql**.
+This time, you must connect to the new _groupomania_ database with the new _project_admin_ role. `path/init.sql` must be replaced by the path to **init.sql**. Don't forget to replace *localhost* with the address of your remote database!
 
 For more informations on the `psql` command and all it's options, visit [the documentation](https://docs.postgresql.fr/10/app-psql.html).
 
