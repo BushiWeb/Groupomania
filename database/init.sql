@@ -445,7 +445,7 @@ Volutpat consequat mauris nunc congue. Sollicitudin ac orci phasellus egestas te
 ),
 (
     'Do you know?',
-    'Which Famous Wine Region Is Centred On Reims 
+    'Which Famous Wine Region Is Centred On Reims
 
 
 
@@ -585,7 +585,7 @@ Viverra aliquet eget sit amet tellus. Adipiscing at in tellus integer feugiat sc
 ),
 (
     'Do you know?',
-    'In 1976 Sue Barker won her only Grand Slam Final. Which one? 
+    'In 1976 Sue Barker won her only Grand Slam Final. Which one?
 
 
 
@@ -611,7 +611,7 @@ The French Open',
 ),
 (
     'Do you know?',
-    'Which Character Is The Most Famous Creation Of James Matthew Barrie? 
+    'Which Character Is The Most Famous Creation Of James Matthew Barrie?
 
 
 
@@ -1644,7 +1644,7 @@ Arthur Ransom',
 ),
 (
     'Do you know?',
-    'In US city houses the headquarters of Coca Cola? 
+    'In US city houses the headquarters of Coca Cola?
 
 
 
@@ -2328,7 +2328,7 @@ it is day light ;>',
 ),
 (
     'Do you know?',
-    'In Which Country Are The Worlds Deepest Mines 
+    'In Which Country Are The Worlds Deepest Mines
 
 
 
@@ -2853,7 +2853,7 @@ The fly flew only 15km because when the fly was flying the cyclists were getting
 ),
 (
     'Do you know?',
-    'According To The Song How Many Drummers Drumming Were There 
+    'According To The Song How Many Drummers Drumming Were There
 
 
 
@@ -3040,7 +3040,7 @@ Bald People',
 ),
 (
     'Do you know?',
-    'What drink comprises Rum, Coconut Milk and Pineapple? 
+    'What drink comprises Rum, Coconut Milk and Pineapple?
 
 
 
@@ -3172,7 +3172,7 @@ Aurora',
 ),
 (
     'Do you know?',
-    'What Do Koala Bears Live On? 
+    'What Do Koala Bears Live On?
 
 
 
@@ -3500,7 +3500,7 @@ Bookkeeper',
 ),
 (
     'Do you know?',
-    'In the fairy tale ''Cinderella'''', which slipper did she lose, the left or the right 
+    'In the fairy tale ''Cinderella'''', which slipper did she lose, the left or the right
 
 
 
@@ -3929,7 +3929,7 @@ Alaska',
 ),
 (
     'Chuck Norris is so strong ...',
-    'Chuck Norris had nasal sex with Barbara Streisand',
+    'Chuck Norris can chocke someone with wireless earbuds.',
     NULL,
     '2022-02-25 07:53:12.329'::timestamp,
     (SELECT user_id FROM users.users OFFSET floor(random() * 100) LIMIT 1)
@@ -4253,7 +4253,7 @@ Write Things Down',
 ),
 (
     'Do you know?',
-    'On what did Marley''s ghostly face first appear to Scrooge in Dickens'' A Christmas Carol 
+    'On what did Marley''s ghostly face first appear to Scrooge in Dickens'' A Christmas Carol
 
 
 
@@ -4272,7 +4272,7 @@ a Door Knocker',
 ),
 (
     'Chuck Norris is so strong ...',
-    'Chuck Norris never made a Porno Movie because His Penis is registered as a deadly weapon.',
+    'Chuck Norris already count to infinity. Twice.',
     NULL,
     '2023-10-02 13:52:26.228'::timestamp,
     (SELECT user_id FROM users.users OFFSET floor(random() * 100) LIMIT 1)
@@ -4983,7 +4983,7 @@ No. This is a situation where you lose even if you win. Assuming the other perso
 ),
 (
     'Do you know?',
-    'Which snooker player was fined 20,000 for assaulting an official in 1996? 
+    'Which snooker player was fined 20,000 for assaulting an official in 1996?
 
 
 
@@ -5593,7 +5593,7 @@ Lorem sed risus ultricies tristique nulla aliquet enim. Curabitur vitae nunc sed
 ),
 (
     'Do you know?',
-    'In Computing And Hi_Tech Gadetry What Doe The Initials WAP Stand For 
+    'In Computing And Hi_Tech Gadetry What Doe The Initials WAP Stand For
 
 
 
@@ -6113,7 +6113,7 @@ Pollen',
 ),
 (
     'Chuck Norris is so strong ...',
-    'Chuck Norris always has sex on the first date. Always.',
+    'Chuck Norris won a poker tournament with pokemon cards.',
     NULL,
     '2020-03-30 08:59:46.554'::timestamp,
     (SELECT user_id FROM users.users OFFSET floor(random() * 100) LIMIT 1)
@@ -6892,7 +6892,7 @@ Are you Asleep? or Are you sleeping?',
 ),
 (
     'Do you know?',
-    'What Does Chilli Con Carne Mean 
+    'What Does Chilli Con Carne Mean
 
 
 
@@ -7107,7 +7107,7 @@ A river- a river runs  has a mouth when it meges into the sea  Has a river bed  
 ),
 (
     'Chuck Norris is so strong ...',
-    'Chuck Norris'' penis has a penis. And it''s still bigger than yours!',
+    'Chuck Norris make onions cry.',
     'https://picsum.photos/376/601',
     '2023-11-15 19:43:43.010'::timestamp,
     (SELECT user_id FROM users.users OFFSET floor(random() * 100) LIMIT 1)
@@ -7242,7 +7242,7 @@ how did they now that a quarter will be date 24 years before christ. (they can''
 ),
 (
     'Do you know?',
-    'How many bottles of `champagne'' are there in a Nebuchadnezzar? 
+    'How many bottles of `champagne'' are there in a Nebuchadnezzar?
 
 
 
@@ -7587,7 +7587,7 @@ Peanuts',
 ),
 (
     'Do you know?',
-    'What was the name of Elizabeth Taylor''s character in ''Cat on a Hot Tin Roof''? 
+    'What was the name of Elizabeth Taylor''s character in ''Cat on a Hot Tin Roof''?
 
 
 
@@ -7660,7 +7660,7 @@ A Yo-Yo.',
 ),
 (
     'Do you know?',
-    'Who was Jesus betrayed by? 
+    'Who was Jesus betrayed by?
 
 
 
@@ -8027,7 +8027,7 @@ Nibh nisl condimentum id venenatis a condimentum vitae sapien. Laoreet sit amet 
 ),
 (
     'Chuck Norris is so strong ...',
-    'Chuck Norris doesn''t consider it good sex unless the women dies.',
+    'Chuck Norris was close to death. She nerver recovered.',
     'https://picsum.photos/602/241',
     '2021-04-15 09:15:10.830'::timestamp,
     (SELECT user_id FROM users.users OFFSET floor(random() * 100) LIMIT 1)
@@ -8276,7 +8276,7 @@ Cras semper auctor neque vitae tempus quam pellentesque nec. Elit pellentesque h
 ),
 (
     'Do you know?',
-    'What Is Measured In Farads 
+    'What Is Measured In Farads
 
 
 
