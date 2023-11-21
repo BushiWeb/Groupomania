@@ -18,7 +18,7 @@ Make sure to check the default configuration to make sure it suits your needs.
 
 ### Environment variables
 
-You will find a file called **env.example** containing all the required environment variables and some example values.
+You will find a file called **env.example** containing all the required environment variables and some example values. These includes all the required informations to connect to the database (username, password, host) and to create and decode JSON Web Tokens.
 
 You _MUST_ rename it **.env** and update any value that needs to be updated. Make sure secrets and token are long enough.
 

@@ -23,7 +23,7 @@ CREATE DATABASE groupomania WITH
 
 
 -- Connect to the database
-\connect -reuse-previous=on "dbname=groupomania user=project_admin password=admin_password"
+\connect -reuse-previous=off "dbname=groupomania user=project_admin password=admin_password host=localhost"
 
 
 ------------------------------------------------------

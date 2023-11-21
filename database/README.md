@@ -27,11 +27,12 @@ In the following instructions, _project_admin_ and _project_user_ will refer to 
 To install the database, first execute:
 
 ```
-psql -U superuser -W -d postgres -f path/create.sql
+psql -U superuser -d postgres -h localhost -f path/create.sql
 ```
 
 -   `superuser` is the name of the role you want to use to connect to the database. This is not the _project_admin_ role. More informations bellow.
 -   We use the **postgres** database since it should be present on your server, but you can use any database except _groupomania_.
+-   Replace localhost with the address of your database if it is remote.
 -   `path/create.sql` must be replaced by the path to the **create.sql** file.
 
 This will execute the statements inside of the _create.sql_ dump.
@@ -42,19 +43,21 @@ These statements will first create the _groupomania_ database as well as the _pr
 -   Delete the statements for the creation of the roles if you wish to reuse existing roles, althought we advise against it.
 -   If the _groupomania_ database already exist, either drop the existing database, rename it or change the name of the new database.
 
-**Note**: after creating the database and before creating the tables and other objects, you will be prompted to enter the _project_admin_'s password you chose.
+**Note**: if you get an connexion error because the program is not asking for your password, try adding the `-W` option in the command line. This forces psql to ask you for your password. Beware, as using this argument will also force psql to ask you for the *project_admin*'s password you chose after creating both roles.
 
 ### Add data to the database
 
 Once the structure is installed, you can add data to the tables with:
 
 ```
-psql -U project_admin -W -d groupomania -f path/init.sql
+psql -U project_admin -d groupomania -h localhost -f path/init.sql
 ```
 
-This time, you must connect to the new _groupomania_ database with the new _project_admin_ role. `path/init.sql` must be replaced by the path to **init.sql**.
+This time, you must connect to the new _groupomania_ database with the new _project_admin_ role. `path/init.sql` must be replaced by the path to **init.sql**. Don't forget to replace *localhost* with the address of your remote database!
 
 For more informations on the `psql` command and all it's options, visit [the documentation](https://docs.postgresql.fr/10/app-psql.html).
+
+**Note**: if you get an connexion error because the program is not asking for your password, try adding the `-W` option in the command line. This forces psql to ask you for your password.
 
 ## Structure
 
