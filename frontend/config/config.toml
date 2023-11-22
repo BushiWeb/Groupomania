@@ -1,14 +1,13 @@
 [session]
-name = "groupomania.sid" # Name of the session cookie
-# cookieExp = 1200000 # Session cookie max age in ms
-# extendedCookieExp = 2592000000 # Session cookie extended max age in ms
+# cookieExp = 1200000 # Session cookie max age in ms. Time before an idle user is logged out.
+# extendedCookieExp = 2592000000 # Session cookie extended max age in ms. Time before an idle user who chose to be kept logged in is logged out.
 
 # [payload]
 # maxSize = 10240 # Payload's max size in bytes
 
 # [payload.files]
 # maxFileSize = 5242880 # Max file size in bytes
-# allowedFileTypes = {'image/jpg' = 'jpg', 'image/jpeg' = 'jpg', 'image/png' = 'png', 'image/webp' = 'webp', 'image/avif' = 'avif' } # Allowed image format
+# allowedFileTypes = {'image/jpg' = 'jpg', 'image/jpeg' = 'jpg', 'image/png' = 'png', 'image/webp' = 'webp', 'image/avif' = 'avif' } # Allowed image format. The property name is the MIME type of the format, and the value the extension name.
 
 # [api]
 # protocol = http # Protocol to connect to the API
@@ -16,7 +15,7 @@ name = "groupomania.sid" # Name of the session cookie
 # port = 3000 # Port to connect to the API
 
 [cors]
-origin = "http://localhost:8000"
+origin = "http://localhost:8000" # URL of the BFF server to establish the CORS headers
 
 # [pagination]
 # users = 25 # Maximum number of users to display per page

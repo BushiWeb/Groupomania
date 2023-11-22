@@ -18,16 +18,16 @@ Make sure to check the default configuration to make sure it suits your needs.
 
 ### Environment variables
 
-You will find a file called **env.example** containing all the required environment variables and some example values. These includes all the required informations to connect to the database (username, password, host) and to create and decode JSON Web Tokens.
+You will find a file called **[env.example](env.example)** containing all the required environment variables and some example values. These includes all the required informations to connect to the database (username, password, host) and to create and decode JSON Web Tokens.
 
 You _MUST_ rename it **.env** and update any value that needs to be updated. Make sure secrets and token are long enough.
 
 ### Configuration files
 
-The config folder contains two configuration files:
+The [config folder](./config) contains two configuration files:
 
--   **development-config.toml** is only used during the development,
--   **config.toml** is the configuration file used in production. It is the one you _SHOULD_ check.
+-   **[development-config.toml](./config/development-config.toml)** is only used during the development,
+-   **[config.toml](./config/config.toml)** is the configuration file used in production. It is the one you _SHOULD_ check.
 
 To update a parameter:
 
@@ -39,6 +39,12 @@ To update a parameter:
 
 **Note**: Make sure the [database](../database/README.md) is up and running. Otherwise, the application won't work.
 
+To start the server in production, use
+
+```
+npm start
+```
+
 To start the server in development mode, use
 
 ```
@@ -46,12 +52,6 @@ npm run dev
 ```
 
 It uses _nodemon_ to watch for file changes.
-
-To start the server for production, use
-
-```
-npm start
-```
 
 ## Admin account
 

@@ -33,16 +33,16 @@ Make sure to check the default configuration to make sure it suits your needs.
 
 ### Environment variables
 
-You will find a file called **env.example** containing all the required environment variables and some example values.
+You will find a file called **[env.example](./env.example)** containing all the required environment variables and some example values.
 
 You *MUST* rename it **.env** and update any value that needs to be updated. Make sure secrets and token are long enough.
 
 ### Configuration files
 
-The config folder contains two configuration files:
+The [config folder](./config) contains two configuration files:
 
-- **development-config.toml** is only used during the development,
-- **config.toml** is the configuration file used in production. It is the one you *SHOULD* check.
+- **[development-config.toml](./config/development-config.toml)** is only used during the development,
+- **[config.toml](./config/config.toml)** is the configuration file used in production. It is the one you *SHOULD* check.
 
 To update a parameter:
 
