@@ -1,31 +1,9 @@
-[cors]
-origin = true
-methods = ["GET", "POST", "PUT", "DELETE", "OPTION"]
-allowedHeaders = ["Origin", "X-Requested-With", "Accept", "Content-Type", "Authorization"]
-# exposedHeaders
-# credentials
-# maxAge
-
 # [payload]
-# maxSize = 10240
-# sanitization = ['<script', '<\\/script', '<!--', '-->', '\\]\\]>']
+# maxSize = 10240 # Maximum payload size in bytes
 # [payload.files]
-# maxFileSize = 5242880
-# saveFolder = "images"
-# [payload.files.allowedFileTypes]
-# 'image/jpg' = 'jpg',
-# 'image/jpeg' = 'jpg',
-# 'image/png' = 'png',
-# 'image/webp' = 'webp',
-# 'image/avif' = 'avif'
-
-# [password]
-# minLength = 8
-# minLowercase = 1
-# minUppercase = 1
-# minNumbers = 1
-# minSymbols = 1
+# maxFileSize = 5242880 # Maximum file size in bytes
+# saveFolder = "images" # Folder to save the images to, within the api folder
+# allowedFileTypes = {'image/jpg' = 'jpg', 'image/jpeg' = 'jpg', 'image/png' = 'png', 'image/webp' = 'webp', 'image/avif' = 'avif' } # Allowed image format. The property name is the MIME type of the format, and the value the extension name.
 
 # [adminUser]
-# roleId = 1
-# email = 'admin@groupomania.com'
+# email = 'admin@groupomania.com' # Email of the administrator user. When starting the server, if no user has this email, it will be created witha random password.

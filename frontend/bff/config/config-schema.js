@@ -49,7 +49,7 @@ const CONFIG_SCHEMA = {
         name: {
             doc: 'Cookie name',
             format: String,
-            default: 'connect.sid',
+            default: 'groupomania.sid',
         },
     },
     payload: {

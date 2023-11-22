@@ -36,7 +36,6 @@ const CONFIG_SCHEMA = {
                 'POST',
                 'PUT',
                 'DELETE',
-                'PATCH',
                 'OPTION',
             ],
             nullable: false,
