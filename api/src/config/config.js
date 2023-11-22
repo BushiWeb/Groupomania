@@ -12,7 +12,14 @@ convict.addParser({ extension: 'toml', parse: (source) => toml.parse(source, { j
 
 // Define configuration schema
 const environment = getEnvironment();
-const { default: CONFIG_SCHEMA } = await (environment === 'test' ? import('./test-config-schema.js') : import('./config-schema.js'));
+
+let CONFIG_SCHEMA;
+if (environment === 'test') {
+    CONFIG_SCHEMA = (await import('./test-config-schema.js')).default;
+} else {
+    CONFIG_SCHEMA = (await import('./config-schema.js')).default;
+}
+
 let config = convict(CONFIG_SCHEMA);
 confLogger.debug(`Configuration schema created for environment ${environment}`);
 
