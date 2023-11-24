@@ -11,15 +11,15 @@ The application is made of two parts:
 
 ### BFF
 
-On top of serving the frontend page and all other ressources, the BFF acts as a gateway between the application and the API, providing more security and handling all the requests' logic.
+On top of serving the frontend page and all other resources, the BFF acts as a gateway between the application and the API, providing more security and handling all the requests' logic.
 
-Thanks to it, the users can identify themselves using sessions and cookies. Although JWT are still used under the hoods by the server, sessions provide more security and a better user experience, since the token are not stored in the browser but the connexion is still maintained between refreshes.
+Thanks to it, the users can identify themselves using sessions and cookies. Although JWTs are still used under the hoods by the server, sessions provide more security and a better user experience, since the tokens are not stored in the browser but the connection is still maintained between refreshes.
 
-It also composes request and aggregates data from multiple sources into one request, allowing for example to check the password before a dangerous action.
+It also composes requests and aggregates data from multiple sources into one request, allowing for example to check the password before a dangerous action.
 
 ## Installation
 
-After downlading the source code or cloning the repository, simply run
+After downloading the source code or cloning the repository, simply run
 
 ```
 npm install
@@ -39,16 +39,15 @@ You *MUST* rename it **.env** and update any value that needs to be updated. Mak
 
 ### Configuration files
 
-The [config folder](./config) contains two configuration files:
-
-- **[development-config.toml](./config/development-config.toml)** is only used during the development,
-- **[config.toml](./config/config.toml)** is the configuration file used in production. It is the one you *SHOULD* check.
+The **[config.toml](./config/config.toml)** is the configuration file used in production. It is the one you _SHOULD_ check. The given values are values used by default, so using those won't change the behavior of the API.
 
 To update a parameter:
 
 1. Uncomment the corresponding table name (`[name]`) by removing the #;
 2. Uncomment the parameter line by removing the #;
 3. Change the parameter value;
+
+*Note*: if you wish to run the BFF in development mode, you SHOULD update the *[development-config.toml](./config/development-config.toml)* configuration file. It can take the same configuration variables as *config.toml*.
 
 ***WARNING***: Make sure to update the *cors.origin* parameter if you updated the *BFF_PORT* environment variable.
 
@@ -78,9 +77,9 @@ Once the bff server is running, simply use any browser to visit the address of t
 
 Equivalent to the Create React App's script `start`. Run the frontend in development mode and reload the page on changes.
 
-It uses the proxy property from the *package.json* file in order to request from the BFF, so make sure to update the port if you change it.
+It uses the proxy property from the _package.json_ file to request from the BFF, so make sure to update the port if you change it.
 
-Running the script in development mode still requires the BFF and the API running.
+Running the script in development mode still requires the BFF and the API to run.
 
 ### frontend-test
 
@@ -88,7 +87,7 @@ Equivalent to the Create React App's script `test`. Run all the react app's test
 
 ### bff-dev
 
-Run the backend in development mode and restart the server on changes. In development mode, CSRF token are optionnal.
+Run the backend in development mode and restart the server on changes. In development mode, anti-CSRF tokens are optional.
 
 ### bff-start
 

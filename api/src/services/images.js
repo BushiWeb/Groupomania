@@ -31,6 +31,9 @@ export function deleteImage(imageUrls) {
 
     for (const url of imageUrls) {
         imagesServicesLogger.verbose('Delete image service starting');
+        if (!/images/.test(url)) {
+            continue;
+        }
         const imageName = url.split('/images/')[1];
         const imagePath = join('./images', imageName);
         unlink(imagePath, (error) => {
