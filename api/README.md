@@ -73,7 +73,7 @@ When starting the server for the first time, an administrator account will be au
 
 You can configure the email address used for this account in the configuration file.
 
-The password will be randomly generated and printed in the log, under the label _groupomania:api:loader:adminUser_.
+The password will be randomly generated and printed in the log, under the label _groupomania:api:loader:adminUser_. You can find the log within the [logs](./logs/) folder.
 
 **_WARNING_**: although the password generated is secured, it is still accessible within the logs. You MUST change it quickly, otherwise, it might get stolen.
 
