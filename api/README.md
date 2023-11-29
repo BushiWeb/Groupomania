@@ -77,6 +77,8 @@ The password will be randomly generated and printed in the log, under the label 
 
 **_WARNING_**: although the password generated is secured, it is still accessible within the logs. You MUST change it quickly, otherwise, it might get stolen.
 
+**_WARNING_**: we recommend checking the log file every time the server starts to make sure no user has been created. If the admin user updates his email, or if the default admin user's email is changed, a new user will be created.
+
 ## API Documentation
 
 To consult the API documentation, you have two options:
