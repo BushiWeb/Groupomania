@@ -13,28 +13,36 @@ const htmlControllerLogger = createLoggerNamespace(
  */
 export function staticHTMLController(req, res, next) {
     htmlControllerLogger.verbose('Static HTML generation controller starting');
-    const crsfToken = generateCRSFToken();
+    const csrfToken = generateCRSFToken();
     const userInfos = req.session.user;
+    const pageTokens = req.session.pageCSRFTokens || [];
+    const requestTokens = req.session.requestCSRFTokens || [];
 
+    console.log('Before page load', req.session);
     // Saves the CRSF token in the session
     req.session.regenerate((error) => {
         if (error) {
-            htmlControllerLogger.debug(
-                'Error while regenerating the session',
+        htmlControllerLogger.debug(
+            'Error while regenerating the session',
             );
             return next(error);
         }
 
         htmlControllerLogger.debug(
-            'Session regenerated, saving data in the session',
+        'Session regenerated, saving data in the session',
         );
-        req.session.crsfToken = crsfToken;
+        req.session.pageCSRFTokens = pageTokens;
+        req.session.requestCSRFTokens = requestTokens;
         req.session.user = userInfos;
+
+        htmlControllerLogger.verbose('Adding new anti CSRF token with timeout')
+        req.session.pageCSRFTokens.push(csrfToken);
+        console.log('After page load', req.session);
         htmlControllerLogger.debug('CRSF token saved in session');
 
         // Generates the HTML page and hydrate it with the CRSF token
         res.render('index.html', {
-            crsfToken,
+            crsfToken: csrfToken,
         });
         htmlControllerLogger.verbose('Page generated and sent successfully');
     })

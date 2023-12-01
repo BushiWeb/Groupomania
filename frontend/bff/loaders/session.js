@@ -13,6 +13,10 @@ export default function sessionLoader(app) {
     loaderLogger.verbose('Loading session middleware');
 
     const MemoryStore = memoryStore(session);
+    app.use((req, res, next) => {
+        console.log('\n#############################\nNew Request', req.method, req.path);
+        next();
+    })
 
     app.use(
         session({
