@@ -5,6 +5,7 @@ import errorsLoader from './errors.js';
 import loggingMiddelwareLoader from './logger.js';
 import routeLoader from './routes.js';
 import sessionLoader from './session.js';
+import staticLoader from './static.js';
 
 const loaderLogger = createLoggerNamespace('groupomania:bff:loader');
 
@@ -25,6 +26,9 @@ export default async function loadApp(app) {
 
     renderEngineLoader(app);
     loaderLogger.verbose('Render engine initialized');
+
+    staticLoader(app);
+    loaderLogger.verbose('Static route initialized');
 
     sessionLoader(app);
     loaderLogger.verbose('Session middleware initialized');

@@ -24,7 +24,7 @@ export default function htmlHeadersLoader(router) {
                     'fonts.gstatic.com',
                 ],
                 objectSrc: ["'none'"],
-                frameAncestors: ['none'],
+                frameAncestors: ["'none'"],
                 imgSrc: [
                     'https:',
                     'data:',

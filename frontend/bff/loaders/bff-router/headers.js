@@ -31,7 +31,7 @@ export default function bffHeadersLoader(router) {
         helmet.noSniff(),
         helmet.frameguard({ action: 'deny' }),
         helmet.contentSecurityPolicy({
-            directives: { 'frame-ancestors': 'none' },
+            directives: { 'frame-ancestors': "'none'" },
         }),
     );
     loaderLogger.verbose('Security header middlewares added');

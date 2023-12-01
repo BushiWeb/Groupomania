@@ -14,14 +14,28 @@ const htmlControllerLogger = createLoggerNamespace(
 export function staticHTMLController(req, res, next) {
     htmlControllerLogger.verbose('Static HTML generation controller starting');
     const crsfToken = generateCRSFToken();
+    const userInfos = req.session.user;
 
     // Saves the CRSF token in the session
-    req.session.crsfToken = crsfToken;
-    htmlControllerLogger.debug('CRSF token saved in session');
+    req.session.regenerate((error) => {
+        if (error) {
+            htmlControllerLogger.debug(
+                'Error while regenerating the session',
+            );
+            return next(error);
+        }
 
-    // Generates the HTML page and hydrate it with the CRSF token
-    res.render('index.html', {
-        crsfToken,
-    });
-    htmlControllerLogger.verbose('Page generated and sent successfully');
+        htmlControllerLogger.debug(
+            'Session regenerated, saving data in the session',
+        );
+        req.session.crsfToken = crsfToken;
+        req.session.user = userInfos;
+        htmlControllerLogger.debug('CRSF token saved in session');
+
+        // Generates the HTML page and hydrate it with the CRSF token
+        res.render('index.html', {
+            crsfToken,
+        });
+        htmlControllerLogger.verbose('Page generated and sent successfully');
+    })
 }

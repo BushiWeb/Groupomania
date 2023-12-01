@@ -31,7 +31,7 @@ export default function headersLoader(app) {
     app.use(
         helmet.noSniff(),
         helmet.frameguard({ action: 'deny' }),
-        helmet.contentSecurityPolicy({ directives: { 'frame-ancestors': 'none' }})
+        helmet.contentSecurityPolicy({ directives: { 'frame-ancestors': '\'none\'' }})
     );
     loaderLogger.verbose('Security header middlewares added');
     loaderLogger.debug('Use helmet.noSniff to set the X-Content-Type-Options to nosniff');
