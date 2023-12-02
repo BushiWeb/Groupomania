@@ -1,5 +1,6 @@
 import { generateCRSFToken } from '../../services/generateCRSFToken.js';
 import { createLoggerNamespace } from '../../logger/index.js';
+import { updateCRSFToken } from '../../middlewares/authentication.js';
 
 const htmlControllerLogger = createLoggerNamespace(
     'groupomania:bff:controllers:html',
@@ -14,11 +15,11 @@ const htmlControllerLogger = createLoggerNamespace(
 export function staticHTMLController(req, res, next) {
     htmlControllerLogger.verbose('Static HTML generation controller starting');
     const csrfToken = generateCRSFToken();
-    const userInfos = req.session.user;
-    const pageTokens = req.session.pageCSRFTokens || [];
-    const requestTokens = req.session.requestCSRFTokens || [];
+    updateCRSFToken(req, res);
+    htmlControllerLogger.debug('Anti CSRF token updated');
 
-    console.log('Before page load', req.session);
+    const userInfos = req.session.user;
+
     // Saves the CRSF token in the session
     req.session.regenerate((error) => {
         if (error) {
@@ -31,14 +32,7 @@ export function staticHTMLController(req, res, next) {
         htmlControllerLogger.debug(
         'Session regenerated, saving data in the session',
         );
-        req.session.pageCSRFTokens = pageTokens;
-        req.session.requestCSRFTokens = requestTokens;
         req.session.user = userInfos;
-
-        htmlControllerLogger.verbose('Adding new anti CSRF token with timeout')
-        req.session.pageCSRFTokens.push(csrfToken);
-        console.log('After page load', req.session);
-        htmlControllerLogger.debug('CRSF token saved in session');
 
         // Generates the HTML page and hydrate it with the CRSF token
         res.render('index.html', {

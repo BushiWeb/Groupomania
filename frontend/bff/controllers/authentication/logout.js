@@ -16,9 +16,6 @@ const logoutControllerLogger = createLoggerNamespace(
 export default async function logoutController(req, res, next) {
     logoutControllerLogger.verbose('Logout controller starting');
 
-    const pageTokens = req.session.pageCSRFTokens;
-    const requestTokens = req.session.requestCSRFTokens;
-
     try {
         // Send the logout request
         await logoutRequest(req.session.user.refreshToken);
@@ -41,8 +38,6 @@ export default async function logoutController(req, res, next) {
                     return next(error);
                 }
 
-                req.session.pageCSRFTokens = pageTokens;
-                req.session.requestCSRFTokens = requestTokens;
                 res.status(204).end();
             });
         });

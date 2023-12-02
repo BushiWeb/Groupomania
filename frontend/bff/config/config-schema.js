@@ -160,6 +160,18 @@ const CONFIG_SCHEMA = {
             default: 15,
         },
     },
+    antiCsrfToken: {
+        cookieName: {
+            doc: 'Name of the cookie containing the valid anti CSRF token',
+            format: String,
+            default: '__host_csrf-token'
+        },
+        maxAge: {
+            doc: 'Validity duration of the anti CSRF token cookie',
+            format: 'int',
+            default: 2_400_000, // 40min
+        },
+    }
 };
 
 export default CONFIG_SCHEMA;

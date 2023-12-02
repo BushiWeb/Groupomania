@@ -44,7 +44,7 @@
         "bff-dev": "nodemon -r dotenv/config ./bff/server.js",
         "bff-start": "node -r dotenv/config ./bff/server.js",
         "bff-test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-        "start": "set DEBUG=express-session & npm run bff-start -- --env production",
+        "start": "npm run bff-start -- --env production",
         "build": "react-scripts build && compress-cra",
         "build-and-start": "npm run build && npm start",
         "eject": "react-scripts eject",

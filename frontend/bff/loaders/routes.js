@@ -2,6 +2,7 @@ import { createLoggerNamespace } from '../logger/index.js';
 import getRoutesRegexp from '../utils/get-routes.js';
 import HTMLRouter from '../routes/html-router.js';
 import BFFRouter from '../routes/authentication-router.js';
+import cookieParser from 'cookie-parser';
 
 const loaderLogger = createLoggerNamespace('groupomania:bff:loader:routes');
 
@@ -11,6 +12,8 @@ const loaderLogger = createLoggerNamespace('groupomania:bff:loader:routes');
  */
 export default function routeLoader(app) {
     loaderLogger.verbose('Loading users routes and middlewares');
+
+    app.use(cookieParser());
 
     // Add the BFF router
     app.use('/data/', BFFRouter);

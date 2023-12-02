@@ -57,15 +57,4 @@ describe('Login page test suite', () => {
             expect(path).toHaveTextContent(/^\/$/);
         });
     });
-
-    it('should update the anti CSRF token', async () => {
-        render(undefined, { initialEntries: ['/login'] });
-
-        await waitFor(() => {
-            const antiCsrfToken = document
-                .querySelector('meta[name="crsf-token"]')
-                .getAttribute('content');
-            expect(antiCsrfToken).toBe('testToken');
-        });
-    });
 });

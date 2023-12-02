@@ -20,6 +20,7 @@ export const mockRequest = (
         query: {},
         params: {},
         session: new Session(),
+        cookies: {}
     };
     req.get = jest.fn().mockImplementation((parameter) => {
         return req.headers[parameter.toLowerCase()];
@@ -34,6 +35,7 @@ export const mockRequest = (
         req.query = {};
         req.params = {};
         req.headers = {};
+        req.cookies = {};
         req.session = new Session();
     };
     return req;
@@ -43,6 +45,7 @@ export const mockResponse = () => {
     const res = {};
     res.status = jest.fn().mockReturnValue(res);
     res.json = jest.fn().mockReturnValue(res);
+    res.cookie = jest.fn().mockReturnValue(res);
     res.locals = {};
     res.headers = {};
 
@@ -53,6 +56,7 @@ export const mockResponse = () => {
     res.clean = () => {
         res.status.mockClear();
         res.json.mockClear();
+        res.cookie.mockClear();
         res.locals = {};
         res.headers = {};
     };

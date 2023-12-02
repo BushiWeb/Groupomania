@@ -14,6 +14,8 @@ const response = mockResponse();
 const validCrsfToken = '123';
 const invalidCrsfToken = '456';
 
+const csrfCookieName = config.get('antiCsrfToken.cookieName');
+
 beforeEach(() => {
     next.mockClear();
     request.restore();
@@ -21,7 +23,7 @@ beforeEach(() => {
 
 describe('authenticate and its middleware test suite', () => {
     it("should call the next function if the user mustn't be authenticated and the CRSF token is valid", () => {
-        request.session.crsfToken = validCrsfToken;
+        request.cookies[csrfCookieName] = validCrsfToken;
         request.headers['x-crsf-token'] = validCrsfToken;
         authenticate(false)(request, response, next);
         expect(next).toHaveBeenCalled();
@@ -29,7 +31,7 @@ describe('authenticate and its middleware test suite', () => {
     });
 
     it('should call the next function if the user is authenticated and the CRSF token is valid', () => {
-        request.session.crsfToken = validCrsfToken;
+        request.cookies[csrfCookieName] = validCrsfToken;
         request.session.user = true;
         request.headers['x-crsf-token'] = validCrsfToken;
         authenticate(true)(request, response, next);
@@ -38,45 +40,46 @@ describe('authenticate and its middleware test suite', () => {
     });
 
     it('should generate a new CRSF token and save it in the session and the response header', () => {
-        request.session.crsfToken = validCrsfToken;
+        request.cookies[csrfCookieName] = validCrsfToken;
         request.headers['x-crsf-token'] = validCrsfToken;
         authenticate(false)(request, response, next);
         expect(next).toHaveBeenCalled();
         expect(next.mock.calls[0]).toHaveLength(0);
-        expect(response.headers).toHaveProperty('x-crsf-token');
-        expect(request.session.crsfToken).not.toBe(validCrsfToken);
+        expect(response.cookie).toHaveBeenCalled();
+        expect(response.cookie.mock.calls[0][0]).toBe(csrfCookieName);
+        expect(response.cookie.mock.calls[0][1]).not.toBe(validCrsfToken);
     });
 
     it('should extend the session ttl if the cookie expiration is close', () => {
-        request.session.crsfToken = validCrsfToken;
+        request.cookies[csrfCookieName] = validCrsfToken;
         request.headers['x-crsf-token'] = validCrsfToken;
         request.session.cookie.maxAge = config.get('session.cookieExp') / 2;
         authenticate(false)(request, response, next);
         expect(next).toHaveBeenCalled();
         expect(next.mock.calls[0]).toHaveLength(0);
-        expect(response.headers).toHaveProperty('x-crsf-token');
-        expect(request.session.crsfToken).not.toBe(validCrsfToken);
+        expect(response.cookie).toHaveBeenCalled();
+        expect(response.cookie.mock.calls[0][0]).toBe(csrfCookieName);
         expect(request.session.cookie.maxAge).toBe(
             config.get('session.cookieExp'),
         );
     });
 
     it('should not extend the session ttl if the cookie expiration is not close', () => {
-        request.session.crsfToken = validCrsfToken;
+        request.cookies[csrfCookieName] = validCrsfToken;
         request.headers['x-crsf-token'] = validCrsfToken;
         request.session.cookie.maxAge = config.get('session.cookieExp') * 2;
         authenticate(false)(request, response, next);
         expect(next).toHaveBeenCalled();
         expect(next.mock.calls[0]).toHaveLength(0);
-        expect(response.headers).toHaveProperty('x-crsf-token');
-        expect(request.session.crsfToken).not.toBe(validCrsfToken);
+        expect(response.cookie).toHaveBeenCalled();
+        expect(response.cookie.mock.calls[0][0]).toBe(csrfCookieName);
         expect(request.session.cookie.maxAge).toBe(
             config.get('session.cookieExp') * 2,
         );
     });
 
     it('should call the next error middleware if there is no X-CRSF-Token header', () => {
-        request.session.crsfToken = validCrsfToken;
+        request.cookies[csrfCookieName] = validCrsfToken;
         authenticate(false)(request, response, next);
         expect(next).toHaveBeenCalled();
         expect(next.mock.calls[0]).toHaveLength(1);
@@ -92,7 +95,7 @@ describe('authenticate and its middleware test suite', () => {
     });
 
     it('should call the next error middleware if the provided token is invalid', () => {
-        request.session.crsfToken = validCrsfToken;
+        request.cookies[csrfCookieName] = validCrsfToken;
         request.headers['x-crsf-token'] = invalidCrsfToken;
         authenticate(false)(request, response, next);
         expect(next).toHaveBeenCalled();
@@ -101,7 +104,7 @@ describe('authenticate and its middleware test suite', () => {
     });
 
     it('should call the next error middleware if the user is not authenticated', () => {
-        request.session.crsfToken = validCrsfToken;
+        request.cookies[csrfCookieName] = validCrsfToken;
         request.headers['x-crsf-token'] = validCrsfToken;
         authenticate(true)(request, response, next);
         expect(next).toHaveBeenCalled();

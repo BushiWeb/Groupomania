@@ -39,10 +39,7 @@ function getCrsfToken(req) {
 function checkCRSFToken(req, token) {
     authLogger.debug('Checking the CRSF token');
 
-    if (
-        (!Array.isArray(req.session.pageCSRFTokens) || req.session.pageCSRFTokens.length === 0) &&
-        (!Array.isArray(req.session.requestCSRFTokens) || req.session.requestCSRFTokens.length === 0)
-    ) {
+    if (!req.cookies[config.get('antiCsrfToken.cookieName')]) {
         throw new ForbiddenError({
             message: 'No CRSF token registered',
             title: "We don't have any CRSF token registered for your session",
@@ -51,7 +48,7 @@ function checkCRSFToken(req, token) {
         });
     }
 
-    if (!req.session.pageCSRFTokens.includes(token) && !req.session.requestCSRFTokens.includes(token)) {
+    if (req.cookies[config.get('antiCsrfToken.cookieName')] !== token) {
         throw new ForbiddenError({
             message: 'Invalid CRSF token',
             title: 'The CRSF token is not valid',
@@ -68,11 +65,14 @@ function checkCRSFToken(req, token) {
  * @param {Express.Request} req
  * @param {Express.Response} res
  */
-function updateCRSFToken(req, res) {
+export function updateCRSFToken(req, res) {
     const newToken = generateCRSFToken();
-    req.session.requestCSRFTokens.push(newToken);
-    console.log('One more', req.session)
-    res.set('X-CRSF-Token', newToken);
+    res.cookie(config.get('antiCsrfToken.cookieName'), newToken,  {
+        maxAge: config.get('antiCsrfToken.maxAge'),
+        httpOnly: false,
+        secure: false,
+        sameSite: 'lax',
+    });
 }
 
 /**
@@ -104,7 +104,6 @@ export default function authenticate(checkAuthentication = true) {
      */
     return function (req, res, next) {
         authLogger.verbose('Authentication middleware starting');
-        console.log('Auth middleware', req.session)
 
         try {
             if (config.get('env') !== 'development') {

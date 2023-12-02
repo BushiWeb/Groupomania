@@ -36,8 +36,6 @@ export async function simpleFetch({
 
     const response = await fetch(url, options);
 
-    handleCSRFToken(response);
-
     if (!response.ok) {
         throw response;
     }

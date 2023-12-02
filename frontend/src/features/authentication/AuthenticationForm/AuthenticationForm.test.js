@@ -251,27 +251,6 @@ describe('AuthenticationForm component test suite', () => {
         });
     });
 
-    it('should update the anti CSRF token', async () => {
-        const user = userEvent.setup();
-        render(<AuthenticationForm />);
-        const emailField = screen.getByLabelText('Email*');
-        const passwordField = screen.getByLabelText('Mot de passe*');
-        const loginButton = screen.getByRole('button', {
-            name: 'Se connecter',
-        });
-
-        await user.type(emailField, email);
-        await user.type(passwordField, password);
-        await user.click(loginButton);
-
-        await waitFor(() => {
-            const antiCsrfToken = document
-                .querySelector('meta[name="crsf-token"]')
-                .getAttribute('content');
-            expect(antiCsrfToken).toBe('testToken');
-        });
-    });
-
     it('should remove the errors on each request', async () => {
         const user = userEvent.setup();
         render(<AuthenticationForm />);

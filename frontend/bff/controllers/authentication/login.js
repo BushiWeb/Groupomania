@@ -85,8 +85,6 @@ function extendSessionLifespan(req) {
 export default async function loginController(req, res, next) {
     loginControllerLogger.verbose('Login controller starting');
     try {
-        const pageTokens = req.session.pageCSRFTokens;
-        const requestTokens = req.session.requestCSRFTokens;
         const maxAge = req.session.cookie.maxAge;
 
         // Login or refresh the access token
@@ -110,8 +108,6 @@ export default async function loginController(req, res, next) {
                 'Session regenerated, saving data in the session',
             );
             req.session.user = user;
-            req.session.pageCSRFTokens = pageTokens;
-            req.session.requestCSRFTokens = requestTokens;
             req.session.cookie.maxAge = maxAge;
 
             // Extend the session lifespan if the user wants to be remembered
